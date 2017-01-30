@@ -30,11 +30,13 @@ The first general division comes in terms of the Cells. We plan to have an abstr
 
 Everything encompassed in each Cell subclass is specifically related to LOCAL operations. This is an important element of our segregation of tasks. Each Cell will make an update based on its neighbors only, it will not be able to influence any other cells. That is, if, for instance, a HouseCell decides that it is not happy, it will remove itself from the board, but it will not relocate. This task is left to the CellSociety objects (which will be discussed in a second). The purpose and functionality of each subclass of Cell is laid out in the image below.
 
-![Image 1](CellDesign.jpg “Cell Design”)
+<img src="CellDesign.jpg" width="256">  
+
 
 The intended methods and variables for each type of cell are included in the image below.
 
-![Image #2](CellFunction.jpg “Cell Function”)
+<img src="CellFunction.jpg" width="256">  
+
 
 Note that, although we made our best efforts to predict necessary variables and methods, there will likely be more in these subclasses. This is okay, because these classes are much more flexible than the superclass Cell. Changes to one subclass can be made without major influence on other types of Cells. This is the case so that new types of Cells can be created without much extra work, but also without altering the foundation of the program.
 
@@ -44,7 +46,8 @@ Consider, for instance, the population simulation. In this simulation, if a cell
 
 As of the current design, there are only four extensions of CellSociety: FireSociety, PopSociety, WaterSociety and LifeSociety -- one for each simulation and set of rules. These can be seen in their relation to CellSociety in the image below:
 
-![Image #3](CellSocietyDesign.jpg “Cell Society Design”). 
+<img src="CellSocietyDesign.jpg" width="256">  
+
 
 These are included to avoid giving each Cell power over an entire CellSociety. The CellSociety step function (which updates one generation) allows for everything to happen simultaneously and without conflict. Despite all of this complexity, in the end, the active CellSociety will only interact with the rest of the program when an updated version of the current CellSociety is requested. The true implementation of this process is not known to the rest of the program, nor does it need to be. In addition, the way in which this step is taken will be defined by the type of CellSociety being used. This means that a new simulation can easily be made by creating an extension of CellSociety, with the required Cells. Still, despite extensions in these subclasses, controlling classes will be able to call the step method on ANY CellSociety without having to know its type. This commonality allows for backend implementation to stay private.
 
@@ -56,7 +59,8 @@ Hence, from this end, we get a set of Nodes to display. What happens next? How i
 
 The front-end and back-end come together in the Simulation class, which acts as a bridge between the two types of input. The Simulation class is responsible for holding the Stage used in the GUI. It constantly receives input from UIMain in the form of updated Nodes and adds these to the screen at the set number of frames per second. Many of the controls happen here (e.g., response to a button being pressed, pausing the program, resetting the information in the grid). Because the Simulation class holds much of the information about the animation itself, most of the input will be funneled back into this class for processing. This control flow is pictured in the image below.
 
-![Image #4](OverallDesign.jpg “Overall Design”) 
+<img src="OverallDesign.jpg" width="256">  
+
 
 
 ###User Interface
@@ -67,10 +71,13 @@ Once the main page is opened, the user can start the simulation by pressing the 
 
 In the case that the XML file input is formatted incorrectly, the user will be notified of the problem and told to re-enter a file. Until the file is formatted correctly, the user will not be able to start the simulation.
 
-Here are two sketches of the basic GUI design:
+Sketch of UI Main
 
-![UI Main Sketch](UI_Sketch.jpg “UI Main Sketch”)
-![File Input Sketch](File_Input_Sketch.jpg “File Input Sketch”)
+<img src="UI_Sketch.jpg" width="256">  
+
+...and sketch of File Input View 
+
+<img src="File_Input_Sketch.jpg" width="256">  
 
 ###Design Details
 **Main**
