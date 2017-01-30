@@ -30,7 +30,7 @@ The first general division comes in terms of the Cells. We plan to have an abstr
 
 Everything encompassed in each Cell subclass is specifically related to LOCAL operations. This is an important element of our segregation of tasks. Each Cell will make an update based on its neighbors only, it will not be able to influence any other cells. That is, if, for instance, a HouseCell decides that it is not happy, it will remove itself from the board, but it will not relocate. This task is left to the CellSociety objects (which will be discussed in a second). The purpose and functionality of each subclass of Cell is laid out in the image below.
 
-![Image #1](CellDesign.jpg “Cell Design”)
+![Image 1](CellDesign.jpg “Cell Design”)
 
 The intended methods and variables for each type of cell are included in the image below.
 
@@ -56,7 +56,7 @@ Hence, from this end, we get a set of Nodes to display. What happens next? How i
 
 The front-end and back-end come together in the Simulation class, which acts as a bridge between the two types of input. The Simulation class is responsible for holding the Stage used in the GUI. It constantly receives input from UIMain in the form of updated Nodes and adds these to the screen at the set number of frames per second. Many of the controls happen here (e.g., response to a button being pressed, pausing the program, resetting the information in the grid). Because the Simulation class holds much of the information about the animation itself, most of the input will be funneled back into this class for processing. This control flow is pictured in the image below.
 
-![Image #4](OverallDesign.jpg “Overall Design”). 
+![Image #4](OverallDesign.jpg “Overall Design”) 
 
 
 ###User Interface
@@ -199,6 +199,7 @@ Scenario 5: Switch simulations
 6. Simulation passes this ArrayList of Cells to UIMain.
 7. UIMain passes this ArrayList to GridView, which creates a 2d-array of CellNodes.
 8. Simulation retrieves this 2d-array from UIMain and displays it.
+
 ___
 
 ###Design Considerations
