@@ -16,6 +16,8 @@ public class BurnCell extends Cell {
 	private static Color burnColor = Color.YELLOW;
 	private static int stepsToBurn = 1;
 	private int mySteps;
+	
+	public static final int VERY_VERY_IMPORTANT = 329485;
 
 	public BurnCell(){
 		super();
