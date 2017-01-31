@@ -15,7 +15,11 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		
 		GUIMain display = new GUIMain();
+		
+		//
+		
 		stage.setTitle(TITLE);
         // add our user interface components to Frame and show it
         stage.setScene(display.getScene());
