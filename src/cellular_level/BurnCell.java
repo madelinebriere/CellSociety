@@ -20,12 +20,12 @@ public class BurnCell extends Cell {
 	public BurnCell(){
 		super();
 		setMyState(burnColor);
-		mySteps=0;
+		setMySteps(0);
 	}
 	
 	public BurnCell(int row, int col){
 		super(row, col, burnColor);
-		mySteps=0;
+		setMySteps(0);
 	}
 	
 	/**
