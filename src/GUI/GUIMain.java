@@ -20,24 +20,26 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import societal_level.CellSociety;
+import societal_level.LifeSociety;
 
 public class GUIMain{
 
-	private static final int FRAMES_PER_SECOND = 1;
+	private static final int FRAMES_PER_SECOND = 3;
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private static final int SCREEN_WIDTH = 424;
     private static final int SCREEN_HEIGHT = 600;
-    private static final int NUMBER_OF_CELLS = 20;
+    private int NUMBER_OF_CELLS;
     private static final Insets GRID_INSETS = new Insets(60,12,0,12);
     
     private CellSociety _model;
     private Timeline _animation;
     private Scene _scene;
     private Pane _root;
-    private Tile[][] _cellGrid = new Tile[NUMBER_OF_CELLS][NUMBER_OF_CELLS];
+    private Tile[][] _cellGrid;
     
     public GUIMain(){
-		//TODO: set default model
+		_model = new LifeSociety();
+		NUMBER_OF_CELLS = _model.getSize();
     	_root =  new Pane();
 		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
 		setupAnimationTimeLine();
@@ -84,7 +86,6 @@ public class GUIMain{
     	_animation = new Timeline();
         _animation.setCycleCount(Timeline.INDEFINITE);
         _animation.getKeyFrames().add(frame);
-        _animation.play();
         setupGridView();
         setupUserControls();
     }
@@ -94,9 +95,13 @@ public class GUIMain{
      */
 
     private void setupGridView(){
+    	_cellGrid = new Tile[NUMBER_OF_CELLS][NUMBER_OF_CELLS];
+    	Color[][] colors = _model.getCurrentColors();
     	for(int i=0; i<NUMBER_OF_CELLS;i++){
     		for(int j=0; j<NUMBER_OF_CELLS;j++){
+    			System.out.println(i + " " + j);
         		Tile cell = new Tile(i,j);
+        		cell.setColor(colors[i][j]);
         		_cellGrid[i][j] = cell;
         		_root.getChildren().add(cell);
         	}
@@ -185,14 +190,15 @@ public class GUIMain{
 		System.out.println("STEP");
 		//TODO:
 		//colors[][] = model.nextStep();
+		updateTileColors(_model.step());
 		
-		//placeholder code for random colors
-		Random rand = new Random();
-		for(int i=0; i<NUMBER_OF_CELLS;i++){
-    		for(int j=0; j<NUMBER_OF_CELLS;j++){
-        		_cellGrid[i][j].setColor(rand.nextBoolean() ? Color.BLACK:Color.BLUE);
-        	}
-    	}
+//		//placeholder code for random colors
+//		Random rand = new Random();
+//		for(int i=0; i<NUMBER_OF_CELLS;i++){
+//    		for(int j=0; j<NUMBER_OF_CELLS;j++){
+//        		_cellGrid[i][j].setColor(rand.nextBoolean() ? Color.BLACK:Color.BLUE);
+//        	}
+//    	}
 	}
 
 }
