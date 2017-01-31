@@ -9,7 +9,7 @@ public abstract class CellSociety {
 	private ArrayList<Cell> currentCells;
 	private int size;
 	
-	public abstract ArrayList<Cell> step();
+	public abstract Color[][] step();
 	
 	public Color[][] getCurrentColors(){
 		Color [][] toRet = new Color[size][size];

@@ -3,6 +3,7 @@ package societal_level;
 import java.util.ArrayList;
 
 import cellular_level.*;
+import javafx.scene.paint.Color;
 
 public class LifeSociety extends CellSociety {
 
@@ -21,12 +22,13 @@ public class LifeSociety extends CellSociety {
 	}
 	
 	@Override
-	public ArrayList<Cell> step() {
+	public Color[][] step() {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		for(Cell c: getCurrentCells()){
 			nextGen.addAll(updateCell(c));
 		}
-		return nextGen;
+		setCurrentCells(nextGen);
+		return getCurrentColors();
 	}
 	
 	private ArrayList<Cell> updateCell(Cell c){
