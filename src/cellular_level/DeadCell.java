@@ -38,6 +38,23 @@ public class DeadCell extends Cell {
 	private boolean isReadyToLive(int numLive){
 		return numLive == numForLive;
 	}
+
+	public static int getNumForLive() {
+		return numForLive;
+	}
+
+	public static void setNumForLive(int numForLive) {
+		DeadCell.numForLive = numForLive;
+	}
+
+	public static Color getDeadColor() {
+		return deadColor;
+	}
+
+	public static void setDeadColor(Color deadColor) {
+		DeadCell.deadColor = deadColor;
+	}
+	
 	
 	
 

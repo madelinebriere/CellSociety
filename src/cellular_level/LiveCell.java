@@ -43,6 +43,31 @@ public class LiveCell extends Cell {
 	private boolean isUnderpopulated(int numLive){
 		return numLive<underpopulation;
 	}
+
+	public static int getUnderpopulation() {
+		return underpopulation;
+	}
+
+	public static void setUnderpopulation(int underpopulation) {
+		LiveCell.underpopulation = underpopulation;
+	}
+
+	public static int getOverpopulation() {
+		return overpopulation;
+	}
+
+	public static void setOverpopulation(int overpopulation) {
+		LiveCell.overpopulation = overpopulation;
+	}
+
+	public static Color getLiveColor() {
+		return liveColor;
+	}
+
+	public static void setLiveColor(Color liveColor) {
+		LiveCell.liveColor = liveColor;
+	}
+	
 	
 	
 
