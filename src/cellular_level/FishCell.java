@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
-import util.Location;
 
 public class FishCell extends WaterWorldCell {
 	private static int stepsToBreed=1;
@@ -31,7 +30,6 @@ public class FishCell extends WaterWorldCell {
 		super(row,col, fishColor);
 		setStepsSinceBreed(0);
 		setEaten(false);
-		
 	}
 	
 	/**
@@ -39,7 +37,7 @@ public class FishCell extends WaterWorldCell {
 	 * can move and then breed, placing a new FishCell in an adjacent Cell
 	 */
 	@Override
-	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		if(!isEaten()){
 			move(neighbors);
