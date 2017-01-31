@@ -1,6 +1,13 @@
+/**
+ * Class representing dead cells in the Game of Life Simulation
+ * Capable of active updates based on surroundings
+ * 
+ * @author maddiebriere
+ */
+
 package cellular_level;
 
-import java.awt.Color;
+import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 
@@ -19,6 +26,12 @@ public class DeadCell extends Cell {
 		super(row,col, deadColor);
 	}
 	
+	/**
+	 * @param neighbors Cell neighbors
+	 * @param nullCells Cells with no current occupants, stored as nulls
+	 * @return ArrayList of Cells for the next generation. Will contain either the current
+	 * dead cell or a new live cell in the same location. Never empty.
+	 */
 	@Override
 	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<Location> nullCells) {
 		ArrayList<Cell> newGen = new ArrayList<Cell>();

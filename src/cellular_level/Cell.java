@@ -1,7 +1,8 @@
 package cellular_level;
 import util.Location;
-import java.awt.Color;
 import java.util.ArrayList;
+
+import javafx.scene.paint.Color;
 
 public abstract class Cell {
 	private Location myLocation;
