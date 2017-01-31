@@ -1,6 +1,13 @@
+/**
+ * Cell used in the segregation simulation.
+ * Classified solely by color (state).
+ * 
+ * @author maddiebriere
+ */
+
 package cellular_level;
 
-import java.awt.Color;
+import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -17,13 +24,19 @@ public class HouseCell extends Cell{
 		super(row, col, state);
 	}
 	
+	/**
+	 * @param neighbors Cell neighbors
+	 * @param nullCells Cells with no current occupants, stored as nulls
+	 * @return ArrayList of next generation Cells, either contains the current Cell in the
+	 * same location, or the current Cell in a new location (if it was not satisfied)
+	 */
 	@Override
 	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<Location> nullCells) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		double percentSame = percentSame(neighbors);
 		if(!isSatisfied(percentSame)){
 			Location newSpot = getOpenSpot(nullCells);
-			setMyLocation(newSpot); //change location
+			setMyLocation(newSpot); 
 		}
 		nextGen.add(this);
 		return nextGen;
