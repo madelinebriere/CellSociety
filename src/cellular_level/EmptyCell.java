@@ -6,28 +6,19 @@ import javafx.scene.paint.Color;
 import util.Location;
 
 public class EmptyCell extends Cell{
-	private static Color emptyColor = null;
+	private static Color EMPTY_COLOR = null;
 	
 	public EmptyCell(){
-		this(0,0);
+		this(0,0, EMPTY_COLOR);
 	}
 	
-	public EmptyCell(int row, int col){
+	public EmptyCell(int row, int col, Color emptyColor){
 		super(row, col, emptyColor);
 	}
 	
 	@Override
-	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
 		return null;
 	}
-
-	public static Color getEmptyColor() {
-		return emptyColor;
-	}
-
-	public static void setEmptyColor(Color emptyColor) {
-		EmptyCell.emptyColor = emptyColor;
-	}
-	
 
 }

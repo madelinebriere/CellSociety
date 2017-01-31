@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
-import util.Location;
 
 public class SharkCell extends WaterWorldCell {
 	private static Color sharkColor = Color.YELLOW;
@@ -43,7 +42,7 @@ public class SharkCell extends WaterWorldCell {
 	 * Check for nulls in other neighbors
 	 */
 	@Override
-	protected ArrayList<Cell> update(ArrayList<Cell> nearbyCells, ArrayList<EmptyCell> nullCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> nearbyCells, ArrayList<EmptyCell> nullCells, int size) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		eatOrMove(nearbyCells, size);
 		breedOrDie(nextGen, nearbyCells, size);

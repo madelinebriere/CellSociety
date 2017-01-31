@@ -18,7 +18,7 @@ public abstract class Cell {
 		myState=state;
 	}
 	
-	protected abstract ArrayList<Cell> update(ArrayList<Cell>neighbors, ArrayList<EmptyCell>nullCells, int size);
+	public abstract ArrayList<Cell> update(ArrayList<Cell>neighbors, ArrayList<EmptyCell>nullCells, int size);
 
 	protected int countSameNeighbors(ArrayList<Cell>neighbors){
 		int sameCount = 0;
@@ -49,7 +49,7 @@ public abstract class Cell {
 	 * @param c target cell
 	 * @return true if adjacent, false otherwise
 	 */
-	protected boolean isAdjacent(Cell c){
+	public boolean isAdjacent(Cell c){
 		return isAdjacent(c.getMyLocation());
 	}
 	
@@ -82,7 +82,7 @@ public abstract class Cell {
 		return isWrappedAdjacent(l,size)|| isAdjacent(l);
 	}
 	
-	protected boolean isAnyAdjacent(Cell c, int size){
+	public boolean isAnyAdjacent(Cell c, int size){
 		return isWrappedAdjacent(c.getMyLocation(),size)|| isAdjacent(c.getMyLocation());
 	}
 	

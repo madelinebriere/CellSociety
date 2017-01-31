@@ -31,7 +31,7 @@ public class HouseCell extends Cell{
 	 * same location, or the current Cell in a new location (if it was not satisfied)
 	 */
 	@Override
-	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		double percentSame = percentSame(neighbors);
 		if(!isSatisfied(percentSame)){
