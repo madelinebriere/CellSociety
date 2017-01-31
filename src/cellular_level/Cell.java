@@ -44,6 +44,29 @@ public abstract class Cell {
 		this.setMyLocation(copyFrom.getMyLocation());
 	}
 	
+	protected boolean isAdjacent(Cell c){
+		return isAdjacent(c.getMyLocation());
+	}
+	
+	protected boolean isAdjacent(Location l){
+		return (sameColumn(l) && oneAwayVertical(l))||(sameRow(l) && oneAwayHorizontal(l));
+	}
+	
+	private boolean sameColumn(Location l){
+		return l.getMyCol() == getMyCol();
+	}
+	private boolean sameRow(Location l){
+		return l.getMyCol() == getMyCol();
+	}
+	private boolean oneAwayVertical(Location l){
+		return ((this.getMyRow()+1) == l.getMyRow()) || ((this.getMyRow()-1) == l.getMyRow());
+	}
+	
+	private boolean oneAwayHorizontal(Location l){
+		return ((this.getMyCol()+1) == l.getMyCol()) || ((this.getMyCol()-1) == l.getMyCol());
+	}
+	
+	
 	public Location getMyLocation() {
 		return myLocation;
 	}
