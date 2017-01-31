@@ -1,6 +1,7 @@
 package societal_level;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import cellular_level.*;
 import javafx.scene.paint.Color;
@@ -12,10 +13,12 @@ public class LifeSociety extends CellSociety {
 	 */
 	public LifeSociety(){
 		setSize(10);
+		Random rnd = new Random();
 		ArrayList<Cell>makeCells = new ArrayList<Cell>();
 		for(int i=0; i<getSize(); i++){
 			for(int j=0; j<getSize(); j++){
-				makeCells.add(new LiveCell(i,j));
+					makeCells.add( rnd.nextBoolean()? new LiveCell(i,j) : new DeadCell(i,j));
+				
 			}
 		}
 		setCurrentCells(makeCells);
