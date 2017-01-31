@@ -1,3 +1,12 @@
+/**
+ * Shark cell in Water World Simulation
+ * 
+ * May need abstract super class because of duplicate
+ * code with FishCell
+ * 
+ * @author maddiebriere
+ */
+
 package cellular_level;
 
 import java.util.ArrayList;
@@ -6,7 +15,7 @@ import java.util.Random;
 import javafx.scene.paint.Color;
 import util.Location;
 
-public class SharkCell extends Cell {
+public class SharkCell extends WaterWorldCell {
 	private static Color sharkColor = Color.YELLOW;
 	private static int stepsToStarve = 5;
 	private static int stepsToBreed = 20;
@@ -28,46 +37,40 @@ public class SharkCell extends Cell {
 
 
 	/**
-	 * Possible concern: Is it okay to choose to eat this fish without "talking"
-	 * to other SharkCells?
+	 * Unlike many of the other types of cells, this cell requires 2nd order neighbors 
+	 * as well as 1st order neighbors. This is because of possible mobility.
 	 * 
 	 * Check for nulls in other neighbors
 	 */
 	@Override
-	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<Location> nullCells) {
+	protected ArrayList<Cell> update(ArrayList<Cell> nearbyCells, ArrayList<EmptyCell> nullCells, int size) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
-		FishCell food = getRandomFish(neighbors);
+		eatOrMove(nearbyCells, size);
+		breedOrDie(nextGen, nearbyCells, size);
+		return nextGen;
+	}
+	
+	private void eatOrMove(ArrayList<Cell> nearbyCells, int size){
+		ArrayList<Cell> firstOrderNeighbors = getFirstOrderNeighbors(nearbyCells, size);
+		FishCell food = getRandomFish(firstOrderNeighbors);
 		if(food!=null){
 			eatFish(food);
 		}
 		else{
-			move(neighbors, nullCells);
+			move(firstOrderNeighbors);
 		}
-		
+	}
+	
+	private void breedOrDie(ArrayList<Cell> nextGen, ArrayList<Cell> nearbyCells, int size){
 		if(!isStarved()){
 			nextGen.add(this);
 			if(timeToBreed()){
-				SharkCell baby = breed(nullCells);
-				nextGen.add(baby);
+				SharkCell baby = breed(nearbyCells, size);
+				if(baby!=null){
+					nextGen.add(baby);
+				}
 			}
 		}
-		return nextGen;
-	}
-	
-	private void move(ArrayList<Cell> neighbors, ArrayList<Location> nullCells){
-		ArrayList<Cell> openSpots = getOpenAdjacentCells(neighbors, nullCells);
-		int index = randy.nextInt(openSpots.size());
-		this.copyLocation(openSpots.get(index));
-	}
-	
-	private ArrayList<Cell> getOpenAdjacentCells(ArrayList<Cell> neighbors, ArrayList<Location> nullCells){
-		ArrayList<Cell> toRet = new ArrayList<Cell>();
-		for(Cell c: neighbors){
-			if(c!=null && nullCells.contains(c.getMyLocation())){
-				toRet.add(c);
-			}
-		}
-		return toRet;
 	}
 	
 	private void eatFish(FishCell food){
@@ -75,26 +78,12 @@ public class SharkCell extends Cell {
 		setStepsSinceEat(0);
 	}
 	
-	private SharkCell breed(ArrayList<Location> nullCells){
-		ArrayList<Location> possibleBreedSpots = new ArrayList<Location>();
-		for(Location loc : nullCells){
-			if(isAdjacent(loc)){
-				possibleBreedSpots.add(loc);
-			}
-		}
-		int index = randy.nextInt(possibleBreedSpots.size());
-		Location breedSpot = possibleBreedSpots.get(index);
+	private SharkCell breed(ArrayList<Cell> nearbyCells, int size){
+		EmptyCell breedSpot = getBreedSpot(nearbyCells, size);
 		SharkCell baby = new SharkCell(breedSpot.getMyRow(), breedSpot.getMyCol());
 		return baby;
 	}
 	
-	private boolean timeToBreed(){
-		return stepsSinceBreed<=stepsToBreed;
-	}
-	
-	private boolean isStarved(){
-		return stepsSinceEat<=stepsSinceEat;
-	}
 	
 	private FishCell getRandomFish(ArrayList<Cell> neighbors){
 		ArrayList<FishCell> possibleFood = locateFishCells(neighbors);
@@ -116,6 +105,14 @@ public class SharkCell extends Cell {
 			}
 		}
 		return possibleFood;
+	}
+	
+	private boolean timeToBreed(){
+		return stepsSinceBreed<=stepsToBreed;
+	}
+	
+	private boolean isStarved(){
+		return stepsSinceEat<=stepsSinceEat;
 	}
 	
 	public static Color getSharkColor() {

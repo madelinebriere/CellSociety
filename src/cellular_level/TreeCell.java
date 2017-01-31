@@ -37,7 +37,7 @@ public class TreeCell extends Cell {
 	 * same location (if the tree has caught fire)
 	 */
 	@Override
-	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<Location> nullCells) {
+	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
 		ArrayList <Cell> nextGen = new ArrayList<Cell>();
 		if(numberBurningTrees(neighbors)>=1 && catchFire()){
 			BurnCell child = new BurnCell();

@@ -36,7 +36,7 @@ public class LiveCell extends Cell {
 	 * live cell or a new dead cell in the same location. Never empty.
 	 */
 	@Override
-	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<Location> nullCells) {
+	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
 		ArrayList<Cell> newGen = new ArrayList<Cell>();
 		int numLive = countSameNeighbors(neighbors);
 		if(isOverpopulated(numLive)||isUnderpopulated(numLive)){
