@@ -31,7 +31,7 @@ public class HouseCell extends Cell{
 	 * same location, or the current Cell in a new location (if it was not satisfied)
 	 */
 	@Override
-	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<Location> nullCells) {
+	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		double percentSame = percentSame(neighbors);
 		if(!isSatisfied(percentSame)){
@@ -52,10 +52,10 @@ public class HouseCell extends Cell{
 		return percentSame;
 	}
 	
-	private Location getOpenSpot(ArrayList<Location> nullCells){
+	private Location getOpenSpot(ArrayList<EmptyCell> nullCells){
 		Random randy = new Random();
 		int emptyIndex = randy.nextInt(nullCells.size());
-		return nullCells.get(emptyIndex);
+		return nullCells.get(emptyIndex).getMyLocation();
 	}
 
 	

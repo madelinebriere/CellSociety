@@ -36,7 +36,7 @@ public class BurnCell extends Cell {
 	 * next generation). Otherwise, an empty List is returned.
 	 */
 	@Override
-	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<Location> nullCells) {
+	protected ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
 		ArrayList<Cell>nextGen = new ArrayList<Cell>();
 		mySteps++;
 		if(!isBurnt()){
