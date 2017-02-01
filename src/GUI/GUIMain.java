@@ -11,6 +11,12 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -130,7 +136,12 @@ public class GUIMain{
     private Button plainButton(String text){
     	Button button = new Button(text);
     	button.setPrefSize(80, 40);
-    	button.setTextFill(Color.BLACK);
+    	button.setTextFill(Color.rgb(60, 60, 60));
+    	button.setBackground(Background.EMPTY);
+    	BorderStroke[] bs = {new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, new CornerRadii(4), BorderWidths.DEFAULT)};
+    	Border b = new Border(bs);
+    	button.setBorder(b);
+    	
     	return button;
     }
     private void setupSpeedSlider(){
@@ -145,8 +156,8 @@ public class GUIMain{
     }
     private void resetAnimation(){
     	pauseAnimation();
-    	_grid.resetGrid();
-    	//TODO: model.reset();
+    	_model = new FireSociety(); //TODO: change this
+    	_grid.updateTileColors(_model.getCurrentColors());
     }
 
     /**
