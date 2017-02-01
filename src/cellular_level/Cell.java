@@ -110,7 +110,6 @@ public abstract class Cell {
 		return ((this.getMyCol()+1) == l.getMyCol()) || ((this.getMyCol()-1) == l.getMyCol());
 	}
 	
-	
 	public Location getMyLocation() {
 		return myLocation;
 	}
