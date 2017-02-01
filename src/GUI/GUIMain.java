@@ -28,8 +28,9 @@ public class GUIMain{
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private static final int SCREEN_WIDTH = 424;
     private static final int SCREEN_HEIGHT = 600;
-    private int NUMBER_OF_CELLS;
     private static final Insets GRID_INSETS = new Insets(60,12,0,12);
+    private final int NUMBER_OF_CELLS;
+    private final Color[][] INITITAL_GRID_STATE; 
     
     private CellSociety _model;
     private Timeline _animation;
@@ -38,14 +39,12 @@ public class GUIMain{
     private Tile[][] _cellGrid;
     
     public GUIMain(){
-		_model = new LifeSociety();
-		NUMBER_OF_CELLS = _model.getSize();
-    	_root =  new Pane();
-		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
-		setupAnimationTimeLine();
+		this(new LifeSociety());
     }
     public GUIMain(CellSociety model){
     	_model = model;
+		NUMBER_OF_CELLS = _model.getSize();
+		INITITAL_GRID_STATE = _model.getCurrentColors();
     	_root =  new Pane();
 		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
 		setupAnimationTimeLine();
@@ -174,7 +173,9 @@ public class GUIMain{
     	_animation.play();
     }
     private void resetAnimation(){
-    	//TODO: 
+    	pauseAnimation();
+    	updateTileColors(INITITAL_GRID_STATE);
+    	//TODO: model.reset();
     }
     
     private void updateTileColors(Color[][] colors){
