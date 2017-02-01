@@ -15,7 +15,7 @@ import java.util.Random;
 import util.Location;
 
 public class TreeCell extends Cell {
-	private static double probCatch;
+	private static double probCatch = .30;
 	private static Color treeColor = Color.FORESTGREEN;
 	private Random randy = new Random();
 
@@ -40,6 +40,7 @@ public class TreeCell extends Cell {
 	public ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
 		ArrayList <Cell> nextGen = new ArrayList<Cell>();
 		if(numberBurningTrees(neighbors)>=1 && catchFire()){
+			System.out.println("HERE");
 			BurnCell child = new BurnCell();
 			child.copyLocation(this);
 			nextGen.add(child);
@@ -47,7 +48,7 @@ public class TreeCell extends Cell {
 		else{
 			nextGen.add(this);
 		}
-		return null;
+		return nextGen;
 	}
 	
 	private int numberBurningTrees(ArrayList<Cell> neighbors){

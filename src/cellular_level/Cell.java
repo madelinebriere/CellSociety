@@ -23,7 +23,7 @@ public abstract class Cell {
 	protected int countSameNeighbors(ArrayList<Cell>neighbors){
 		int sameCount = 0;
 		for(Cell c: neighbors){
-			if(c.getMyState()==getMyState()){
+			if(c.getClass() == this.getClass()){
 				sameCount++;
 			}
 		}
@@ -33,7 +33,7 @@ public abstract class Cell {
 	protected int countDiffNeighbors(ArrayList<Cell>neighbors){
 		int diffCount = 0;
 		for(Cell c: neighbors){
-			if(c.getMyState()!=getMyState()){
+			if(!(c.getClass() == this.getClass())){
 				diffCount++;
 			}
 		}
@@ -54,7 +54,8 @@ public abstract class Cell {
 	}
 	
 	protected boolean isAdjacent(Location l){
-		return (sameColumn(l) && oneAwayVertical(l))||(sameRow(l) && oneAwayHorizontal(l));
+		return (sameColumn(l) && oneAwayVertical(l))||(sameRow(l) && oneAwayHorizontal(l))
+				||(oneAwayVertical(l) && oneAwayHorizontal(l));
 	}
 	
 	/**
@@ -100,7 +101,7 @@ public abstract class Cell {
 		return l.getMyCol() == getMyCol();
 	}
 	private boolean sameRow(Location l){
-		return l.getMyCol() == getMyCol();
+		return l.getMyRow() == getMyRow();
 	}
 	private boolean oneAwayVertical(Location l){
 		return ((this.getMyRow()+1) == l.getMyRow()) || ((this.getMyRow()-1) == l.getMyRow());
