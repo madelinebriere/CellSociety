@@ -18,6 +18,17 @@ public abstract class Cell {
 		myState=state;
 	}
 	
+	
+	public boolean positionEquals(Object o){
+		if(o == this){
+			return true;
+		}
+		if(!(o instanceof Cell)){
+			return false;
+		}
+		return getMyLocation().equals(((Cell)o).getMyLocation());
+	}
+	
 	public abstract ArrayList<Cell> update(ArrayList<Cell>neighbors, ArrayList<EmptyCell>nullCells, int size);
 
 	protected int countSameNeighbors(ArrayList<Cell>neighbors){
@@ -40,7 +51,7 @@ public abstract class Cell {
 		return diffCount;
 	}
 	
-	protected void copyLocation(Cell copyFrom){
+	public void copyLocation(Cell copyFrom){
 		this.setMyLocation(copyFrom.getMyLocation());
 	}
 	

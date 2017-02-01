@@ -13,11 +13,22 @@ import javafx.scene.paint.Color;
 public abstract class CellSociety {
 	private ArrayList<Cell> currentCells;
 	private int size;
+	private Color emptyColor;
 	
+
 	public Color[][] getCurrentColors(){
+		//Catch to avoid null pointer 
+		if(getEmptyColor()==null){
+			setEmptyColor(Color.WHITE);
+		}
 		Color [][] toRet = new Color[size][size];
 		for(Cell c: currentCells){
-			toRet[c.getMyRow()][c.getMyCol()]=c.getMyState();
+			if(!(c instanceof EmptyCell)){
+				toRet[c.getMyRow()][c.getMyCol()]=c.getMyState();
+			}
+			else{
+				toRet[c.getMyRow()][c.getMyCol()]=getEmptyColor();
+			}
 		}
 		return toRet;
 	}
@@ -37,12 +48,17 @@ public abstract class CellSociety {
 	 * @return
 	 */
 	public Color[][] step() {
+		updateAllCells();
+		return getCurrentColors();
+	}
+	
+	public void updateAllCells(){
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		for(Cell c: getCurrentCells()){
 			nextGen.addAll(updateCell(c));
+			System.out.println("HERE " + c.getMyState());
 		}
 		setCurrentCells(nextGen);
-		return getCurrentColors();
 	}
 	
 	/**
@@ -58,13 +74,6 @@ public abstract class CellSociety {
 		return newCells;
 	}
 	
-	public ArrayList<Cell> getCurrentCells(){
-		return currentCells;
-	}
-	
-	public void setCurrentCells(ArrayList<Cell> current){
-		currentCells=current;
-	}
 	
 	public ArrayList<EmptyCell> getEmptyCells(){
 		ArrayList <EmptyCell>toRet = new ArrayList<EmptyCell>();
@@ -97,14 +106,7 @@ public abstract class CellSociety {
 		}
 		return neighbors;
 	}
-	
-	public int getSize() {
-		return size;
-	}
 
-	public void setSize(int size) {
-		this.size = size;
-	}
 
 	public ArrayList<Cell>getSecondNeighbors(Cell c){
 		HashSet <Cell> neighborhood = new HashSet<Cell>();
@@ -130,5 +132,28 @@ public abstract class CellSociety {
 		return toRet;
 	}
 	
+	public ArrayList<Cell> getCurrentCells(){
+		return currentCells;
+	}
 	
+	public void setCurrentCells(ArrayList<Cell> current){
+		currentCells=current;
+	}
+	
+	public Color getEmptyColor() {
+		return emptyColor;
+	}
+
+	public void setEmptyColor(Color emptyColor) {
+		this.emptyColor = emptyColor;
+	}
+	
+	
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
 }

@@ -36,9 +36,15 @@ public class HouseCell extends Cell{
 		double percentSame = percentSame(neighbors);
 		if(!isSatisfied(percentSame)){
 			Location newSpot = getOpenSpot(nullCells);
-			setMyLocation(newSpot); 
+			HouseCell relocatedCell = new HouseCell(newSpot.getMyRow(), newSpot.getMyRow(), this.getMyState());
+			nextGen.add(relocatedCell);
+			
+			EmptyCell leftover = new EmptyCell(this);
+			nextGen.add(leftover);
 		}
-		nextGen.add(this);
+		else{
+			nextGen.add(this);
+		}
 		return nextGen;
 	}
 

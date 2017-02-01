@@ -13,6 +13,7 @@ public class LifeSociety extends CellSociety {
 	 */
 	public LifeSociety(){
 		setSize(10);
+		setEmptyColor(Color.BLUE); //catch any errors
 		Random rnd = new Random();
 		ArrayList<Cell>makeCells = new ArrayList<Cell>();
 		

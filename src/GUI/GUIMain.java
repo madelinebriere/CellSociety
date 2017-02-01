@@ -20,7 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import societal_level.CellSociety;
-import societal_level.FireSociety;
+import societal_level.PopSociety;
 
 public class GUIMain{
 
@@ -38,7 +38,7 @@ public class GUIMain{
     private Tile[][] _cellGrid;
     
     public GUIMain(){
-		_model = new FireSociety();
+		_model = new PopSociety();
 		NUMBER_OF_CELLS = _model.getSize();
     	_root =  new Pane();
 		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
