@@ -17,6 +17,7 @@ public class BurnCell extends Cell {
 	private static int stepsToBurn = 1;
 	private int mySteps;
 
+
 	public BurnCell(){
 		super();
 		setMyState(burnColor);

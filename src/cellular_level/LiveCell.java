@@ -36,6 +36,9 @@ public class LiveCell extends Cell {
 	public ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
 		ArrayList<Cell> newGen = new ArrayList<Cell>();
 		int numLive = countSameNeighbors(neighbors);
+		System.out.println("together: " + (isOverpopulated(numLive)||isUnderpopulated(numLive)));
+		System.out.println("isoverpopulated: " + isOverpopulated(numLive));
+		System.out.println(numLive);
 		if(isOverpopulated(numLive)||isUnderpopulated(numLive)){
 			DeadCell child = new DeadCell();
 			child.copyLocation(this);
