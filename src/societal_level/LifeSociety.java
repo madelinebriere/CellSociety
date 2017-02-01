@@ -15,31 +15,40 @@ public class LifeSociety extends CellSociety {
 		setSize(10);
 		Random rnd = new Random();
 		ArrayList<Cell>makeCells = new ArrayList<Cell>();
-		for(int i=0; i<getSize(); i++){
+		
+		//RANDOM
+		/**for(int i=0; i<getSize(); i++){
 			for(int j=0; j<getSize(); j++){
 					makeCells.add( rnd.nextBoolean()? new LiveCell(i,j) : new DeadCell(i,j));
 				
 			}
-		}
+		}*/
+		
+		//BLINKER
+		/**for(int i=0; i<getSize(); i++){
+			for(int j=0; j<getSize(); j++){
+				if(!((i==4) && (j==3 || j==4 || j==5)))
+					makeCells.add(new DeadCell(i,j));
+				else
+					makeCells.add(new LiveCell(i,j));
+				
+			}
+		}*/
+		
+		//BEACON
+		/**for(int i=0; i<getSize(); i++){
+			for(int j=0; j<getSize(); j++){
+				if(!(( (i==4 || i==5)  && ( j==4 || j==5 ) )|| 
+					 ( (i==6 || i==7) && (j==6 || j==7) )))
+					makeCells.add(new DeadCell(i,j));
+				else
+					makeCells.add(new LiveCell(i,j));
+				
+			}
+		}*/
+		
 		setCurrentCells(makeCells);
 	}
 	
-	@Override
-	public Color[][] step() {
-		ArrayList<Cell> nextGen = new ArrayList<Cell>();
-		for(Cell c: getCurrentCells()){
-			nextGen.addAll(updateCell(c));
-		}
-		setCurrentCells(nextGen);
-		return getCurrentColors();
-	}
-	
-	private ArrayList<Cell> updateCell(Cell c){
-		ArrayList<Cell> neighbors = getFirstNeighbors(c);
-		ArrayList<EmptyCell> emptyCells = getEmptyCells();
-		int size = getSize();
-		ArrayList<Cell> newCells =  c.update(neighbors, emptyCells, size);
-		return newCells;
-	}
 
 }

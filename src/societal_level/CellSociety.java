@@ -1,3 +1,8 @@
+/**
+ * Class made abstract solely to keep
+ * users from creating instances of the
+ * superclass
+ */
 package societal_level;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -9,14 +14,48 @@ public abstract class CellSociety {
 	private ArrayList<Cell> currentCells;
 	private int size;
 	
-	public abstract Color[][] step();
-	
 	public Color[][] getCurrentColors(){
 		Color [][] toRet = new Color[size][size];
 		for(Cell c: currentCells){
 			toRet[c.getMyRow()][c.getMyCol()]=c.getMyState();
 		}
 		return toRet;
+	}
+	
+	public void printCurrentColors(){
+		Color[][] curr = getCurrentColors();
+		for(int i=0; i<size; i++){
+			for(int j=0; j<size; j++){
+				System.out.print(curr[i][j].toString()+ "  ");
+			}
+			System.out.println();
+		}
+	}
+	
+	/**
+	 * Basic step, can override in subclass
+	 * @return
+	 */
+	public Color[][] step() {
+		ArrayList<Cell> nextGen = new ArrayList<Cell>();
+		for(Cell c: getCurrentCells()){
+			nextGen.addAll(updateCell(c));
+		}
+		setCurrentCells(nextGen);
+		return getCurrentColors();
+	}
+	
+	/**
+	 * Basic update: Can override in subclass
+	 * @param c
+	 * @return
+	 */
+	private ArrayList<Cell> updateCell(Cell c){
+		ArrayList<Cell> neighbors = getFirstNeighbors(c);
+		ArrayList<EmptyCell> emptyCells = getEmptyCells();
+		int size = getSize();
+		ArrayList<Cell> newCells =  c.update(neighbors, emptyCells, size);
+		return newCells;
 	}
 	
 	public ArrayList<Cell> getCurrentCells(){
