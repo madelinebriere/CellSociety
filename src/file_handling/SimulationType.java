@@ -16,7 +16,7 @@ public abstract class SimulationType {
 	    });
 	
 	
-	//private ArrayList<String> cellData = new ArrayList<String>();  //Would be used to store each initial cell's string of data
+	//private List<String> cellData = new ArrayList<String>();  //Would be used to store each initial cell's string of data
 																	//Instead of holding it as one long String in myDataValues
 																	//Would have to remove "cells" from UNIVERSAL_DATA_TYPES
 	private List<String> dataTypes = setDataTypes();
@@ -25,6 +25,11 @@ public abstract class SimulationType {
 	public SimulationType(Map<String, String> values){
 		myDataValues = values;
 	}
+	
+//	public SimulationType(Map<String, String> values, ArrayList<String> cells){
+//		myDataValues = values;
+//		cellData = cells
+//	}
 	
 	public String getTitle(){
 		return myDataValues.get(UNIVERSAL_DATA_TYPES.get(0));
@@ -38,13 +43,14 @@ public abstract class SimulationType {
 		return Integer.parseInt(myDataValues.get(UNIVERSAL_DATA_TYPES.get(2)));
 	}
 	
-	public List<Cell> getCellPositions(){
-		String cellData = myDataValues.get(UNIVERSAL_DATA_TYPES.get(3));
-		List<Cell> cellPositions = new ArrayList<Cell>();
+	public ArrayList<Cell> getCells(){
+		String cellDataString = myDataValues.get(UNIVERSAL_DATA_TYPES.get(3));
+		ArrayList<Cell> cells = new ArrayList<Cell>();
 		
 		//TODO: implement
+		//return createCells();
 		
-		return cellPositions;
+		return cells;
 	}
 	
 	
@@ -66,6 +72,19 @@ public abstract class SimulationType {
 	 * @return List of all attributes that an XMLParser will look for
 	 */
 	public abstract List<String> setDataTypes(); 
+	
+	protected abstract ArrayList<Cell> createCells();
+	//Example implementation of LifeSimulation
+	
+//	for(String data: cellData){
+//		String[] vars = data.split(" ");
+//		if(vars[2].toUpperCase().equals("LIVE")){
+//			cells.add(new LiveCell(vars[0], vars[1]));
+//		}
+//		else{
+//			cells.add(new DeadCell(vars[0], vars[1]));
+//		}
+//	}
 	
 	
 }
