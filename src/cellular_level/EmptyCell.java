@@ -18,7 +18,9 @@ public class EmptyCell extends Cell{
 	
 	@Override
 	public ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
-		return null;
+		ArrayList<Cell> empty = new ArrayList<Cell>();
+		empty.add(this);
+		return empty;
 	}
 
 }

@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import util.Location;
 
 public class BurnCell extends Cell {
-	private static Color burnColor = Color.YELLOW;
+	private static Color burnColor = Color.RED;
+	private static Color burntColor = Color.YELLOW;
 	private static int stepsToBurn = 1;
 	private int mySteps;
 
@@ -42,6 +43,10 @@ public class BurnCell extends Cell {
 		mySteps++;
 		if(!isBurnt()){
 			nextGen.add(this); //nextGen only filled if this is satisfied
+		}
+		else{
+			EmptyCell burned = new EmptyCell(this.getMyRow(), this.getMyCol(), burntColor);
+			nextGen.add(burned);
 		}
 		return nextGen;
 	}
