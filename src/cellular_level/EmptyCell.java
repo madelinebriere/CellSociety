@@ -21,7 +21,15 @@ public class EmptyCell extends Cell{
 	}
 	
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
+	public Cell createCopy(){
+		EmptyCell copy = new EmptyCell();
+		copy.setMyLocation(this.getMyLocation());
+		copy.setMyState(this.getMyState());
+		return copy;
+	}
+	
+	@Override
+	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
 		ArrayList<Cell> empty = new ArrayList<Cell>();
 		empty.add(this);
 		return empty;

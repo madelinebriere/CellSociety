@@ -29,6 +29,15 @@ public class TreeCell extends Cell {
 		super(row, col, treeColor);
 	}
 	
+	@Override
+	public Cell createCopy(){
+		TreeCell copy = new TreeCell();
+		copy.setMyLocation(this.getMyLocation());
+		copy.setMyState(this.getMyState());
+		return copy;
+	}
+
+	
 	/**
 	 * @param neighbors Cell neighbors
 	 * @param nullCells Cells with no current occupants, stored as nulls
@@ -37,8 +46,9 @@ public class TreeCell extends Cell {
 	 * same location (if the tree has caught fire)
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
 		ArrayList <Cell> nextGen = new ArrayList<Cell>();
+		ArrayList<Cell> neighbors = getFirstNeighbors(currentCells);
 		if(numberBurningTrees(neighbors)>=1 && catchFire()){
 			System.out.println("HERE");
 			BurnCell child = new BurnCell();

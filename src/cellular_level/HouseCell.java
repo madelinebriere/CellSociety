@@ -24,6 +24,14 @@ public class HouseCell extends Cell{
 		super(row, col, state);
 	}
 	
+	@Override
+	public Cell createCopy(){
+		HouseCell copy = new HouseCell();
+		copy.setMyLocation(this.getMyLocation());
+		copy.setMyState(this.getMyState());
+		return copy;
+	}
+	
 	/**
 	 * @param neighbors Cell neighbors
 	 * @param nullCells Cells with no current occupants, stored as nulls
@@ -31,8 +39,10 @@ public class HouseCell extends Cell{
 	 * same location, or the current Cell in a new location (if it was not satisfied)
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
+		ArrayList<Cell> neighbors = getFirstNeighbors(currentCells);
+		ArrayList<EmptyCell> nullCells = getEmptyCells(currentCells);
 		double percentSame = percentSame(neighbors);
 		if(!isSatisfied(percentSame)){
 			Location newSpot = getOpenSpot(nullCells);

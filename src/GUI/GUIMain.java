@@ -20,7 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import societal_level.CellSociety;
-import societal_level.PopSociety;
+import societal_level.*;
 
 public class GUIMain{
 

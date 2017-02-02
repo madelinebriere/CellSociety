@@ -33,6 +33,16 @@ public class SharkCell extends WaterWorldCell {
 		setStepsSinceEat(0);
 		setStepsSinceBreed(0);
 	}
+	
+	@Override
+	public Cell createCopy(){
+		SharkCell copy = new SharkCell();
+		copy.setMyLocation(this.getMyLocation());
+		copy.setMyState(this.getMyState());
+		copy.setStepsSinceBreed(this.getStepsSinceBreed());
+		copy.setStepsSinceEat(this.getStepsSinceEat());
+		return copy;
+	}
 
 
 	/**
@@ -42,7 +52,8 @@ public class SharkCell extends WaterWorldCell {
 	 * Check for nulls in other neighbors
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> nearbyCells, ArrayList<EmptyCell> nullCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
+		ArrayList<Cell> nearbyCells = getSecondNeighbors(currentCells);
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		eatOrMove(nearbyCells, size);
 		breedOrDie(nextGen, nearbyCells, size);

@@ -52,6 +52,26 @@ public abstract class CellSociety {
 		return getCurrentColors();
 	}
 	
+	/**
+	 * DUPLICATE METHOD FROM CELL
+	 * 
+	 * 
+	 * FIND FIX!!
+	 * @param currentCells
+	 * @return
+	 */
+	public ArrayList<EmptyCell> getEmptyCells(){
+		ArrayList<Cell> currentCells = getCurrentCells();
+		ArrayList <EmptyCell>toRet = new ArrayList<EmptyCell>();
+		for(Cell c: currentCells){
+			if(c instanceof EmptyCell){
+				toRet.add((EmptyCell)c);
+			}
+		}
+		return toRet;
+	}
+	
+	
 	public void updateAllCells(){
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		for(Cell c: getCurrentCells()){
@@ -67,69 +87,19 @@ public abstract class CellSociety {
 	 * @return
 	 */
 	private ArrayList<Cell> updateCell(Cell c){
-		ArrayList<Cell> neighbors = getFirstNeighbors(c);
-		ArrayList<EmptyCell> emptyCells = getEmptyCells();
 		int size = getSize();
-		ArrayList<Cell> newCells =  c.update(neighbors, emptyCells, size);
+		ArrayList<Cell> newCells =  c.update(getCurrentCellsCopy(), size);
 		return newCells;
 	}
 	
 	
-	public ArrayList<EmptyCell> getEmptyCells(){
-		ArrayList <EmptyCell>toRet = new ArrayList<EmptyCell>();
-		for(Cell c: currentCells){
-			if(c instanceof EmptyCell){
-				toRet.add((EmptyCell)c);
-			}
-			
+	public ArrayList<Cell> getCurrentCellsCopy(){
+		ArrayList<Cell> copy = new ArrayList<Cell>();
+		for(Cell c: getCurrentCells()){
+			Cell newCell = c.createCopy();
+			copy.add(newCell);
 		}
-		return toRet;
-	}
-	
-	public ArrayList<Cell> getFirstNeighbors(Cell c){
-		ArrayList<Cell> neighbors = new ArrayList<Cell>();
-		for(Cell possible: currentCells){
-			if(possible.isAdjacent(c)){
-				neighbors.add(possible);
-			}
-		}
-		return neighbors;
-	}
-	
-	public ArrayList<Cell> getWrappedFirstNeighbors(Cell c){
-		ArrayList<Cell> neighbors = new ArrayList<Cell>();
-		for(Cell possible: currentCells){
-			if(possible.isAnyAdjacent(c, size)){
-				neighbors.add(possible);
-			}
-			
-		}
-		return neighbors;
-	}
-
-
-	public ArrayList<Cell>getSecondNeighbors(Cell c){
-		HashSet <Cell> neighborhood = new HashSet<Cell>();
-		ArrayList<Cell> firstOrderNeighbors = getFirstNeighbors(c);
-		neighborhood.addAll(firstOrderNeighbors);
-		for(Cell n: firstOrderNeighbors){
-			ArrayList<Cell> secondOrderNeighbors = getFirstNeighbors(n);
-			neighborhood.addAll(secondOrderNeighbors);
-		}
-		ArrayList<Cell> toRet = new ArrayList<Cell>(neighborhood);
-		return toRet;
-	}
-	
-	public ArrayList<Cell>getSecondWrappedNeighbors(Cell c){
-		HashSet <Cell> neighborhood = new HashSet<Cell>();
-		ArrayList<Cell> firstOrderNeighbors = getWrappedFirstNeighbors(c);
-		neighborhood.addAll(firstOrderNeighbors);
-		for(Cell n: firstOrderNeighbors){
-			ArrayList<Cell> secondOrderNeighbors = getWrappedFirstNeighbors(n);
-			neighborhood.addAll(secondOrderNeighbors);
-		}
-		ArrayList<Cell> toRet = new ArrayList<Cell>(neighborhood);
-		return toRet;
+		return copy;
 	}
 	
 	public ArrayList<Cell> getCurrentCells(){
