@@ -32,7 +32,6 @@ public abstract class Cell {
 		myState=state;
 	}
 	
-	
 	public boolean positionEquals(Object o){
 		if(o == this){
 			return true;
@@ -43,26 +42,9 @@ public abstract class Cell {
 		return getMyLocation().equals(((Cell)o).getMyLocation());
 	}
 	
-	public abstract ArrayList<Cell> update(ArrayList<Cell>currentCells, int size);
-	
-	/**
-	 * Duplicate method from CellSociety
-	 * 
-	 * 
-	 * @param currentCells
-	 * @return
-	 */
-	public ArrayList<EmptyCell> getEmptyCells(ArrayList<Cell> currentCells){
-		ArrayList <EmptyCell>toRet = new ArrayList<EmptyCell>();
-		for(Cell c: currentCells){
-			if(c instanceof EmptyCell){
-				toRet.add((EmptyCell)c);
-			}
-		}
-		return toRet;
-	}
-	
 	public abstract Cell createCopy();
+	
+	public abstract ArrayList<Cell> update(ArrayList<Cell>currentCells, ArrayList<EmptyCell>available, int size);
 
 	public ArrayList<Cell> getFirstNeighbors(ArrayList<Cell> currentCells){
 		ArrayList<Cell> neighbors = new ArrayList<Cell>();
@@ -110,10 +92,11 @@ public abstract class Cell {
 		return toRet;
 	}
 	
+	
 	protected int countSameNeighbors(ArrayList<Cell>neighbors){
 		int sameCount = 0;
 		for(Cell c: neighbors){
-			if(c.getClass() == this.getClass()){
+			if(c.getMyState()!=null && c.getMyState().equals(this.getMyState())){
 				sameCount++;
 			}
 		}
@@ -131,7 +114,8 @@ public abstract class Cell {
 	}
 	
 	public void copyLocation(Cell copyFrom){
-		this.setMyLocation(copyFrom.getMyLocation());
+		this.setMyCol(copyFrom.getMyCol());
+		this.setMyRow(copyFrom.getMyRow());
 	}
 	
 	/**

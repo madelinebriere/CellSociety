@@ -14,7 +14,7 @@ import java.util.Random;
 import util.Location;
 
 public class HouseCell extends Cell{
-	public static double satisfiedThreshold;
+	public static double satisfiedThreshold = .80;
 	
 	public HouseCell(){
 		super();
@@ -39,18 +39,18 @@ public class HouseCell extends Cell{
 	 * same location, or the current Cell in a new location (if it was not satisfied)
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> currentCells, ArrayList<EmptyCell> available, int size) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		ArrayList<Cell> neighbors = getFirstNeighbors(currentCells);
-		ArrayList<EmptyCell> nullCells = getEmptyCells(currentCells);
 		double percentSame = percentSame(neighbors);
 		if(!isSatisfied(percentSame)){
-			Location newSpot = getOpenSpot(nullCells);
-			HouseCell relocatedCell = new HouseCell(newSpot.getMyRow(), newSpot.getMyRow(), this.getMyState());
-			nextGen.add(relocatedCell);
-			
-			EmptyCell leftover = new EmptyCell(this);
-			nextGen.add(leftover);
+			Location newSpot = getOpenSpot(available);
+			if(newSpot!=null){
+				HouseCell relocatedCell = new HouseCell(newSpot.getMyRow(), newSpot.getMyCol(), this.getMyState());
+				nextGen.add(relocatedCell);
+			}else{
+				nextGen.add(this);
+			}
 		}
 		else{
 			nextGen.add(this);
@@ -64,11 +64,24 @@ public class HouseCell extends Cell{
 	
 	private double percentSame(ArrayList<Cell> neighbors){
 		int same = countSameNeighbors(neighbors);
-		double percentSame = ((double)same)/(neighbors.size());
+		int total = countNonEmptyNeighbors(neighbors);
+		double percentSame = ((double)same)/(total);
+		System.out.println(same + " " + total);
 		return percentSame;
 	}
 	
+	private int countNonEmptyNeighbors(ArrayList<Cell> neighbors){
+		int count=0;
+		for(Cell c: neighbors){
+			if(!(c instanceof EmptyCell)){
+				count++;
+			}
+		}
+		return count;
+	}
+	
 	private Location getOpenSpot(ArrayList<EmptyCell> nullCells){
+		if(nullCells==null || nullCells.size()==0){return null;}
 		Random randy = new Random();
 		int emptyIndex = randy.nextInt(nullCells.size());
 		return nullCells.get(emptyIndex).getMyLocation();

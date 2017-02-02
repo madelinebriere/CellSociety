@@ -1,7 +1,5 @@
 package util;
 
-import cellular_level.Cell;
-
 public class Location {
 	private int myRow;
 	private int myCol;
@@ -24,8 +22,8 @@ public class Location {
 		if(!(o instanceof Location)){
 			return false;
 		}
-		return getMyRow() == ((Location)o).getMyRow() &&
-				getMyCol() == ((Location)o).getMyCol(); 
+		return (getMyRow() == ((Location)o).getMyRow()) &&
+				(getMyCol() == ((Location)o).getMyCol()); 
 	}
 
 	public int getMyRow() {

@@ -1,14 +1,3 @@
-/**
- * 
- * Bug with current version:
- * Can't get people to stay
- * on screen
- * 
- * Some sort of overriding happening
- * 
- */
-
-
 package societal_level;
 
 import java.util.ArrayList;
@@ -17,11 +6,10 @@ import java.util.Random;
 import cellular_level.*;
 import javafx.scene.paint.Color;
 
-
-public class PopSociety extends CellSociety {
-	private Random rnd = new Random();
+public class WaterSociety extends CellSociety{
+	Random rnd = new Random();
 	
-	public PopSociety(){
+	public WaterSociety(){
 		setSize(10);
 		setEmptyColor(Color.LIGHTBLUE);
 		ArrayList<Cell> makeCells = new ArrayList<Cell>();
@@ -29,16 +17,23 @@ public class PopSociety extends CellSociety {
 			for(int j=0; j<getSize(); j++){
 				if(rnd.nextBoolean()){
 					makeCells.add(rnd.nextBoolean()? 
-							new HouseCell(i,j, Color.BLUE): new HouseCell(i,j,Color.RED));
+							new SharkCell(i,j): new FishCell(i,j));
 				}
-				else
-					makeCells.add(new EmptyCell(i,j));
+				else {
+					if(rnd.nextBoolean()){
+						makeCells.add(new EmptyCell(i,j));
+					}
+					else{
+						makeCells.add(new FishCell(i,j));
+					}
+				}
 			}
 		}
 		setCurrentCells(makeCells);
 	}
 	
 	public Color[][] step() {
+		System.out.println("SIZE: " + getEmptyCells().size());
 		updateAllCells(getEmptyCells());
 		return getCurrentColors();
 	}

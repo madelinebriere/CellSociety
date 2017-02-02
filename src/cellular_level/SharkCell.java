@@ -21,7 +21,7 @@ public class SharkCell extends WaterWorldCell {
 	
 	private int stepsSinceEat;
 	private int stepsSinceBreed;
-	private Random randy;
+	private Random randy = new Random();
 	
 	
 	public SharkCell(){
@@ -52,15 +52,15 @@ public class SharkCell extends WaterWorldCell {
 	 * Check for nulls in other neighbors
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> currentCells, ArrayList<EmptyCell> available, int size) {
 		ArrayList<Cell> nearbyCells = getSecondNeighbors(currentCells);
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
-		eatOrMove(nearbyCells, size);
+		eatOrMove(nextGen, nearbyCells, size);
 		breedOrDie(nextGen, nearbyCells, size);
 		return nextGen;
 	}
 	
-	private void eatOrMove(ArrayList<Cell> nearbyCells, int size){
+	private void eatOrMove(ArrayList<Cell> nextGen, ArrayList<Cell> nearbyCells, int size){
 		ArrayList<Cell> firstOrderNeighbors = getFirstOrderNeighbors(nearbyCells, size);
 		FishCell food = getRandomFish(firstOrderNeighbors);
 		if(food!=null){
@@ -97,7 +97,7 @@ public class SharkCell extends WaterWorldCell {
 	
 	private FishCell getRandomFish(ArrayList<Cell> neighbors){
 		ArrayList<FishCell> possibleFood = locateFishCells(neighbors);
-		if(possibleFood.size()>0){
+		if(possibleFood != null && possibleFood.size()>0){
 			int fishIndex = randy.nextInt(possibleFood.size());
 			return possibleFood.get(fishIndex);
 		}
@@ -118,11 +118,11 @@ public class SharkCell extends WaterWorldCell {
 	}
 	
 	private boolean timeToBreed(){
-		return stepsSinceBreed<=stepsToBreed;
+		return stepsSinceBreed>=stepsToBreed;
 	}
 	
 	private boolean isStarved(){
-		return stepsSinceEat<=stepsSinceEat;
+		return stepsSinceEat>=stepsToStarve;
 	}
 	
 	public static Color getSharkColor() {

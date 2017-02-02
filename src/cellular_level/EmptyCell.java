@@ -29,9 +29,8 @@ public class EmptyCell extends Cell{
 	}
 	
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> currentCells, ArrayList<EmptyCell> available, int size) {
 		ArrayList<Cell> empty = new ArrayList<Cell>();
-		empty.add(this);
 		return empty;
 	}
 

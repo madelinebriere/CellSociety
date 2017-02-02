@@ -33,7 +33,7 @@ public class GUIMain{
     
     private CellSociety _model;
     private Timeline _animation;
-    private Scene _scene;
+    private Scene _scene; 
     private Pane _root;
     private Tile[][] _cellGrid;
     

@@ -47,11 +47,12 @@ public class FishCell extends WaterWorldCell {
 	 * can move and then breed, placing a new FishCell in an adjacent Cell
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> currentCells, ArrayList<EmptyCell> available, int size) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		ArrayList<Cell> neighbors = getFirstNeighbors(currentCells);
 		if(!isEaten()){
 			move(neighbors);
+			
 			FishCell baby = breed(neighbors, size);
 			if(baby!=null){
 				nextGen.add(baby);
@@ -63,8 +64,11 @@ public class FishCell extends WaterWorldCell {
 	
 	private FishCell breed(ArrayList<Cell> nearbyCells, int size){
 		EmptyCell breedSpot = getBreedSpot(nearbyCells, size);
-		FishCell baby = new FishCell(breedSpot.getMyRow(), breedSpot.getMyCol());
-		return baby;
+		if(breedSpot!=null){
+			FishCell baby = new FishCell(breedSpot.getMyRow(), breedSpot.getMyCol());
+			return baby;
+		}
+		return null;
 	}
 	
 

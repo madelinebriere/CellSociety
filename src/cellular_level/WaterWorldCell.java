@@ -5,6 +5,14 @@ import java.util.Random;
 
 import javafx.scene.paint.Color;
 
+/**
+ * Add wrapped,
+ * delete duplicate code
+ * 
+ * 
+ * @author maddiebriere
+ *
+ */
 public abstract class WaterWorldCell extends Cell {
 	private Random randy = new Random();
 	
@@ -49,9 +57,13 @@ public abstract class WaterWorldCell extends Cell {
 	
 	protected EmptyCell getBreedSpot(ArrayList<Cell> nearbyCells, int size){
 		ArrayList<EmptyCell> possibleBreedSpots = getFirstOrderOpenNeighbors(nearbyCells,size);
+		if(possibleBreedSpots!=null && possibleBreedSpots.size()!=0){
 		int index = randy.nextInt(possibleBreedSpots.size());
 		EmptyCell breedSpot = possibleBreedSpots.get(index);
 		return breedSpot;
+		}
+		else
+			return null;
 	}
 	
 	
