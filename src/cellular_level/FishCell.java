@@ -32,13 +32,24 @@ public class FishCell extends WaterWorldCell {
 		setEaten(false);
 	}
 	
+	@Override
+	public Cell createCopy(){
+		FishCell copy = new FishCell();
+		copy.setMyLocation(this.getMyLocation());
+		copy.setMyState(this.getMyState());
+		copy.setStepsSinceBreed(this.getStepsSinceBreed());
+		copy.setEaten(this.isEaten());
+		return copy;
+	}
+	
 	/**
 	 * Like SharkCell, FishCell also requires second degree neighbors because it 
 	 * can move and then breed, placing a new FishCell in an adjacent Cell
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
+		ArrayList<Cell> neighbors = getFirstNeighbors(currentCells);
 		if(!isEaten()){
 			move(neighbors);
 			FishCell baby = breed(neighbors, size);

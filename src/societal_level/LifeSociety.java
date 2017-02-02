@@ -13,11 +13,12 @@ public class LifeSociety extends CellSociety {
 	 */
 	public LifeSociety(){
 		setSize(10);
+		setEmptyColor(Color.BLUE); //catch any errors
 		Random rnd = new Random();
 		ArrayList<Cell>makeCells = new ArrayList<Cell>();
 		
 		//RANDOM
-		/**for(int i=0; i<getSize(); i++){
+		/*for(int i=0; i<getSize(); i++){
 			for(int j=0; j<getSize(); j++){
 					makeCells.add( rnd.nextBoolean()? new LiveCell(i,j) : new DeadCell(i,j));
 				
@@ -25,7 +26,7 @@ public class LifeSociety extends CellSociety {
 		}*/
 		
 		//BLINKER
-		/**for(int i=0; i<getSize(); i++){
+		/*for(int i=0; i<getSize(); i++){
 			for(int j=0; j<getSize(); j++){
 				if(!((i==4) && (j==3 || j==4 || j==5)))
 					makeCells.add(new DeadCell(i,j));
@@ -36,7 +37,7 @@ public class LifeSociety extends CellSociety {
 		}*/
 		
 		//BEACON
-		/**for(int i=0; i<getSize(); i++){
+		for(int i=0; i<getSize(); i++){
 			for(int j=0; j<getSize(); j++){
 				if(!(( (i==4 || i==5)  && ( j==4 || j==5 ) )|| 
 					 ( (i==6 || i==7) && (j==6 || j==7) )))
@@ -45,7 +46,7 @@ public class LifeSociety extends CellSociety {
 					makeCells.add(new LiveCell(i,j));
 				
 			}
-		}*/
+		}
 		
 		setCurrentCells(makeCells);
 	}

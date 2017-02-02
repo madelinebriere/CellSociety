@@ -1,6 +1,20 @@
+/**
+ * 
+ * Because we will have different cells of interest, we need 
+ * to pass the entire grid!!
+ * 
+ * @author maddiebriere
+ */
+
+
+
+
+
+
 package cellular_level;
 import util.Location;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javafx.scene.paint.Color;
 
@@ -18,8 +32,84 @@ public abstract class Cell {
 		myState=state;
 	}
 	
-	public abstract ArrayList<Cell> update(ArrayList<Cell>neighbors, ArrayList<EmptyCell>nullCells, int size);
+	
+	public boolean positionEquals(Object o){
+		if(o == this){
+			return true;
+		}
+		if(!(o instanceof Cell)){
+			return false;
+		}
+		return getMyLocation().equals(((Cell)o).getMyLocation());
+	}
+	
+	public abstract ArrayList<Cell> update(ArrayList<Cell>currentCells, int size);
+	
+	/**
+	 * Duplicate method from CellSociety
+	 * 
+	 * 
+	 * @param currentCells
+	 * @return
+	 */
+	public ArrayList<EmptyCell> getEmptyCells(ArrayList<Cell> currentCells){
+		ArrayList <EmptyCell>toRet = new ArrayList<EmptyCell>();
+		for(Cell c: currentCells){
+			if(c instanceof EmptyCell){
+				toRet.add((EmptyCell)c);
+			}
+		}
+		return toRet;
+	}
+	
+	public abstract Cell createCopy();
 
+	public ArrayList<Cell> getFirstNeighbors(ArrayList<Cell> currentCells){
+		ArrayList<Cell> neighbors = new ArrayList<Cell>();
+		for(Cell possible: currentCells){
+			if(isAdjacent(possible)){
+				neighbors.add(possible);
+			}
+		}
+		return neighbors;
+	}
+	
+	public ArrayList<Cell> getWrappedFirstNeighbors(ArrayList<Cell> currentCells, int size){
+		ArrayList<Cell> neighbors = new ArrayList<Cell>();
+		for(Cell possible: currentCells){
+			if(isAnyAdjacent(possible, size)){
+				neighbors.add(possible);
+			}
+			
+		}
+		return neighbors;
+	}
+
+
+	public ArrayList<Cell>getSecondNeighbors(ArrayList<Cell> currentCells){
+		HashSet <Cell> neighborhood = new HashSet<Cell>();
+		ArrayList<Cell> firstOrderNeighbors = getFirstNeighbors(currentCells);
+		neighborhood.addAll(firstOrderNeighbors);
+		for(Cell n: firstOrderNeighbors){
+			ArrayList<Cell> secondOrderNeighbors = n.getFirstNeighbors(currentCells);
+			neighborhood.addAll(secondOrderNeighbors);
+		}
+		ArrayList<Cell> toRet = new ArrayList<Cell>(neighborhood);
+		return toRet;
+	}
+	
+	public ArrayList<Cell>getSecondWrappedNeighbors(ArrayList<Cell> currentCells, int size){
+		HashSet <Cell> neighborhood = new HashSet<Cell>();
+		ArrayList<Cell> firstOrderNeighbors = getWrappedFirstNeighbors(currentCells, size);
+		neighborhood.addAll(firstOrderNeighbors);
+		for(Cell n: firstOrderNeighbors){
+			ArrayList<Cell> secondOrderNeighbors = n.getWrappedFirstNeighbors(currentCells, size);
+			neighborhood.addAll(secondOrderNeighbors);
+		}
+		ArrayList<Cell> toRet = new ArrayList<Cell>(neighborhood);
+		return toRet;
+	}
+	
 	protected int countSameNeighbors(ArrayList<Cell>neighbors){
 		int sameCount = 0;
 		for(Cell c: neighbors){
@@ -40,7 +130,7 @@ public abstract class Cell {
 		return diffCount;
 	}
 	
-	protected void copyLocation(Cell copyFrom){
+	public void copyLocation(Cell copyFrom){
 		this.setMyLocation(copyFrom.getMyLocation());
 	}
 	

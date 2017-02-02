@@ -26,6 +26,14 @@ public class LiveCell extends Cell {
 		super(row,col, liveColor);
 	}
 	
+	@Override
+	public Cell createCopy(){
+		LiveCell copy = new LiveCell();
+		copy.setMyLocation(this.getMyLocation());
+		copy.setMyState(this.getMyState());
+		return copy;
+	}
+	
 	/**
 	 * @param neighbors Cell neighbors
 	 * @param nullCells Cells with no current occupants, stored as nulls
@@ -33,8 +41,9 @@ public class LiveCell extends Cell {
 	 * live cell or a new dead cell in the same location. Never empty.
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
 		ArrayList<Cell> newGen = new ArrayList<Cell>();
+		ArrayList<Cell> neighbors = getFirstNeighbors(currentCells);
 		int numLive = countSameNeighbors(neighbors);
 		if(isOverpopulated(numLive)||isUnderpopulated(numLive)){
 			DeadCell child = new DeadCell();

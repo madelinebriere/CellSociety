@@ -14,7 +14,6 @@ import util.Location;
 
 public class BurnCell extends Cell {
 	private static Color burnColor = Color.RED;
-	private static Color burntColor = Color.YELLOW;
 	private static int stepsToBurn = 1;
 	private int mySteps;
 
@@ -30,6 +29,15 @@ public class BurnCell extends Cell {
 		setMySteps(0);
 	}
 	
+	@Override
+	public Cell createCopy(){
+		BurnCell copy = new BurnCell();
+		copy.setMyLocation(this.getMyLocation());
+		copy.setMyState(this.getMyState());
+		copy.setMySteps(this.getMySteps());
+		return copy;
+	}
+	
 	/**
 	 * @param neighbors Cell neighbors
 	 * @param nullCells Cells with no current occupants, stored as nulls
@@ -38,14 +46,14 @@ public class BurnCell extends Cell {
 	 * next generation). Otherwise, an empty List is returned.
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> neighbors, ArrayList<EmptyCell> nullCells, int size) {
+	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
 		ArrayList<Cell>nextGen = new ArrayList<Cell>();
 		mySteps++;
 		if(!isBurnt()){
 			nextGen.add(this); //nextGen only filled if this is satisfied
 		}
 		else{
-			EmptyCell burned = new EmptyCell(this.getMyRow(), this.getMyCol(), burntColor);
+			EmptyCell burned = new EmptyCell(this);
 			nextGen.add(burned);
 		}
 		return nextGen;

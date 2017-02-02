@@ -13,11 +13,22 @@ import javafx.scene.paint.Color;
 public abstract class CellSociety {
 	private ArrayList<Cell> currentCells;
 	private int size;
+	private Color emptyColor;
 	
+
 	public Color[][] getCurrentColors(){
+		//Catch to avoid null pointer 
+		if(getEmptyColor()==null){
+			setEmptyColor(Color.WHITE);
+		}
 		Color [][] toRet = new Color[size][size];
 		for(Cell c: currentCells){
-			toRet[c.getMyRow()][c.getMyCol()]=c.getMyState();
+			if(!(c instanceof EmptyCell)){
+				toRet[c.getMyRow()][c.getMyCol()]=c.getMyState();
+			}
+			else{
+				toRet[c.getMyRow()][c.getMyCol()]=getEmptyColor();
+			}
 		}
 		return toRet;
 	}
@@ -37,12 +48,37 @@ public abstract class CellSociety {
 	 * @return
 	 */
 	public Color[][] step() {
+		updateAllCells();
+		return getCurrentColors();
+	}
+	
+	/**
+	 * DUPLICATE METHOD FROM CELL
+	 * 
+	 * 
+	 * FIND FIX!!
+	 * @param currentCells
+	 * @return
+	 */
+	public ArrayList<EmptyCell> getEmptyCells(){
+		ArrayList<Cell> currentCells = getCurrentCells();
+		ArrayList <EmptyCell>toRet = new ArrayList<EmptyCell>();
+		for(Cell c: currentCells){
+			if(c instanceof EmptyCell){
+				toRet.add((EmptyCell)c);
+			}
+		}
+		return toRet;
+	}
+	
+	
+	public void updateAllCells(){
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		for(Cell c: getCurrentCells()){
 			nextGen.addAll(updateCell(c));
+			System.out.println("HERE " + c.getMyState());
 		}
 		setCurrentCells(nextGen);
-		return getCurrentColors();
 	}
 	
 	/**
@@ -51,11 +87,19 @@ public abstract class CellSociety {
 	 * @return
 	 */
 	private ArrayList<Cell> updateCell(Cell c){
-		ArrayList<Cell> neighbors = getFirstNeighbors(c);
-		ArrayList<EmptyCell> emptyCells = getEmptyCells();
 		int size = getSize();
-		ArrayList<Cell> newCells =  c.update(neighbors, emptyCells, size);
+		ArrayList<Cell> newCells =  c.update(getCurrentCellsCopy(), size);
 		return newCells;
+	}
+	
+	
+	public ArrayList<Cell> getCurrentCellsCopy(){
+		ArrayList<Cell> copy = new ArrayList<Cell>();
+		for(Cell c: getCurrentCells()){
+			Cell newCell = c.createCopy();
+			copy.add(newCell);
+		}
+		return copy;
 	}
 	
 	public ArrayList<Cell> getCurrentCells(){
@@ -66,37 +110,14 @@ public abstract class CellSociety {
 		currentCells=current;
 	}
 	
-	public ArrayList<EmptyCell> getEmptyCells(){
-		ArrayList <EmptyCell>toRet = new ArrayList<EmptyCell>();
-		for(Cell c: currentCells){
-			if(c instanceof EmptyCell){
-				toRet.add((EmptyCell)c);
-			}
-			
-		}
-		return toRet;
+	public Color getEmptyColor() {
+		return emptyColor;
+	}
+
+	public void setEmptyColor(Color emptyColor) {
+		this.emptyColor = emptyColor;
 	}
 	
-	public ArrayList<Cell> getFirstNeighbors(Cell c){
-		ArrayList<Cell> neighbors = new ArrayList<Cell>();
-		for(Cell possible: currentCells){
-			if(possible.isAdjacent(c)){
-				neighbors.add(possible);
-			}
-		}
-		return neighbors;
-	}
-	
-	public ArrayList<Cell> getWrappedFirstNeighbors(Cell c){
-		ArrayList<Cell> neighbors = new ArrayList<Cell>();
-		for(Cell possible: currentCells){
-			if(possible.isAnyAdjacent(c, size)){
-				neighbors.add(possible);
-			}
-			
-		}
-		return neighbors;
-	}
 	
 	public int getSize() {
 		return size;
@@ -105,30 +126,4 @@ public abstract class CellSociety {
 	public void setSize(int size) {
 		this.size = size;
 	}
-
-	public ArrayList<Cell>getSecondNeighbors(Cell c){
-		HashSet <Cell> neighborhood = new HashSet<Cell>();
-		ArrayList<Cell> firstOrderNeighbors = getFirstNeighbors(c);
-		neighborhood.addAll(firstOrderNeighbors);
-		for(Cell n: firstOrderNeighbors){
-			ArrayList<Cell> secondOrderNeighbors = getFirstNeighbors(n);
-			neighborhood.addAll(secondOrderNeighbors);
-		}
-		ArrayList<Cell> toRet = new ArrayList<Cell>(neighborhood);
-		return toRet;
-	}
-	
-	public ArrayList<Cell>getSecondWrappedNeighbors(Cell c){
-		HashSet <Cell> neighborhood = new HashSet<Cell>();
-		ArrayList<Cell> firstOrderNeighbors = getWrappedFirstNeighbors(c);
-		neighborhood.addAll(firstOrderNeighbors);
-		for(Cell n: firstOrderNeighbors){
-			ArrayList<Cell> secondOrderNeighbors = getWrappedFirstNeighbors(n);
-			neighborhood.addAll(secondOrderNeighbors);
-		}
-		ArrayList<Cell> toRet = new ArrayList<Cell>(neighborhood);
-		return toRet;
-	}
-	
-	
 }

@@ -1,5 +1,7 @@
 package util;
 
+import cellular_level.Cell;
+
 public class Location {
 	private int myRow;
 	private int myCol;
@@ -12,6 +14,18 @@ public class Location {
 	public Location(int row, int col){
 		myRow=row;
 		myCol=col;
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o == this){
+			return true;
+		}
+		if(!(o instanceof Location)){
+			return false;
+		}
+		return getMyRow() == ((Location)o).getMyRow() &&
+				getMyCol() == ((Location)o).getMyCol(); 
 	}
 
 	public int getMyRow() {
