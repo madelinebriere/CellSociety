@@ -20,7 +20,7 @@ public abstract class SimulationType {
 
 	private static final List<String> UNIVERSAL_DATA_TYPES = Arrays.asList(new String[] {
 			"title",
-	        "artist",
+	        "author",
 	        "dimension",
 	        "cells"
 	    });
@@ -39,7 +39,7 @@ public abstract class SimulationType {
 		return myDataValues.get(UNIVERSAL_DATA_TYPES.get(0));
 	}
 	
-	public String getArtist(){
+	public String getAuthor(){
 		return myDataValues.get(UNIVERSAL_DATA_TYPES.get(1));
 	}
 	
@@ -57,7 +57,7 @@ public abstract class SimulationType {
 	/**
 	 * @return List of raw Cell data from file
 	 */
-	public List<String> getCellData(){
+	public ArrayList<String> getCellData(){
 		return cellData;
 	}
 	

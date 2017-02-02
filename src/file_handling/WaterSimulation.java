@@ -52,15 +52,15 @@ public class WaterSimulation extends SimulationType {
 		return cells;
 	}
 	
-	public String getFishBreed(){
-		return getDataValues().get(SETTING_TYPES.get(0));
+	public int getFishBreed(){
+		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(0)));
 	}
 	
-	public String getSharkBreed(){
-		return getDataValues().get(SETTING_TYPES.get(1));
+	public int getSharkBreed(){
+		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
 	}
 	
-	public String getSharkStarve(){
-		return getDataValues().get(SETTING_TYPES.get(2));
+	public int getSharkStarve(){
+		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
 	}
 }
