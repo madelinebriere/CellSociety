@@ -50,7 +50,7 @@ public class PopSimulation extends SimulationType {
 		return cells;
 	}
 	
-	public String getThreshold(){
-		return getDataValues().get(SETTING_TYPES.get(0));
+	public Double getThreshold(){
+		return Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
 	}
 }

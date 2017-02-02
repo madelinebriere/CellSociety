@@ -51,12 +51,12 @@ public class FireSimulation extends SimulationType {
 		return cells;
 	}
 	
-	public String getProbability(){
-		return getDataValues().get(SETTING_TYPES.get(0));
+	public Double getProbability(){
+		return Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
 	}
 	
-	public String getSteps(){
-		return getDataValues().get(SETTING_TYPES.get(1));
+	public int getSteps(){
+		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
 	}
 
 
