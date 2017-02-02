@@ -11,8 +11,12 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -28,43 +32,23 @@ public class GUIMain{
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private static final int SCREEN_WIDTH = 424;
     private static final int SCREEN_HEIGHT = 600;
-    private int NUMBER_OF_CELLS;
-    private static final Insets GRID_INSETS = new Insets(60,12,0,12);
+
     
     private CellSociety _model;
     private Timeline _animation;
     private Scene _scene; 
     private Pane _root;
-    private Tile[][] _cellGrid;
+    private Grid _grid;
     
     public GUIMain(){
-		_model = new PopSociety();
-		NUMBER_OF_CELLS = _model.getSize();
-    	_root =  new Pane();
-		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
-		setupAnimationTimeLine();
+		this(new FireSociety());
     }
     public GUIMain(CellSociety model){
     	_model = model;
     	_root =  new Pane();
 		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
+		setupGrid();
 		setupAnimationTimeLine();
-    }
-    
-    final class Tile extends StackPane{
-    	private Rectangle rect;
-    	public Tile(int x, int y){
-        	int size = (int) ((SCREEN_WIDTH - GRID_INSETS.getRight() -GRID_INSETS.getLeft())/NUMBER_OF_CELLS);
-    		rect = new Rectangle(size - 1, size - 1);
-    		rect.setStroke(Color.LIGHTGRAY);
-    		this.getChildren().add(rect);
-    		setTranslateX(x * size + GRID_INSETS.getLeft());
-    		setTranslateY(y * size + GRID_INSETS.getTop());
-    	}
-    	public void setColor(Color color){
-    		rect.setFill(color);
-    	}
-    	
     }
     
     /*
@@ -77,6 +61,12 @@ public class GUIMain{
     	_model = model;
     }
     
+    private void setupGrid(){
+    	_grid = new Grid(_model.getSize(), SCREEN_WIDTH - 40, _model.getCurrentColors());
+    	_grid.setLayoutX(20);
+    	_grid.setLayoutY(80);
+    	_root.getChildren().add(_grid);
+    }
     /**
      * sets up frame and timeline
      */
@@ -86,27 +76,13 @@ public class GUIMain{
     	_animation = new Timeline();
         _animation.setCycleCount(Timeline.INDEFINITE);
         _animation.getKeyFrames().add(frame);
-        setupGridView();
         setupUserControls();
     }
     
     /*
      * setup views 
      */
-
-    private void setupGridView(){
-    	_cellGrid = new Tile[NUMBER_OF_CELLS][NUMBER_OF_CELLS];
-    	Color[][] colors = _model.getCurrentColors();
-    	for(int i=0; i<NUMBER_OF_CELLS;i++){
-    		for(int j=0; j<NUMBER_OF_CELLS;j++){
-    			System.out.println(i + " " + j);
-        		Tile cell = new Tile(i,j);
-        		cell.setColor(colors[i][j]);
-        		_cellGrid[i][j] = cell;
-        		_root.getChildren().add(cell);
-        	}
-    	}
-    }
+   
     private void setupUserControls(){
     	setupTopMenu();
     	setupButtons();
@@ -160,7 +136,12 @@ public class GUIMain{
     private Button plainButton(String text){
     	Button button = new Button(text);
     	button.setPrefSize(80, 40);
-    	button.setTextFill(Color.BLACK);
+    	button.setTextFill(Color.rgb(60, 60, 60));
+    	button.setBackground(Background.EMPTY);
+    	BorderStroke[] bs = {new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, new CornerRadii(4), BorderWidths.DEFAULT)};
+    	Border b = new Border(bs);
+    	button.setBorder(b);
+    	
     	return button;
     }
     private void setupSpeedSlider(){
@@ -174,33 +155,17 @@ public class GUIMain{
     	_animation.play();
     }
     private void resetAnimation(){
-    	//TODO: 
+    	pauseAnimation();
+    	_model = new FireSociety(); //TODO: change this
+    	_grid.updateTileColors(_model.getCurrentColors());
     }
-    
-    private void updateTileColors(Color[][] colors){
-    	//TODO: check if correct size
-		for(int i=0; i<NUMBER_OF_CELLS; i++){
-    		for(int j=0; j<NUMBER_OF_CELLS; j++){
-    			_cellGrid[i][j].setColor( colors[i][j]);
-    		}
-    	}
-    }
-	
+
+    /**
+     * updates grid using model (CellSociety object) to retrieve 2d-array of colors
+     */
 	private void step(){
-		System.out.println("STEP");
-		//TODO:
-		//colors[][] = model.nextStep();
-		updateTileColors(_model.step());
-		
-//		//placeholder code for random colors
-//		Random rand = new Random();
-//		for(int i=0; i<NUMBER_OF_CELLS;i++){
-//    		for(int j=0; j<NUMBER_OF_CELLS;j++){
-//        		_cellGrid[i][j].setColor(rand.nextBoolean() ? Color.BLACK:Color.BLUE);
-//        	}
-//    	}
+		_grid.updateTileColors(_model.step());
 	}
 
 }
-
 
