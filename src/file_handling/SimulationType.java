@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+
 import cellular_level.Cell;
 
 public abstract class SimulationType {
@@ -58,7 +60,9 @@ public abstract class SimulationType {
 	 * @return List of raw Cell data from file
 	 */
 	public List<String> getCellData(){
-		return cellData;
+		List<String> copy = new ArrayList<String>();
+		copy.addAll(cellData);
+		return copy;
 	}
 	
 	/**
@@ -79,7 +83,9 @@ public abstract class SimulationType {
 	 * @return Map of SimulationType's data values
 	 */
 	public Map<String, String> getDataValues(){
-		return myDataValues;
+		HashMap<String, String> copy = new HashMap<String, String>();
+		copy.putAll(myDataValues);
+		return copy;
 	}
 	
 	
