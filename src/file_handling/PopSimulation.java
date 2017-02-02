@@ -1,14 +1,14 @@
 /**
  * Holds, interprets, and returns data passed 
- * in from a file specific to the Fire Simulation.
+ * in from a file specific to the Segregation Simulation.
  * 
  * @author Stone Mathers
  */
 
 package file_handling;
 
-import cellular_level.TreeCell;
-import cellular_level.BurnCell;
+import cellular_level.HouseCell;
+import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,14 +17,13 @@ import java.util.Map;
 
 import cellular_level.Cell;
 
-public class FireSimulation extends SimulationType {
+public class PopSimulation extends SimulationType {
 	
 	private static final List<String> SETTING_TYPES = Arrays.asList(new String[] {
-			"probability",
-	        "steps"
+			"threshold"
 	    });
 
-	public FireSimulation(Map<String, String> values, ArrayList<String> cells) {
+	public PopSimulation(Map<String, String> values, ArrayList<String> cells) {
 		super(values, cells);
 	}
 
@@ -41,23 +40,17 @@ public class FireSimulation extends SimulationType {
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		for(String data: this.getCellData()){
 			String[] vars = data.split(" ");
-			if(vars[2].toUpperCase().equals("TREE")){
-				cells.add(new TreeCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
+			if(vars[2].toUpperCase().equals("BLUE")){
+				cells.add(new HouseCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1]), Color.BLUE));
 			}
-			else if(vars[2].toUpperCase().equals("BURN")){
-				cells.add(new BurnCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
+			else if(vars[2].toUpperCase().equals("RED")){
+				cells.add(new HouseCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1]), Color.RED));
 			}
 		}
 		return cells;
 	}
 	
-	public String getProbability(){
+	public String getThreshold(){
 		return getDataValues().get(SETTING_TYPES.get(0));
 	}
-	
-	public String getSteps(){
-		return getDataValues().get(SETTING_TYPES.get(1));
-	}
-
-
 }

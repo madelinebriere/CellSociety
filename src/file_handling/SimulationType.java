@@ -1,3 +1,13 @@
+/**
+ * Defines the variables and methods that are needed to store, interpret, and 
+ * return the data behind any Simulation. The abstract class holds the title,
+ * artist, dimension, and ArrayList of initial cells. The subclasses are in charge
+ * of defining which initial settings need to be stored and how to interpret the
+ * Strings of initial cell data.
+ * 
+ * @author Stone Mathers
+ */
+
 package file_handling;
 
 import java.util.List;
@@ -15,8 +25,7 @@ public abstract class SimulationType {
 	        "cells"
 	    });
 	
-	
-	private List<String> cellData = new ArrayList<String>();																
+	private ArrayList<String> cellData;																
 	private List<String> dataTypes = combineDataTypes();
 	private Map<String, String> myDataValues;
 
@@ -38,6 +47,19 @@ public abstract class SimulationType {
 		return Integer.parseInt(myDataValues.get(UNIVERSAL_DATA_TYPES.get(2)));
 	}
 	
+	/**
+	 * Uses List of cell data in String format to create an ArrayList of Cells
+	 * 
+	 * @return
+	 */
+	public abstract ArrayList<Cell> getCells();	
+	
+	/**
+	 * @return List of raw Cell data from file
+	 */
+	public List<String> getCellData(){
+		return cellData;
+	}
 	
 	/**
 	 * @return List of data types that all SimulationTypes share
@@ -54,13 +76,6 @@ public abstract class SimulationType {
 	}
 	
 	/**
-	 * @return List of raw Cell data from file
-	 */
-	public List<String> getCellData(){
-		return cellData;
-	}
-	
-	/**
 	 * @return Map of SimulationType's data values
 	 */
 	public Map<String, String> getDataValues(){
@@ -73,13 +88,6 @@ public abstract class SimulationType {
 	 * 
 	 * @return List of all attributes that an XMLParser will look for
 	 */
-	public abstract List<String> combineDataTypes(); 
-	
-	/**
-	 * Uses List of cell data in String format to create an ArrayList of Cells
-	 * 
-	 * @return
-	 */
-	protected abstract ArrayList<Cell> getCells();	
+	protected abstract List<String> combineDataTypes(); 
 	
 }
