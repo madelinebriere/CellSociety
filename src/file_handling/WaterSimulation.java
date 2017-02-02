@@ -1,14 +1,14 @@
 /**
  * Holds, interprets, and returns data passed 
- * in from a file specific to the Fire Simulation.
+ * in from a file specific to the Predator-Prey Simulation.
  * 
  * @author Stone Mathers
  */
 
 package file_handling;
 
-import cellular_level.TreeCell;
-import cellular_level.BurnCell;
+import cellular_level.FishCell;
+import cellular_level.SharkCell;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,14 +17,15 @@ import java.util.Map;
 
 import cellular_level.Cell;
 
-public class FireSimulation extends SimulationType {
+public class WaterSimulation extends SimulationType {
 	
 	private static final List<String> SETTING_TYPES = Arrays.asList(new String[] {
-			"probability",
-	        "steps"
+			"fish breed",
+	        "shark breed",
+	        "shark starve"
 	    });
 
-	public FireSimulation(Map<String, String> values, ArrayList<String> cells) {
+	public WaterSimulation(Map<String, String> values, ArrayList<String> cells) {
 		super(values, cells);
 	}
 
@@ -41,23 +42,25 @@ public class FireSimulation extends SimulationType {
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		for(String data: this.getCellData()){
 			String[] vars = data.split(" ");
-			if(vars[2].toUpperCase().equals("TREE")){
-				cells.add(new TreeCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
+			if(vars[2].toUpperCase().equals("FISH")){
+				cells.add(new FishCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
 			}
-			else if(vars[2].toUpperCase().equals("BURN")){
-				cells.add(new BurnCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
+			else if(vars[2].toUpperCase().equals("SHARK")){
+				cells.add(new SharkCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
 			}
 		}
 		return cells;
 	}
 	
-	public String getProbability(){
+	public String getFishBreed(){
 		return getDataValues().get(SETTING_TYPES.get(0));
 	}
 	
-	public String getSteps(){
+	public String getSharkBreed(){
 		return getDataValues().get(SETTING_TYPES.get(1));
 	}
-
-
+	
+	public String getSharkStarve(){
+		return getDataValues().get(SETTING_TYPES.get(2));
+	}
 }
