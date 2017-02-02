@@ -25,7 +25,7 @@ public class WaterSimulation extends SimulationType {
 	        "shark starve"
 	    });
 
-	public WaterSimulation(Map<String, String> values, ArrayList<String> cells) {
+	public WaterSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
 	}
 
@@ -38,7 +38,7 @@ public class WaterSimulation extends SimulationType {
 	}
 
 	@Override
-	public ArrayList<Cell> getCells() {
+	public List<Cell> getCells() {
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		for(String data: this.getCellData()){
 			String[] vars = data.split(" ");

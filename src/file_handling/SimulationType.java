@@ -25,12 +25,12 @@ public abstract class SimulationType {
 	        "cells"
 	    });
 	
-	private ArrayList<String> cellData;																
+	private List<String> cellData;																
 	private List<String> dataTypes = combineDataTypes();
 	private Map<String, String> myDataValues;
 
 	
-	public SimulationType(Map<String, String> values, ArrayList<String> cells){
+	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
 	}
@@ -52,12 +52,12 @@ public abstract class SimulationType {
 	 * 
 	 * @return
 	 */
-	public abstract ArrayList<Cell> getCells();	
+	public abstract List<Cell> getCells();	
 	
 	/**
 	 * @return List of raw Cell data from file
 	 */
-	public ArrayList<String> getCellData(){
+	public List<String> getCellData(){
 		return cellData;
 	}
 	
