@@ -5,13 +5,14 @@
  */
 package societal_level;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 import cellular_level.*;
 import javafx.scene.paint.Color;
 
 public abstract class CellSociety {
-	private ArrayList<Cell> currentCells;
+	private Collection<Cell> currentCells;
 	private int size;
 	private Color emptyColor;
 	
@@ -33,22 +34,32 @@ public abstract class CellSociety {
 		return toRet;
 	}
 	
-	public void printCurrentColors(){
-		Color[][] curr = getCurrentColors();
-		for(int i=0; i<size; i++){
-			for(int j=0; j<size; j++){
-				System.out.print(curr[i][j].toString()+ "  ");
-			}
-			System.out.println();
-		}
-	}
-	
 	/**
 	 * Basic step, can override in subclass
 	 * @return
 	 */
-	public Color[][] step() {
+	public abstract Color[][] step();
+	
+	
+	public Color [][] totalStep(){
 		updateAllCells(null);
+		return getCurrentColors();
+	}
+	
+	public Color[][] guidedStep(){
+		updateAllCells(new ArrayList<EmptyCell> (getEmptyCells()));
+		return getCurrentColors();
+	}
+	
+	public Color [][] orderedStep(Collection<String>types){
+		ArrayList<Cell> nextGen = new ArrayList<Cell>();
+		ArrayList<EmptyCell> emptyCells = new ArrayList<EmptyCell>(getEmptyCells());
+		for(String s: types){
+			nextGen.addAll(updateSomeCells(getCategoryCells(s), emptyCells));
+		}
+		System.out.println("SIZE: "+ nextGen.size());
+		fillEmptySpots(nextGen);
+		setCurrentCells(nextGen);
 		return getCurrentColors();
 	}
 	
@@ -60,8 +71,8 @@ public abstract class CellSociety {
 	 * @param currentCells
 	 * @return
 	 */
-	public ArrayList<EmptyCell> getEmptyCells(){
-		ArrayList<Cell> currentCells = getCurrentCells();
+	public Collection<EmptyCell> getEmptyCells(){
+		Collection<Cell> currentCells = getCurrentCells();
 		ArrayList <EmptyCell>toRet = new ArrayList<EmptyCell>();
 		for(Cell c: currentCells){
 			if(c instanceof EmptyCell){
@@ -72,11 +83,11 @@ public abstract class CellSociety {
 	}
 	
 	
-	public void updateAllCells(ArrayList<EmptyCell> available){
+	private void updateAllCells(ArrayList<EmptyCell> available){
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
-		Collections.shuffle(getCurrentCells());
+		//Collections.shuffle(getCurrentCells());
 		for(Cell c: getCurrentCells()){
-			ArrayList<Cell> cells = updateCell(c, available);
+			ArrayList<Cell> cells = new ArrayList<Cell>(updateCell(c, available));
 			removeUsedSpots(available, cells);
 			nextGen.addAll(cells);
 		}
@@ -84,29 +95,48 @@ public abstract class CellSociety {
 		setCurrentCells(nextGen);
 	}
 	
-	public void fillEmptySpots(ArrayList<Cell> nextGen){
+	private Collection<Cell> updateSomeCells(ArrayList<Cell> targetCells, ArrayList<EmptyCell>available){
+		if(targetCells.size()==0){return new ArrayList<Cell>();}
+		ArrayList<Cell> nextGen = new ArrayList<Cell>();
+		//Collections.shuffle(getCurrentCells());
+		for(Cell c: targetCells){
+			ArrayList<Cell> cells = new ArrayList<Cell>(updateCell(c, available));
+			removeUsedSpots(available, cells);
+			nextGen.addAll(cells);
+		}
+		return nextGen;
+	}
+	
+	public void fillEmptySpots(Collection<Cell> nextGen){
 		int [][] filled = new int[size][size];
 		for(Cell c: nextGen){
-			filled[c.getMyRow()][c.getMyCol()]=1;
+			filled[c.getMyRow()][c.getMyCol()]+=1;
 		}
 		for(int i=0; i<size; i++){
 			for(int j=0; j<size; j++){
-				if(filled[i][j]!=1)
+				if(filled[i][j]>1){System.out.println("COPY: " + filled[i][j] + " "+
+						i + " " + j);}
+				if(filled[i][j]==0)
 					nextGen.add(new EmptyCell(i,j));
 			}
 		}
 	}
 	
 	
-	public void removeUsedSpots(ArrayList<EmptyCell> available, ArrayList<Cell> newCells){
-		if(available ==null || newCells ==null || available.size()==0 || newCells.size()==0){return;}
+	private void removeUsedSpots(ArrayList<EmptyCell> available, ArrayList<Cell> newCells){
+		if(available ==null || newCells ==null || available.size()==0 
+				|| newCells.size()==0){return;}
+		
 		for(int i=0; i<available.size(); i++){
 			for(int j=0; j<newCells.size(); j++){
 				if(available.get(i).getMyLocation().
 						equals(newCells.get(j).
 						getMyLocation())){
 					available.remove(i);
-					break;
+					if(i>0)
+						i--;
+					else
+						break;
 				}
 			}
 		}
@@ -137,13 +167,13 @@ public abstract class CellSociety {
 	 * @param c
 	 * @return
 	 */
-	private ArrayList<Cell> updateCell(Cell c, ArrayList<EmptyCell> available){
+	private Collection<Cell> updateCell(Cell c, Collection<EmptyCell> available){
 		int size = getSize();
-		ArrayList<Cell> newCells =  c.update(getCurrentCellsCopy(), available, size);
+		Collection<Cell> newCells =  c.update(getCurrentCells(), available, size);
 		return newCells;
 	}
 	
-	public ArrayList<Cell> getCurrentCellsCopy(){
+	public Collection<Cell> getCurrentCellsCopy(){
 		ArrayList<Cell> copy = new ArrayList<Cell>();
 		for(Cell c: getCurrentCells()){
 			Cell newCell = c.createCopy();
@@ -152,11 +182,21 @@ public abstract class CellSociety {
 		return copy;
 	}
 	
-	public ArrayList<Cell> getCurrentCells(){
+	private ArrayList<Cell> getCategoryCells(String className){
+		ArrayList<Cell> toRet = new ArrayList<Cell>();
+		for(Cell c: getCurrentCells()){
+			if(c.getClass().getName().equals("cellular_level." + className)){
+				toRet.add(c);
+			}
+		}
+		return toRet;
+	}
+	
+	public Collection<Cell> getCurrentCells(){
 		return currentCells;
 	}
 	
-	public void setCurrentCells(ArrayList<Cell> current){
+	public void setCurrentCells(Collection<Cell> current){
 		currentCells=current;
 	}
 	

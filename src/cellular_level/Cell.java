@@ -13,7 +13,10 @@
 
 package cellular_level;
 import util.Location;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collection;
 import java.util.HashSet;
 
 import javafx.scene.paint.Color;
@@ -42,11 +45,26 @@ public abstract class Cell {
 		return getMyLocation().equals(((Cell)o).getMyLocation());
 	}
 	
+	public <T extends Cell>boolean locationIn(Collection<T>cells){
+		for(Cell c: cells){
+			if(positionEquals(c)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public abstract Cell createCopy();
 	
-	public abstract ArrayList<Cell> update(ArrayList<Cell>currentCells, ArrayList<EmptyCell>available, int size);
-
-	public ArrayList<Cell> getFirstNeighbors(ArrayList<Cell> currentCells){
+	public abstract Collection<Cell> update(Collection<Cell>currentCells, Collection<EmptyCell>available, int size);
+	
+	public abstract Collection<Cell> neighbors(Collection<Cell>currentCells, int size);
+	
+	/**
+	 * Get different types of neighbors
+	 */
+	
+	protected Collection<Cell> getNeighbors(Collection<Cell> currentCells){
 		ArrayList<Cell> neighbors = new ArrayList<Cell>();
 		for(Cell possible: currentCells){
 			if(isAdjacent(possible)){
@@ -56,44 +74,56 @@ public abstract class Cell {
 		return neighbors;
 	}
 	
-	public ArrayList<Cell> getWrappedFirstNeighbors(ArrayList<Cell> currentCells, int size){
+	protected Collection<Cell> getWrappedNeighbors(Collection<Cell> currentCells, int size){
+		ArrayList<Cell> close = new ArrayList<Cell>();
+		for(Cell c: currentCells){
+			if(isAnyAdjacent(c, size)){
+				close.add(c);
+			}
+		}
+		return close;
+	}
+	
+	protected Collection<Cell> getCardinalNeighbors(Collection<Cell> currentCells){
 		ArrayList<Cell> neighbors = new ArrayList<Cell>();
 		for(Cell possible: currentCells){
-			if(isAnyAdjacent(possible, size)){
+			if(isAdjacent(possible)){
 				neighbors.add(possible);
 			}
-			
 		}
 		return neighbors;
 	}
-
-
-	public ArrayList<Cell>getSecondNeighbors(ArrayList<Cell> currentCells){
-		HashSet <Cell> neighborhood = new HashSet<Cell>();
-		ArrayList<Cell> firstOrderNeighbors = getFirstNeighbors(currentCells);
-		neighborhood.addAll(firstOrderNeighbors);
-		for(Cell n: firstOrderNeighbors){
-			ArrayList<Cell> secondOrderNeighbors = n.getFirstNeighbors(currentCells);
-			neighborhood.addAll(secondOrderNeighbors);
-		}
-		ArrayList<Cell> toRet = new ArrayList<Cell>(neighborhood);
-		return toRet;
+	
+	/**
+	 * Get open cells for different types of neighbors
+	 */
+	
+	protected Collection<EmptyCell> getOpenNeighbors(Collection<Cell>curr, Collection<EmptyCell> available){
+		return getOpenCells(getNeighbors(curr), available);
 	}
 	
-	public ArrayList<Cell>getSecondWrappedNeighbors(ArrayList<Cell> currentCells, int size){
-		HashSet <Cell> neighborhood = new HashSet<Cell>();
-		ArrayList<Cell> firstOrderNeighbors = getWrappedFirstNeighbors(currentCells, size);
-		neighborhood.addAll(firstOrderNeighbors);
-		for(Cell n: firstOrderNeighbors){
-			ArrayList<Cell> secondOrderNeighbors = n.getWrappedFirstNeighbors(currentCells, size);
-			neighborhood.addAll(secondOrderNeighbors);
-		}
-		ArrayList<Cell> toRet = new ArrayList<Cell>(neighborhood);
-		return toRet;
+	protected Collection<EmptyCell> getOpenWrappedNeighbors(Collection<Cell>curr, Collection<EmptyCell> available, int size){
+		return getOpenCells(getWrappedNeighbors(curr, size), available);
 	}
 	
+	protected Collection<EmptyCell> getOpenCardinalNeighbors(Collection<Cell>curr, Collection<EmptyCell> available){
+		return getOpenCells(getCardinalNeighbors(curr), available);
+	}
 	
-	protected int countSameNeighbors(ArrayList<Cell>neighbors){
+	/**
+	 * Get open cells from given options
+	 */
+	protected Collection<EmptyCell> getOpenCells(Collection<Cell> possibleCells, Collection<EmptyCell> available){
+		ArrayList<EmptyCell> close = new ArrayList<EmptyCell>();
+		for(Cell c: possibleCells){
+			if(c.locationIn(available) && c instanceof EmptyCell){
+				close.add((EmptyCell)c);
+			}
+		}
+		return close;
+	}
+	
+	protected int countSameNeighbors(Collection<Cell>neighbors){
 		int sameCount = 0;
 		for(Cell c: neighbors){
 			if(c.getMyState()!=null && c.getMyState().equals(this.getMyState())){
@@ -103,7 +133,7 @@ public abstract class Cell {
 		return sameCount;
 	}
 	
-	protected int countDiffNeighbors(ArrayList<Cell>neighbors){
+	protected int countDiffNeighbors(Collection<Cell>neighbors){
 		int diffCount = 0;
 		for(Cell c: neighbors){
 			if(!(c.getClass() == this.getClass())){
@@ -118,6 +148,9 @@ public abstract class Cell {
 		this.setMyRow(copyFrom.getMyRow());
 	}
 	
+	
+	
+	
 	/**
 	 * Adjacency in common sense
 	 * @param c target cell
@@ -127,10 +160,22 @@ public abstract class Cell {
 		return isAdjacent(c.getMyLocation());
 	}
 	
+	
 	protected boolean isAdjacent(Location l){
-		return (sameColumn(l) && oneAwayVertical(l))||(sameRow(l) && oneAwayHorizontal(l))
-				||(oneAwayVertical(l) && oneAwayHorizontal(l));
+		return isCardinalAdjacent(l)||(oneAwayVertical(l) && oneAwayHorizontal(l));
 	}
+	
+	/**
+	 * Adjacency, but only in cardinal directions
+	 */
+	public boolean isCardinalAdjacent(Cell c){
+		return isCardinalAdjacent(c.getMyLocation());
+	}
+	
+	public boolean isCardinalAdjacent(Location l){
+		return (sameColumn(l) && oneAwayVertical(l))||(sameRow(l) && oneAwayHorizontal(l));
+	}
+	
 	
 	/**
 	 * Adjacency EVEN ACROSS BOARD (wrapped sides)
@@ -161,6 +206,10 @@ public abstract class Cell {
 		return isWrappedAdjacent(c.getMyLocation(),size)|| isAdjacent(c.getMyLocation());
 	}
 	
+	
+	/**
+	 * Check for same column/row ACROSS the board
+	 */
 	private boolean inColAcrossBoard(Location l, int size){
 		return (l.getMyCol()==0 && getMyCol() == size-1) ||
 			   (getMyCol()==0 && l.getMyCol() == size-1);
@@ -171,18 +220,48 @@ public abstract class Cell {
 				   (getMyRow()==0 && l.getMyRow() == size-1);
 	}
 	
+	
+	/**
+	 * Check for same column/row
+	 * 
+	 */
+	
 	private boolean sameColumn(Location l){
 		return l.getMyCol() == getMyCol();
 	}
 	private boolean sameRow(Location l){
 		return l.getMyRow() == getMyRow();
 	}
+	
+	
+	/**
+	 * Check distance in directions
+	 */
 	private boolean oneAwayVertical(Location l){
-		return ((this.getMyRow()+1) == l.getMyRow()) || ((this.getMyRow()-1) == l.getMyRow());
+		return oneAwayDown(l) || oneAwayUp(l);
 	}
 	
 	private boolean oneAwayHorizontal(Location l){
-		return ((this.getMyCol()+1) == l.getMyCol()) || ((this.getMyCol()-1) == l.getMyCol());
+		return oneAwayRight(l) || oneAwayLeft(l);
+	}
+	
+	/**
+	 * Check distance in cardinal directions
+	 */
+	private boolean oneAwayUp(Location l){
+		return ((this.getMyRow()-1) == l.getMyRow());
+	}
+	
+	private boolean oneAwayDown(Location l){
+		return ((this.getMyRow()+1) == l.getMyRow());
+	}
+	
+	private boolean oneAwayRight(Location l){
+		return ((this.getMyCol()+1) == l.getMyCol());
+	}
+	
+	private boolean oneAwayLeft(Location l){
+		return ((this.getMyCol()-1) == l.getMyCol());
 	}
 	
 	public Location getMyLocation() {

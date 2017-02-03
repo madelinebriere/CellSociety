@@ -11,6 +11,7 @@ package cellular_level;
 
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class LiveCell extends Cell {
 	private static int underpopulation = 2;
@@ -41,9 +42,9 @@ public class LiveCell extends Cell {
 	 * live cell or a new dead cell in the same location. Never empty.
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> currentCells, ArrayList<EmptyCell> available, int size) {
+	public Collection<Cell> update(Collection<Cell> currentCells, Collection<EmptyCell> available, int size) {
 		ArrayList<Cell> newGen = new ArrayList<Cell>();
-		ArrayList<Cell> neighbors = getFirstNeighbors(currentCells);
+		Collection<Cell> neighbors = neighbors(currentCells, size);
 		int numLive = countSameNeighbors(neighbors);
 		if(isOverpopulated(numLive)||isUnderpopulated(numLive)){
 			DeadCell child = new DeadCell();
@@ -55,6 +56,11 @@ public class LiveCell extends Cell {
 		}
 		return newGen;
 		
+	}
+	
+	@Override
+	public Collection<Cell> neighbors(Collection<Cell> currentCells, int size){
+		return getNeighbors(currentCells);
 	}
 	
 	private boolean isOverpopulated(int numLive){

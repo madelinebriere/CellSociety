@@ -41,7 +41,7 @@ public class GUIMain{
     private Grid _grid;
     
     public GUIMain(){
-		this(new FireSociety());
+		this(new PopSociety());
     }
     public GUIMain(CellSociety model){
     	_model = model;

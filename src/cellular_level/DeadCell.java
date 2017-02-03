@@ -9,7 +9,7 @@ package cellular_level;
 
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
-
+import java.util.Collection;
 
 import util.Location;
 
@@ -41,8 +41,8 @@ public class DeadCell extends Cell {
 	 * dead cell or a new live cell in the same location. Never empty.
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> currentCells, ArrayList<EmptyCell> available, int size) {
-		ArrayList<Cell> neighbors = getFirstNeighbors(currentCells);
+	public Collection<Cell> update(Collection<Cell> currentCells, Collection<EmptyCell> available, int size) {
+		Collection<Cell> neighbors = neighbors(currentCells, size);
 		ArrayList<Cell> newGen = new ArrayList<Cell>();
 		int numLive = countDiffNeighbors(neighbors);
 		if(isReadyToLive(numLive)){
@@ -55,6 +55,11 @@ public class DeadCell extends Cell {
 		}
 		return newGen;
 		
+	}
+	
+	@Override
+	public Collection<Cell> neighbors(Collection<Cell> currentCells, int size){
+		return getNeighbors(currentCells);
 	}
 	
 	private boolean isReadyToLive(int numLive){

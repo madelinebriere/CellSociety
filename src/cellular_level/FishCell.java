@@ -10,12 +10,13 @@
 package cellular_level;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
 
 public class FishCell extends WaterWorldCell {
-	private static int stepsToBreed=1;
+	private static int stepsToBreed=5;
 	private static Color fishColor = Color.GREEN;
 	
 	private Random randy = new Random();
@@ -47,28 +48,42 @@ public class FishCell extends WaterWorldCell {
 	 * can move and then breed, placing a new FishCell in an adjacent Cell
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> currentCells, ArrayList<EmptyCell> available, int size) {
+	public Collection<Cell> update(Collection<Cell> currentCells, Collection<EmptyCell> available, int size) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
-		ArrayList<Cell> neighbors = getFirstNeighbors(currentCells);
 		if(!isEaten()){
-			move(neighbors);
-			
-			FishCell baby = breed(neighbors, size);
-			if(baby!=null){
-				nextGen.add(baby);
+			Collection<Cell> neighbors = neighbors(currentCells, size);
+			move(neighbors, available, size);
+			neighbors = neighbors(currentCells,size);
+			if(timeToBreed()){
+				stepsSinceBreed=0;
+				FishCell baby = breed(neighbors, available, size);
+				if(baby!=null){
+					nextGen.add(baby);
+				}
+			}else{
+				stepsSinceBreed++;
 			}
 			nextGen.add(this);
 		}
 		return nextGen;
 	}
 	
-	private FishCell breed(ArrayList<Cell> nearbyCells, int size){
-		EmptyCell breedSpot = getBreedSpot(nearbyCells, size);
+	@Override
+	public Collection<Cell> neighbors(Collection<Cell> currentCells, int size){
+		return getCardinalNeighbors(getWrappedNeighbors(currentCells, size));
+	}
+	
+	private FishCell breed(Collection<Cell> nearbyCells, Collection<EmptyCell> available, int size){
+		EmptyCell breedSpot = getBreedSpot(nearbyCells, available, size);
 		if(breedSpot!=null){
 			FishCell baby = new FishCell(breedSpot.getMyRow(), breedSpot.getMyCol());
 			return baby;
 		}
 		return null;
+	}
+	
+	private boolean timeToBreed(){
+		return stepsSinceBreed>=stepsToBreed;
 	}
 	
 

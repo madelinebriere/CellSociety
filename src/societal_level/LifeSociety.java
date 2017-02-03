@@ -50,6 +50,13 @@ public class LifeSociety extends CellSociety {
 		
 		setCurrentCells(makeCells);
 	}
+
+	@Override
+	public Color[][] step() {
+		return totalStep();
+	}
+	
+	
 	
 
 }

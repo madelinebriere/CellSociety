@@ -10,6 +10,7 @@ package cellular_level;
 
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 import util.Location;
@@ -46,11 +47,10 @@ public class TreeCell extends Cell {
 	 * same location (if the tree has caught fire)
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> currentCells,ArrayList<EmptyCell> available, int size) {
+	public Collection<Cell> update(Collection<Cell> currentCells, Collection<EmptyCell> available, int size) {
 		ArrayList <Cell> nextGen = new ArrayList<Cell>();
-		ArrayList<Cell> neighbors = getFirstNeighbors(currentCells);
+		Collection<Cell> neighbors = neighbors(currentCells, size);
 		if(numberBurningTrees(neighbors)>=1 && catchFire()){
-			System.out.println("HERE");
 			BurnCell child = new BurnCell();
 			child.copyLocation(this);
 			nextGen.add(child);
@@ -61,7 +61,12 @@ public class TreeCell extends Cell {
 		return nextGen;
 	}
 	
-	private int numberBurningTrees(ArrayList<Cell> neighbors){
+	@Override
+	public Collection<Cell> neighbors(Collection<Cell> currentCells, int size){
+		return getNeighbors(currentCells);
+	}
+	
+	private int numberBurningTrees(Collection<Cell> neighbors){
 		int numBurn = 0;
 		for(Cell c: neighbors){
 			if(c instanceof BurnCell){

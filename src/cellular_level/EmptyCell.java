@@ -1,9 +1,9 @@
 package cellular_level;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javafx.scene.paint.Color;
-import util.Location;
 
 public class EmptyCell extends Cell{
 	private static Color EMPTY_COLOR = null;
@@ -29,9 +29,14 @@ public class EmptyCell extends Cell{
 	}
 	
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> currentCells, ArrayList<EmptyCell> available, int size) {
+	public Collection<Cell> update(Collection<Cell> currentCells, Collection<EmptyCell> available, int size) {
 		ArrayList<Cell> empty = new ArrayList<Cell>();
 		return empty;
+	}
+	
+	@Override
+	public Collection<Cell> neighbors(Collection<Cell> currentCells, int size){
+		return getNeighbors(currentCells);
 	}
 
 }

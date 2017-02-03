@@ -23,5 +23,11 @@ public class FireSociety extends CellSociety{
 		}
 		setCurrentCells(makeCells);
 	}
+	
+	@Override
+	public Color[][] step() {
+		return totalStep();
+	}
+	
 
 }

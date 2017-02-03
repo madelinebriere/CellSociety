@@ -18,6 +18,7 @@ import cellular_level.*;
 import javafx.scene.paint.Color;
 
 
+
 public class PopSociety extends CellSociety {
 	private Random rnd = new Random();
 	
@@ -32,15 +33,22 @@ public class PopSociety extends CellSociety {
 							new HouseCell(i,j, Color.BLUE): new HouseCell(i,j,Color.RED));
 				}
 				else
-					makeCells.add(new EmptyCell(i,j));
+					if(rnd.nextBoolean()){
+						makeCells.add(new HouseCell(i,j, Color.BLUE));
+					}
+					else
+						makeCells.add(new EmptyCell(i,j));
 			}
-		}
+		} 
 		setCurrentCells(makeCells);
 	}
 	
+	@Override
 	public Color[][] step() {
-		updateAllCells(getEmptyCells());
-		return getCurrentColors();
+		return guidedStep();
+		
 	}
+	
+
 
 }
