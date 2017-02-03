@@ -3,7 +3,7 @@
  * return the data behind any Simulation. The abstract class holds the title,
  * artist, dimension, and ArrayList of initial cells. The subclasses are in charge
  * of defining which initial settings need to be stored and how to interpret the
- * Strings of initial cell data.
+ * Strings of initial cell data. This is a Read-Only data structure.
  * 
  * @author Stone Mathers
  */
@@ -76,16 +76,13 @@ public abstract class SimulationType {
 	 * @return List of data types of SimulationType and the subclass instantiated
 	 */
 	public List<String> getDataTypes(){
-		return dataTypes;
+		List<String> copy = new ArrayList<String>();
+		copy.addAll(dataTypes);
+		return copy;
 	}
 	
-	/**
-	 * @return Map of SimulationType's data values
-	 */
-	public Map<String, String> getDataValues(){
-		HashMap<String, String> copy = new HashMap<String, String>();
-		copy.putAll(myDataValues);
-		return copy;
+	protected Map<String, String> getDataValues(){
+		return myDataValues;
 	}
 	
 	
