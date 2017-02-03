@@ -1,6 +1,7 @@
 package societal_level;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 import cellular_level.*;
@@ -54,6 +55,11 @@ public class LifeSociety extends CellSociety {
 	@Override
 	public Color[][] step() {
 		return totalStep();
+	}
+	
+	@Override
+	public Collection<Cell> neighbors(Cell c) {
+		return getNeighbors(c);
 	}
 	
 	

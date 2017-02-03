@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
+import util.CellData;
+import util.Location;
 
 /**
  * Add wrapped,
@@ -25,25 +27,21 @@ public abstract class WaterWorldCell extends Cell {
 		super(row, col, color);
 	}
 	
-	protected EmptyCell getBreedSpot(Collection<Cell> nearbyCells, Collection<EmptyCell> available, int size){
-		Collection<Cell> neighbors = neighbors(nearbyCells, size);
-		Collection<EmptyCell> possibleBreedSpots = getOpenCells(neighbors, available);
-		if(possibleBreedSpots!=null && possibleBreedSpots.size()!=0){
-		int index = randy.nextInt(possibleBreedSpots.size());
-		EmptyCell breedSpot = (new ArrayList<EmptyCell>(possibleBreedSpots)).get(index);
-		return breedSpot;
-		}
+	protected Location getBreedSpot(CellData data){
+		Cell target = data.getCopyAvailableNeighbor(this);
+		if(target!=null)
+			return target.getMyLocation();
 		else
 			return null;
 	}
 	
 	
-	protected void move(Collection<Cell> neighbors, Collection<EmptyCell> available, int size){
-		Collection<EmptyCell> openSpots = getOpenWrappedNeighbors(neighbors, available, size);
-		if(openSpots.size()!=0){
-			int index = randy.nextInt(openSpots.size());
-			this.copyLocation(new ArrayList<Cell>(openSpots).get(index));
-		}
+	protected void move(CellData data){
+		Cell target = data.getCopyAvailableNeighbor(this);
+		if(target!=null)
+			this.setMyLocation(target.getMyLocation());
 	}
+	
+	
 	
 }

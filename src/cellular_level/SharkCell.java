@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
+import util.CellData;
+import util.Location;
 
 public class SharkCell extends WaterWorldCell {
 	private static Color sharkColor = Color.YELLOW;
@@ -53,42 +55,32 @@ public class SharkCell extends WaterWorldCell {
 	 * Check for nulls in other neighbors
 	 */
 	@Override
-	public Collection<Cell> update(Collection<Cell> currentCells, Collection<EmptyCell> available, int size) {
+	public Collection<Cell> update(CellData data) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
-		eatOrMove(currentCells, available, size);
-		
-		available=getOpenCells(neighbors(currentCells, size), available);
-		breedOrDie(nextGen,currentCells, available, size);
+		eatOrMove(nextGen, data);
+		breedOrDie(nextGen, data);
 		return nextGen;
 	}
 	
-	@Override
-	public Collection<Cell> neighbors(Collection<Cell> currentCells, int size){
-		return getWrappedNeighbors(getCardinalNeighbors(currentCells),size);
-	}
-	
-	private void eatOrMove(Collection<Cell> currentCells, Collection<EmptyCell> available, int size){
-		Collection<Cell>possibleFood = neighbors(currentCells, size);
-		FishCell food = getRandomFish(possibleFood);
+	private void eatOrMove(Collection <Cell> nextGen, CellData data){
+		FishCell food = getRandomFish(data);
 		if(food!=null){
 			eatFish(food);
 		}
 		else{
 			stepsSinceEat++;
-			move(currentCells, available, size);
+			move(data);
 		}
 	}
 	
-	private void breedOrDie(Collection<Cell> nextGen, Collection<Cell> currentCells, Collection<EmptyCell> available, int size){
+	private void breedOrDie(Collection <Cell> nextGen, CellData data){
 		if(!isStarved()){
 			nextGen.add(this);
 			if(timeToBreed()){
 				stepsSinceBreed=0;
-				Collection<Cell>neighbors = neighbors(currentCells, size);
-				SharkCell baby = breed(neighbors, available, size);
+				SharkCell baby = breed(data);
 				if(baby!=null){
 					nextGen.add(baby);
-					System.out.println("HERE");
 				}
 			}
 			else{
@@ -102,15 +94,15 @@ public class SharkCell extends WaterWorldCell {
 		setStepsSinceEat(0);
 	}
 	
-	private SharkCell breed(Collection<Cell> nearbyCells, Collection<EmptyCell> available, int size){
-		EmptyCell breedSpot = getBreedSpot(nearbyCells, available, size);
+	private SharkCell breed(CellData data){
+		Location breedSpot = getBreedSpot(data);
 		if(breedSpot == null){return null;}
 		SharkCell baby = new SharkCell(breedSpot.getMyRow(), breedSpot.getMyCol());
 		return baby;
 	}
 	
-	private FishCell getRandomFish(Collection<Cell> neighbors){
-		ArrayList<FishCell> possibleFood = locateFishCells(neighbors);
+	private FishCell getRandomFish(CellData data){
+		ArrayList<FishCell> possibleFood = locateFishCells(data.getNeighbors(this));
 		if(possibleFood != null && possibleFood.size()>0){
 			int fishIndex = randy.nextInt(possibleFood.size());
 			return possibleFood.get(fishIndex);

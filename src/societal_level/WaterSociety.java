@@ -1,6 +1,7 @@
 package societal_level;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 import cellular_level.*;
@@ -48,5 +49,12 @@ public class WaterSociety extends CellSociety{
 		System.out.println("Shark: " + shark);
 		return orderedStep(types);
 	}
+
+	@Override
+	public Collection<Cell> neighbors(Cell c) {
+		Collection<Cell> cells = getWrappedNeighbors(c);
+		return cells;
+	}
+
 
 }

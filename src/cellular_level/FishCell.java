@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
+import util.CellData;
+import util.Location;
 
 public class FishCell extends WaterWorldCell {
 	private static int stepsToBreed=5;
@@ -48,15 +50,13 @@ public class FishCell extends WaterWorldCell {
 	 * can move and then breed, placing a new FishCell in an adjacent Cell
 	 */
 	@Override
-	public Collection<Cell> update(Collection<Cell> currentCells, Collection<EmptyCell> available, int size) {
+	public Collection<Cell> update(CellData data) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		if(!isEaten()){
-			Collection<Cell> neighbors = neighbors(currentCells, size);
-			move(neighbors, available, size);
-			neighbors = neighbors(currentCells,size);
+			move(data);
 			if(timeToBreed()){
 				stepsSinceBreed=0;
-				FishCell baby = breed(neighbors, available, size);
+				FishCell baby = breed(data);
 				if(baby!=null){
 					nextGen.add(baby);
 				}
@@ -68,13 +68,8 @@ public class FishCell extends WaterWorldCell {
 		return nextGen;
 	}
 	
-	@Override
-	public Collection<Cell> neighbors(Collection<Cell> currentCells, int size){
-		return getCardinalNeighbors(getWrappedNeighbors(currentCells, size));
-	}
-	
-	private FishCell breed(Collection<Cell> nearbyCells, Collection<EmptyCell> available, int size){
-		EmptyCell breedSpot = getBreedSpot(nearbyCells, available, size);
+	private FishCell breed(CellData data){
+		Location breedSpot = getBreedSpot(data);
 		if(breedSpot!=null){
 			FishCell baby = new FishCell(breedSpot.getMyRow(), breedSpot.getMyCol());
 			return baby;

@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import util.CellData;
 import util.Location;
 
 public class DeadCell extends Cell {
@@ -41,10 +42,9 @@ public class DeadCell extends Cell {
 	 * dead cell or a new live cell in the same location. Never empty.
 	 */
 	@Override
-	public Collection<Cell> update(Collection<Cell> currentCells, Collection<EmptyCell> available, int size) {
-		Collection<Cell> neighbors = neighbors(currentCells, size);
+	public Collection<Cell> update(CellData data) {
 		ArrayList<Cell> newGen = new ArrayList<Cell>();
-		int numLive = countDiffNeighbors(neighbors);
+		int numLive = data.countDiffNeighbors(this);
 		if(isReadyToLive(numLive)){
 			LiveCell child = new LiveCell();
 			child.copyLocation(this);
@@ -55,11 +55,6 @@ public class DeadCell extends Cell {
 		}
 		return newGen;
 		
-	}
-	
-	@Override
-	public Collection<Cell> neighbors(Collection<Cell> currentCells, int size){
-		return getNeighbors(currentCells);
 	}
 	
 	private boolean isReadyToLive(int numLive){

@@ -41,11 +41,12 @@ public class GUIMain{
     private Grid _grid;
     
     public GUIMain(){
-		this(new PopSociety());
+		this(new WaterSociety());
     }
     public GUIMain(CellSociety model){
     	_model = model;
     	_root =  new Pane();
+    	
 		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
 		setupGrid();
 		setupAnimationTimeLine();

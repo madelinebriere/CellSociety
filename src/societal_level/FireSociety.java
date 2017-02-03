@@ -1,6 +1,8 @@
 package societal_level;
 
 import java.util.ArrayList;
+import java.util.Collection;
+
 import cellular_level.*;
 import javafx.scene.paint.Color;
 
@@ -27,6 +29,11 @@ public class FireSociety extends CellSociety{
 	@Override
 	public Color[][] step() {
 		return totalStep();
+	}
+
+	@Override
+	public Collection<Cell> neighbors(Cell c) {
+		return getNeighbors(c);
 	}
 	
 

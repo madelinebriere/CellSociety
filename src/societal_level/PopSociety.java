@@ -12,6 +12,7 @@
 package societal_level;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 import cellular_level.*;
@@ -47,6 +48,11 @@ public class PopSociety extends CellSociety {
 	public Color[][] step() {
 		return guidedStep();
 		
+	}
+	
+	@Override
+	public Collection<Cell> neighbors(Cell c) {
+		return getNeighbors(c);
 	}
 	
 

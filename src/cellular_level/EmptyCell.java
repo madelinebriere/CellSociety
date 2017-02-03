@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javafx.scene.paint.Color;
+import util.CellData;
 
 public class EmptyCell extends Cell{
 	private static Color EMPTY_COLOR = null;
@@ -29,14 +30,10 @@ public class EmptyCell extends Cell{
 	}
 	
 	@Override
-	public Collection<Cell> update(Collection<Cell> currentCells, Collection<EmptyCell> available, int size) {
+	public Collection<Cell> update(CellData data) {
 		ArrayList<Cell> empty = new ArrayList<Cell>();
 		return empty;
 	}
 	
-	@Override
-	public Collection<Cell> neighbors(Collection<Cell> currentCells, int size){
-		return getNeighbors(currentCells);
-	}
 
 }

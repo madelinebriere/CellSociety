@@ -8,9 +8,11 @@
 package cellular_level;
 
 import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
+import util.CellData;
 import util.Location;
 
 public class BurnCell extends Cell {
@@ -47,7 +49,7 @@ public class BurnCell extends Cell {
 	 * next generation). Otherwise, an empty List is returned.
 	 */
 	@Override
-	public Collection<Cell> update(Collection<Cell> currentCells, Collection<EmptyCell> available, int size) {
+	public Collection<Cell> update(CellData data) {
 		ArrayList<Cell>nextGen = new ArrayList<Cell>();
 		mySteps++;
 		if(!isBurnt()){
@@ -58,11 +60,6 @@ public class BurnCell extends Cell {
 			nextGen.add(burned);
 		}
 		return nextGen;
-	}
-	
-	@Override
-	public Collection<Cell> neighbors(Collection<Cell> currentCells, int size){
-		return getNeighbors(currentCells);
 	}
 	
 	private boolean isBurnt(){

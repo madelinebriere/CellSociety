@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
+import util.CellData;
 import util.Location;
 
 public class HouseCell extends Cell{
@@ -40,12 +41,11 @@ public class HouseCell extends Cell{
 	 * same location, or the current Cell in a new location (if it was not satisfied)
 	 */
 	@Override
-	public Collection<Cell> update(Collection<Cell> currentCells, Collection<EmptyCell> available, int size) {
+	public Collection<Cell> update(CellData data) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
-		Collection<Cell> neighbors = neighbors(currentCells, size);
-		double percentSame = percentSame(neighbors);
+		double percentSame = percentSame(data);
 		if(!isSatisfied(percentSame)){
-			Location newSpot = getOpenSpot(available);
+			Location newSpot = data.getCopyAvailableLocation();
 			if(newSpot!=null){
 				HouseCell relocatedCell = new HouseCell(newSpot.getMyRow(), newSpot.getMyCol(), this.getMyState());
 				nextGen.add(relocatedCell);
@@ -59,38 +59,15 @@ public class HouseCell extends Cell{
 		return nextGen;
 	}
 	
-	@Override
-	public Collection<Cell> neighbors(Collection<Cell> currentCells, int size){
-		return getNeighbors(currentCells);
-	}
-
 	private boolean isSatisfied(double percentSame){
 		return percentSame >= satisfiedThreshold;
 	}
 	
-	private double percentSame(Collection<Cell> neighbors){
-		int same = countSameNeighbors(neighbors);
-		int total = countNonEmptyNeighbors(neighbors);
+	private double percentSame(CellData data){
+		int same = data.countSameNeighbors(this);
+		int total = data.countNonEmptyNeighbors(this);
 		double percentSame = ((double)same)/(total);
 		return percentSame;
-	}
-	
-	private int countNonEmptyNeighbors(Collection<Cell> neighbors){
-		int count=0;
-		for(Cell c: neighbors){
-			if(!(c instanceof EmptyCell)){
-				count++;
-			}
-		}
-		return count;
-	}
-	
-	private Location getOpenSpot(Collection<EmptyCell> nullCells){
-		if(nullCells==null || nullCells.size()==0){return null;}
-		Random randy = new Random();
-		int emptyIndex = randy.nextInt(nullCells.size());
-		ArrayList<Cell> openCells = new ArrayList <Cell>(nullCells);
-		return openCells.get(emptyIndex).getMyLocation();
 	}
 
 	
