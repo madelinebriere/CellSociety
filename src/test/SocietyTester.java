@@ -1,7 +1,9 @@
-package societal_level;
+package test;
 
 import java.util.ArrayList;
 import cellular_level.Cell;
+import societal_level.CellSociety;
+import societal_level.PopSociety;
 
 /**
  * Basic test class for CellSocieties to bring out the number of each CellType 
