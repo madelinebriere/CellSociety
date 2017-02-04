@@ -15,7 +15,7 @@ import java.util.Collection;
 
 import javafx.scene.paint.Color;
 
-public abstract class Cell {
+public abstract class Cell implements Comparable{
 	private Location myLocation;
 	private Color myState;
 	
@@ -39,6 +39,14 @@ public abstract class Cell {
 		return getMyLocation().equals(((Cell)o).getMyLocation());
 	}
 	
+	@Override
+	public int compareTo(Object o) {
+		if(o == null) {return -1;}
+		if(this==o){return 0;}
+		return this.getClass().getName().compareTo(o.getClass().getName());
+		
+	}
+	
 	public <T extends Cell>boolean locationIn(Collection<T>cells){
 		for(Cell c: cells){
 			if(positionEquals(c)){
@@ -55,6 +63,16 @@ public abstract class Cell {
 	public void copyLocation(Cell copyFrom){
 		this.setMyCol(copyFrom.getMyCol());
 		this.setMyRow(copyFrom.getMyRow());
+	}
+	
+	public void copyLocation(Location copyFrom){
+		this.setMyCol(copyFrom.getMyCol());
+		this.setMyRow(copyFrom.getMyRow());
+	}
+	
+	public void basicCopy(Cell copyFrom){
+		this.setMyState(copyFrom.getMyState());
+		this.copyLocation(copyFrom);
 	}
 	
 	
@@ -89,5 +107,7 @@ public abstract class Cell {
 	public void setMyState(Color myState) {
 		this.myState = myState;
 	}
+
+
 	
 }

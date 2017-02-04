@@ -40,8 +40,7 @@ public class SharkCell extends WaterWorldCell {
 	@Override
 	public Cell createCopy(){
 		SharkCell copy = new SharkCell();
-		copy.setMyLocation(this.getMyLocation());
-		copy.setMyState(this.getMyState());
+		copy.basicCopy(this);
 		copy.setStepsSinceBreed(this.getStepsSinceBreed());
 		copy.setStepsSinceEat(this.getStepsSinceEat());
 		return copy;
@@ -49,10 +48,10 @@ public class SharkCell extends WaterWorldCell {
 
 
 	/**
-	 * Unlike many of the other types of cells, this cell requires 2nd order neighbors 
-	 * as well as 1st order neighbors. This is because of possible mobility.
-	 * 
-	 * Check for nulls in other neighbors
+	 * Update for SharkCell, returns new Cells
+	 * @param data CellData provided Cell with necessary access and information
+	 * @return Collection of updated cells, including current shark (same spot or moved) or not 
+	 * (if it has starved), and baby shark if the shark has bred
 	 */
 	@Override
 	public Collection<Cell> update(CellData data) {
@@ -68,23 +67,20 @@ public class SharkCell extends WaterWorldCell {
 			eatFish(food);
 		}
 		else{
-			stepsSinceEat++;
 			move(data);
+			incrementStepsSinceEat();
 		}
 	}
 	
 	private void breedOrDie(Collection <Cell> nextGen, CellData data){
 		if(!isStarved()){
-			nextGen.add(this);
+			stayAlive(nextGen);
 			if(timeToBreed()){
-				stepsSinceBreed=0;
-				SharkCell baby = breed(data);
-				if(baby!=null){
-					nextGen.add(baby);
-				}
+				setStepsSinceBreed(0);
+				breed(data,nextGen);
 			}
 			else{
-				stepsSinceBreed++;
+				incrementStepsSinceBreed();
 			}
 		}
 	}
@@ -94,11 +90,21 @@ public class SharkCell extends WaterWorldCell {
 		setStepsSinceEat(0);
 	}
 	
-	private SharkCell breed(CellData data){
+	private void breed(CellData data, Collection<Cell> nextGen){
+		SharkCell baby = getBabyShark(data);
+		if(baby!=null){
+			nextGen.add(baby);
+		}
+	}
+	
+	private SharkCell getBabyShark(CellData data){
 		Location breedSpot = getBreedSpot(data);
-		if(breedSpot == null){return null;}
-		SharkCell baby = new SharkCell(breedSpot.getMyRow(), breedSpot.getMyCol());
-		return baby;
+		if(breedSpot != null){
+			SharkCell baby = new SharkCell();
+			baby.copyLocation(breedSpot);
+			return baby;
+		}
+		return null;
 	}
 	
 	private FishCell getRandomFish(CellData data){
@@ -120,6 +126,10 @@ public class SharkCell extends WaterWorldCell {
 			}
 		}
 		return possibleFood;
+	}
+	
+	private void stayAlive(Collection <Cell>nextGen){
+		nextGen.add(this);
 	}
 	
 	private boolean timeToBreed(){
@@ -157,6 +167,10 @@ public class SharkCell extends WaterWorldCell {
 	public int getStepsSinceEat() {
 		return stepsSinceEat;
 	}
+	
+	public void incrementStepsSinceEat(){
+		stepsSinceEat++;
+	}
 
 	public void setStepsSinceEat(int stepsSinceEat) {
 		this.stepsSinceEat = stepsSinceEat;
@@ -168,6 +182,10 @@ public class SharkCell extends WaterWorldCell {
 
 	public void setStepsSinceBreed(int stepsSinceBreed) {
 		this.stepsSinceBreed = stepsSinceBreed;
+	}
+	
+	public void incrementStepsSinceBreed(){
+		stepsSinceBreed++;
 	}
 
 

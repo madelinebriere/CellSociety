@@ -20,106 +20,115 @@ import societal_level.CellSociety;
 
 public class CellData {
 	private CellSociety mySociety;
-	private Collection <EmptyCell> available;
-	
-	public CellData(CellSociety s, Collection<EmptyCell> validSpots){
+	private Collection<EmptyCell> available;
+
+	public CellData(CellSociety s, Collection<EmptyCell> validSpots) {
 		mySociety = s;
 		available = validSpots;
 	}
-	
-	public int getSize(){
+
+	public int getSize() {
 		return mySociety.getSize();
 	}
-	
-	public int getNumberNeighbors(Cell c){
+
+	public int getNumberNeighbors(Cell c) {
 		return mySociety.neighbors(c).size();
 	}
-	
+
 	/**
-	 * Call will be specific to CellSociety
-	 * --> correct type of neighbors
+	 * Call will be specific to CellSociety --> correct type of neighbors
 	 */
-	public Collection <Cell> getNeighbors(Cell c){
+	public Collection<Cell> getNeighbors(Cell c) {
 		return mySociety.neighbors(c);
 	}
-	
-	public Collection<Cell> getNeighborsOfType(Cell c, String className){
-		return mySociety.getCategoryCells(getNeighbors(c), className);
-	}
-	
-	public Collection<Cell> getCurrentCellsCopy(){
+
+	public Collection<Cell> getCurrentCellsCopy() {
 		return copy(mySociety.getCurrentCells());
 	}
-	
-	public Collection<EmptyCell>getAvailableCellsCopy(){
+
+	public Collection<EmptyCell> getAvailableCellsCopy() {
 		return copy(available);
 	}
-	
-	private <T extends Cell> Collection<T> copy(Collection<T> toCopy){
-		ArrayList<Cell> copy = new ArrayList<Cell>();
-		for(Cell c: toCopy){
-			Cell newCell = c.createCopy();
-			copy.add(newCell);
-		}
-		return toCopy;
-	}
-	
-	public int countNeighborsOfType(String className){
-		return mySociety.getCategoryCells(getCurrentCellsCopy(), className).size();
-	}
-	
-	public int countSameNeighbors(Cell center){
+
+	public int countSameNeighbors(Cell center) {
 		int sameCount = 0;
-		for(Cell c: mySociety.neighbors(center)){
-			if(c.getMyState()!=null && c.getMyState().equals(center.getMyState())){
+		for (Cell c : mySociety.neighbors(center)) {
+			if (c.getMyState() != null && c.getMyState().equals(center.getMyState())) {
 				sameCount++;
 			}
 		}
 		return sameCount;
 	}
-	
-	public int countDiffNeighbors(Cell center){
+
+	public int countDiffNeighbors(Cell center) {
 		return getNumberNeighbors(center) - countSameNeighbors(center);
 	}
-	
-	public int countNonEmptyNeighbors(Cell center){
-		Collection <Cell> neighbors = mySociety.neighbors(center);
-		Collection <EmptyCell> emptyNeighbors = mySociety.getEmptyCells(neighbors);
-		if(neighbors.size()==0){return 0;}
-		if(emptyNeighbors.size()==0){return neighbors.size();}
+
+	public int countNonEmptyNeighbors(Cell center) {
+		Collection<Cell> neighbors = mySociety.neighbors(center);
+		Collection<EmptyCell> emptyNeighbors = mySociety.getEmptyCells(neighbors);
+		if (neighbors.size() == 0) {
+			return 0;
+		}
+		if (emptyNeighbors.size() == 0) {
+			return neighbors.size();
+		}
 		return neighbors.size() - emptyNeighbors.size();
 	}
-	
-	public Cell getCopyAvailableCell(){
-		if(available.size()==0){return null;}
+
+	public Cell getCopyAvailableCell() {
+		if (available.size() == 0) {
+			return null;
+		}
 		Random randy = new Random();
 		int emptyIndex = randy.nextInt(available.size());
-		ArrayList<Cell> openCells = new ArrayList <Cell>(available);
+		ArrayList<Cell> openCells = new ArrayList<Cell>(available);
 		return openCells.get(emptyIndex).createCopy();
 	}
-	
-	public Location getCopyAvailableLocation(){
+
+	public Location getCopyAvailableLocation() {
 		Cell c = getCopyAvailableCell();
-		if(c == null) return null;
+		if (c == null)
+			return null;
 		return c.getMyLocation();
-		
+
 	}
-	
-	public Cell getCopyAvailableNeighbor(Cell c){
-		if(getAvailableNeighbor(c)!=null)
+
+	public Cell getCopyAvailableNeighbor(Cell c) {
+		if (getAvailableNeighbor(c) != null)
 			return getAvailableNeighbor(c).createCopy();
 		else
 			return null;
 	}
-	
-	public Cell getAvailableNeighbor(Cell c){
-		if(available.size()==0){return null;}
+
+	public Cell getAvailableNeighbor(Cell c) {
+		if (available.size() == 0) {
+			return null;
+		}
 		Random randy = new Random();
 		ArrayList<EmptyCell> availableNeighbors = new ArrayList<EmptyCell>(available);
 		availableNeighbors.retainAll(mySociety.neighbors(c));
-		if(availableNeighbors.size()==0){return null;}
+		if (availableNeighbors.size() == 0) {
+			return null;
+		}
 		int emptyIndex = randy.nextInt(availableNeighbors.size());
 		return availableNeighbors.get(emptyIndex);
 	}
-	
+
+	/**
+	 * Basic Collection copy function to limit actual access to items
+	 * 
+	 * @param toCopy
+	 *            Collection to be copied
+	 * @return Copy of Collection filled with COPIES OF EACH ITEM
+	 */
+	private <T extends Cell> Collection<T> copy(Collection<T> toCopy) {
+		ArrayList<Cell> copy = new ArrayList<Cell>();
+		for (Cell c : toCopy) {
+			Cell newCell = c.createCopy();
+			copy.add(newCell);
+		}
+		return toCopy;
+	}
+
 }

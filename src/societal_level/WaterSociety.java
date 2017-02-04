@@ -7,21 +7,32 @@ import java.util.Random;
 import cellular_level.*;
 import javafx.scene.paint.Color;
 
+/**
+ * Extension of CellSociety representing the 
+ * Water World simulation
+ * 
+ * @author maddiebriere
+ *
+ */
+
 public class WaterSociety extends CellSociety{
-	private ArrayList<String> types = new ArrayList<String>();
-	Random rnd = new Random();
+	private static Random rnd = new Random();
 	
 	public WaterSociety(){
-		setSize(40);
-		setEmptyColor(Color.LIGHTBLUE);
-		types.add("SharkCell");
-		types.add("FishCell");
+		super(makeCells(40), 40, Color.LIGHTBLUE);
+	}
+	
+	public WaterSociety(Collection<Cell> currentCells, int size, Color emptyColor){
+		super(currentCells, size, emptyColor);
+	}
+	
+	private static ArrayList<Cell> makeCells(int size){
 		ArrayList<Cell> makeCells = new ArrayList<Cell>();
-		for (int i=0; i<getSize(); i++){
+		for (int i=0; i<size; i++){
 			makeCells.add(new SharkCell(0,i));
 		}
-		for(int i=1; i<getSize(); i++){
-			for(int j=0; j<getSize(); j++){
+		for(int i=1; i<size; i++){
+			for(int j=0; j<size; j++){
 				if(rnd.nextBoolean()){
 					makeCells.add(rnd.nextBoolean()? 
 							new FishCell(i,j): new FishCell(i,j));
@@ -31,29 +42,19 @@ public class WaterSociety extends CellSociety{
 				}
 			}
 		}
-		setCurrentCells(makeCells);
+		return makeCells;
 	}
 	
 	public Color[][] step() {
-		System.out.println("Cell list: " + getCurrentCells().size());
-		int empty =0;
-		int fish = 0;
-		int shark =0;
-		for(Cell c: getCurrentCells()){
-			if(c instanceof EmptyCell){empty++;}
-			if(c instanceof FishCell){fish++;}
-			if(c instanceof SharkCell){shark++;}
-		}
-		System.out.println("Empty: " + empty);
-		System.out.println("Fish: " + fish);
-		System.out.println("Shark: " + shark);
-		return orderedStep(types);
+		return orderedStep();
 	}
 
 	@Override
 	public Collection<Cell> neighbors(Cell c) {
-		Collection<Cell> cells = getWrappedNeighbors(c);
-		return cells;
+		Collection<Cell> wrapped = getWrappedNeighbors(c);
+		//Collection<Cell> cardinal = getCardinalNeighbors(c);
+		//wrapped.retainAll(cardinal);
+		return wrapped;
 	}
 
 

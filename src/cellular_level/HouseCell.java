@@ -10,13 +10,12 @@ package cellular_level;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Random;
 
 import util.CellData;
 import util.Location;
 
 public class HouseCell extends Cell{
-	public static double satisfiedThreshold = .80;
+	public static double satisfiedThreshold = .60;
 	
 	public HouseCell(){
 		super();
@@ -29,14 +28,13 @@ public class HouseCell extends Cell{
 	@Override
 	public Cell createCopy(){
 		HouseCell copy = new HouseCell();
-		copy.setMyLocation(this.getMyLocation());
-		copy.setMyState(this.getMyState());
+		copy.basicCopy(this);
 		return copy;
 	}
 	
 	/**
-	 * @param neighbors Cell neighbors
-	 * @param nullCells Cells with no current occupants, stored as nulls
+	 * Update method for "people" in segregation simulation (HouseCells)
+	 * @param data CellData object holding information for HouseCell use
 	 * @return ArrayList of next generation Cells, either contains the current Cell in the
 	 * same location, or the current Cell in a new location (if it was not satisfied)
 	 */
@@ -45,18 +43,23 @@ public class HouseCell extends Cell{
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		double percentSame = percentSame(data);
 		if(!isSatisfied(percentSame)){
-			Location newSpot = data.getCopyAvailableLocation();
-			if(newSpot!=null){
-				HouseCell relocatedCell = new HouseCell(newSpot.getMyRow(), newSpot.getMyCol(), this.getMyState());
-				nextGen.add(relocatedCell);
-			}else{
-				nextGen.add(this);
-			}
+			relocate(data, nextGen);
 		}
 		else{
-			nextGen.add(this);
+			stayInPlace(nextGen);
 		}
 		return nextGen;
+	}
+	
+	private void relocate(CellData data, ArrayList<Cell>nextGen){
+		Location newSpot = data.getCopyAvailableLocation();
+		if(newSpot!=null){
+			HouseCell relocatedCell = new HouseCell(0, 0, this.getMyState());
+			relocatedCell.copyLocation(newSpot);
+			nextGen.add(relocatedCell);
+		}else{
+			stayInPlace(nextGen);
+		}
 	}
 	
 	private boolean isSatisfied(double percentSame){
@@ -68,6 +71,10 @@ public class HouseCell extends Cell{
 		int total = data.countNonEmptyNeighbors(this);
 		double percentSame = ((double)same)/(total);
 		return percentSame;
+	}
+	
+	private void stayInPlace(ArrayList<Cell>nextGen){
+		nextGen.add(this);
 	}
 
 	

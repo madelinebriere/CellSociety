@@ -35,31 +35,32 @@ public class BurnCell extends Cell {
 	@Override
 	public Cell createCopy(){
 		BurnCell copy = new BurnCell();
-		copy.setMyLocation(this.getMyLocation());
-		copy.setMyState(this.getMyState());
+		copy.basicCopy(this);
 		copy.setMySteps(this.getMySteps());
 		return copy;
 	}
 	
 	/**
-	 * @param neighbors Cell neighbors
-	 * @param nullCells Cells with no current occupants, stored as nulls
-	 * @return An ArrayList of Cells for the next generation of Cells. This ArrayList will
-	 * be empty unless the tree IS NOT burnt (in which case, the cell remains for the 
-	 * next generation). Otherwise, an empty List is returned.
+	 * @param CellData holding information about board and allowing access to Cell's neighbors
+	 * @return An ArrayList of Cells for the next generation of Cells. This ArrayList will either 
+	 * hold a burnt cell or the same burning cell.
 	 */
 	@Override
 	public Collection<Cell> update(CellData data) {
 		ArrayList<Cell>nextGen = new ArrayList<Cell>();
-		mySteps++;
+		incrementSteps();
 		if(!isBurnt()){
-			nextGen.add(this); //nextGen only filled if this is satisfied
+			nextGen.add(this); 
 		}
 		else{
-			EmptyCell burned = new EmptyCell(this);
-			nextGen.add(burned);
+			generateBurntCell(nextGen);
 		}
 		return nextGen;
+	}
+	
+	private void generateBurntCell(ArrayList <Cell> nextGen){
+		EmptyCell burned = new EmptyCell(this);
+		nextGen.add(burned);
 	}
 	
 	private boolean isBurnt(){
@@ -90,4 +91,7 @@ public class BurnCell extends Cell {
 		this.mySteps = mySteps;
 	}
 
+	public void incrementSteps(){
+		mySteps++;
+	}
 }

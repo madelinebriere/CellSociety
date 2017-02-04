@@ -38,40 +38,50 @@ public class FishCell extends WaterWorldCell {
 	@Override
 	public Cell createCopy(){
 		FishCell copy = new FishCell();
-		copy.setMyLocation(this.getMyLocation());
-		copy.setMyState(this.getMyState());
+		copy.basicCopy(this);
 		copy.setStepsSinceBreed(this.getStepsSinceBreed());
 		copy.setEaten(this.isEaten());
 		return copy;
 	}
 	
 	/**
-	 * Like SharkCell, FishCell also requires second degree neighbors because it 
-	 * can move and then breed, placing a new FishCell in an adjacent Cell
+	 * Update method for FishCell, returns relevant updated cells
+	 * @param data CellData object providing Cell information and access
+	 * @return ArrayList of new updated cells, including current cell or moved current cell,
+	 *  and a baby fish cell if the current cell is ready to breed
 	 */
 	@Override
 	public Collection<Cell> update(CellData data) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		if(!isEaten()){
-			move(data);
-			if(timeToBreed()){
-				stepsSinceBreed=0;
-				FishCell baby = breed(data);
-				if(baby!=null){
-					nextGen.add(baby);
-				}
-			}else{
-				stepsSinceBreed++;
-			}
-			nextGen.add(this);
+			changeState(data,nextGen);
 		}
 		return nextGen;
 	}
 	
-	private FishCell breed(CellData data){
+	private void changeState(CellData data, ArrayList<Cell> nextGen){
+		move(data);
+		if(timeToBreed()){
+			breed(data, nextGen);
+		}else{
+			incrementStepsSinceBreed();
+		}
+		nextGen.add(this);
+	}
+	
+	private void breed(CellData data, ArrayList<Cell> nextGen){
+		stepsSinceBreed=0;
+		FishCell baby = getBabyFish(data);
+		if(baby!=null){
+			nextGen.add(baby);
+		}
+	}
+	
+	private FishCell getBabyFish(CellData data){
 		Location breedSpot = getBreedSpot(data);
 		if(breedSpot!=null){
-			FishCell baby = new FishCell(breedSpot.getMyRow(), breedSpot.getMyCol());
+			FishCell baby = new FishCell();
+			baby.copyLocation(breedSpot);
 			return baby;
 		}
 		return null;
@@ -90,6 +100,10 @@ public class FishCell extends WaterWorldCell {
 		FishCell.stepsToBreed = stepsToBreed;
 	}
 
+	public void incrementStepsSinceBreed(){
+		stepsSinceBreed++;
+	}
+	
 	public static Color getFishColor() {
 		return fishColor;
 	}

@@ -30,31 +30,41 @@ public class DeadCell extends Cell {
 	@Override
 	public Cell createCopy(){
 		DeadCell copy = new DeadCell();
-		copy.setMyLocation(this.getMyLocation());
-		copy.setMyState(this.getMyState());
+		copy.basicCopy(this);
 		return copy;
 	}
 	
 	/**
-	 * @param neighbors Cell neighbors
-	 * @param nullCells Cells with no current occupants, stored as nulls
+	 *@param data CellData object holding accessible information for Cell
 	 * @return ArrayList of Cells for the next generation. Will contain either the current
 	 * dead cell or a new live cell in the same location. Never empty.
 	 */
 	@Override
 	public Collection<Cell> update(CellData data) {
 		ArrayList<Cell> newGen = new ArrayList<Cell>();
-		int numLive = data.countDiffNeighbors(this);
-		if(isReadyToLive(numLive)){
-			LiveCell child = new LiveCell();
-			child.copyLocation(this);
-			newGen.add(child);
-		}
-		else{
-			newGen.add(this);
-		}
+		changeState(data, newGen);
 		return newGen;
 		
+	}
+	
+	private void changeState(CellData data, ArrayList<Cell> newGen){
+		int numLive = data.countDiffNeighbors(this);
+		if(isReadyToLive(numLive)){
+			generateLiveCell(newGen);
+		}
+		else{
+			stayDead(newGen);
+		}
+	}
+	
+	private void generateLiveCell(ArrayList<Cell>newGen){
+		LiveCell child = new LiveCell();
+		child.copyLocation(this);
+		newGen.add(child);
+	}
+	
+	private void stayDead(ArrayList<Cell> newGen){
+		newGen.add(this);
 	}
 	
 	private boolean isReadyToLive(int numLive){

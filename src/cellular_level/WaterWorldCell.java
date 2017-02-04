@@ -1,9 +1,5 @@
 package cellular_level;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Random;
-
 import javafx.scene.paint.Color;
 import util.CellData;
 import util.Location;
@@ -17,7 +13,6 @@ import util.Location;
  *
  */
 public abstract class WaterWorldCell extends Cell {
-	private Random randy = new Random();
 	
 	public WaterWorldCell(){
 		super();

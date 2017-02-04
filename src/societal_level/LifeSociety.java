@@ -7,28 +7,38 @@ import java.util.Random;
 import cellular_level.*;
 import javafx.scene.paint.Color;
 
+/**
+ * Extension of CellSociety representing the 
+ * Game of Life simulation
+ * 
+ * @author maddiebriere
+ *
+ */
+
 public class LifeSociety extends CellSociety {
 
-	/**
-	 * Need to instantiate
-	 */
+	public LifeSociety(Collection<Cell> currentCells, int size, Color emptyColor){
+		super(currentCells, size, emptyColor);
+	}
+	
 	public LifeSociety(){
-		setSize(10);
-		setEmptyColor(Color.BLUE); //catch any errors
+		super(makeCells(10), 10, Color.WHITE);
+	}
+	private static ArrayList<Cell> makeCells(int size){
 		Random rnd = new Random();
 		ArrayList<Cell>makeCells = new ArrayList<Cell>();
 		
 		//RANDOM
-		/*for(int i=0; i<getSize(); i++){
-			for(int j=0; j<getSize(); j++){
+		for(int i=0; i<size; i++){
+			for(int j=0; j<size; j++){
 					makeCells.add( rnd.nextBoolean()? new LiveCell(i,j) : new DeadCell(i,j));
 				
 			}
-		}*/
+		}
 		
 		//BLINKER
-		/*for(int i=0; i<getSize(); i++){
-			for(int j=0; j<getSize(); j++){
+		/*for(int i=0; i<size; i++){
+			for(int j=0; j<size; j++){
 				if(!((i==4) && (j==3 || j==4 || j==5)))
 					makeCells.add(new DeadCell(i,j));
 				else
@@ -38,8 +48,8 @@ public class LifeSociety extends CellSociety {
 		}*/
 		
 		//BEACON
-		for(int i=0; i<getSize(); i++){
-			for(int j=0; j<getSize(); j++){
+		/*for(int i=0; i<size; i++){
+			for(int j=0; j<size; j++){
 				if(!(( (i==4 || i==5)  && ( j==4 || j==5 ) )|| 
 					 ( (i==6 || i==7) && (j==6 || j==7) )))
 					makeCells.add(new DeadCell(i,j));
@@ -47,11 +57,10 @@ public class LifeSociety extends CellSociety {
 					makeCells.add(new LiveCell(i,j));
 				
 			}
-		}
-		
-		setCurrentCells(makeCells);
+		}*/
+		return makeCells;
 	}
-
+	
 	@Override
 	public Color[][] step() {
 		return totalStep();

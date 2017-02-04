@@ -32,32 +32,43 @@ public class LiveCell extends Cell {
 	@Override
 	public Cell createCopy(){
 		LiveCell copy = new LiveCell();
-		copy.setMyLocation(this.getMyLocation());
-		copy.setMyState(this.getMyState());
+		copy.basicCopy(this);
 		return copy;
 	}
 	
 	/**
-	 * @param neighbors Cell neighbors
-	 * @param nullCells Cells with no current occupants, stored as nulls
+	 *@param data CellData object holding accessible information for Cell
 	 * @return ArrayList of Cells for the next generation. Will contain either the current
 	 * live cell or a new dead cell in the same location. Never empty.
 	 */
 	@Override
 	public Collection<Cell> update(CellData data) {
 		ArrayList<Cell> newGen = new ArrayList<Cell>();
-		int numLive = data.countSameNeighbors(this);
-		if(isOverpopulated(numLive)||isUnderpopulated(numLive)){
-			DeadCell child = new DeadCell();
-			child.copyLocation(this);
-			newGen.add(child);
-		}
-		else{
-			newGen.add(this);
-		}
+		changeState(data, newGen);
 		return newGen;
 		
 	}
+	
+	private void changeState(CellData data, ArrayList<Cell> newGen){
+		int numLive = data.countSameNeighbors(this);
+		if(isOverpopulated(numLive)||isUnderpopulated(numLive)){
+			generateDeadCell(newGen);
+		}
+		else{
+			stayAlive(newGen);
+		}
+	}
+	
+	private void generateDeadCell(ArrayList<Cell>newGen){
+		DeadCell child = new DeadCell();
+		child.copyLocation(this);
+		newGen.add(child);
+	}
+	
+	private void stayAlive(ArrayList<Cell> newGen){
+		newGen.add(this);
+	}
+	
 	
 	private boolean isOverpopulated(int numLive){
 		return numLive>overpopulation;

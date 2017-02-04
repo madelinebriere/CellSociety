@@ -24,8 +24,7 @@ public class EmptyCell extends Cell{
 	@Override
 	public Cell createCopy(){
 		EmptyCell copy = new EmptyCell();
-		copy.setMyLocation(this.getMyLocation());
-		copy.setMyState(this.getMyState());
+		copy.basicCopy(this);
 		return copy;
 	}
 	
