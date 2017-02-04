@@ -128,8 +128,7 @@ public class XMLParser {
             return nodeList.item(0).getTextContent();
         }
         else {
-            // FIXME: empty string or null, is it an error to not find the text value?
-            return "";
+            throw new RuntimeException();
         }
     }
 	
@@ -173,7 +172,7 @@ public class XMLParser {
             }
         }
         else {
-            // FIXME: empty string or null, is it an error to not find the text value?
+            throw new RuntimeException();
         }
 	}
 }

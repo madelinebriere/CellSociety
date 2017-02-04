@@ -1,3 +1,10 @@
+/**
+ * This class was created to test the functionality of SimulationType
+ * and all of its subclasses.
+ * 
+ * @author Stone Mathers
+ */
+
 package test;
 
 import java.util.Map;
