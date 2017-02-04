@@ -1,0 +1,12 @@
+<data simulation="game of life">
+  <title>LifeTest</title>
+  <author>Stone</author>
+  <dimension>10</dimension>
+  <cells>
+    <cell>2 4 live</cell>
+    <cell>1 5 lIvE</cell>
+    <cell>8 8 DEAD</cell>
+    <cell>9 9 dead</cell>
+    <cell>4 6 liVe</cell>
+  </cells>
+</data>
