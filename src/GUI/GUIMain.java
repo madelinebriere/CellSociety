@@ -32,13 +32,13 @@ import societal_level.*;
 
 public class GUIMain{
 
-	private static final int FRAMES_PER_SECOND = 3;
-    private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+    private static final int MILLISECOND_DELAY = 400;
     private static final int SCREEN_WIDTH = 424;
     private static final int SCREEN_HEIGHT = 600;
 
     
     private CellSociety _model;
+    private Class<CellSociety> SOCIETY_TYPE;
     private Timeline _animation;
     private Scene _scene; 
     private Pane _root;
@@ -50,10 +50,12 @@ public class GUIMain{
     private Button _playButton;
     
     public GUIMain(){
-		this(new WaterSociety());
+    	//default society
+		this(new FireSociety());
     }
     public GUIMain(CellSociety model){
     	_model = model;
+		SOCIETY_TYPE = (Class<CellSociety>) model.getClass();
     	_root =  new Pane();
     	
 		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
@@ -98,12 +100,15 @@ public class GUIMain{
     	_generationLabel.setLayoutX(16);
     	_generationLabel.setPrefHeight(80);
     	_generationLabel.setAlignment(Pos.CENTER_LEFT);
+    	_generationLabel.setTextFill(Color.rgb(60, 60, 60));
     	
-    	_societyTitleLabel = plainLabel("Cell Society", 15);
+    	_societyTitleLabel = plainLabel(SOCIETY_TYPE.getSimpleName(), 15);
     	_societyTitleLabel.setLayoutX(SCREEN_WIDTH/2);
     	_societyTitleLabel.setPrefHeight(80);
     	_societyTitleLabel.setPrefWidth(SCREEN_WIDTH/2 - 20);
     	_societyTitleLabel.setAlignment(Pos.CENTER_RIGHT);
+    	_societyTitleLabel.setTextFill(Color.rgb(60, 60, 60));
+
     	
     	_root.getChildren().add(_generationLabel);
     	_root.getChildren().add(_societyTitleLabel);
@@ -188,7 +193,6 @@ public class GUIMain{
     private Button plainButton(String text){
     	Button button = new Button(text);
     	button.setPrefSize(80, 40);
-    	button.setTextFill(Color.rgb(60, 60, 60));
     	button.setBackground(Background.EMPTY);
     	setButtonToUnhighlightedState(button);
     	return button;
@@ -201,22 +205,25 @@ public class GUIMain{
     	return label;
     }
     private void setButtonToHighlightedState(Button button){
-    	BorderStroke[] bs = {new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(4), new BorderWidths(3))};
+    	BorderStroke[] bs = {new BorderStroke(Color.rgb(70, 70, 70), BorderStrokeStyle.SOLID, new CornerRadii(4), new BorderWidths(2))};
     	Border b = new Border(bs);
     	button.setBorder(b);
-    	button.setFont(Font.font("HelveticaNeue", FontWeight.BOLD, 14));
+    	button.setTextFill(Color.rgb(30, 30, 30));
+    	button.setFont(Font.font("HelveticaNeue", FontWeight.SEMI_BOLD, 13));
     }
     private void setButtonToUnhighlightedState(Button button){
-    	BorderStroke[] bs = {new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, new CornerRadii(4), new BorderWidths(1))};
+    	BorderStroke[] bs = {new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.DASHED, new CornerRadii(4), new BorderWidths(1))};
     	Border b = new Border(bs);
     	button.setBorder(b);
-    	button.setFont(Font.font("HelveticaNeue", FontWeight.EXTRA_LIGHT, 14));
+    	button.setTextFill(Color.rgb(100, 100, 100));
+    	button.setFont(Font.font("HelveticaNeue", FontWeight.EXTRA_LIGHT, 13));
     }
     private void setButtonToSelected(Button button){
-    	BorderStroke[] bs = {new BorderStroke(Color.DODGERBLUE, BorderStrokeStyle.SOLID, new CornerRadii(4), new BorderWidths(2))};
+    	BorderStroke[] bs = {new BorderStroke(Color.rgb(0, 122, 255), BorderStrokeStyle.SOLID, new CornerRadii(4), new BorderWidths(2))};
     	Border b = new Border(bs);
     	button.setBorder(b);
-    	button.setFont(Font.font("HelveticaNeue", FontWeight.MEDIUM, 14));
+    	button.setTextFill(Color.rgb(70, 70, 70));
+    	button.setFont(Font.font("HelveticaNeue", FontWeight.MEDIUM, 13));
 
     }
     private void setupSpeedSlider(){
@@ -236,12 +243,6 @@ public class GUIMain{
     	_slider.valueProperty().addListener((observable, oldValue, newValue) -> {
     		changeAnimationSpeed(newValue);
     	});
-//    	slider.onDragDoneProperty().addListener((something)->{
-//    	    System.out.println("Slider Value Changed (newValue: " + something.toString() + ")");
-//    	});
-//    	slider.onMouseDragExitedProperty().addListener((observable, oldValue, newValue) -> {
-//    	    System.out.println("Slider Value Changed (newValue: " + newValue.toString() + ")");
-//    	});
     	Label label = plainLabel("Animation Speed", 12);
     	label.setLayoutY(_slider.getLayoutY() - 24);
     	label.setPrefWidth(SCREEN_WIDTH);
@@ -263,7 +264,16 @@ public class GUIMain{
     }
     private void resetAnimation(){
     	pauseAnimation();
-    	_model = new FireSociety(); //TODO: change this
+    	
+    	try {
+			_model = SOCIETY_TYPE.newInstance();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //TODO: change this
     	_grid.updateTileColors(_model.getCurrentColors());
     }
     private void changeAnimationSpeed(Number newValue){
@@ -285,4 +295,3 @@ public class GUIMain{
 	}
 
 }
-
