@@ -12,6 +12,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,13 +46,13 @@ public class XMLParser {
 		 Element root = getRootElement(dataFile);		 
 		 HashMap<String, String> data = new HashMap<String, String>();
 		 ArrayList<String> cells = new ArrayList<String>();
-		 SimulationType tempSim = chooseSimulationType(root);
+		 SimulationType tempSim = readSimulationType(root);
 		 
 		 for(String field: tempSim.getDataTypes()){
 			 if(field.equals(CELLS)){
 				 fillCellData(root, cells);
 			 } else {
-				 data.put(field, getTextValue(root, field));
+				 data.put(field, getTextValue(root, field).get(0));
 			 }
 		 }
 		  
@@ -69,18 +70,21 @@ public class XMLParser {
 	 * @param list
 	 * @return
 	 */
+	@SuppressWarnings({"rawtypes"})  //Now Class[] parameters does not need to be parameterized
 	private SimulationType createSimulation(SimulationType sim, Map<String, String> map, List<String> list) { //TODO: Refactor
-		if(sim instanceof LifeSimulation){
-			return new LifeSimulation(map, list);
-		}else if(sim instanceof PopSimulation){
-			return new PopSimulation(map, list);
-		}else if(sim instanceof FireSimulation){
-			return new FireSimulation(map, list);
-		}else if(sim instanceof WaterSimulation){
-			return new WaterSimulation(map, list);
-		}else{
-			throw new RuntimeException();
-		}
+		try{
+			Class<? extends SimulationType> simClass = sim.getClass();
+			Class[] parameters = new Class[2];
+			parameters[0] = Map.class;
+			parameters[1] = List.class;
+			Constructor<? extends SimulationType> ct = simClass.getConstructor(parameters);
+			Object[] argList = new Object[2];
+			argList[0] = map;
+			argList[1] = list;
+			return (SimulationType)ct.newInstance(argList);
+			} catch (Throwable e){
+				throw new RuntimeException(e);
+			}
 	}
 
 	/**
@@ -121,14 +125,20 @@ public class XMLParser {
      * @param tagName
      * @return
      */
-    private String getTextValue (Element e, String tagName) { //TODO: Refactor this and fillCellData
-        NodeList nodeList = e.getElementsByTagName(tagName);
+    private List<String> getTextValue (Element e, String tagName) {
+        ArrayList<String> values = new ArrayList<String>();
+    	NodeList nodeList = e.getElementsByTagName(tagName);
+    	
         if (nodeList != null && nodeList.getLength() > 0) {
-            return nodeList.item(0).getTextContent();
+        	for(int i = 0; i < nodeList.getLength(); i++){
+            	values.add(nodeList.item(i).getTextContent());
+            }
         }
         else {
             throw new RuntimeException();
         }
+        
+        return values;
     }
 	
 	/**
@@ -138,7 +148,7 @@ public class XMLParser {
 	 * @param root element of the XML file
 	 * @return subclass of SimulationType identified by the XML file
 	 */
-	private SimulationType chooseSimulationType(Element root){
+	private SimulationType readSimulationType(Element root){
 		String type = root.getAttribute(SIMULATION_ATTRIBUTE);
 		return mySimulationMap.get(type);
 		
@@ -163,15 +173,10 @@ public class XMLParser {
 	 * 
 	 * @param list
 	 */
-	private void fillCellData(Element e, List<String> list) {  //TODO: Refactor this and getTextValue
-		NodeList nodeList = e.getElementsByTagName(CELL);
-		if (nodeList != null && nodeList.getLength() > 0) {
-            for(int i = 0; i < nodeList.getLength(); i++){
-            	list.add(nodeList.item(i).getTextContent());
-            }
-        }
-        else {
-            throw new RuntimeException();
-        }
+	private void fillCellData(Element e, List<String> list) {
+		List<String> values = getTextValue(e, CELL);
+		for(String text: values){
+			list.add(text);
+		}
 	}
 }
