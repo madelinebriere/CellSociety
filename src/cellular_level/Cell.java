@@ -7,18 +7,15 @@
  */
 
 
-
-
-
-
 package cellular_level;
+import util.CellData;
 import util.Location;
-import java.util.ArrayList;
-import java.util.HashSet;
+
+import java.util.Collection;
 
 import javafx.scene.paint.Color;
 
-public abstract class Cell {
+public abstract class Cell implements Comparable{
 	private Location myLocation;
 	private Color myState;
 	
@@ -32,7 +29,6 @@ public abstract class Cell {
 		myState=state;
 	}
 	
-	
 	public boolean positionEquals(Object o){
 		if(o == this){
 			return true;
@@ -43,163 +39,42 @@ public abstract class Cell {
 		return getMyLocation().equals(((Cell)o).getMyLocation());
 	}
 	
-	public abstract ArrayList<Cell> update(ArrayList<Cell>currentCells, int size);
+	@Override
+	public int compareTo(Object o) {
+		if(o == null) {return -1;}
+		if(this==o){return 0;}
+		return this.getClass().getName().compareTo(o.getClass().getName());
+		
+	}
 	
-	/**
-	 * Duplicate method from CellSociety
-	 * 
-	 * 
-	 * @param currentCells
-	 * @return
-	 */
-	public ArrayList<EmptyCell> getEmptyCells(ArrayList<Cell> currentCells){
-		ArrayList <EmptyCell>toRet = new ArrayList<EmptyCell>();
-		for(Cell c: currentCells){
-			if(c instanceof EmptyCell){
-				toRet.add((EmptyCell)c);
+	public <T extends Cell>boolean locationIn(Collection<T>cells){
+		for(Cell c: cells){
+			if(positionEquals(c)){
+				return true;
 			}
 		}
-		return toRet;
+		return false;
 	}
 	
 	public abstract Cell createCopy();
-
-	public ArrayList<Cell> getFirstNeighbors(ArrayList<Cell> currentCells){
-		ArrayList<Cell> neighbors = new ArrayList<Cell>();
-		for(Cell possible: currentCells){
-			if(isAdjacent(possible)){
-				neighbors.add(possible);
-			}
-		}
-		return neighbors;
-	}
 	
-	public ArrayList<Cell> getWrappedFirstNeighbors(ArrayList<Cell> currentCells, int size){
-		ArrayList<Cell> neighbors = new ArrayList<Cell>();
-		for(Cell possible: currentCells){
-			if(isAnyAdjacent(possible, size)){
-				neighbors.add(possible);
-			}
-			
-		}
-		return neighbors;
-	}
-
-
-	public ArrayList<Cell>getSecondNeighbors(ArrayList<Cell> currentCells){
-		HashSet <Cell> neighborhood = new HashSet<Cell>();
-		ArrayList<Cell> firstOrderNeighbors = getFirstNeighbors(currentCells);
-		neighborhood.addAll(firstOrderNeighbors);
-		for(Cell n: firstOrderNeighbors){
-			ArrayList<Cell> secondOrderNeighbors = n.getFirstNeighbors(currentCells);
-			neighborhood.addAll(secondOrderNeighbors);
-		}
-		ArrayList<Cell> toRet = new ArrayList<Cell>(neighborhood);
-		return toRet;
-	}
-	
-	public ArrayList<Cell>getSecondWrappedNeighbors(ArrayList<Cell> currentCells, int size){
-		HashSet <Cell> neighborhood = new HashSet<Cell>();
-		ArrayList<Cell> firstOrderNeighbors = getWrappedFirstNeighbors(currentCells, size);
-		neighborhood.addAll(firstOrderNeighbors);
-		for(Cell n: firstOrderNeighbors){
-			ArrayList<Cell> secondOrderNeighbors = n.getWrappedFirstNeighbors(currentCells, size);
-			neighborhood.addAll(secondOrderNeighbors);
-		}
-		ArrayList<Cell> toRet = new ArrayList<Cell>(neighborhood);
-		return toRet;
-	}
-	
-	protected int countSameNeighbors(ArrayList<Cell>neighbors){
-		int sameCount = 0;
-		for(Cell c: neighbors){
-			if(c.getClass() == this.getClass()){
-				sameCount++;
-			}
-		}
-		return sameCount;
-	}
-	
-	protected int countDiffNeighbors(ArrayList<Cell>neighbors){
-		int diffCount = 0;
-		for(Cell c: neighbors){
-			if(!(c.getClass() == this.getClass())){
-				diffCount++;
-			}
-		}
-		return diffCount;
-	}
+	public abstract Collection<Cell> update(CellData data);
 	
 	public void copyLocation(Cell copyFrom){
-		this.setMyLocation(copyFrom.getMyLocation());
+		this.setMyCol(copyFrom.getMyCol());
+		this.setMyRow(copyFrom.getMyRow());
 	}
 	
-	/**
-	 * Adjacency in common sense
-	 * @param c target cell
-	 * @return true if adjacent, false otherwise
-	 */
-	public boolean isAdjacent(Cell c){
-		return isAdjacent(c.getMyLocation());
+	public void copyLocation(Location copyFrom){
+		this.setMyCol(copyFrom.getMyCol());
+		this.setMyRow(copyFrom.getMyRow());
 	}
 	
-	protected boolean isAdjacent(Location l){
-		return (sameColumn(l) && oneAwayVertical(l))||(sameRow(l) && oneAwayHorizontal(l))
-				||(oneAwayVertical(l) && oneAwayHorizontal(l));
+	public void basicCopy(Cell copyFrom){
+		this.setMyState(copyFrom.getMyState());
+		this.copyLocation(copyFrom);
 	}
 	
-	/**
-	 * Adjacency EVEN ACROSS BOARD (wrapped sides)
-	 * @param c target cell
-	 * @param size size of the board
-	 * @return true if wrapped adjacent, false otherwise
-	 */
-	protected boolean isWrappedAdjacent(Cell c, int size){
-		return isWrappedAdjacent(c.getMyLocation(), size);
-	}
-	
-	protected boolean isWrappedAdjacent(Location l, int size){
-		return (sameColumn(l) && inRowAcrossBoard(l,size)) || 
-				(sameRow(l) && inColAcrossBoard(l,size));
-	}
-	
-	/**
-	 * Includes both common adjacency and wrapped adjacency
-	 * @param l target cell
-	 * @param size size of the board
-	 * @return true if any type of adjacent, false otherwise
-	 */
-	protected boolean isAnyAdjacent(Location l, int size){
-		return isWrappedAdjacent(l,size)|| isAdjacent(l);
-	}
-	
-	public boolean isAnyAdjacent(Cell c, int size){
-		return isWrappedAdjacent(c.getMyLocation(),size)|| isAdjacent(c.getMyLocation());
-	}
-	
-	private boolean inColAcrossBoard(Location l, int size){
-		return (l.getMyCol()==0 && getMyCol() == size-1) ||
-			   (getMyCol()==0 && l.getMyCol() == size-1);
-	}
-	
-	private boolean inRowAcrossBoard(Location l, int size){
-		return (l.getMyRow()==0 && getMyRow() == size-1) ||
-				   (getMyRow()==0 && l.getMyRow() == size-1);
-	}
-	
-	private boolean sameColumn(Location l){
-		return l.getMyCol() == getMyCol();
-	}
-	private boolean sameRow(Location l){
-		return l.getMyRow() == getMyRow();
-	}
-	private boolean oneAwayVertical(Location l){
-		return ((this.getMyRow()+1) == l.getMyRow()) || ((this.getMyRow()-1) == l.getMyRow());
-	}
-	
-	private boolean oneAwayHorizontal(Location l){
-		return ((this.getMyCol()+1) == l.getMyCol()) || ((this.getMyCol()-1) == l.getMyCol());
-	}
 	
 	public Location getMyLocation() {
 		return myLocation;
@@ -232,5 +107,7 @@ public abstract class Cell {
 	public void setMyState(Color myState) {
 		this.myState = myState;
 	}
+
+
 	
 }

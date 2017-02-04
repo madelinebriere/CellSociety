@@ -12,73 +12,61 @@
 package societal_level;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 import cellular_level.*;
 import javafx.scene.paint.Color;
 
+/**
+ * Extension of CellSociety representing the 
+ * population society simulation
+ * 
+ * @author maddiebriere
+ *
+ */
 
 public class PopSociety extends CellSociety {
-	private Random rnd = new Random();
+	private static Random rnd = new Random();
+	
+	public PopSociety(Collection<Cell> currentCells, int size, Color emptyColor){
+		super(currentCells, size, emptyColor);
+	}
 	
 	public PopSociety(){
-		setSize(10);
-		setEmptyColor(Color.LIGHTBLUE);
+		super(makeCells(20), 20, Color.LIGHTBLUE);
+	}
+	
+	private static ArrayList<Cell> makeCells(int size){
 		ArrayList<Cell> makeCells = new ArrayList<Cell>();
-		for(int i=0; i<getSize(); i++){
-			for(int j=0; j<getSize(); j++){
+		for(int i=0; i<size; i++){
+			for(int j=0; j<size; j++){
 				if(rnd.nextBoolean()){
 					makeCells.add(rnd.nextBoolean()? 
 							new HouseCell(i,j, Color.BLUE): new HouseCell(i,j,Color.RED));
 				}
 				else
-					makeCells.add(new EmptyCell(i,j));
+					if(rnd.nextBoolean()){
+						makeCells.add(new HouseCell(i,j, Color.GREEN));
+					}
+					else
+						makeCells.add(new EmptyCell(i,j));
 			}
-		}
-		setCurrentCells(makeCells);
+		} 
+		return makeCells;
 	}
 	
 	@Override
-	public Color[][] step(){
-		updateAllCells();
-		//resolveConflicts();
-		return getCurrentColors();
+	public Color[][] step() {
+		return guidedStep();
+		
 	}
+	
+	@Override
+	public Collection<Cell> neighbors(Cell c) {
+		return getNeighbors(c);
+	}
+	
 
-	public void resolveConflicts(){
-		ArrayList<Cell> oldCells = new ArrayList<Cell>(); //avoid concurrent modification
-		for(Cell c1: getCurrentCells()){
-			for(Cell c2: getCurrentCells()){
-				if(c1.positionEquals(c2)){//same location
-					handleConflict(c1, c2, oldCells);
-				}
-			}
-		}
-		for(Cell c: oldCells){
-			getCurrentCells().remove(c);
-		}
-	}
-	
-	public void handleConflict(Cell c1, Cell c2, ArrayList<Cell> oldCells){
-		if(((c1 instanceof EmptyCell) && (c2 instanceof HouseCell))){
-			oldCells.add(c1);
-			return;
-		}
-		if(((c2 instanceof EmptyCell) && (c1 instanceof HouseCell))){
-			oldCells.add(c2);
-			return;
-		}
-		if(c1 instanceof HouseCell && c2 instanceof HouseCell){
-			Cell toRemove = rnd.nextBoolean()? c1:c2;
-			relocate((HouseCell)toRemove, oldCells);
-		}
-	}
-	
-	public void relocate(HouseCell cell, ArrayList<Cell>oldCells){
-		ArrayList <EmptyCell> emptySpots = getEmptyCells();
-		int index = rnd.nextInt(emptySpots.size());
-		EmptyCell toReplace = emptySpots.get(index);
-		oldCells.add(toReplace);
-		cell.copyLocation(toReplace);
-	}
+
 }

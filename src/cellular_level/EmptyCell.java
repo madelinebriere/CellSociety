@@ -1,9 +1,10 @@
 package cellular_level;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javafx.scene.paint.Color;
-import util.Location;
+import util.CellData;
 
 public class EmptyCell extends Cell{
 	private static Color EMPTY_COLOR = null;
@@ -23,16 +24,15 @@ public class EmptyCell extends Cell{
 	@Override
 	public Cell createCopy(){
 		EmptyCell copy = new EmptyCell();
-		copy.setMyLocation(this.getMyLocation());
-		copy.setMyState(this.getMyState());
+		copy.basicCopy(this);
 		return copy;
 	}
 	
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
+	public Collection<Cell> update(CellData data) {
 		ArrayList<Cell> empty = new ArrayList<Cell>();
-		empty.add(this);
 		return empty;
 	}
+	
 
 }

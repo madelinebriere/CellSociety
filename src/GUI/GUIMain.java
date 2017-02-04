@@ -36,16 +36,17 @@ public class GUIMain{
     
     private CellSociety _model;
     private Timeline _animation;
-    private Scene _scene;
+    private Scene _scene; 
     private Pane _root;
     private Grid _grid;
     
     public GUIMain(){
-		this(new FireSociety());
+		this(new WaterSociety());
     }
     public GUIMain(CellSociety model){
     	_model = model;
     	_root =  new Pane();
+    	
 		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
 		setupGrid();
 		setupAnimationTimeLine();

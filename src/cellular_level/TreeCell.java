@@ -9,10 +9,12 @@
 package cellular_level;
 
 import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
-import util.Location;
+import util.CellData;
 
 public class TreeCell extends Cell {
 	private static double probCatch = .30;
@@ -32,25 +34,21 @@ public class TreeCell extends Cell {
 	@Override
 	public Cell createCopy(){
 		TreeCell copy = new TreeCell();
-		copy.setMyLocation(this.getMyLocation());
-		copy.setMyState(this.getMyState());
+		copy.basicCopy(this);
 		return copy;
 	}
 
 	
 	/**
-	 * @param neighbors Cell neighbors
-	 * @param nullCells Cells with no current occupants, stored as nulls
+	 * @param data CellData object holding info for Cell
 	 * @return An ArrayList of Cells for the next generation of Cells. This ArrayList will
 	 * either contain the current Cell, if it does not catch fire, or a new BurnCell in the
 	 * same location (if the tree has caught fire)
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
+	public Collection<Cell> update(CellData data) {
 		ArrayList <Cell> nextGen = new ArrayList<Cell>();
-		ArrayList<Cell> neighbors = getFirstNeighbors(currentCells);
-		if(numberBurningTrees(neighbors)>=1 && catchFire()){
-			System.out.println("HERE");
+		if(countBurnTrees(data)>=1 && catchFire()){
 			BurnCell child = new BurnCell();
 			child.copyLocation(this);
 			nextGen.add(child);
@@ -61,14 +59,14 @@ public class TreeCell extends Cell {
 		return nextGen;
 	}
 	
-	private int numberBurningTrees(ArrayList<Cell> neighbors){
-		int numBurn = 0;
-		for(Cell c: neighbors){
+	private int countBurnTrees(CellData data){
+		int count=0;
+		for(Cell c: data.getNeighbors(this)){
 			if(c instanceof BurnCell){
-				numBurn++;
+				count++;
 			}
 		}
-		return numBurn;
+		return count;
 	}
 	
 	private boolean catchFire(){
