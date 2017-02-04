@@ -2,9 +2,11 @@ package societal_level;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Random;
 
 import cellular_level.*;
+import file_handling.*;
 import javafx.scene.paint.Color;
 
 /**
@@ -20,6 +22,13 @@ public class WaterSociety extends CellSociety{
 	
 	public WaterSociety(){
 		super(makeCells(40), 40, Color.LIGHTBLUE);
+	}
+	
+	public WaterSociety(SimulationType water){
+		super(water);
+		if(water instanceof WaterSimulation){
+			setVariables((WaterSimulation)water);
+		}
 	}
 	
 	public WaterSociety(Collection<Cell> currentCells, int size, Color emptyColor){
@@ -45,16 +54,19 @@ public class WaterSociety extends CellSociety{
 		return makeCells;
 	}
 	
+	public void setVariables(WaterSimulation water){
+		FishCell.setStepsToBreed(water.getFishBreed());
+		SharkCell.setStepsToBreed(water.getSharkBreed());
+		SharkCell.setStepsToStarve(water.getSharkStarve());
+	}
+	
 	public Color[][] step() {
 		return orderedStep();
 	}
 
 	@Override
 	public Collection<Cell> neighbors(Cell c) {
-		Collection<Cell> wrapped = getWrappedNeighbors(c);
-		Collection<Cell> cardinal = getCardinalNeighbors(c);
-		wrapped.retainAll(cardinal);
-		return wrapped;
+		return getWrappedCardinalNeighbors(c);
 	}
 
 

@@ -20,7 +20,7 @@ import util.Location;
 public class SharkCell extends WaterWorldCell {
 	private static Color sharkColor = Color.YELLOW;
 	private static int stepsToStarve = 3;
-	private static int stepsToBreed = 20;
+	private static int stepsToBreed = 5;
 	
 	private int stepsSinceEat;
 	private int stepsSinceBreed;
