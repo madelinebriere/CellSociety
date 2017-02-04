@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import cellular_level.*;
+import file_handling.SimulationType;
 import javafx.scene.paint.Color;
 import util.CellData;
 import util.Location;
@@ -37,6 +38,12 @@ public abstract class CellSociety {
 		this.currentCells = currentCells;
 		this.size = size;
 	}
+	
+	public CellSociety(SimulationType sim){
+		setCurrentCells(sim.getCells());
+		setSize(sim.getDimension());
+	}
+	
 	
 	/**
 	 * Main method for interaction between front and back end
@@ -242,6 +249,8 @@ public abstract class CellSociety {
 	public abstract Collection<Cell> neighbors(Cell c);
 	
 	
+	
+	
 	/**
 	 * Normal neighbors function, gets any adjacent cells
 	 * @param c Cell of interest
@@ -284,6 +293,22 @@ public abstract class CellSociety {
 		ArrayList<Cell> neighbors = new ArrayList<Cell>();
 		for(Cell possible: currentCells){
 			if(isCardinalAdjacent(c, possible)){
+				neighbors.add(possible);
+			}
+		}
+		return neighbors;
+	}
+	
+	/**
+	 * Limited neighbors function, gets any adjacent cells IN THE
+	 * CARDINAL DIRECTIONS (N, S, E, W), includes movement across the board
+	 * @param c Cell of interest
+	 * @return Cardinal neighbors of Cell c
+	 */
+	protected Collection<Cell> getWrappedCardinalNeighbors(Cell c){
+		ArrayList<Cell> neighbors = new ArrayList<Cell>();
+		for(Cell possible: currentCells){
+			if(isWrappedCardinalAdjacent(c, possible)){
 				neighbors.add(possible);
 			}
 		}
@@ -335,6 +360,21 @@ public abstract class CellSociety {
 	protected boolean isWrappedAdjacent(Location l1, Location l2){
 		return (sameColumn(l1, l2) && inRowAcrossBoard(l1, l2)) || 
 				(sameRow(l1, l2) && inColAcrossBoard(l1, l2));
+	}
+	
+	
+	/**
+	 * Adjacency EVEN ACROSS BOARD (wrapped sides), includes cardinal cells
+	 * @param c1 target cell
+	 * @param c2 target cell for comparison
+	 * @return true if wrapped adjacent, false otherwise
+	 */
+	protected boolean isWrappedCardinalAdjacent(Cell c1, Cell c2){
+		return isWrappedCardinalAdjacent(c1.getMyLocation(), c2.getMyLocation());
+	}
+	
+	protected boolean isWrappedCardinalAdjacent(Location l1, Location l2){
+		return isWrappedAdjacent(l1, l2) || isCardinalAdjacent(l1, l2);
 	}
 	
 	/**

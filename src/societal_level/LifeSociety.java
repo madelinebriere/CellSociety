@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Random;
 
 import cellular_level.*;
+import file_handling.*;
 import javafx.scene.paint.Color;
 
 /**
@@ -19,6 +20,10 @@ public class LifeSociety extends CellSociety {
 
 	public LifeSociety(Collection<Cell> currentCells, int size, Color emptyColor){
 		super(currentCells, size, emptyColor);
+	}
+	
+	public LifeSociety(SimulationType life){
+		super(life);
 	}
 	
 	public LifeSociety(){

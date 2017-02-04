@@ -15,7 +15,7 @@ import util.CellData;
 import util.Location;
 
 public class HouseCell extends Cell{
-	public static double satisfiedThreshold = .60;
+	public static double satisfiedThreshold = .40;
 	
 	public HouseCell(){
 		super();

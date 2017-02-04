@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import cellular_level.*;
+import file_handling.*;
 import javafx.scene.paint.Color;
 
 /**
@@ -19,6 +20,14 @@ public class FireSociety extends CellSociety{
 	public FireSociety(){
 		super(makeCells(10), 10, Color.YELLOW);
 	
+	}
+	
+	public FireSociety(SimulationType sim){
+		super(sim);
+		if(sim instanceof FireSimulation){
+			setVariables((FireSimulation)sim);
+		}
+		
 	}
 	
 	public FireSociety(Collection<Cell> currentCells, int size, Color emptyColor){
@@ -38,6 +47,11 @@ public class FireSociety extends CellSociety{
 			}
 		}
 		return makeCells;
+	}
+	
+	private void setVariables(FireSimulation sim){
+		TreeCell.setProbCatch(sim.getProbability());
+		BurnCell.setStepsToBurn(sim.getSteps());
 	}
 	
 	@Override
