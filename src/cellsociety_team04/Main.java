@@ -3,6 +3,7 @@ package cellsociety_team04;
 import GUI.GUIMain;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import societal_level.*;
 
 public class Main extends Application {
 	private static final String TITLE = "Team 04 - Cell Society";
@@ -16,7 +17,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		
-		GUIMain display = new GUIMain();
+		CellSociety model = new LifeSociety();
+		GUIMain display = new GUIMain(model);
 		
 		//
 		
