@@ -1,0 +1,13 @@
+<data simulation="population">
+  <title>PopTest</title>
+  <author>Stone</author>
+  <dimension>15</dimension>
+  <cells>
+    <cell>12 4 red</cell>
+    <cell>11 5 red</cell>
+    <cell>5 14 blue</cell>
+    <cell>9 9 blue</cell>
+    <cell>4 6 blue</cell>
+  </cells>
+  <threshold>0.60</threshold>
+</data>

@@ -9,12 +9,13 @@ package cellular_level;
 
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Collection;
 
+import util.CellData;
 import util.Location;
 
 public class HouseCell extends Cell{
-	public static double satisfiedThreshold;
+	public static double satisfiedThreshold = .60;
 	
 	public HouseCell(){
 		super();
@@ -27,51 +28,53 @@ public class HouseCell extends Cell{
 	@Override
 	public Cell createCopy(){
 		HouseCell copy = new HouseCell();
-		copy.setMyLocation(this.getMyLocation());
-		copy.setMyState(this.getMyState());
+		copy.basicCopy(this);
 		return copy;
 	}
 	
 	/**
-	 * @param neighbors Cell neighbors
-	 * @param nullCells Cells with no current occupants, stored as nulls
+	 * Update method for "people" in segregation simulation (HouseCells)
+	 * @param data CellData object holding information for HouseCell use
 	 * @return ArrayList of next generation Cells, either contains the current Cell in the
 	 * same location, or the current Cell in a new location (if it was not satisfied)
 	 */
 	@Override
-	public ArrayList<Cell> update(ArrayList<Cell> currentCells, int size) {
+	public Collection<Cell> update(CellData data) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
-		ArrayList<Cell> neighbors = getFirstNeighbors(currentCells);
-		ArrayList<EmptyCell> nullCells = getEmptyCells(currentCells);
-		double percentSame = percentSame(neighbors);
+		double percentSame = percentSame(data);
 		if(!isSatisfied(percentSame)){
-			Location newSpot = getOpenSpot(nullCells);
-			HouseCell relocatedCell = new HouseCell(newSpot.getMyRow(), newSpot.getMyRow(), this.getMyState());
-			nextGen.add(relocatedCell);
-			
-			EmptyCell leftover = new EmptyCell(this);
-			nextGen.add(leftover);
+			relocate(data, nextGen);
 		}
 		else{
-			nextGen.add(this);
+			stayInPlace(nextGen);
 		}
 		return nextGen;
 	}
-
+	
+	private void relocate(CellData data, ArrayList<Cell>nextGen){
+		Location newSpot = data.getCopyAvailableLocation();
+		if(newSpot!=null){
+			HouseCell relocatedCell = new HouseCell(0, 0, this.getMyState());
+			relocatedCell.copyLocation(newSpot);
+			nextGen.add(relocatedCell);
+		}else{
+			stayInPlace(nextGen);
+		}
+	}
+	
 	private boolean isSatisfied(double percentSame){
 		return percentSame >= satisfiedThreshold;
 	}
 	
-	private double percentSame(ArrayList<Cell> neighbors){
-		int same = countSameNeighbors(neighbors);
-		double percentSame = ((double)same)/(neighbors.size());
+	private double percentSame(CellData data){
+		int same = data.countSameNeighbors(this);
+		int total = data.countNonEmptyNeighbors(this);
+		double percentSame = ((double)same)/(total);
 		return percentSame;
 	}
 	
-	private Location getOpenSpot(ArrayList<EmptyCell> nullCells){
-		Random randy = new Random();
-		int emptyIndex = randy.nextInt(nullCells.size());
-		return nullCells.get(emptyIndex).getMyLocation();
+	private void stayInPlace(ArrayList<Cell>nextGen){
+		nextGen.add(this);
 	}
 
 	

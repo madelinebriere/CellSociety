@@ -40,7 +40,7 @@ public class GUIMain{
     private CellSociety _model;
     private Class<CellSociety> SOCIETY_TYPE;
     private Timeline _animation;
-    private Scene _scene;
+    private Scene _scene; 
     private Pane _root;
     private Grid _grid;
     private Label _generationLabel;
@@ -57,6 +57,7 @@ public class GUIMain{
     	_model = model;
 		SOCIETY_TYPE = (Class<CellSociety>) model.getClass();
     	_root =  new Pane();
+    	
 		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
 		setupTopLabels();
 		setupGrid();
@@ -294,4 +295,3 @@ public class GUIMain{
 	}
 
 }
-
