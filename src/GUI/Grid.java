@@ -1,11 +1,16 @@
 package GUI;
 
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class Grid extends Pane{
 	
-//	private final Color[][] INITIAL_CELL_STATES;
 	private final int NUMBER_OF_CELLS;
 	private final int SCREEN_SIZE; 
 	
@@ -14,13 +19,12 @@ public class Grid extends Pane{
 
 	public Grid(int numberOfCells, int screenSize, Color[][] colors){
 		super();
-		System.out.println("super();");
 		NUMBER_OF_CELLS = numberOfCells;
 		SCREEN_SIZE = screenSize;
+		setGridBackground();
 		setupGridView(colors);
-		System.out.println("setupGridView");
 	}
-	
+
     public void updateTileColors(Color[][] colors){
     	//TODO: check if correct size
 		for(int i=0; i<NUMBER_OF_CELLS; i++){
@@ -31,15 +35,22 @@ public class Grid extends Pane{
 		_currentGeneration ++;
     }
     
-//    public void resetGrid(){
-//    	updateTileColors(INITIAL_CELL_STATES);
-//    	_currentGeneration = 0;
-//    }
     public int getCurrentGeneration(){
     	return _currentGeneration;
     }
     public void setCurrentGeneration(int gen){
     	_currentGeneration = gen;
+    }
+    private void setGridBackground(){
+    	Rectangle rec = new Rectangle();
+    	rec.setFill(Color.LIGHTGRAY);
+    	rec.setWidth(SCREEN_SIZE + 6);
+    	rec.setHeight(SCREEN_SIZE + 6);
+    	rec.setY(-5);
+    	rec.setX(-5);
+    	rec.setArcHeight(10);
+    	rec.setArcWidth(10);
+		getChildren().add(rec);
     }
     private void setupGridView(Color[][] colors){
     	_tiles = new Tile[NUMBER_OF_CELLS][NUMBER_OF_CELLS];
