@@ -58,8 +58,6 @@ public class XMLParser {
 
 		 return createSimulation(tempSim, data, cells);
 		 
-		 //return (tempSim.getClass())(new SimulationType(data, cells));
-		 
 	}
 
 	/**
