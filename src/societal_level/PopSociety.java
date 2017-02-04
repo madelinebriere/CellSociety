@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Random;
 
 import cellular_level.*;
+import file_handling.*;
 import javafx.scene.paint.Color;
 
 /**
@@ -31,6 +32,13 @@ public class PopSociety extends CellSociety {
 	
 	public PopSociety(Collection<Cell> currentCells, int size, Color emptyColor){
 		super(currentCells, size, emptyColor);
+	}
+	
+	public PopSociety(SimulationType pop){
+		super(pop);
+		if(pop instanceof PopSimulation){
+			HouseCell.setSatisfiedThreshold(((PopSimulation)pop).getThreshold());
+		}
 	}
 	
 	public PopSociety(){
