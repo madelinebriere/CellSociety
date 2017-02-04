@@ -31,9 +31,9 @@ import societal_level.CellSociety;
 import societal_level.*;
 
 public class GUIMain{
-
-    private static final int MILLISECOND_DELAY = 400;
-    private static final int SCREEN_WIDTH = 424;
+	
+    private static final int MILLISECOND_DELAY = 1000/5;
+    private static final int SCREEN_WIDTH = 600;
     private static final int SCREEN_HEIGHT = 600;
 
     
@@ -76,7 +76,7 @@ public class GUIMain{
     }
     
     private void setupGrid(){
-    	_grid = new Grid(_model.getSize(), SCREEN_WIDTH - 40, _model.getCurrentColors());
+    	_grid = new Grid(_model.getSize(), SCREEN_WIDTH - 200, _model.getCurrentColors());
     	_grid.setLayoutX(20);
     	_grid.setLayoutY(60);
     	_root.getChildren().add(_grid);
@@ -122,6 +122,7 @@ public class GUIMain{
     
     private void setupTopMenu(){
     	//TODO:
+    	
     }
     private void setupButtons(){
     	HBox hbox1 = new HBox();
@@ -129,6 +130,8 @@ public class GUIMain{
     	_playButton = plainButton("Play");
     	Button stepButton = plainButton("Step");
     	Button resetButton = plainButton("Reset");
+    	Button fileButton = plainButton("New File");
+
     	
     	//simulation starts in paused state
     	setButtonToSelected(_pauseButton);
@@ -182,6 +185,7 @@ public class GUIMain{
         hbox1.getChildren().add(_playButton);
         hbox1.getChildren().add(resetButton);
         hbox1.getChildren().add(stepButton);
+        hbox1.getChildren().add(fileButton);
         hbox1.setSpacing(10);
         hbox1.setAlignment(Pos.CENTER);
     	hbox1.setLayoutX(24);
@@ -229,14 +233,14 @@ public class GUIMain{
     private void setupSpeedSlider(){
     	
     	_slider = new Slider();
-    	_slider.setMin(100);
-    	_slider.setMax(1000);
-    	_slider.setValue(400);
+    	_slider.setMin(1);
+    	_slider.setMax(30);
+    	_slider.setValue(6);
     	_slider.setShowTickLabels(true);
     	_slider.setShowTickMarks(false);
-    	_slider.setMajorTickUnit(300);
-    	_slider.setMinorTickCount(300);
-    	_slider.setBlockIncrement(300);
+    	_slider.setMajorTickUnit(7);
+    	_slider.setMinorTickCount(7);
+    	_slider.setBlockIncrement(7);
     	_slider.setPrefWidth(SCREEN_WIDTH*0.6);
     	_slider.setLayoutY(SCREEN_HEIGHT - 120); //bad way to set this
     	_slider.setLayoutX(SCREEN_WIDTH *1/6);
@@ -264,7 +268,8 @@ public class GUIMain{
     }
     private void resetAnimation(){
     	pauseAnimation();
-    	
+    	_grid.setCurrentGeneration(0);
+    	updateGenerationLabel();
     	try {
 			_model = SOCIETY_TYPE.newInstance();
 		} catch (InstantiationException e) {
@@ -278,7 +283,7 @@ public class GUIMain{
     }
     private void changeAnimationSpeed(Number newValue){
     		pauseAnimation();
-        	setupAnimationTimeLine(newValue.doubleValue());
+        	setupAnimationTimeLine(1000./newValue.doubleValue());
         	playAnimation();
     }
     

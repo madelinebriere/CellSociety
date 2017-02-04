@@ -57,7 +57,6 @@ public class Grid extends Pane{
     	int size = (SCREEN_SIZE/NUMBER_OF_CELLS);
     	for(int i=0; i<NUMBER_OF_CELLS;i++){
     		for(int j=0; j<NUMBER_OF_CELLS;j++){
-    			//System.out.println(i + " " + j);
         		Tile cell = new Tile(i,j, size);
         		cell.setColor(colors[i][j]);
         		_tiles[i][j] = cell;
