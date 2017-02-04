@@ -52,8 +52,8 @@ public class WaterSociety extends CellSociety{
 	@Override
 	public Collection<Cell> neighbors(Cell c) {
 		Collection<Cell> wrapped = getWrappedNeighbors(c);
-		//Collection<Cell> cardinal = getCardinalNeighbors(c);
-		//wrapped.retainAll(cardinal);
+		Collection<Cell> cardinal = getCardinalNeighbors(c);
+		wrapped.retainAll(cardinal);
 		return wrapped;
 	}
 
