@@ -25,8 +25,9 @@ public class XMLParser {
 
 	public static final String SIMULATION_ATTRIBUTE = "simulation";
 	public static final String CELLS = "cells";
+	public static final String CELL = "cell";
 	private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();	
-	private static final String[] POSSIBLE_SIM_STRINGS = {"game of life", "segregation", "fire", "water"};
+	private static final String[] POSSIBLE_SIM_STRINGS = {"game of life", "population", "fire", "water"};
 	private static final SimulationType[] POSSIBLE_SIM_TYPES = {
 			new LifeSimulation(null, null),
 			new PopSimulation(null, null),
@@ -165,7 +166,7 @@ public class XMLParser {
 	 * @param list
 	 */
 	private void fillCellData(Element e, List<String> list) {  //TODO: Refactor this and getTextValue
-		NodeList nodeList = e.getElementsByTagName(CELLS);
+		NodeList nodeList = e.getElementsByTagName(CELL);
 		if (nodeList != null && nodeList.getLength() > 0) {
             for(int i = 0; i < nodeList.getLength(); i++){
             	list.add(nodeList.item(i).getTextContent());

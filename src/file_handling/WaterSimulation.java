@@ -20,9 +20,9 @@ import cellular_level.Cell;
 public class WaterSimulation extends SimulationType {
 	
 	private static final List<String> SETTING_TYPES = Arrays.asList(new String[] {
-			"fish breed",
-	        "shark breed",
-	        "shark starve"
+			"fishBreed",
+	        "sharkBreed",
+	        "sharkStarve"
 	    });
 
 	public WaterSimulation(Map<String, String> values, List<String> cells) {
