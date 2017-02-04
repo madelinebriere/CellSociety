@@ -23,7 +23,7 @@ public class PopSimulation extends SimulationType {
 			"threshold"
 	    });
 
-	public PopSimulation(Map<String, String> values, ArrayList<String> cells) {
+	public PopSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
 	}
 
@@ -36,7 +36,7 @@ public class PopSimulation extends SimulationType {
 	}
 
 	@Override
-	public ArrayList<Cell> getCells() {
+	public List<Cell> getCells() {
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		for(String data: this.getCellData()){
 			String[] vars = data.split(" ");

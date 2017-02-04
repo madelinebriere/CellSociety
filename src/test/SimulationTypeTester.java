@@ -1,6 +1,15 @@
+/**
+ * This class was created to test the functionality of SimulationType
+ * and all of its subclasses.
+ * 
+ * @author Stone Mathers
+ */
+
 package test;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.List;
 import java.util.ArrayList;
 
 import file_handling.*;
@@ -8,7 +17,7 @@ import file_handling.*;
 public class SimulationTypeTester {
 
 	public static void main(String[] args) {
-		HashMap<String, String> data = new HashMap<String, String>();
+		TreeMap<String, String> data = new TreeMap<String, String>();
 		ArrayList<String> cells = new ArrayList<String>();
 		
 		fillLife(data, cells);
@@ -29,7 +38,7 @@ public class SimulationTypeTester {
 
 	}
 	
-	public static void fillLife(HashMap<String, String> map, ArrayList<String> array){
+	public static void fillLife(Map<String, String> map, List<String> array){
 		map.clear();
 		map.put("title", "LifeSim");
 		map.put("author", "Stone Mathers");
@@ -41,7 +50,7 @@ public class SimulationTypeTester {
 		array.add("3 1 LIVE");
 	}
 	
-	public static void fillFire(HashMap<String, String> map, ArrayList<String> array){
+	public static void fillFire(Map<String, String> map, List<String> array){
 		map.clear();
 		map.put("title", "FireSim");
 		map.put("author", "Stone Mathers");
@@ -55,7 +64,7 @@ public class SimulationTypeTester {
 		array.add("3 1 treE");
 	}
 	
-	public static void fillPop(HashMap<String, String> map, ArrayList<String> array){
+	public static void fillPop(Map<String, String> map, List<String> array){
 		map.clear();
 		map.put("title", "PopSim");
 		map.put("author", "Stone Mathers");
@@ -68,7 +77,7 @@ public class SimulationTypeTester {
 		array.add("3 1 BLUE");
 	}
 	
-	public static void fillWater(HashMap<String, String> map, ArrayList<String> array){
+	public static void fillWater(Map<String, String> map, List<String> array){
 		map.clear();
 		map.put("title", "WaterSim");
 		map.put("author", "Stone Mathers");
@@ -93,7 +102,7 @@ public class SimulationTypeTester {
 	}
 	
 	public static void printFire(SimulationType sim){
-		FireSimulation fireSim = new FireSimulation(sim.getDataValues(), sim.getCellData());
+		FireSimulation fireSim = (FireSimulation)sim;
 		System.out.println(fireSim.getTitle());
 		System.out.println(fireSim.getAuthor());
 		System.out.println(fireSim.getDimension());

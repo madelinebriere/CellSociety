@@ -3,7 +3,7 @@
  * return the data behind any Simulation. The abstract class holds the title,
  * artist, dimension, and ArrayList of initial cells. The subclasses are in charge
  * of defining which initial settings need to be stored and how to interpret the
- * Strings of initial cell data.
+ * Strings of initial cell data. This is a Read-Only data structure.
  * 
  * @author Stone Mathers
  */
@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+
 import cellular_level.Cell;
 
 public abstract class SimulationType {
@@ -25,12 +27,12 @@ public abstract class SimulationType {
 	        "cells"
 	    });
 	
-	private ArrayList<String> cellData;																
+	private List<String> cellData;																
 	private List<String> dataTypes = combineDataTypes();
 	private Map<String, String> myDataValues;
 
 	
-	public SimulationType(Map<String, String> values, ArrayList<String> cells){
+	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
 	}
@@ -52,13 +54,15 @@ public abstract class SimulationType {
 	 * 
 	 * @return
 	 */
-	public abstract ArrayList<Cell> getCells();	
+	public abstract List<Cell> getCells();	
 	
 	/**
 	 * @return List of raw Cell data from file
 	 */
-	public ArrayList<String> getCellData(){
-		return cellData;
+	public List<String> getCellData(){
+		List<String> copy = new ArrayList<String>();
+		copy.addAll(cellData);
+		return copy;
 	}
 	
 	/**
@@ -72,13 +76,12 @@ public abstract class SimulationType {
 	 * @return List of data types of SimulationType and the subclass instantiated
 	 */
 	public List<String> getDataTypes(){
-		return dataTypes;
+		List<String> copy = new ArrayList<String>();
+		copy.addAll(dataTypes);
+		return copy;
 	}
 	
-	/**
-	 * @return Map of SimulationType's data values
-	 */
-	public Map<String, String> getDataValues(){
+	protected Map<String, String> getDataValues(){
 		return myDataValues;
 	}
 	
