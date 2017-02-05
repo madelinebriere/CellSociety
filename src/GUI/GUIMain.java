@@ -2,6 +2,8 @@ package GUI;
 
 import java.util.Random;
 
+import file_handling.PopUp;
+import file_handling.SimulationType;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
@@ -26,6 +28,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import societal_level.CellSociety;
 import societal_level.*;
@@ -33,13 +36,14 @@ import societal_level.*;
 public class GUIMain{
 	
     private static final int MILLISECOND_DELAY = 1000/5;
-    private static final int SCREEN_WIDTH = 600;
+    private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 600;
-
+    private static final int GRID_WIDTH = SCREEN_WIDTH - 350;
     
     private CellSociety _model;
     private Class<CellSociety> SOCIETY_TYPE;
     private Timeline _animation;
+    private Stage _stage;
     private Scene _scene; 
     private Pane _root;
     private Grid _grid;
@@ -57,7 +61,6 @@ public class GUIMain{
     	_model = model;
 		SOCIETY_TYPE = (Class<CellSociety>) model.getClass();
     	_root =  new Pane();
-    	
 		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
 		setupTopLabels();
 		setupGrid();
@@ -76,7 +79,7 @@ public class GUIMain{
     }
     
     private void setupGrid(){
-    	_grid = new Grid(_model.getSize(), SCREEN_WIDTH - 200, _model.getCurrentColors());
+    	_grid = new Grid(_model.getSize(), GRID_WIDTH, _model.getCurrentColors());
     	_grid.setLayoutX(20);
     	_grid.setLayoutY(60);
     	_root.getChildren().add(_grid);
@@ -180,6 +183,15 @@ public class GUIMain{
     	        step();
     	    }
     	});
+    	fileButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
+    	    public void handle(MouseEvent me) {
+    	    	pauseAnimation();
+    	    	PopUp p = new PopUp((Stage) _scene.getWindow());
+    	    	SimulationType s = p.getSimulation();
+    	    	System.out.println(s);
+    	    	//SOCIETY_TYPE = s;
+    	    }
+    	}); 
 
     	hbox1.getChildren().add(_pauseButton);
         hbox1.getChildren().add(_playButton);
@@ -189,9 +201,10 @@ public class GUIMain{
         hbox1.setSpacing(10);
         hbox1.setAlignment(Pos.CENTER);
     	hbox1.setLayoutX(24);
-    	hbox1.setPrefWidth(SCREEN_WIDTH - 48);
-    	hbox1.setLayoutY(SCREEN_HEIGHT - 100); 
-    	hbox1.setPrefHeight(100);
+    	hbox1.setPrefWidth(GRID_WIDTH);
+    	
+    	hbox1.setLayoutY(GRID_WIDTH + 40); 
+    	hbox1.setPrefHeight(SCREEN_HEIGHT - GRID_WIDTH - 40);
     	_root.getChildren().add(hbox1);
     }
     private Button plainButton(String text){
