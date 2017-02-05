@@ -340,7 +340,7 @@ public class GUIMain{
 		}
     	_model.setNewSizeAndCells((int) _sizeSlider.getValue());
     	resetGrid(); 
-//    	_grid.updateTileColors(_model.getCurrentColors());
+    	_grid.updateTileColors(_model.getCurrentColors());
     }
     private void resetGrid(){
     	_root.getChildren().remove(_grid);
