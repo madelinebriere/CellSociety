@@ -499,9 +499,10 @@ public abstract class CellSociety {
 		}
 		else{
 			newCells.addAll(getCurrentCells());
-			for(int i=getSize(); i<size; i++){
-				for(int j=getSize(); j<size;j++){
-					newCells.add(new EmptyCell(i,j));
+			for(int i=0; i<size; i++){
+				for(int j=0; j<size;j++){
+					if(i>=size || j>=size)
+						newCells.add(new EmptyCell(i,j));
 				}
 			}
 		}
