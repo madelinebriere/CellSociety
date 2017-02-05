@@ -19,10 +19,11 @@ import javafx.scene.paint.Color;
 
 public class WaterSociety extends CellSociety{
 	private static Random rnd = new Random();
+	private static final int DEFAULT_SIZE = 40;
 	private static final Color EMPTY_COLOR = Color.LIGHTBLUE;
 	
 	public WaterSociety(){
-		super(makeCells(40), 40, EMPTY_COLOR);
+		this(DEFAULT_SIZE);
 	}
 	
 	public WaterSociety(int size){

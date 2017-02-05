@@ -24,13 +24,15 @@ import util.Location;
  */
 
 public abstract class CellSociety {
+	private static final Color DEFAULT_COLOR = Color.WHITE;
+	
 	private Collection<Cell> currentCells;
 	private int size;
 	private Color emptyColor;
 	
 	public CellSociety(Collection<Cell> currentCells, int size, Color emptyColor){
 		if(emptyColor==null){
-			setEmptyColor(Color.WHITE);
+			setEmptyColor(DEFAULT_COLOR);
 		}
 		else{
 			this.emptyColor = emptyColor;
@@ -43,7 +45,6 @@ public abstract class CellSociety {
 		setCurrentCells(sim.getCells());
 		setSize(sim.getDimension());
 	}
-	
 	
 	/**
 	 * Main method for interaction between front and back end
@@ -59,12 +60,21 @@ public abstract class CellSociety {
 				toRet[c.getMyRow()][c.getMyCol()]=c.getMyState();
 			}
 			else{
-				toRet[c.getMyRow()][c.getMyCol()]=getEmptyColor();
+				Color setColor;
+				if(getEmptyColor()!=null){
+					setColor = getEmptyColor();
+				}
+				else{
+					setColor=DEFAULT_COLOR;
+				}
+				toRet[c.getMyRow()][c.getMyCol()]=setColor;
+					
 			}
 		}
 		return toRet;
 	}
 	
+//	public abstract CellSociety generateDefaultSociety(int size);
 	
 	/**
 	 * Step function for CellSociety, moves each cell through one update

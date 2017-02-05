@@ -17,22 +17,24 @@ import javafx.scene.paint.Color;
  */
 
 public class LifeSociety extends CellSociety {
+private static final int DEFAULT_SIZE = 10;
 private static final Color EMPTY_COLOR = Color.WHITE;
 	
-	public LifeSociety(Collection<Cell> currentCells, int size, Color emptyColor){
-		super(currentCells, size, emptyColor);
+	
+	public LifeSociety(){
+		this(DEFAULT_SIZE);
 	}
 	
 	public LifeSociety(SimulationType life){
 		super(life);
 	}
 	
-	public LifeSociety(){
-		super(makeCells(10), 10, EMPTY_COLOR);
-	}
-	
 	public LifeSociety(int size){
 		super(makeCells(size), size, EMPTY_COLOR);
+	}
+	
+	public LifeSociety(Collection<Cell> currentCells, int size, Color emptyColor){
+		super(currentCells, size, emptyColor);
 	}
 	
 	private static ArrayList<Cell> makeCells(int size){

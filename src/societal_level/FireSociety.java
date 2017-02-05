@@ -16,11 +16,12 @@ import javafx.scene.paint.Color;
  */
 
 public class FireSociety extends CellSociety{
+	private static final int DEFAULT_SIZE = 10;
 	private static final Color EMPTY_COLOR = Color.YELLOW;
 	
 	//default
 	public FireSociety(){
-		super(makeCells(10), 10, EMPTY_COLOR);
+		this(DEFAULT_SIZE);
 	
 	}
 	
