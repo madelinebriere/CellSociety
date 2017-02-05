@@ -403,7 +403,7 @@ public abstract class CellSociety {
 	 */
 	private boolean inColAcrossBoard(Location l1, Location l2){
 		return (l1.getMyCol()==0 && l2.getMyCol() == size-1) ||
-			   (l1.getMyCol()==0 && l2.getMyCol() == size-1);
+			   (l2.getMyCol()==0 && l1.getMyCol() == size-1);
 	}
 	
 	/**
@@ -416,7 +416,7 @@ public abstract class CellSociety {
 	 */
 	private boolean inRowAcrossBoard(Location l1, Location l2){
 		return (l1.getMyRow()==0 && l2.getMyRow() == size-1) ||
-				   (l1.getMyRow()==0 && l2.getMyRow() == size-1);
+				   (l2.getMyRow()==0 && l1.getMyRow() == size-1);
 	}
 	
 	
