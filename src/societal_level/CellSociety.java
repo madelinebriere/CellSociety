@@ -403,7 +403,7 @@ public abstract class CellSociety {
 	 */
 	private boolean inColAcrossBoard(Location l1, Location l2){
 		return (l1.getMyCol()==0 && l2.getMyCol() == size-1) ||
-			   (l1.getMyCol()==0 && l2.getMyCol() == size-1);
+			   (l2.getMyCol()==0 && l1.getMyCol() == size-1);
 	}
 	
 	/**
@@ -416,7 +416,7 @@ public abstract class CellSociety {
 	 */
 	private boolean inRowAcrossBoard(Location l1, Location l2){
 		return (l1.getMyRow()==0 && l2.getMyRow() == size-1) ||
-				   (l1.getMyRow()==0 && l2.getMyRow() == size-1);
+				   (l2.getMyRow()==0 && l1.getMyRow() == size-1);
 	}
 	
 	
@@ -483,6 +483,30 @@ public abstract class CellSociety {
 		ArrayList<Cell> orderedCells = new ArrayList<Cell>(getCurrentCells());
 		Collections.sort(orderedCells, Comparator.reverseOrder());
 		setCurrentCells(orderedCells);
+	}
+	
+	public void setNewSizeAndCells(int size){
+		if(size==getSize()){
+			return;
+		}
+		ArrayList<Cell> newCells=new ArrayList<Cell>();
+		if(size<getSize()){
+			for (Cell c: getCurrentCells()){
+				if(c.getMyRow()<=size-1 || c.getMyCol()<=size-1){
+					newCells.add(c);
+				}
+			}
+		}
+		else{
+			newCells.addAll(getCurrentCells());
+			for(int i=getSize(); i<size; i++){
+				for(int j=getSize(); j<size;j++){
+					newCells.add(new EmptyCell(i,j));
+				}
+			}
+		}
+		setCurrentCells(newCells);
+		setSize(size);
 	}
 	
 	
