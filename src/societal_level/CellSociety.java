@@ -485,6 +485,30 @@ public abstract class CellSociety {
 		setCurrentCells(orderedCells);
 	}
 	
+	public void setNewSizeAndCells(int size){
+		if(size==getSize()){
+			return;
+		}
+		ArrayList<Cell> newCells=new ArrayList<Cell>();
+		if(size<getSize()){
+			for (Cell c: getCurrentCells()){
+				if(c.getMyRow()<=size-1 || c.getMyCol()<=size-1){
+					newCells.add(c);
+				}
+			}
+		}
+		else{
+			newCells.addAll(getCurrentCells());
+			for(int i=getSize(); i<size; i++){
+				for(int j=getSize(); j<size;j++){
+					newCells.add(new EmptyCell(i,j));
+				}
+			}
+		}
+		setCurrentCells(newCells);
+		setSize(size);
+	}
+	
 	
 	public Collection<Cell> getCurrentCells(){
 		return currentCells;
