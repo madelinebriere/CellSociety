@@ -29,6 +29,7 @@ import javafx.scene.paint.Color;
 
 public class PopSociety extends CellSociety {
 	private static Random rnd = new Random();
+	private static final Color EMPTY_COLOR = Color.LIGHTBLUE;
 	
 	public PopSociety(Collection<Cell> currentCells, int size, Color emptyColor){
 		super(currentCells, size, emptyColor);
@@ -42,7 +43,11 @@ public class PopSociety extends CellSociety {
 	}
 	
 	public PopSociety(){
-		super(makeCells(20), 20, Color.LIGHTBLUE);
+		super(makeCells(20), 20, EMPTY_COLOR);
+	}
+	
+	public PopSociety(int size){
+		super(makeCells(size), size, EMPTY_COLOR);
 	}
 	
 	private static ArrayList<Cell> makeCells(int size){
