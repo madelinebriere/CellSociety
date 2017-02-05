@@ -21,6 +21,11 @@ import societal_level.CellSociety;
 public class CellData {
 	private CellSociety mySociety;
 	private Collection<EmptyCell> available;
+	
+	public CellData(CellSociety s){
+		mySociety=s;
+		available=null;
+	}
 
 	public CellData(CellSociety s, Collection<EmptyCell> validSpots) {
 		mySociety = s;
