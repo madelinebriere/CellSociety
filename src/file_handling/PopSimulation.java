@@ -16,6 +16,7 @@ import java.util.Map;
 
 
 import cellular_level.Cell;
+import cellular_level.EmptyCell;
 
 public class PopSimulation extends SimulationType {
 	
@@ -45,6 +46,9 @@ public class PopSimulation extends SimulationType {
 			}
 			else if(vars[2].toUpperCase().equals("RED")){
 				cells.add(new HouseCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1]), Color.RED));
+			}
+			else if(vars[2].toUpperCase().equals("EMPTY")){
+				cells.add(new EmptyCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
 			}
 		}
 		return cells;

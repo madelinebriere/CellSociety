@@ -16,6 +16,7 @@ import java.util.Map;
 
 
 import cellular_level.Cell;
+import cellular_level.EmptyCell;
 
 public class WaterSimulation extends SimulationType {
 	
@@ -47,6 +48,9 @@ public class WaterSimulation extends SimulationType {
 			}
 			else if(vars[2].toUpperCase().equals("SHARK")){
 				cells.add(new SharkCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
+			}
+			else if(vars[2].toUpperCase().equals("EMPTY")){
+				cells.add(new EmptyCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
 			}
 		}
 		return cells;
