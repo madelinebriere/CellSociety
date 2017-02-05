@@ -49,14 +49,14 @@ public abstract class SimulationType {
 	}
 	
 	/**
-	 * Uses List of cell data in String format to create an ArrayList of Cells
+	 * Uses List of cell data in String format to create an ArrayList of Cells.
 	 * 
 	 * @return
 	 */
 	public abstract List<Cell> getCells();	
 	
 	/**
-	 * @return List of raw Cell data from file
+	 * @return List of raw Cell data from file.
 	 */
 	public List<String> getCellData(){
 		List<String> copy = new ArrayList<String>();
@@ -65,14 +65,14 @@ public abstract class SimulationType {
 	}
 	
 	/**
-	 * @return List of data types that all SimulationTypes share
+	 * @return List of data types that all SimulationTypes share.
 	 */
 	protected List<String> getUniversalTypes(){
 		return UNIVERSAL_DATA_TYPES;
 	}
 	
 	/**
-	 * @return List of data types of SimulationType and the subclass instantiated
+	 * @return List of data types of SimulationType and the subclass instantiated.
 	 */
 	public List<String> getDataTypes(){
 		List<String> copy = new ArrayList<String>();
@@ -86,9 +86,9 @@ public abstract class SimulationType {
 	
 	
 	/**
-	 * Combines List of simulation-specific setting attributes with attributes that all files must contain
+	 * Combines List of simulation-specific setting attributes with attributes that all files must contain.
 	 * 
-	 * @return List of all attributes that an XMLParser will look for
+	 * @return List of all attributes that an XMLParser will look for.
 	 */
 	protected abstract List<String> combineDataTypes(); 
 	

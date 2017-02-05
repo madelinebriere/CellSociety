@@ -1,5 +1,10 @@
 /**
- * TODO: Add description
+ * The purpose of XMLParser is to take in and pares an XML file.
+ * It then creates a new SimulationType that holds the file's data
+ * and returns it in a usable format.
+ * 
+ * XMLParser currently depends on the user passing it a file that
+ * conforms to the formatting rules of our available simulations.
  * 
  * @author Stone Mathers
  * @author Robert C. Duvall
@@ -13,6 +18,7 @@ import org.w3c.dom.NodeList;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,22 +48,37 @@ public class XMLParser {
 		fillSimulationMap();
 	}
 	
+	/**
+	 * Parses the given XML file and creates and returns a SimulationType
+	 * containing the data represented by the file.
+	 * 
+	 * Assumes that the given file conforms to the formatting rules
+	 * of our available simulations. Also depends on SimulationType and
+	 * all of its subclasses being correctly implemented and containing
+	 * the correct identifiers for each piece of data.
+	 * 
+	 * @param dataFile File to be parsed.
+	 * @return SimulationType holding dataFile's data.
+	 */
 	public SimulationType getSimulation(File dataFile){
-		 Element root = getRootElement(dataFile);		 
-		 HashMap<String, String> data = new HashMap<String, String>();
-		 ArrayList<String> cells = new ArrayList<String>();
-		 SimulationType tempSim = readSimulationType(root);
+		if(!dataFile.equals(null)){
+			Element root = getRootElement(dataFile);		 
+			HashMap<String, String> data = new HashMap<String, String>();
+			ArrayList<String> cells = new ArrayList<String>();
+			SimulationType tempSim = readSimulationType(root);
 		 
-		 for(String field: tempSim.getDataTypes()){
-			 if(field.equals(CELLS)){
-				 fillCellData(root, cells);
-			 } else {
-				 data.put(field, getTextValue(root, field).get(0));
-			 }
-		 }
+			for(String field: tempSim.getDataTypes()){
+				if(field.equals(CELLS)){
+					fillCellData(root, cells);
+				} else {
+					data.put(field, getTextValue(root, field).get(0));
+				}
+			}
 		  
-
-		 return createSimulation(tempSim, data, cells);
+			return createSimulation(tempSim, data, cells);
+		} else {
+			throw new RuntimeException();
+		}
 		 
 	}
 
@@ -65,10 +86,10 @@ public class XMLParser {
 	 * Instantiates a subclass of SimulationType that matches
 	 * the class of the given SimulationType, using the given Map and List.
 	 * 
-	 * @param sim
-	 * @param map
-	 * @param list
-	 * @return
+	 * @param sim Subclass of SimulationType that the user wants to make a new instance of.
+	 * @param map Map to be passed into the new SimulationType's constructor.
+	 * @param list List to be passed into the new SimulationType's constructor.
+	 * @return SimulationType
 	 */
 	@SuppressWarnings({"rawtypes"})  //Now Class[] parameters does not need to be parameterized
 	private SimulationType createSimulation(SimulationType sim, Map<String, String> map, List<String> list) { //TODO: Refactor
@@ -91,7 +112,7 @@ public class XMLParser {
      * Gets the root element of the given XML file.
      * 
      * @param xmlFile
-     * @return
+     * @return Element
      */
     private Element getRootElement (File xmlFile) {
         try {
@@ -107,7 +128,7 @@ public class XMLParser {
 	/**
 	 * Creates a DocumentBuilder.
 	 * 
-	 * @return
+	 * @return DocumentBuilder
 	 */
 	private static DocumentBuilder getDocumentBuilder () {
 		try {
