@@ -291,7 +291,7 @@ public class GUIMain{
     	_sizeSlider = new Slider();
     	_sizeSlider.setMin(10);
     	_sizeSlider.setMax(100);
-    	_sizeSlider.setValue(10);
+    	_sizeSlider.setValue(_model.getSize());
     	_sizeSlider.setShowTickLabels(true);
     	_sizeSlider.setShowTickMarks(true);
     	_sizeSlider.setMajorTickUnit(10);
@@ -301,6 +301,8 @@ public class GUIMain{
     	_sizeSlider.setLayoutX(startX);
     	_sizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
     		//TODO:create new grid of given size
+//    		_sizeSlider.setValue((_sizeSlider.getValue()/10) * 10);
+    		resetAnimation();
     	});
     	Label label = plainLabel("Grid Size", 12);
     	label.setLayoutY(startY - 24);
@@ -311,7 +313,6 @@ public class GUIMain{
     	_root.getChildren().add(_sizeSlider);
     	_root.getChildren().add(label);
     }
-	
     private void pauseAnimation(){
     	setButtonToSelected(_pauseButton);
     	setButtonToUnhighlightedState(_playButton);
@@ -337,8 +338,9 @@ public class GUIMain{
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
+    	_model.setNewSizeAndCells((int) _sizeSlider.getValue());
     	resetGrid(); 
-    	_grid.updateTileColors(_model.getCurrentColors());
+//    	_grid.updateTileColors(_model.getCurrentColors());
     }
     private void resetGrid(){
     	_root.getChildren().remove(_grid);
