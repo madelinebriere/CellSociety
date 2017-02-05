@@ -1,9 +1,10 @@
+//Author Talha Koc
+
 package GUI;
 
 import java.util.Random;
 
-import file_handling.PopUp;
-import file_handling.SimulationType;
+import file_handling.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
@@ -30,7 +31,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import societal_level.CellSociety;
 import societal_level.*;
 
 public class GUIMain{
@@ -43,15 +43,16 @@ public class GUIMain{
     private CellSociety _model;
     private Class<CellSociety> SOCIETY_TYPE;
     private Timeline _animation;
-    private Stage _stage;
     private Scene _scene; 
     private Pane _root;
     private Grid _grid;
     private Label _generationLabel;
     private Label _societyTitleLabel;
-    private Slider _slider;
+    private Slider _speedSlider;
+    private Slider _sizeSlider;
     private Button _pauseButton;
     private Button _playButton;
+    private SimulationType _currentSimulationType;
     
     public GUIMain(){
     	//default society
@@ -73,9 +74,6 @@ public class GUIMain{
      */
     public Scene getScene () {
         return _scene;
-    }
-    public void setCellSociety(CellSociety model){
-    	_model = model;
     }
     
     private void setupGrid(){
@@ -112,7 +110,6 @@ public class GUIMain{
     	_societyTitleLabel.setAlignment(Pos.CENTER_RIGHT);
     	_societyTitleLabel.setTextFill(Color.rgb(60, 60, 60));
 
-    	
     	_root.getChildren().add(_generationLabel);
     	_root.getChildren().add(_societyTitleLabel);
 
@@ -120,7 +117,9 @@ public class GUIMain{
     private void setupUserControls(){
     	setupTopMenu();
     	setupButtons();
-    	setupSpeedSlider();
+    	double sliderWidth = SCREEN_WIDTH - GRID_WIDTH - 60;
+    	setupSpeedSlider(sliderWidth, GRID_WIDTH + 30, _grid.getLayoutY() + 30);
+    	setupSizeSlider(sliderWidth, GRID_WIDTH + 30, _speedSlider.getLayoutY() + 80);
     }
     
     private void setupTopMenu(){
@@ -134,7 +133,6 @@ public class GUIMain{
     	Button stepButton = plainButton("Step");
     	Button resetButton = plainButton("Reset");
     	Button fileButton = plainButton("New File");
-
     	
     	//simulation starts in paused state
     	setButtonToSelected(_pauseButton);
@@ -187,7 +185,8 @@ public class GUIMain{
     	    public void handle(MouseEvent me) {
     	    	pauseAnimation();
     	    	PopUp p = new PopUp((Stage) _scene.getWindow());
-    	    	resetSimulationToType(p.getSimulation());
+    	    	_currentSimulationType = p.getSimulation();
+    	    	resetSimulationToType(_currentSimulationType);
     	    }
     	}); 
 
@@ -199,17 +198,33 @@ public class GUIMain{
         hbox1.setSpacing(10);
         hbox1.setAlignment(Pos.CENTER);
     	hbox1.setLayoutX(24);
-    	hbox1.setPrefWidth(GRID_WIDTH);
+    	hbox1.setPrefWidth(GRID_WIDTH - 24);
     	
     	hbox1.setLayoutY(GRID_WIDTH + 40); 
     	hbox1.setPrefHeight(SCREEN_HEIGHT - GRID_WIDTH - 40);
     	_root.getChildren().add(hbox1);
     }
     private void resetSimulationToType(SimulationType s){
-    	String name = s.getTitle();
-    	switch(name){
-    	
+    	//TODO update model
+    	Class<? extends SimulationType> type = s.getClass();
+    	if(type.equals(FireSimulation.class)){
+    		_model = new FireSociety(s);
+    	}else if(type.equals(WaterSimulation.class)){
+    		_model = new WaterSociety(s);
+    	}else if(type.equals(PopSimulation.class)){
+    		_model = new PopSociety(s);
+    	}else if(type.equals(LifeSimulation.class)){
+    		_model = new LifeSociety(s);
+    	}else{
+    		//TODO handle incorrect file
+        	System.out.println(type);
+    		System.out.println("Error casting simulation to a type");
     	}
+    	SOCIETY_TYPE = (Class<CellSociety>) _model.getClass();
+    	resetGrid();
+    	_grid.setCurrentGeneration(0);
+    	updateGenerationLabel();
+    	_grid.updateTileColors(_model.getCurrentColors());
     }
     private Button plainButton(String text){
     	Button button = new Button(text);
@@ -247,30 +262,53 @@ public class GUIMain{
     	button.setFont(Font.font("HelveticaNeue", FontWeight.MEDIUM, 13));
 
     }
-    private void setupSpeedSlider(){
-    	double inset = 40;
-    	_slider = new Slider();
-    	_slider.setMin(1);
-    	_slider.setMax(30);
-    	_slider.setValue(6);
-    	_slider.setShowTickLabels(true);
-    	_slider.setShowTickMarks(false);
-    	_slider.setMajorTickUnit(7);
-    	_slider.setMinorTickCount(7);
-    	_slider.setBlockIncrement(7);
-    	_slider.setPrefWidth(SCREEN_WIDTH - GRID_WIDTH - inset);
-    	_slider.setLayoutY(_grid.getLayoutY() + 30); //bad way to set this
-    	_slider.setLayoutX(GRID_WIDTH + inset/2.0);
-    	_slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+    private void setupSpeedSlider(double sliderWidth, double startX, double startY){
+    	_speedSlider = new Slider();
+    	_speedSlider.setMin(1);
+    	_speedSlider.setMax(25);
+    	_speedSlider.setValue(6);
+    	_speedSlider.setShowTickLabels(true);
+    	_speedSlider.setShowTickMarks(true);
+    	_speedSlider.setMajorTickUnit(6);
+    	_speedSlider.setMinorTickCount(5);
+    	_speedSlider.setPrefWidth(sliderWidth);
+    	_speedSlider.setLayoutY(startY); //bad way to set this
+    	_speedSlider.setLayoutX(startX);
+    	_speedSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
     		changeAnimationSpeed(newValue);
     	});
     	Label label = plainLabel("Animation Speed", 12);
-    	label.setLayoutY(_slider.getLayoutY() - 24);
-    	label.setPrefWidth(SCREEN_WIDTH - GRID_WIDTH);
-    	label.setLayoutX(GRID_WIDTH);
+    	label.setLayoutY(startY - 24);
+    	label.setPrefWidth(sliderWidth);
+    	label.setLayoutX(startX);
 		label.setAlignment(Pos.CENTER);
     	
-    	_root.getChildren().add(_slider);
+    	_root.getChildren().add(_speedSlider);
+    	_root.getChildren().add(label);
+    }
+    private void setupSizeSlider(double sliderWidth, double startX, double startY){
+    	//TODO:
+    	_sizeSlider = new Slider();
+    	_sizeSlider.setMin(10);
+    	_sizeSlider.setMax(100);
+    	_sizeSlider.setValue(10);
+    	_sizeSlider.setShowTickLabels(true);
+    	_sizeSlider.setShowTickMarks(true);
+    	_sizeSlider.setMajorTickUnit(10);
+    	_sizeSlider.setMinorTickCount(1);
+    	_sizeSlider.setPrefWidth(sliderWidth);
+    	_sizeSlider.setLayoutY(startY); //bad way to set this
+    	_sizeSlider.setLayoutX(startX);
+    	_sizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+    		//TODO:create new grid of given size
+    	});
+    	Label label = plainLabel("Grid Size", 12);
+    	label.setLayoutY(startY - 24);
+    	label.setPrefWidth(sliderWidth);
+    	label.setLayoutX(startX);
+		label.setAlignment(Pos.CENTER);
+    	
+    	_root.getChildren().add(_sizeSlider);
     	_root.getChildren().add(label);
     }
 	
@@ -286,18 +324,25 @@ public class GUIMain{
     }
     private void resetAnimation(){
     	pauseAnimation();
+    	if(_currentSimulationType != null){
+    		resetSimulationToType(_currentSimulationType);
+    		return;
+    	}
     	_grid.setCurrentGeneration(0);
     	updateGenerationLabel();
     	try {
 			_model = SOCIETY_TYPE.newInstance();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} //TODO: change this
+		}
+    	resetGrid(); 
     	_grid.updateTileColors(_model.getCurrentColors());
+    }
+    private void resetGrid(){
+    	_root.getChildren().remove(_grid);
+    	setupGrid();
     }
     private void changeAnimationSpeed(Number newValue){
     		pauseAnimation();

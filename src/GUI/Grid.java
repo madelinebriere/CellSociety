@@ -1,3 +1,5 @@
+//Author Talha Koc
+
 package GUI;
 
 import javafx.scene.layout.Border;
@@ -27,9 +29,12 @@ public class Grid extends Pane{
 
     public void updateTileColors(Color[][] colors){
     	//TODO: check if correct size
+    	System.out.println(NUMBER_OF_CELLS);
+    	System.out.println(_cells.length);
+    	System.out.println(colors.length);
 		for(int i=0; i<NUMBER_OF_CELLS; i++){
     		for(int j=0; j<NUMBER_OF_CELLS; j++){
-    			_cells[i][j].setFill( colors[i][j]);
+    			_cells[i][j].setFill(colors[i][j]);
     		}
     	}
 		_currentGeneration ++;
@@ -56,7 +61,7 @@ public class Grid extends Pane{
     	System.out.println(size + "\t" + GRID_SIZE + "\t" + NUMBER_OF_CELLS + "\t" + pixelMarginError);
     	for(int x=0; x<NUMBER_OF_CELLS;x++){
     		for(int y=0; y<NUMBER_OF_CELLS;y++){
-        		Rectangle cell = plainCellWithColor(colors[x][y], inset + x * size, inset + y * size, size - 1.0);
+        		Rectangle cell = plainCellWithColor(colors[x][y], inset + x * size + 0.5, inset + y * size + 0.5, size - 1.0);
         		_cells[x][y] = cell;
         		getChildren().add(cell);
         	}
@@ -65,8 +70,8 @@ public class Grid extends Pane{
     private Rectangle plainCellWithColor(Color color, double xPos, double yPos, double length){
     	Rectangle cell = new Rectangle(xPos, yPos, length, length);
     	cell.setFill(color);
-    	cell.setArcHeight(3);
-    	cell.setArcWidth(3);
+//    	cell.setArcHeight(0);
+//    	cell.setArcWidth(0);
     	return cell;
     }
     
