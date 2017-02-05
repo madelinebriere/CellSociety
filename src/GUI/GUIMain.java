@@ -187,9 +187,7 @@ public class GUIMain{
     	    public void handle(MouseEvent me) {
     	    	pauseAnimation();
     	    	PopUp p = new PopUp((Stage) _scene.getWindow());
-    	    	SimulationType s = p.getSimulation();
-    	    	System.out.println(s);
-    	    	//SOCIETY_TYPE = s;
+    	    	resetSimulationToType(p.getSimulation());
     	    }
     	}); 
 
@@ -206,6 +204,12 @@ public class GUIMain{
     	hbox1.setLayoutY(GRID_WIDTH + 40); 
     	hbox1.setPrefHeight(SCREEN_HEIGHT - GRID_WIDTH - 40);
     	_root.getChildren().add(hbox1);
+    }
+    private void resetSimulationToType(SimulationType s){
+    	String name = s.getTitle();
+    	switch(name){
+    	
+    	}
     }
     private Button plainButton(String text){
     	Button button = new Button(text);
@@ -244,7 +248,7 @@ public class GUIMain{
 
     }
     private void setupSpeedSlider(){
-    	
+    	double inset = 40;
     	_slider = new Slider();
     	_slider.setMin(1);
     	_slider.setMax(30);
@@ -254,15 +258,16 @@ public class GUIMain{
     	_slider.setMajorTickUnit(7);
     	_slider.setMinorTickCount(7);
     	_slider.setBlockIncrement(7);
-    	_slider.setPrefWidth(SCREEN_WIDTH*0.6);
-    	_slider.setLayoutY(SCREEN_HEIGHT - 120); //bad way to set this
-    	_slider.setLayoutX(SCREEN_WIDTH *1/6);
+    	_slider.setPrefWidth(SCREEN_WIDTH - GRID_WIDTH - inset);
+    	_slider.setLayoutY(_grid.getLayoutY() + 30); //bad way to set this
+    	_slider.setLayoutX(GRID_WIDTH + inset/2.0);
     	_slider.valueProperty().addListener((observable, oldValue, newValue) -> {
     		changeAnimationSpeed(newValue);
     	});
     	Label label = plainLabel("Animation Speed", 12);
     	label.setLayoutY(_slider.getLayoutY() - 24);
-    	label.setPrefWidth(SCREEN_WIDTH);
+    	label.setPrefWidth(SCREEN_WIDTH - GRID_WIDTH);
+    	label.setLayoutX(GRID_WIDTH);
 		label.setAlignment(Pos.CENTER);
     	
     	_root.getChildren().add(_slider);
