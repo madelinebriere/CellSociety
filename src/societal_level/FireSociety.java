@@ -16,10 +16,17 @@ import javafx.scene.paint.Color;
  */
 
 public class FireSociety extends CellSociety{
+	private static final int DEFAULT_SIZE = 10;
+	private static final Color EMPTY_COLOR = Color.YELLOW;
 	
+	//default
 	public FireSociety(){
-		super(makeCells(10), 10, Color.YELLOW);
+		this(DEFAULT_SIZE);
 	
+	}
+	
+	public FireSociety(int size){
+		super(makeCells(size), size, EMPTY_COLOR);
 	}
 	
 	public FireSociety(SimulationType sim){
@@ -36,9 +43,10 @@ public class FireSociety extends CellSociety{
 	
 	private static ArrayList<Cell> makeCells(int size){
 		ArrayList<Cell> makeCells = new ArrayList<Cell>();
+		int center = size/2;
 		for(int i=0; i<size; i++){
 			for(int j=0; j<size; j++){
-				if(!(i==5 && j==5)){
+				if(!(i==center && j==center)){
 					makeCells.add(new TreeCell(i,j));
 				}
 				else{
