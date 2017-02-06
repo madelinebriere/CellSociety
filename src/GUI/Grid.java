@@ -29,9 +29,6 @@ public class Grid extends Pane{
 
     public void updateTileColors(Color[][] colors){
     	//TODO: check if correct size
-    	System.out.println(NUMBER_OF_CELLS);
-    	System.out.println(_cells.length);
-    	System.out.println(colors.length);
 		for(int i=0; i<NUMBER_OF_CELLS; i++){
     		for(int j=0; j<NUMBER_OF_CELLS; j++){
     			_cells[i][j].setFill(colors[i][j]);
