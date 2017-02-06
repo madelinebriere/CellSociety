@@ -132,7 +132,6 @@ public class GUIMain{
     }
     
     private void setupTopMenu(){
-    	//TODO:
     	ComboBox<String> menu = new ComboBox<String>();
     	double width = 200;
     	menu.getItems().addAll(nameToSocietyClassType.keySet());
