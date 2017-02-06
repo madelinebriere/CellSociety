@@ -1,5 +1,6 @@
 package societal_level;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -55,6 +56,12 @@ public abstract class CellSociety {
 	 */
 	public Color[][] getCurrentColors(){
 		Color [][] toRet = new Color[size][size];
+		Color emptyColor = getEmptyColor();
+		for(int i = 0; i<size; i++){
+			for(int j = 0; j<size; j++){
+				toRet[i][j] = emptyColor;
+			}
+		}
 		for(Cell c: currentCells){
 			if(!(c instanceof EmptyCell)){
 				toRet[c.getMyRow()][c.getMyCol()]=c.getMyState();
