@@ -104,5 +104,5 @@
 		<cell>9 8 Red</cell>
 		<cell>9 9 Red</cell>
   </cells>
-  <threshold>0.60</threshold>
+  <threshold>0.30</threshold>
 </data>

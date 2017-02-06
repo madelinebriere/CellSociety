@@ -154,7 +154,8 @@ public class GUIMain{
     	Button stepButton = plainButton("Step");
     	Button resetButton = plainButton("Reset");
     	Button fileButton = plainButton("New File");
-    	fileButton.setTextFill(Color.rgb(120, 120, 120));
+    	setButtonTheme(fileButton, Color.rgb(180, 180, 180), Color.rgb(120, 120, 120), FontWeight.EXTRA_LIGHT, 12, BorderStrokeStyle.DASHED, 1);
+
     	
     	//simulation starts in paused state
     	setButtonToSelected(_pauseButton);
@@ -242,34 +243,24 @@ public class GUIMain{
     	return label;
     }
     private void setButtonToHighlightedState(Button button){
-    	BorderStroke[] bs = {new BorderStroke(Color.rgb(70, 70, 70), BorderStrokeStyle.SOLID, new CornerRadii(4), new BorderWidths(2))};
-    	Border b = new Border(bs);
-    	button.setBorder(b);
-    	button.setTextFill(Color.rgb(30, 30, 30));
-    	button.setFont(Font.font("HelveticaNeue", FontWeight.SEMI_BOLD, 14));
+    	setButtonTheme(button, Color.rgb(70, 70, 70), Color.rgb(30, 30, 30), FontWeight.SEMI_BOLD, 14, BorderStrokeStyle.SOLID, 2);
     }
     private void setButtonToUnhighlightedState(Button button){
-    	BorderStroke[] bs = {new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.DASHED, new CornerRadii(4), new BorderWidths(1))};
-    	Border b = new Border(bs);
-    	button.setBorder(b);
-    	button.setTextFill(Color.rgb(90, 90, 90));
-    	button.setFont(Font.font("HelveticaNeue", FontWeight.LIGHT, 14));
+    	setButtonTheme(button, Color.DARKGRAY, Color.rgb(90, 90, 90), FontWeight.LIGHT, 14, BorderStrokeStyle.DASHED, 1);
     }
     private void setButtonToSelected(Button button){
-    	BorderStroke[] bs = {new BorderStroke(Color.rgb(0, 122, 255), BorderStrokeStyle.SOLID, new CornerRadii(4), new BorderWidths(2))};
-    	Border b = new Border(bs);
-    	button.setBorder(b);
-    	button.setTextFill(Color.rgb(56, 56, 56));
-    	button.setFont(Font.font("HelveticaNeue", FontWeight.MEDIUM, 14));
-
+    	setButtonTheme(button, Color.rgb(0, 122, 255), Color.rgb(56, 56, 56),  FontWeight.MEDIUM, 14, BorderStrokeStyle.SOLID, 2);
     }
     private void setButtonTheme(Button button, Color borderStokeColor, Color textColor, 
-    		FontWeight fontWeight, int fontSize, BorderStrokeStyle borderStrokeStyle){
-    	BorderStroke[] bs = {new BorderStroke(borderStokeColor, borderStrokeStyle, new CornerRadii(4), new BorderWidths(2))};
+    		FontWeight fontWeight, int fontSize, 
+    		BorderStrokeStyle borderStrokeStyle, double borderWidth){
+    	
+    	BorderStroke[] bs = {new BorderStroke(borderStokeColor, borderStrokeStyle, new CornerRadii(4), new BorderWidths(borderWidth))};
     	Border b = new Border(bs);
     	button.setBorder(b);
     	button.setTextFill(textColor);
     	button.setFont(Font.font("HelveticaNeue", fontWeight, fontSize));
+    	
     }
     private void setupSpeedSlider(double sliderWidth, double startX, double startY){
     	_speedSlider = new Slider();

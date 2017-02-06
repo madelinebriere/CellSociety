@@ -66,8 +66,8 @@ public class Grid extends Pane{
     private Rectangle plainCellWithColor(Color color, double xPos, double yPos, double length){
     	Rectangle cell = new Rectangle(xPos, yPos, length, length);
     	cell.setFill(color);
-//    	cell.setArcHeight(0);
-//    	cell.setArcWidth(0);
+    	cell.setArcHeight(4);
+    	cell.setArcWidth(4);
     	return cell;
     }
     

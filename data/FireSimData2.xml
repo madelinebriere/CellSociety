@@ -1,7 +1,7 @@
 <data simulation="fire">
   <title>FireTest</title>
   <author>Stone</author>
-  <dimension>20</dimension>
+  <dimension>10</dimension>
   <cells>
    		<cell>0 0 Tree</cell>
 		<cell>0 1 Tree</cell>
@@ -104,6 +104,6 @@
 		<cell>9 8 Tree</cell>
 		<cell>9 9 Tree</cell>
   </cells>
-  <probability>0.35</probability>
+  <probability>0.1</probability>
   <steps>5</steps>
 </data>
