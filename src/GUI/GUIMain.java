@@ -86,7 +86,7 @@ public class GUIMain{
     }
     
     private void setupGrid(){
-    	_grid = new Grid(_currentGridLength, GRID_WIDTH, _model.getCurrentColors());
+    	_grid = new Grid(_model.getSize(), GRID_WIDTH, _model.getCurrentColors());
     	_grid.setLayoutX(20);
     	_grid.setLayoutY(60);
     	_root.getChildren().add(_grid);
@@ -154,6 +154,7 @@ public class GUIMain{
     	Button stepButton = plainButton("Step");
     	Button resetButton = plainButton("Reset");
     	Button fileButton = plainButton("New File");
+    	fileButton.setTextFill(Color.rgb(120, 120, 120));
     	
     	//simulation starts in paused state
     	setButtonToSelected(_pauseButton);
@@ -225,27 +226,7 @@ public class GUIMain{
     	hbox1.setPrefHeight(SCREEN_HEIGHT - GRID_WIDTH - 40);
     	_root.getChildren().add(hbox1);
     }
-    private void resetSimulationToType(SimulationType s){
-    	Class<? extends SimulationType> type = s.getClass();
-    	if(type.equals(FireSimulation.class)){
-    		_model = new FireSociety(s);
-    	}else if(type.equals(WaterSimulation.class)){
-    		_model = new WaterSociety(s);
-    	}else if(type.equals(PopSimulation.class)){
-    		_model = new PopSociety(s);
-    	}else if(type.equals(LifeSimulation.class)){
-    		_model = new LifeSociety(s);
-    	}else{
-    		//TODO handle incorrect file
-        	System.out.println(type);
-    		System.out.println("Error casting simulation to a type");
-    	}
-    	SOCIETY_TYPE = (Class<CellSociety>) _model.getClass();
-    	resetGrid();
-    	_grid.setCurrentGeneration(0);
-    	updateGenerationLabel();
-    	_grid.updateTileColors(_model.getCurrentColors());
-    }
+    
     private Button plainButton(String text){
     	Button button = new Button(text);
     	button.setPrefSize(80, 40);
@@ -265,22 +246,30 @@ public class GUIMain{
     	Border b = new Border(bs);
     	button.setBorder(b);
     	button.setTextFill(Color.rgb(30, 30, 30));
-    	button.setFont(Font.font("HelveticaNeue", FontWeight.SEMI_BOLD, 13));
+    	button.setFont(Font.font("HelveticaNeue", FontWeight.SEMI_BOLD, 14));
     }
     private void setButtonToUnhighlightedState(Button button){
     	BorderStroke[] bs = {new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.DASHED, new CornerRadii(4), new BorderWidths(1))};
     	Border b = new Border(bs);
     	button.setBorder(b);
-    	button.setTextFill(Color.rgb(100, 100, 100));
-    	button.setFont(Font.font("HelveticaNeue", FontWeight.EXTRA_LIGHT, 13));
+    	button.setTextFill(Color.rgb(90, 90, 90));
+    	button.setFont(Font.font("HelveticaNeue", FontWeight.LIGHT, 14));
     }
     private void setButtonToSelected(Button button){
     	BorderStroke[] bs = {new BorderStroke(Color.rgb(0, 122, 255), BorderStrokeStyle.SOLID, new CornerRadii(4), new BorderWidths(2))};
     	Border b = new Border(bs);
     	button.setBorder(b);
-    	button.setTextFill(Color.rgb(70, 70, 70));
-    	button.setFont(Font.font("HelveticaNeue", FontWeight.MEDIUM, 13));
+    	button.setTextFill(Color.rgb(56, 56, 56));
+    	button.setFont(Font.font("HelveticaNeue", FontWeight.MEDIUM, 14));
 
+    }
+    private void setButtonTheme(Button button, Color borderStokeColor, Color textColor, 
+    		FontWeight fontWeight, int fontSize, BorderStrokeStyle borderStrokeStyle){
+    	BorderStroke[] bs = {new BorderStroke(borderStokeColor, borderStrokeStyle, new CornerRadii(4), new BorderWidths(2))};
+    	Border b = new Border(bs);
+    	button.setBorder(b);
+    	button.setTextFill(textColor);
+    	button.setFont(Font.font("HelveticaNeue", fontWeight, fontSize));
     }
     private void setupSpeedSlider(double sliderWidth, double startX, double startY){
     	_speedSlider = new Slider();
@@ -308,13 +297,13 @@ public class GUIMain{
     }
     private void setupSizeSlider(double sliderWidth, double startX, double startY){
     	Slider _sizeSlider = new Slider();
-    	_sizeSlider.setMin(10);
-    	_sizeSlider.setMax(100);
+    	_sizeSlider.setMin(5);
+    	_sizeSlider.setMax(40);
     	_sizeSlider.setValue(_currentGridLength);
     	_sizeSlider.setShowTickLabels(true);
     	_sizeSlider.setShowTickMarks(true);
-    	_sizeSlider.setMajorTickUnit(10);
-    	_sizeSlider.setMinorTickCount(1);
+    	_sizeSlider.setMajorTickUnit(5);
+    	_sizeSlider.setMinorTickCount(0);
     	_sizeSlider.setPrefWidth(sliderWidth);
     	_sizeSlider.setLayoutY(startY); //bad way to set this
     	_sizeSlider.setLayoutX(startX);
@@ -349,10 +338,9 @@ public class GUIMain{
     	pauseAnimation();
     	if(_currentSimulationType != null){
     		resetSimulationToType(_currentSimulationType);
+    		_currentSimulationType = null;
     		return;
     	}
-    	_grid.setCurrentGeneration(0);
-    	updateGenerationLabel();
     	try {
 			_model = SOCIETY_TYPE.newInstance();
 		} catch (InstantiationException e) {
@@ -361,8 +349,36 @@ public class GUIMain{
 			e.printStackTrace();
 		}
     	_model.setNewSizeAndCells((int) _currentGridLength);
-    	resetGrid(); 
-    	_grid.updateTileColors(_model.getCurrentColors());
+    	resetGUIComponents();
+    }
+    private void resetSimulationToType(SimulationType s){
+    	Class<? extends SimulationType> type = s.getClass();
+    	if(type.equals(FireSimulation.class)){
+    		_model = new FireSociety(s);
+    	}else if(type.equals(WaterSimulation.class)){
+    		_model = new WaterSociety(s);
+    	}else if(type.equals(PopSimulation.class)){
+    		_model = new PopSociety(s);
+    	}else if(type.equals(LifeSimulation.class)){
+    		_model = new LifeSociety(s);
+    	}else{
+    		//TODO handle incorrect file
+        	System.out.println(type);
+    		System.out.println("Error casting simulation to a type");
+    	}
+    	SOCIETY_TYPE = (Class<CellSociety>) _model.getClass();
+    	resetGUIComponents();
+    }
+    private void resetGUIComponents(){
+    	resetGrid();
+    	updateGenerationLabel();
+    	//_grid.updateTileColors(_model.getCurrentColors());
+    }
+    private void enableSliders(){
+    	//TODO:
+    }
+    private void disableSliders(){
+    	//TODO:
     }
     private void resetGrid(){
     	_root.getChildren().remove(_grid);

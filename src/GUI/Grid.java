@@ -55,7 +55,6 @@ public class Grid extends Pane{
     	int size = (GRID_SIZE/NUMBER_OF_CELLS);
     	double pixelMarginError = GRID_SIZE - size*NUMBER_OF_CELLS;
     	double inset = pixelMarginError/2.0;
-    	System.out.println(size + "\t" + GRID_SIZE + "\t" + NUMBER_OF_CELLS + "\t" + pixelMarginError);
     	for(int x=0; x<NUMBER_OF_CELLS;x++){
     		for(int y=0; y<NUMBER_OF_CELLS;y++){
         		Rectangle cell = plainCellWithColor(colors[x][y], inset + x * size + 0.5, inset + y * size + 0.5, size - 1.0);
