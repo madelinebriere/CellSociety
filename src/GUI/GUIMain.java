@@ -56,6 +56,7 @@ public class GUIMain{
     private int _currentGridLength;
     private Button _pauseButton;
     private Button _playButton;
+    private Button _fileButton;
     private SimulationType _currentSimulationType;
     
     public GUIMain(){
@@ -143,6 +144,7 @@ public class GUIMain{
     	    String name = menu.getSelectionModel().getSelectedItem();
     	    SOCIETY_TYPE = (Class<CellSociety>) nameToSocietyClassType.get(name);
     	    System.out.println(name + "\t" + SOCIETY_TYPE);
+    	    setFileToNull();
     	    resetAnimation();
     	});
     	_root.getChildren().add(menu);
@@ -153,8 +155,8 @@ public class GUIMain{
     	_playButton = plainButton("Play");
     	Button stepButton = plainButton("Step");
     	Button resetButton = plainButton("Reset");
-    	Button fileButton = plainButton("New File");
-    	setButtonTheme(fileButton, Color.rgb(180, 180, 180), Color.rgb(120, 120, 120), FontWeight.EXTRA_LIGHT, 12, BorderStrokeStyle.DASHED, 1);
+    	_fileButton = plainButton("New File");
+    	setButtonTheme(_fileButton, Color.rgb(220, 180, 30), Color.rgb(240, 200, 70), FontWeight.EXTRA_LIGHT, 11, BorderStrokeStyle.DASHED, 1);
 
     	
     	//simulation starts in paused state
@@ -204,11 +206,12 @@ public class GUIMain{
     	        step();
     	    }
     	});
-    	fileButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
+    	_fileButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
     	    public void handle(MouseEvent me) {
     	    	pauseAnimation();
     	    	PopUp p = new PopUp((Stage) _scene.getWindow());
     	    	_currentSimulationType = p.getSimulation();
+    	    	_fileButton.setText(_currentSimulationType.getTitle());
     	    	resetSimulationToType(_currentSimulationType);
     	    }
     	}); 
@@ -217,7 +220,7 @@ public class GUIMain{
         hbox1.getChildren().add(_playButton);
         hbox1.getChildren().add(resetButton);
         hbox1.getChildren().add(stepButton);
-        hbox1.getChildren().add(fileButton);
+        hbox1.getChildren().add(_fileButton);
         hbox1.setSpacing(10);
         hbox1.setAlignment(Pos.CENTER);
     	hbox1.setLayoutX(24);
@@ -301,6 +304,7 @@ public class GUIMain{
     	_sizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
     		_sizeSlider.setValue(_sizeSlider.getValue() - _sizeSlider.getValue() % 5 );
     		if(_sizeSlider.getValue() % 5 == 0 && _sizeSlider.getValue() != _currentGridLength){
+    			setFileToNull();
     			System.out.println("Changing grid size to " + _sizeSlider.getValue());
     			_currentGridLength = (int) _sizeSlider.getValue();
         		resetAnimation();
@@ -329,7 +333,6 @@ public class GUIMain{
     	pauseAnimation();
     	if(_currentSimulationType != null){
     		resetSimulationToType(_currentSimulationType);
-    		_currentSimulationType = null;
     		return;
     	}
     	try {
@@ -364,6 +367,11 @@ public class GUIMain{
     	resetGrid();
     	updateGenerationLabel();
     	//_grid.updateTileColors(_model.getCurrentColors());
+    }
+    private void setFileToNull(){
+    	//TODO:
+		_currentSimulationType = null; //TODO: do this more elegantly
+		_fileButton.setText("New File");
     }
     private void enableSliders(){
     	//TODO:
