@@ -156,7 +156,7 @@ public class GUIMain{
     	Button stepButton = plainButton("Step");
     	Button resetButton = plainButton("Reset");
     	_fileButton = plainButton("New File");
-    	setButtonTheme(_fileButton, Color.rgb(180, 180, 180), Color.LIGHTSEAGREEN, FontWeight.EXTRA_LIGHT, 11, BorderStrokeStyle.DASHED, 1);
+    	setButtonTheme(_fileButton, Color.rgb(220, 180, 30), Color.rgb(240, 200, 70), FontWeight.EXTRA_LIGHT, 11, BorderStrokeStyle.DASHED, 1);
 
     	
     	//simulation starts in paused state
