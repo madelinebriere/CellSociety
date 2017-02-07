@@ -34,6 +34,7 @@ public class WaterSociety extends CellSociety {
 		if (water instanceof WaterSimulation) {
 			setVariables((WaterSimulation) water);
 		}
+		setEmptyColor(EMPTY_COLOR);
 	}
 
 	public WaterSociety(Collection<Cell> currentCells, int size, Color emptyColor) {
