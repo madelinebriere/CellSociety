@@ -8,7 +8,6 @@
  * 
  */
 
-
 package societal_level;
 
 import java.util.ArrayList;
@@ -20,8 +19,7 @@ import file_handling.*;
 import javafx.scene.paint.Color;
 
 /**
- * Extension of CellSociety representing the 
- * population society simulation
+ * Extension of CellSociety representing the population society simulation
  * 
  * @author maddiebriere
  *
@@ -31,56 +29,63 @@ public class PopSociety extends CellSociety {
 	private static Random rnd = new Random();
 	private static final int DEFAULT_SIZE = 20;
 	private static final Color EMPTY_COLOR = Color.LIGHTBLUE;
-	
-	public PopSociety(){
-		this(DEFAULT_SIZE);;
+
+	public PopSociety() {
+		this(DEFAULT_SIZE);
+		;
 	}
-	
-	public PopSociety(int size){
+
+	public PopSociety(int size) {
 		super(makeCells(size), size, EMPTY_COLOR);
 	}
-	
-	public PopSociety(Collection<Cell> currentCells, int size, Color emptyColor){
+
+	public PopSociety(Collection<Cell> currentCells, int size, Color emptyColor) {
 		super(currentCells, size, emptyColor);
 	}
-	
-	public PopSociety(SimulationType pop){
+
+	public PopSociety(SimulationType pop) {
 		super(pop);
-		if(pop instanceof PopSimulation){
-			HouseCell.setSatisfiedThreshold(((PopSimulation)pop).getThreshold());
+		if (pop instanceof PopSimulation) {
+			HouseCell.setSatisfiedThreshold(((PopSimulation) pop).getThreshold());
 		}
 	}
-	
-	private static ArrayList<Cell> makeCells(int size){
-		ArrayList<Cell> makeCells = new ArrayList<Cell>();
-		for(int i=0; i<size; i++){
-			for(int j=0; j<size; j++){
-				if(rnd.nextBoolean()){
-					makeCells.add(rnd.nextBoolean()? 
-							new HouseCell(i,j, Color.BLUE): new HouseCell(i,j,Color.RED));
-				}
-				else
-					if(rnd.nextBoolean()){
-						makeCells.add(new HouseCell(i,j, Color.GREEN));
-					}
-					else
-						makeCells.add(new EmptyCell(i,j));
+
+	@Override
+	public Collection<Cell> makeBorderCells(int oldSize, int newSize) {
+		ArrayList<Cell> newCells = new ArrayList<Cell>();
+		for (int i = 0; i < newSize; i++) {
+			for (int j = 0; j < newSize; j++) {
+				if (i >= oldSize || j >= oldSize)
+					newCells.add(new EmptyCell(i, j));
 			}
-		} 
+		}
+		return newCells;
+	}
+
+	private static ArrayList<Cell> makeCells(int size) {
+		ArrayList<Cell> makeCells = new ArrayList<Cell>();
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if (rnd.nextBoolean()) {
+					makeCells.add(rnd.nextBoolean() ? new HouseCell(i, j, Color.BLUE) : new HouseCell(i, j, Color.RED));
+				} else if (rnd.nextBoolean()) {
+					makeCells.add(new HouseCell(i, j, Color.GREEN));
+				} else
+					makeCells.add(new EmptyCell(i, j));
+			}
+		}
 		return makeCells;
 	}
-	
+
 	@Override
 	public Color[][] step() {
 		return guidedStep();
-		
+
 	}
-	
+
 	@Override
 	public Collection<Cell> neighbors(Cell c) {
 		return getNeighbors(c);
 	}
-	
-
 
 }

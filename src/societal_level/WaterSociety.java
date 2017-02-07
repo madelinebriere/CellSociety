@@ -10,62 +10,71 @@ import file_handling.*;
 import javafx.scene.paint.Color;
 
 /**
- * Extension of CellSociety representing the 
- * Water World simulation
+ * Extension of CellSociety representing the Water World simulation
  * 
  * @author maddiebriere
  *
  */
 
-public class WaterSociety extends CellSociety{
+public class WaterSociety extends CellSociety {
 	private static Random rnd = new Random();
 	private static final int DEFAULT_SIZE = 40;
 	private static final Color EMPTY_COLOR = Color.LIGHTBLUE;
-	
-	public WaterSociety(){
+
+	public WaterSociety() {
 		this(DEFAULT_SIZE);
 	}
-	
-	public WaterSociety(int size){
+
+	public WaterSociety(int size) {
 		super(makeCells(size), size, EMPTY_COLOR);
 	}
-	
-	public WaterSociety(SimulationType water){
+
+	public WaterSociety(SimulationType water) {
 		super(water);
-		if(water instanceof WaterSimulation){
-			setVariables((WaterSimulation)water);
+		if (water instanceof WaterSimulation) {
+			setVariables((WaterSimulation) water);
 		}
 	}
-	
-	public WaterSociety(Collection<Cell> currentCells, int size, Color emptyColor){
+
+	public WaterSociety(Collection<Cell> currentCells, int size, Color emptyColor) {
 		super(currentCells, size, emptyColor);
 	}
-	
-	private static ArrayList<Cell> makeCells(int size){
-		ArrayList<Cell> makeCells = new ArrayList<Cell>();
-		for (int i=0; i<size; i++){
-			makeCells.add(new SharkCell(0,i));
+
+	@Override
+	public Collection<Cell> makeBorderCells(int oldSize, int newSize) {
+		ArrayList<Cell> newCells = new ArrayList<Cell>();
+		for (int i = 0; i < newSize; i++) {
+			for (int j = 0; j < newSize; j++) {
+				if (i >= oldSize || j >= oldSize)
+					newCells.add(new EmptyCell(i, j));
+			}
 		}
-		for(int i=1; i<size; i++){
-			for(int j=0; j<size; j++){
-				if(rnd.nextBoolean()){
-					makeCells.add(rnd.nextBoolean()? 
-							new FishCell(i,j): new FishCell(i,j));
-				}
-				else {
-						makeCells.add(new FishCell(i,j));
+		return newCells;
+	}
+
+	private static ArrayList<Cell> makeCells(int size) {
+		ArrayList<Cell> makeCells = new ArrayList<Cell>();
+		for (int i = 0; i < size; i++) {
+			makeCells.add(new SharkCell(0, i));
+		}
+		for (int i = 1; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if (rnd.nextBoolean()) {
+					makeCells.add(rnd.nextBoolean() ? new FishCell(i, j) : new FishCell(i, j));
+				} else {
+					makeCells.add(new FishCell(i, j));
 				}
 			}
 		}
 		return makeCells;
 	}
-	
-	public void setVariables(WaterSimulation water){
+
+	public void setVariables(WaterSimulation water) {
 		FishCell.setStepsToBreed(water.getFishBreed());
 		SharkCell.setStepsToBreed(water.getSharkBreed());
 		SharkCell.setStepsToStarve(water.getSharkStarve());
 	}
-	
+
 	public Color[][] step() {
 		return orderedStep();
 	}
@@ -74,6 +83,5 @@ public class WaterSociety extends CellSociety{
 	public Collection<Cell> neighbors(Cell c) {
 		return getWrappedCardinalNeighbors(c);
 	}
-
 
 }

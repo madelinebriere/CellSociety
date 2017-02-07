@@ -29,9 +29,6 @@ public class Grid extends Pane{
 
     public void updateTileColors(Color[][] colors){
     	//TODO: check if correct size
-    	System.out.println(NUMBER_OF_CELLS);
-    	System.out.println(_cells.length);
-    	System.out.println(colors.length);
 		for(int i=0; i<NUMBER_OF_CELLS; i++){
     		for(int j=0; j<NUMBER_OF_CELLS; j++){
     			_cells[i][j].setFill(colors[i][j]);
@@ -58,7 +55,6 @@ public class Grid extends Pane{
     	int size = (GRID_SIZE/NUMBER_OF_CELLS);
     	double pixelMarginError = GRID_SIZE - size*NUMBER_OF_CELLS;
     	double inset = pixelMarginError/2.0;
-    	System.out.println(size + "\t" + GRID_SIZE + "\t" + NUMBER_OF_CELLS + "\t" + pixelMarginError);
     	for(int x=0; x<NUMBER_OF_CELLS;x++){
     		for(int y=0; y<NUMBER_OF_CELLS;y++){
         		Rectangle cell = plainCellWithColor(colors[x][y], inset + x * size + 0.5, inset + y * size + 0.5, size - 1.0);

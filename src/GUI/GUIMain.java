@@ -2,6 +2,7 @@
 
 package GUI;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import file_handling.*;
@@ -13,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
@@ -39,6 +41,7 @@ public class GUIMain{
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 600;
     private static final int GRID_WIDTH = SCREEN_WIDTH - 350;
+    private static final HashMap<String, Class<?>> nameToSocietyClassType = new HashMap<String, Class<?>>();
     
     private CellSociety _model;
     private Class<CellSociety> SOCIETY_TYPE;
@@ -49,7 +52,8 @@ public class GUIMain{
     private Label _generationLabel;
     private Label _societyTitleLabel;
     private Slider _speedSlider;
-    private Slider _sizeSlider;
+    //private Slider _sizeSlider;
+    private int _currentGridLength;
     private Button _pauseButton;
     private Button _playButton;
     private SimulationType _currentSimulationType;
@@ -60,7 +64,12 @@ public class GUIMain{
     }
     public GUIMain(CellSociety model){
     	_model = model;
+    	_currentGridLength = model.getSize();
 		SOCIETY_TYPE = (Class<CellSociety>) model.getClass();
+		nameToSocietyClassType.put("Fire Society", FireSociety.class);
+		nameToSocietyClassType.put("Wa-Tor Society", WaterSociety.class);
+		nameToSocietyClassType.put("Segregation Society", PopSociety.class);
+		nameToSocietyClassType.put("Life Society", LifeSociety.class);
     	_root =  new Pane();
 		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
 		setupTopLabels();
@@ -123,8 +132,20 @@ public class GUIMain{
     }
     
     private void setupTopMenu(){
-    	//TODO:
-    	
+    	ComboBox<String> menu = new ComboBox<String>();
+    	double width = 200;
+    	menu.getItems().addAll(nameToSocietyClassType.keySet());
+    	menu.setLayoutY(20);
+    	menu.setLayoutX((SCREEN_WIDTH-width)/2);
+    	menu.setPrefWidth(width);
+    	menu.editableProperty().set(false);
+    	menu.setOnAction((event) -> {
+    	    String name = menu.getSelectionModel().getSelectedItem();
+    	    SOCIETY_TYPE = (Class<CellSociety>) nameToSocietyClassType.get(name);
+    	    System.out.println(name + "\t" + SOCIETY_TYPE);
+    	    resetAnimation();
+    	});
+    	_root.getChildren().add(menu);
     }
     private void setupButtons(){
     	HBox hbox1 = new HBox();
@@ -133,6 +154,7 @@ public class GUIMain{
     	Button stepButton = plainButton("Step");
     	Button resetButton = plainButton("Reset");
     	Button fileButton = plainButton("New File");
+    	fileButton.setTextFill(Color.rgb(120, 120, 120));
     	
     	//simulation starts in paused state
     	setButtonToSelected(_pauseButton);
@@ -204,28 +226,7 @@ public class GUIMain{
     	hbox1.setPrefHeight(SCREEN_HEIGHT - GRID_WIDTH - 40);
     	_root.getChildren().add(hbox1);
     }
-    private void resetSimulationToType(SimulationType s){
-    	//TODO update model
-    	Class<? extends SimulationType> type = s.getClass();
-    	if(type.equals(FireSimulation.class)){
-    		_model = new FireSociety(s);
-    	}else if(type.equals(WaterSimulation.class)){
-    		_model = new WaterSociety(s);
-    	}else if(type.equals(PopSimulation.class)){
-    		_model = new PopSociety(s);
-    	}else if(type.equals(LifeSimulation.class)){
-    		_model = new LifeSociety(s);
-    	}else{
-    		//TODO handle incorrect file
-        	System.out.println(type);
-    		System.out.println("Error casting simulation to a type");
-    	}
-    	SOCIETY_TYPE = (Class<CellSociety>) _model.getClass();
-    	resetGrid();
-    	_grid.setCurrentGeneration(0);
-    	updateGenerationLabel();
-    	_grid.updateTileColors(_model.getCurrentColors());
-    }
+    
     private Button plainButton(String text){
     	Button button = new Button(text);
     	button.setPrefSize(80, 40);
@@ -245,22 +246,30 @@ public class GUIMain{
     	Border b = new Border(bs);
     	button.setBorder(b);
     	button.setTextFill(Color.rgb(30, 30, 30));
-    	button.setFont(Font.font("HelveticaNeue", FontWeight.SEMI_BOLD, 13));
+    	button.setFont(Font.font("HelveticaNeue", FontWeight.SEMI_BOLD, 14));
     }
     private void setButtonToUnhighlightedState(Button button){
     	BorderStroke[] bs = {new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.DASHED, new CornerRadii(4), new BorderWidths(1))};
     	Border b = new Border(bs);
     	button.setBorder(b);
-    	button.setTextFill(Color.rgb(100, 100, 100));
-    	button.setFont(Font.font("HelveticaNeue", FontWeight.EXTRA_LIGHT, 13));
+    	button.setTextFill(Color.rgb(90, 90, 90));
+    	button.setFont(Font.font("HelveticaNeue", FontWeight.LIGHT, 14));
     }
     private void setButtonToSelected(Button button){
     	BorderStroke[] bs = {new BorderStroke(Color.rgb(0, 122, 255), BorderStrokeStyle.SOLID, new CornerRadii(4), new BorderWidths(2))};
     	Border b = new Border(bs);
     	button.setBorder(b);
-    	button.setTextFill(Color.rgb(70, 70, 70));
-    	button.setFont(Font.font("HelveticaNeue", FontWeight.MEDIUM, 13));
+    	button.setTextFill(Color.rgb(56, 56, 56));
+    	button.setFont(Font.font("HelveticaNeue", FontWeight.MEDIUM, 14));
 
+    }
+    private void setButtonTheme(Button button, Color borderStokeColor, Color textColor, 
+    		FontWeight fontWeight, int fontSize, BorderStrokeStyle borderStrokeStyle){
+    	BorderStroke[] bs = {new BorderStroke(borderStokeColor, borderStrokeStyle, new CornerRadii(4), new BorderWidths(2))};
+    	Border b = new Border(bs);
+    	button.setBorder(b);
+    	button.setTextFill(textColor);
+    	button.setFont(Font.font("HelveticaNeue", fontWeight, fontSize));
     }
     private void setupSpeedSlider(double sliderWidth, double startX, double startY){
     	_speedSlider = new Slider();
@@ -287,22 +296,24 @@ public class GUIMain{
     	_root.getChildren().add(label);
     }
     private void setupSizeSlider(double sliderWidth, double startX, double startY){
-    	//TODO:
-    	_sizeSlider = new Slider();
-    	_sizeSlider.setMin(10);
-    	_sizeSlider.setMax(100);
-    	_sizeSlider.setValue(_model.getSize());
+    	Slider _sizeSlider = new Slider();
+    	_sizeSlider.setMin(5);
+    	_sizeSlider.setMax(40);
+    	_sizeSlider.setValue(_currentGridLength);
     	_sizeSlider.setShowTickLabels(true);
     	_sizeSlider.setShowTickMarks(true);
-    	_sizeSlider.setMajorTickUnit(10);
-    	_sizeSlider.setMinorTickCount(1);
+    	_sizeSlider.setMajorTickUnit(5);
+    	_sizeSlider.setMinorTickCount(0);
     	_sizeSlider.setPrefWidth(sliderWidth);
     	_sizeSlider.setLayoutY(startY); //bad way to set this
     	_sizeSlider.setLayoutX(startX);
     	_sizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-    		//TODO:create new grid of given size
-//    		_sizeSlider.setValue((_sizeSlider.getValue()/10) * 10);
-    		resetAnimation();
+    		_sizeSlider.setValue(_sizeSlider.getValue() - _sizeSlider.getValue() % 5 );
+    		if(_sizeSlider.getValue() % 5 == 0 && _sizeSlider.getValue() != _currentGridLength){
+    			System.out.println("Changing grid size to " + _sizeSlider.getValue());
+    			_currentGridLength = (int) _sizeSlider.getValue();
+        		resetAnimation();
+    		}
     	});
     	Label label = plainLabel("Grid Size", 12);
     	label.setLayoutY(startY - 24);
@@ -327,10 +338,9 @@ public class GUIMain{
     	pauseAnimation();
     	if(_currentSimulationType != null){
     		resetSimulationToType(_currentSimulationType);
+    		_currentSimulationType = null;
     		return;
     	}
-    	_grid.setCurrentGeneration(0);
-    	updateGenerationLabel();
     	try {
 			_model = SOCIETY_TYPE.newInstance();
 		} catch (InstantiationException e) {
@@ -338,9 +348,37 @@ public class GUIMain{
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-    	_model.setNewSizeAndCells((int) _sizeSlider.getValue());
-    	resetGrid(); 
-    	_grid.updateTileColors(_model.getCurrentColors());
+    	_model.setNewSizeAndCells((int) _currentGridLength);
+    	resetGUIComponents();
+    }
+    private void resetSimulationToType(SimulationType s){
+    	Class<? extends SimulationType> type = s.getClass();
+    	if(type.equals(FireSimulation.class)){
+    		_model = new FireSociety(s);
+    	}else if(type.equals(WaterSimulation.class)){
+    		_model = new WaterSociety(s);
+    	}else if(type.equals(PopSimulation.class)){
+    		_model = new PopSociety(s);
+    	}else if(type.equals(LifeSimulation.class)){
+    		_model = new LifeSociety(s);
+    	}else{
+    		//TODO handle incorrect file
+        	System.out.println(type);
+    		System.out.println("Error casting simulation to a type");
+    	}
+    	SOCIETY_TYPE = (Class<CellSociety>) _model.getClass();
+    	resetGUIComponents();
+    }
+    private void resetGUIComponents(){
+    	resetGrid();
+    	updateGenerationLabel();
+    	//_grid.updateTileColors(_model.getCurrentColors());
+    }
+    private void enableSliders(){
+    	//TODO:
+    }
+    private void disableSliders(){
+    	//TODO:
     }
     private void resetGrid(){
     	_root.getChildren().remove(_grid);
