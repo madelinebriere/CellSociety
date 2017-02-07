@@ -25,6 +25,7 @@ public class LifeSociety extends CellSociety {
 
 	public LifeSociety(SimulationType life) {
 		super(life);
+		setEmptyColor(EMPTY_COLOR);
 	}
 
 	public LifeSociety(int size) {

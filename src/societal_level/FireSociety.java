@@ -70,6 +70,7 @@ public class FireSociety extends CellSociety {
 	private void setVariables(FireSimulation sim) {
 		TreeCell.setProbCatch(sim.getProbability());
 		BurnCell.setStepsToBurn(sim.getSteps());
+		setEmptyColor(EMPTY_COLOR);
 	}
 
 	@Override

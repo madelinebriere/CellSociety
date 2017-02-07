@@ -48,6 +48,7 @@ public class PopSociety extends CellSociety {
 		if (pop instanceof PopSimulation) {
 			HouseCell.setSatisfiedThreshold(((PopSimulation) pop).getThreshold());
 		}
+		setEmptyColor(EMPTY_COLOR);
 	}
 
 	@Override
