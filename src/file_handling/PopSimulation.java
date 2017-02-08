@@ -8,6 +8,7 @@
 package file_handling;
 
 import cellular_level.HouseCell;
+import cellular_level.LiveCell;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 
 import cellular_level.Cell;
+import cellular_level.DeadCell;
 import cellular_level.EmptyCell;
 
 public class PopSimulation extends SimulationType {
@@ -57,4 +59,27 @@ public class PopSimulation extends SimulationType {
 	public Double getThreshold(){
 		return Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
 	}
+
+	@Override
+	public void initializeSocietyVariables() {
+		HouseCell.setSatisfiedThreshold(getThreshold());
+		setEmptyColor(Color.WHITE);
+		
+	}
+	
+	@Override
+	public void initializeCellTypes(){
+		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		cellTypes.add(HouseCell.class);
+		cellTypes.add(EmptyCell.class);
+		setCellTypes(cellTypes);
+	}
+	
+	@Override
+	public void initializeDefaultCells(){
+		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		cellTypes.add(EmptyCell.class);
+		setDefaultCellTypes(cellTypes);
+	}
 }
+

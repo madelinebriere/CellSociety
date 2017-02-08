@@ -7,15 +7,14 @@
 
 package file_handling;
 
-import cellular_level.TreeCell;
-import cellular_level.BurnCell;
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-
-import cellular_level.Cell;
+import cellular_level.*;
 
 public class FireSimulation extends SimulationType {
 	
@@ -59,5 +58,28 @@ public class FireSimulation extends SimulationType {
 		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
 	}
 
+	@Override
+	public void initializeSocietyVariables() {
+		TreeCell.setProbCatch(getProbability());
+		BurnCell.setStepsToBurn(getSteps());
+		setEmptyColor(Color.YELLOW);
+	}
+	
+	@Override
+	public void initializeCellTypes(){
+		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		cellTypes.add(TreeCell.class);
+		cellTypes.add(BurnCell.class);
+		cellTypes.add(EmptyCell.class);
+		setCellTypes(cellTypes);
+		
+	}
+
+	@Override
+	public void initializeDefaultCells(){
+		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		cellTypes.add(TreeCell.class);
+		setDefaultCellTypes(cellTypes);
+	}
 
 }

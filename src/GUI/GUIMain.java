@@ -61,17 +61,20 @@ public class GUIMain{
     
     public GUIMain(){
     	//default society
-		this(new FireSociety());
+		this(new CellSociety());
     }
     public GUIMain(CellSociety model){
     	_model = model;
     	_currentGridLength = model.getSize();
 		SOCIETY_TYPE = (Class<CellSociety>) model.getClass();
+		
+		/*
 		nameToSocietyClassType.put("Fire Society", FireSociety.class);
 		nameToSocietyClassType.put("Wa-Tor Society", WaterSociety.class);
 		nameToSocietyClassType.put("Segregation Society", PopSociety.class);
-		nameToSocietyClassType.put("Life Society", LifeSociety.class);
-    	_root =  new Pane();
+		nameToSocietyClassType.put("Life Society", LifeSociety.class);*/
+    	
+		_root =  new Pane();
 		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
 		setupTopLabels();
 		setupGrid();
@@ -347,19 +350,7 @@ public class GUIMain{
     }
     private void resetSimulationToType(SimulationType s){
     	Class<? extends SimulationType> type = s.getClass();
-    	if(type.equals(FireSimulation.class)){
-    		_model = new FireSociety(s);
-    	}else if(type.equals(WaterSimulation.class)){
-    		_model = new WaterSociety(s);
-    	}else if(type.equals(PopSimulation.class)){
-    		_model = new PopSociety(s);
-    	}else if(type.equals(LifeSimulation.class)){
-    		_model = new LifeSociety(s);
-    	}else{
-    		//TODO handle incorrect file
-        	System.out.println(type);
-    		System.out.println("Error casting simulation to a type");
-    	}
+    	_model=new CellSociety(s);
     	SOCIETY_TYPE = (Class<CellSociety>) _model.getClass();
     	resetGUIComponents();
     }

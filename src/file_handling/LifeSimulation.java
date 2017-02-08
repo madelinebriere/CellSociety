@@ -8,7 +8,10 @@
 package file_handling;
 
 import cellular_level.LiveCell;
+import javafx.scene.paint.Color;
 import cellular_level.DeadCell;
+import cellular_level.EmptyCell;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,5 +45,26 @@ public class LifeSimulation extends SimulationType {
 		}
 		return cells;
 	}
+
+	@Override
+	public void initializeSocietyVariables() {
+		setEmptyColor(Color.WHITE);
+	}
+	
+	@Override
+	public void initializeCellTypes(){
+		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		cellTypes.add(LiveCell.class);
+		cellTypes.add(DeadCell.class);
+		setCellTypes(cellTypes);
+	}
+	
+	@Override
+	public void initializeDefaultCells(){
+		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		cellTypes.add(DeadCell.class);
+		setDefaultCellTypes(cellTypes);
+	}
+	
 
 }
