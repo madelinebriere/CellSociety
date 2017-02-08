@@ -8,7 +8,10 @@
 package file_handling;
 
 import cellular_level.FishCell;
+import cellular_level.LiveCell;
 import cellular_level.SharkCell;
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +19,7 @@ import java.util.Map;
 
 
 import cellular_level.Cell;
+import cellular_level.DeadCell;
 import cellular_level.EmptyCell;
 
 public class WaterSimulation extends SimulationType {
@@ -66,5 +70,29 @@ public class WaterSimulation extends SimulationType {
 	
 	public int getSharkStarve(){
 		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
+	}
+
+	@Override
+	public void initializeSocietyVariables() {
+		FishCell.setStepsToBreed(getFishBreed());
+		SharkCell.setStepsToBreed(getSharkBreed());
+		SharkCell.setStepsToStarve(getSharkStarve());
+		setEmptyColor(Color.LIGHTBLUE);
+	}
+	
+	@Override
+	public void initializeCellTypes(){
+		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		cellTypes.add(FishCell.class);
+		cellTypes.add(SharkCell.class);
+		cellTypes.add(EmptyCell.class);
+		setCellTypes(cellTypes);
+	}
+	
+	@Override
+	public void initializeDefaultCells(){
+		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		cellTypes.add(EmptyCell.class);
+		setDefaultCellTypes(cellTypes);
 	}
 }

@@ -25,14 +25,14 @@ public class NeighborTester {
 	}
 	
 	public static void tests(){
-		System.out.println("LifeSociety");
+		/*System.out.println("LifeSociety");
 		neighborsTest(new LifeSociety());
 		System.out.println("\nFireSociety");
 		neighborsTest(new FireSociety());
 		System.out.println("\nPopSociety");
 		neighborsTest(new PopSociety());
 		System.out.println("\nWaterSociety");
-		neighborsTest(new WaterSociety());
+		neighborsTest(new WaterSociety());*/
 	}
 	
 	public static void neighborsTest(CellSociety s){

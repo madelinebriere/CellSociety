@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import cellular_level.Cell;
+import javafx.scene.paint.Color;
+import societal_level.CellSociety;
 
 public abstract class SimulationType {
 
@@ -29,12 +31,34 @@ public abstract class SimulationType {
 	private List<String> cellData;																
 	private List<String> dataTypes = combineDataTypes();
 	private Map<String, String> myDataValues;
+	private Color emptyColor;
+	private List<Class> cellTypes;
+	private List<Class> defaultCellTypes;
 
 	
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
 	}
+	
+	/**
+	 *	Called by CellSociety when it wants to initialize its own variables according 
+	 *	to simulation type
+	 */
+	public void initializeSociety(CellSociety c){
+		initializeSocietyVariables();
+		initializeCellTypes();
+		initializeDefaultCells();
+		c.setCurrentCells(getCells());
+		c.setSize(getDimension());
+		c.setEmptyColor(getEmptyColor());
+		c.setCellTypes(cellTypes);
+		c.setDefaultCellTypes(defaultCellTypes);
+	}
+	
+	public abstract void initializeSocietyVariables();
+	public abstract void initializeCellTypes();
+	public abstract void initializeDefaultCells();
 	
 	public String getTitle(){
 		return myDataValues.get(UNIVERSAL_DATA_TYPES.get(0));
@@ -90,6 +114,35 @@ public abstract class SimulationType {
 	 * 
 	 * @return List of all attributes that an XMLParser will look for.
 	 */
-	protected abstract List<String> combineDataTypes(); 
+	protected abstract List<String> combineDataTypes();
+
+	public Color getEmptyColor() {
+		return emptyColor;
+	}
+
+	public void setEmptyColor(Color emptyColor) {
+		this.emptyColor = emptyColor;
+	}
+
+	public List<Class> getCellTypes() {
+		return cellTypes;
+	}
+
+	public void setCellTypes(List<Class> cellTypes) {
+		this.cellTypes = cellTypes;
+	}
+
+	public List<Class> getDefaultCellTypes() {
+		return defaultCellTypes;
+	}
+
+	public void setDefaultCellTypes(List<Class> defaultCellTypes) {
+		this.defaultCellTypes = defaultCellTypes;
+	} 
+	
+	
+	
+	
+	
 	
 }

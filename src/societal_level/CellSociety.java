@@ -1,13 +1,13 @@
 package societal_level;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
 import cellular_level.*;
-import file_handling.SimulationType;
+import file_handling.*;
 import javafx.scene.paint.Color;
 import util.CellData;
 import util.Location;
@@ -23,27 +23,29 @@ import util.Location;
  *         the superclass
  */
 
-public abstract class CellSociety {
+public class CellSociety {
 	private static final Color DEFAULT_COLOR = Color.WHITE;
 
 	private Collection<Cell> currentCells;
+	private List <Class> cellTypes;
+	private List<Class> defaultCellTypes;
 	private int size;
 	private Color emptyColor;
-
-	public CellSociety(Collection<Cell> currentCells, int size, Color emptyColor) {
-		if (emptyColor == null) {
-			setEmptyColor(DEFAULT_COLOR);
-		} else {
-			this.emptyColor = emptyColor;
-		}
-		this.currentCells = currentCells;
-		this.size = size;
+	
+	
+	public CellSociety() {
+		currentCells = new ArrayList<Cell>();
+		setCurrentCells(makeCells(10));
+		cellTypes = new ArrayList<Class>();
+		defaultCellTypes = new ArrayList<Class>();
+		size=10;
+		emptyColor=Color.WHITE;
 	}
-
+	
 	public CellSociety(SimulationType sim) {
-		setCurrentCells(sim.getCells());
-		setSize(sim.getDimension());
+		sim.initializeSociety(this);
 	}
+	
 
 	/**
 	 * Main method for interaction between front and back end
@@ -86,7 +88,9 @@ public abstract class CellSociety {
 	 * 
 	 * @return 2D Array of current Cell colors
 	 */
-	public abstract Color[][] step();
+	public Color[][] step(){
+		return orderedStep();
+	}
 
 	/**
 	 * Options for step function, called upon in descendants to choose type of
@@ -145,7 +149,42 @@ public abstract class CellSociety {
 	 *            The new size of the grid
 	 * @return Collection of Cells to fill in the new space
 	 */
-	public abstract Collection<Cell> makeBorderCells(int oldSize, int newSize);
+	public Collection<Cell> makeBorderCells(int oldSize, int newSize){
+		ArrayList<Cell> newCells = new ArrayList<Cell>();
+		for (int i = 0; i < newSize; i++) {
+			for (int j = 0; j < newSize; j++) {
+				if (i >= oldSize || j >= oldSize){
+					ArrayList<Class> defa = (new ArrayList<Class>(getDefaultCellTypes()));
+					Cell newCell;
+					try{
+						newCell = (Cell) defa.get(0).newInstance();
+					}
+					catch (Exception e){
+						newCell = new EmptyCell();
+					}
+					newCell.setMyRow(i);
+					newCell.setMyCol(j);
+					newCells.add(newCell);
+				}
+			}
+		}
+		return newCells;
+	}
+	
+	public Collection<Cell> makeCells(int size){
+		ArrayList<Cell> newCells = new ArrayList<Cell>();
+		for(int i=0; i<size; i++){
+			for(int j=0; j<size; j++){
+				if(j%2==0)
+					newCells.add(new HouseCell(i,j, Color.BLUE));
+				else if(i%2 == 0)
+					newCells.add(new HouseCell(i,j,Color.RED));
+				else
+					newCells.add(new EmptyCell(i,j));
+			}
+		}
+		return newCells;
+	}
 
 	/**
 	 * EmptyCells getter
@@ -278,7 +317,9 @@ public abstract class CellSociety {
 	 *            Cell whose neighbors are returned
 	 * @return neighbors of Cell c
 	 */
-	public abstract Collection<Cell> neighbors(Cell c);
+	public Collection<Cell> neighbors(Cell c){
+		return getNeighbors(c);
+	}
 
 	/**
 	 * Normal neighbors function, gets any adjacent cells
@@ -550,6 +591,23 @@ public abstract class CellSociety {
 		}
 		setCurrentCells(newCells);
 		setSize(size);
+	}
+	
+
+	public List<Class> getCellTypes() {
+		return cellTypes;
+	}
+
+	public void setCellTypes(List<Class> cellTypes) {
+		this.cellTypes = cellTypes;
+	}
+
+	public List<Class> getDefaultCellTypes() {
+		return defaultCellTypes;
+	}
+
+	public void setDefaultCellTypes(List<Class> defaultCellTypes) {
+		this.defaultCellTypes = defaultCellTypes;
 	}
 
 	public Collection<Cell> getCurrentCells() {

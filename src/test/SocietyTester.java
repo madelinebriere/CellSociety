@@ -3,8 +3,6 @@ package test;
 import java.util.ArrayList;
 import cellular_level.Cell;
 import societal_level.CellSociety;
-import societal_level.PopSociety;
-
 /**
  * Basic test class for CellSocieties to bring out the number of each CellType 
  * and that the number of Cells in not to small or too big
@@ -25,7 +23,7 @@ public class SocietyTester{
 	}
 	
 	private static void tests(){
-		setSociety(new PopSociety());
+		//setSociety(new PopSociety());
 		
 		while(true){
 			mySociety.step();
