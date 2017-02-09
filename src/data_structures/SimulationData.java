@@ -5,13 +5,13 @@ package data_structures;
 public class SimulationData {
 	private Dimensions dimensions;
 	private SimulationName name;
-	private CellRatio ratio;
+	private CellRatioMap ratios;
 	private CellShape shape;
 	
-	public SimulationData(Dimensions d, SimulationName id, CellRatio r, CellShape s){
+	public SimulationData(Dimensions d, SimulationName id, CellRatioMap r, CellShape s){
 		dimensions = d;
 		name = id;
-		ratio = r;
+		ratios = r;
 		shape = s;
 	}
 	public CellShape getShape(){
@@ -20,8 +20,8 @@ public class SimulationData {
 	public Dimensions getDimensions(){
 		return dimensions;
 	}
-	public CellRatio getRatio(){
-		return ratio;
+	public CellRatioMap getRatio(){
+		return ratios;
 	}
 	public SimulationName getSimulationName(){
 		return name;

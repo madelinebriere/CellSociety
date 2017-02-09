@@ -9,7 +9,7 @@ import javafx.scene.shape.Rectangle;
 public abstract class GridView extends Pane{
 	protected Frame _bounds;
 	protected Dimensions _dimensions;
-	public GridView(Frame bounds, Dimensions dimensions){
+	public GridView(Frame bounds, Dimensions dimensions, Color[][] colors){
 		super();
 		_bounds = bounds;
 		_dimensions = dimensions;
@@ -23,6 +23,6 @@ public abstract class GridView extends Pane{
 		rec.setFill(color);
 		this.getChildren().add(rec);
 	}
-	protected abstract void setupGrid();
+	protected abstract void setupGrid(Color[][] colors);
 	public abstract void updateGrid(Color[][] newColors);
 }

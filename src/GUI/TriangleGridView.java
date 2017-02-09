@@ -7,10 +7,10 @@ import javafx.scene.paint.Color;
 public class TriangleGridView extends GridView{
 
 	
-	public TriangleGridView(Frame bounds, Dimensions dimensions){
-		super(bounds, dimensions);
-		this.setBackgroundColor(Color.RED);
-		setupGrid();
+	public TriangleGridView(Frame bounds, Dimensions dimensions, Color[][] colors){
+		super(bounds, dimensions, colors);
+		this.setBackgroundColor(Color.BLACK);
+		setupGrid(colors);
 	}
 	@Override
 	public void updateGrid(Color[][] newColors) {
@@ -18,7 +18,7 @@ public class TriangleGridView extends GridView{
 		
 	}
 	@Override
-	protected void setupGrid() {
+	protected void setupGrid(Color[][] colors) {
 		// TODO Auto-generated method stub
 		
 	}

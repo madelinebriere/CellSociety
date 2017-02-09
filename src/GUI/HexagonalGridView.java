@@ -7,10 +7,10 @@ import javafx.scene.paint.Color;
 public class HexagonalGridView extends GridView {
 
 	
-	public HexagonalGridView(Frame bounds, Dimensions dimensions){
-		super(bounds, dimensions);
-		this.setBackgroundColor(Color.ORANGE);
-		setupGrid();
+	public HexagonalGridView(Frame bounds, Dimensions dimensions, Color[][] colors){
+		super(bounds, dimensions, colors);
+		this.setBackgroundColor(Color.BLACK);
+		setupGrid(colors);
 	}
 	
 	@Override
@@ -20,7 +20,7 @@ public class HexagonalGridView extends GridView {
 	}
 
 	@Override
-	protected void setupGrid() {
+	protected void setupGrid(Color[][] newColors) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -17,54 +17,56 @@ public class UIGridController {
 	private final Frame _bounds;
 	private int _currentGeneration = 0;
 	
-	public UIGridController(Pane root, Frame frame) {
-		this(root, CellShape.SQUARE, new Dimensions(10,10), frame);
+	public UIGridController(Pane root, Frame frame, Color[][] colors) {
+		this(root, CellShape.SQUARE, new Dimensions(10,10), frame, colors);
 	}
-	public UIGridController(Pane root, Frame frame, Dimensions dimensions) {
-		this(root, CellShape.SQUARE, dimensions, frame);
+	public UIGridController(Pane root, Frame frame, Color[][] colors, Dimensions dimensions) {
+		this(root, CellShape.SQUARE, dimensions, frame, colors);
 	}
-	public UIGridController(Pane root, Frame frame, CellShape shape) {
-		this(root, shape, new Dimensions(10,10), frame);
+	public UIGridController(Pane root, Frame frame, Color[][] colors, CellShape shape) {
+		this(root, shape, new Dimensions(10,10),frame, colors);
 	}
-	public UIGridController(Pane root, CellShape shape, Dimensions dimensions, Frame frame) {
+	public UIGridController(Pane root, CellShape shape, Dimensions dimensions, Frame frame, Color[][] colors) {
 		_root = root;
 		_currentGridDimensions = dimensions;
 		_currentShape = shape;
 		_bounds = frame;
-		setNewGridWithShape(shape);
+		setNewGridWithShape(shape, colors);
 	}
 	
-	public void setNewGridWithShape(CellShape shape){
+	public void setNewGridWithShape(CellShape shape, Color[][] colors){
 		if(_gridView != null){
 			clearGridFromScreen();
 		}
 		switch(shape){
 		case SQUARE:
-			_gridView = new SquareGridView(_bounds, _currentGridDimensions);
+			_gridView = new SquareGridView(_bounds, _currentGridDimensions, colors);
 			break;
 		case TRIANGLE:
-			_gridView = new TriangleGridView(_bounds, _currentGridDimensions);
+			_gridView = new TriangleGridView(_bounds, _currentGridDimensions, colors);
 			break;
 		case HEXAGON:
-			_gridView = new HexagonalGridView(_bounds, _currentGridDimensions);
+			_gridView = new HexagonalGridView(_bounds, _currentGridDimensions, colors);
 			break;
 		default:
-			_gridView = new SquareGridView(_bounds, _currentGridDimensions);
+			_gridView = new SquareGridView(_bounds, _currentGridDimensions, colors);
 			break;
 		}
 		_root.getChildren().add(_gridView);
 		
 	}
-	public void setNewGridWithDimension(Dimensions dimensions){
+	public void setNewGridWithDimension(Dimensions dimensions, Color[][] colors){
 		_currentGridDimensions = dimensions;
-		setNewGridWithShape(_currentShape);
+		setNewGridWithShape(_currentShape, colors);
 	}
 	
 	public void step(Color[][] newColors, Dimensions newDimensions){
-		if(newDimensions != null && _currentGridDimensions.equals(newDimensions)){
-			setNewGridWithDimension(newDimensions);
+		if(!_currentGridDimensions.equals((Dimensions) newDimensions)){
+			setNewGridWithDimension(newDimensions, newColors);
+			System.out.println("setting new grid of size" + newDimensions.toString());
+		}else{
+			_gridView.updateGrid(newColors);
 		}
-		_gridView.updateGrid(newColors);
 	}
 	
 	public int getCurrentGeneration(){

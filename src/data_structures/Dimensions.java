@@ -14,6 +14,6 @@ public class Dimensions {
 		return y;
 	}
 	public boolean equals(Dimensions other){
-		return (other.getX() == getX() && other.getY() == getY());
+		return (this != null && other != null) && (other.getX() == getX() && other.getY() == getY());
 	}
 }

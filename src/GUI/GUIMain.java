@@ -5,6 +5,7 @@ package GUI;
 import java.util.HashMap;
 import java.util.Random;
 
+import data_structures.Dimensions;
 import file_handling.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -100,7 +101,7 @@ public class GUIMain{
     	_gridContainer.setPrefWidth(GRID_WIDTH);
     	_gridContainer.setPrefHeight(GRID_WIDTH);
     	_root.getChildren().add(_gridContainer);
-    	_gridController = new UIGridController(_gridContainer,frame);
+    	_gridController = new UIGridController(_gridContainer,frame, _model.getCurrentColors());
     	//_gridController.setupGridWithShape(CellShape.HEXAGON);
     }
     /**
@@ -399,6 +400,7 @@ public class GUIMain{
 		//TODO:
 //		_grid.updateTileColors(_model.step());
 //		updateGenerationLabel();
+		_gridController.step(_model.step(), new Dimensions(10,10));
 	}
 
 }
