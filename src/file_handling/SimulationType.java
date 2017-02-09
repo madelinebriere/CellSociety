@@ -27,6 +27,7 @@ public abstract class SimulationType {
 	        "dimension",
 	        "cells"
 	    });
+	protected static final int NAME_INDEX = 2;
 	
 	private List<String> cellData;																
 	protected List<String> dataTypes;
@@ -40,6 +41,7 @@ public abstract class SimulationType {
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
+		dataTypes = combineDataTypes();
 	}
 	
 	/**

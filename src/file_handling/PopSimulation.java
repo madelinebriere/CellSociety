@@ -37,13 +37,13 @@ public class PopSimulation extends SimulationType {
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		for(String data: this.getCellData()){
 			String[] vars = data.split(" ");
-			if(vars[2].toUpperCase().equals("BLUE")){
+			if(vars[NAME_INDEX].toUpperCase().equals("BLUE")){
 				cells.add(new HouseCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1]), Color.BLUE));
 			}
-			else if(vars[2].toUpperCase().equals("RED")){
+			else if(vars[NAME_INDEX].toUpperCase().equals("RED")){
 				cells.add(new HouseCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1]), Color.RED));
 			}
-			else if(vars[2].toUpperCase().equals("EMPTY")){
+			else if(vars[NAME_INDEX].toUpperCase().equals("EMPTY")){
 				cells.add(new EmptyCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
 			}
 		}
