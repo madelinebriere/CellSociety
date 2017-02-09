@@ -1,3 +1,5 @@
+//author Talha Koc
+
 package data_structures;
 
 public enum SimulationName {

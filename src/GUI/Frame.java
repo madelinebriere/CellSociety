@@ -1,3 +1,5 @@
+//author Talha Koc
+
 package GUI;
 
 public class Frame {
