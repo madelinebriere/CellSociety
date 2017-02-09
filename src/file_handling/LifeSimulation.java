@@ -53,7 +53,7 @@ public class LifeSimulation extends SimulationType {
 	
 	@Override
 	public void initializeCellTypes(){
-		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
 		cellTypes.add(LiveCell.class);
 		cellTypes.add(DeadCell.class);
 		setCellTypes(cellTypes);
@@ -61,7 +61,7 @@ public class LifeSimulation extends SimulationType {
 	
 	@Override
 	public void initializeDefaultCells(){
-		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
 		cellTypes.add(DeadCell.class);
 		setDefaultCellTypes(cellTypes);
 	}

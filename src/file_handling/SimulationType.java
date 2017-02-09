@@ -3,7 +3,7 @@
  * return the data behind any Simulation. The abstract class holds the title,
  * artist, dimension, and ArrayList of initial cells. The subclasses are in charge
  * of defining which initial settings need to be stored and how to interpret the
- * Strings of initial cell data. This is a Read-Only data structure.
+ * Strings of initial cell data.
  * 
  * @author Stone Mathers
  */
@@ -32,8 +32,8 @@ public abstract class SimulationType {
 	private List<String> dataTypes = combineDataTypes();
 	private Map<String, String> myDataValues;
 	private Color emptyColor;
-	private List<Class> cellTypes;
-	private List<Class> defaultCellTypes;
+	private List<Class<? extends Cell>> cellTypes;
+	private List<Class<? extends Cell>> defaultCellTypes;
 
 	
 	public SimulationType(Map<String, String> values, List<String> cells){
@@ -74,10 +74,14 @@ public abstract class SimulationType {
 	
 	/**
 	 * Uses List of cell data in String format to create an ArrayList of Cells.
+	 * There must be a valid tag at the beginning of the list for the correct
+	 * filling method to be chosen.
 	 * 
 	 * @return
 	 */
-	public abstract List<Cell> getCells();	
+	public abstract List<Cell> getCells();
+	
+	
 	
 	/**
 	 * @return List of raw Cell data from file.
@@ -124,19 +128,19 @@ public abstract class SimulationType {
 		this.emptyColor = emptyColor;
 	}
 
-	public List<Class> getCellTypes() {
+	public List<Class<? extends Cell>> getCellTypes() {
 		return cellTypes;
 	}
 
-	public void setCellTypes(List<Class> cellTypes) {
+	public void setCellTypes(List<Class<? extends Cell>> cellTypes) {
 		this.cellTypes = cellTypes;
 	}
 
-	public List<Class> getDefaultCellTypes() {
+	public List<Class<? extends Cell>> getDefaultCellTypes() {
 		return defaultCellTypes;
 	}
 
-	public void setDefaultCellTypes(List<Class> defaultCellTypes) {
+	public void setDefaultCellTypes(List<Class<? extends Cell>> defaultCellTypes) {
 		this.defaultCellTypes = defaultCellTypes;
 	} 
 	
