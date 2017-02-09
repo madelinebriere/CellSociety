@@ -60,26 +60,6 @@ public class PopSimulation extends SimulationType {
 		return Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
 	}
 
-	@Override
-	public void initializeSocietyVariables() {
-		HouseCell.setSatisfiedThreshold(getThreshold());
-		setEmptyColor(Color.WHITE);
-		
-	}
-	
-	@Override
-	public void initializeCellTypes(){
-		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
-		cellTypes.add(HouseCell.class);
-		cellTypes.add(EmptyCell.class);
-		setCellTypes(cellTypes);
-	}
-	
-	@Override
-	public void initializeDefaultCells(){
-		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
-		cellTypes.add(EmptyCell.class);
-		setDefaultCellTypes(cellTypes);
-	}
+
 }
 

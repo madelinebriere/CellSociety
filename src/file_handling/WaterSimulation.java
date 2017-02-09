@@ -72,27 +72,5 @@ public class WaterSimulation extends SimulationType {
 		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
 	}
 
-	@Override
-	public void initializeSocietyVariables() {
-		FishCell.setStepsToBreed(getFishBreed());
-		SharkCell.setStepsToBreed(getSharkBreed());
-		SharkCell.setStepsToStarve(getSharkStarve());
-		setEmptyColor(Color.LIGHTBLUE);
-	}
-	
-	@Override
-	public void initializeCellTypes(){
-		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
-		cellTypes.add(FishCell.class);
-		cellTypes.add(SharkCell.class);
-		cellTypes.add(EmptyCell.class);
-		setCellTypes(cellTypes);
-	}
-	
-	@Override
-	public void initializeDefaultCells(){
-		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
-		cellTypes.add(EmptyCell.class);
-		setDefaultCellTypes(cellTypes);
-	}
+
 }

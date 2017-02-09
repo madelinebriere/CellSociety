@@ -31,9 +31,6 @@ public abstract class SimulationType {
 	private List<String> cellData;																
 	private List<String> dataTypes = combineDataTypes();
 	private Map<String, String> myDataValues;
-	private Color emptyColor;
-	private List<Class<? extends Cell>> cellTypes;
-	private List<Class<? extends Cell>> defaultCellTypes;
 
 	
 	public SimulationType(Map<String, String> values, List<String> cells){
@@ -41,24 +38,6 @@ public abstract class SimulationType {
 		cellData = cells;
 	}
 	
-	/**
-	 *	Called by CellSociety when it wants to initialize its own variables according 
-	 *	to simulation type
-	 */
-	public void initializeSociety(CellSociety c){
-		initializeSocietyVariables();
-		initializeCellTypes();
-		initializeDefaultCells();
-		c.setCurrentCells(getCells());
-		c.setSize(getDimension());
-		c.setEmptyColor(getEmptyColor());
-		c.setCellTypes(cellTypes);
-		c.setDefaultCellTypes(defaultCellTypes);
-	}
-	
-	public abstract void initializeSocietyVariables();
-	public abstract void initializeCellTypes();
-	public abstract void initializeDefaultCells();
 	
 	public String getTitle(){
 		return myDataValues.get(UNIVERSAL_DATA_TYPES.get(0));
@@ -116,29 +95,6 @@ public abstract class SimulationType {
 	 */
 	protected abstract List<String> combineDataTypes();
 
-	public Color getEmptyColor() {
-		return emptyColor;
-	}
-
-	public void setEmptyColor(Color emptyColor) {
-		this.emptyColor = emptyColor;
-	}
-
-	public List<Class<? extends Cell>> getCellTypes() {
-		return cellTypes;
-	}
-
-	public void setCellTypes(List<Class<? extends Cell>> cellTypes) {
-		this.cellTypes = cellTypes;
-	}
-
-	public List<Class<? extends Cell>> getDefaultCellTypes() {
-		return defaultCellTypes;
-	}
-
-	public void setDefaultCellTypes(List<Class<? extends Cell>> defaultCellTypes) {
-		this.defaultCellTypes = defaultCellTypes;
-	} 
 	
 	
 	
