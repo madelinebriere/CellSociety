@@ -32,14 +32,8 @@ public class WaterSimulation extends SimulationType {
 
 	public WaterSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
-	}
-
-	@Override
-	protected List<String> combineDataTypes() {
-		List<String> data = new ArrayList<String>();
-		data.addAll(getUniversalTypes());
-		data.addAll(SETTING_TYPES);
-		return data;
+		this.settingTypes = SETTING_TYPES;
+		this.dataTypes = combineDataTypes();
 	}
 
 	@Override
@@ -47,13 +41,13 @@ public class WaterSimulation extends SimulationType {
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		for(String data: this.getCellData()){
 			String[] vars = data.split(" ");
-			if(vars[2].toUpperCase().equals("FISH")){
+			if(vars[NAME_INDEX].toUpperCase().equals("FISH")){
 				cells.add(new FishCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
 			}
-			else if(vars[2].toUpperCase().equals("SHARK")){
+			else if(vars[NAME_INDEX].toUpperCase().equals("SHARK")){
 				cells.add(new SharkCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
 			}
-			else if(vars[2].toUpperCase().equals("EMPTY")){
+			else if(vars[NAME_INDEX].toUpperCase().equals("EMPTY")){
 				cells.add(new EmptyCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
 			}
 		}
