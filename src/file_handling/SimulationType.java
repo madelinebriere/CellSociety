@@ -32,8 +32,8 @@ public abstract class SimulationType {
 	private List<String> dataTypes = combineDataTypes();
 	private Map<String, String> myDataValues;
 	private Color emptyColor;
-	private List<Class> cellTypes;
-	private List<Class> defaultCellTypes;
+	private List<Class<? extends Cell>> cellTypes;
+	private List<Class<? extends Cell>> defaultCellTypes;
 
 	
 	public SimulationType(Map<String, String> values, List<String> cells){
@@ -124,19 +124,19 @@ public abstract class SimulationType {
 		this.emptyColor = emptyColor;
 	}
 
-	public List<Class> getCellTypes() {
+	public List<Class<? extends Cell>> getCellTypes() {
 		return cellTypes;
 	}
 
-	public void setCellTypes(List<Class> cellTypes) {
+	public void setCellTypes(List<Class<? extends Cell>> cellTypes) {
 		this.cellTypes = cellTypes;
 	}
 
-	public List<Class> getDefaultCellTypes() {
+	public List<Class<? extends Cell>> getDefaultCellTypes() {
 		return defaultCellTypes;
 	}
 
-	public void setDefaultCellTypes(List<Class> defaultCellTypes) {
+	public void setDefaultCellTypes(List<Class<? extends Cell>> defaultCellTypes) {
 		this.defaultCellTypes = defaultCellTypes;
 	} 
 	
