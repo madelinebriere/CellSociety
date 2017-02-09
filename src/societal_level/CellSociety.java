@@ -61,7 +61,6 @@ public class CellSociety {
 				toRet[i][j] = emptyColor;
 			}
 		}
-		System.out.println(currentCells.size());
 		for (Cell c : currentCells) {
 			if (!(c instanceof EmptyCell)) {
 				toRet[c.getMyRow()][c.getMyCol()] = c.getMyState();
