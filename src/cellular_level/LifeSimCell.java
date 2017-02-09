@@ -1,0 +1,45 @@
+package cellular_level;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javafx.scene.paint.Color;
+import util.CellData;
+
+public abstract class LifeSimCell extends Cell {
+	
+	public LifeSimCell(){
+		super();
+	}
+	
+	public LifeSimCell(int row, int col, Color color){
+		super(row, col, color);
+	}
+	
+	@Override
+	public Cell createCopy(){
+		Cell copy = new DeadCell();  //Arbitrary instantiation
+		try {
+			copy = this.getClass().newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+		copy.basicCopy(this);
+		return copy;
+	}
+	
+	/**
+	 *@param data CellData object holding accessible information for Cell
+	 * @return ArrayList of Cells for the next generation. Will contain either the current
+	 * live cell or a new dead cell in the same location. Never empty.
+	 */
+	@Override
+	public Collection<Cell> update(CellData data) {
+		ArrayList<Cell> newGen = new ArrayList<Cell>();
+		changeState(data, newGen);
+		return newGen;
+		
+	}
+	
+	protected abstract void changeState(CellData data, ArrayList<Cell> newGen);
+}

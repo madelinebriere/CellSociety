@@ -25,14 +25,8 @@ public class FireSimulation extends SimulationType {
 
 	public FireSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
-	}
-
-	@Override
-	protected List<String> combineDataTypes() {
-		List<String> data = new ArrayList<String>();
-		data.addAll(getUniversalTypes());
-		data.addAll(SETTING_TYPES);
-		return data;
+		this.settingTypes = SETTING_TYPES;
+		this.dataTypes = combineDataTypes();
 	}
 
 	@Override
@@ -40,10 +34,10 @@ public class FireSimulation extends SimulationType {
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		for(String data: this.getCellData()){
 			String[] vars = data.split(" ");
-			if(vars[2].toUpperCase().equals("TREE")){
+			if(vars[NAME_INDEX].toUpperCase().equals("TREE")){
 				cells.add(new TreeCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
 			}
-			else if(vars[2].toUpperCase().equals("BURN")){
+			else if(vars[NAME_INDEX].toUpperCase().equals("BURN")){
 				cells.add(new BurnCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
 			}
 		}

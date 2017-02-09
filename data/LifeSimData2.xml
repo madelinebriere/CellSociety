@@ -3,6 +3,7 @@
   <author>Stone</author>
   <dimension>10</dimension>
   <cells>
+    <cellDataType>location</cellDataType>
 		<cell>0 0 Alive</cell>
 		<cell>0 1 Dead</cell>
 		<cell>0 2 Alive</cell>
