@@ -4,6 +4,7 @@ package GUI;
 
 import data_structures.CellShape;
 import data_structures.Dimensions;
+import file_handling.SimulationType;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
@@ -61,7 +62,11 @@ public class UIGridController {
 		_currentGridDimensions = dimensions;
 		setNewGridWithShape(_currentShape, colors);
 	}
-	
+	public void setNewGridFromFile(SimulationType s, Color[][] colors){
+		//TODO:
+		_currentGridDimensions = new Dimensions(s.getDimension(), s.getDimension());
+		setNewGridWithDimension(_currentGridDimensions, colors);
+	}
 	public void step(Color[][] newColors, Dimensions newDimensions){
 		if(!_currentGridDimensions.equals((Dimensions) newDimensions)){
 			setNewGridWithDimension(newDimensions, newColors);

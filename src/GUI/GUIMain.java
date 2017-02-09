@@ -11,9 +11,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -28,9 +26,7 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -46,7 +42,7 @@ public class GUIMain{
     private static final HashMap<String, Class<?>> nameToSocietyClassType = new HashMap<String, Class<?>>();
     
     private CellSociety _model;
-    private Class<CellSociety> SOCIETY_TYPE;
+//    private Class<CellSociety> SOCIETY_TYPE;
     private Timeline _animation;
     private Scene _scene; 
     private Pane _root;
@@ -70,7 +66,7 @@ public class GUIMain{
     public GUIMain(CellSociety model){
     	_model = model;
     	_currentGridLength = model.getSize();
-		SOCIETY_TYPE = (Class<CellSociety>) model.getClass();
+//		SOCIETY_TYPE = (Class<CellSociety>) model.getClass();
 		
 		/*
 		nameToSocietyClassType.put("Fire Society", FireSociety.class);
@@ -125,7 +121,8 @@ public class GUIMain{
     	_generationLabel.setAlignment(Pos.CENTER_LEFT);
     	_generationLabel.setTextFill(Color.rgb(60, 60, 60));
     	
-    	_societyTitleLabel = plainLabel(SOCIETY_TYPE.getSimpleName(), 15);
+    	//TODO:
+    	_societyTitleLabel = plainLabel("TODO:", 15);
     	_societyTitleLabel.setLayoutX(SCREEN_WIDTH/2);
     	_societyTitleLabel.setPrefHeight(80);
     	_societyTitleLabel.setPrefWidth(SCREEN_WIDTH/2 - 20);
@@ -153,11 +150,12 @@ public class GUIMain{
     	menu.setPrefWidth(width);
     	menu.editableProperty().set(false);
     	menu.setOnAction((event) -> {
-    	    String name = menu.getSelectionModel().getSelectedItem();
-    	    SOCIETY_TYPE = (Class<CellSociety>) nameToSocietyClassType.get(name);
-    	    System.out.println(name + "\t" + SOCIETY_TYPE);
-    	    setFileToNull();
-    	    resetAnimation();
+    		//TODO:
+//    	    String name = menu.getSelectionModel().getSelectedItem();
+//    	    SOCIETY_TYPE = (Class<CellSociety>) nameToSocietyClassType.get(name);
+//    	    System.out.println(name + "\t" + SOCIETY_TYPE);
+//    	    setFileToNull();
+//    	    resetAnimation();
     	});
     	_root.getChildren().add(menu);
     }
@@ -347,20 +345,20 @@ public class GUIMain{
     		resetSimulationToType(_currentSimulationType);
     		return;
     	}
-    	try {
-			_model = SOCIETY_TYPE.newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-    	_model.setNewSizeAndCells((int) _currentGridLength);
-    	resetGUIComponents();
+    	//TODO:
+//    	try {
+//			_model = SOCIETY_TYPE.newInstance();
+//		} catch (InstantiationException e) {
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			e.printStackTrace();
+//		}
+//    	_model.setNewSizeAndCells((int) _currentGridLength);
+//    	resetGUIComponents();
     }
     private void resetSimulationToType(SimulationType s){
-    	Class<? extends SimulationType> type = s.getClass();
     	_model=new CellSociety(s);
-    	SOCIETY_TYPE = (Class<CellSociety>) _model.getClass();
+    	_gridController.setNewGridFromFile(s, _model.getCurrentColors());
     	resetGUIComponents();
     }
     private void resetGUIComponents(){
@@ -400,7 +398,7 @@ public class GUIMain{
 		//TODO:
 //		_grid.updateTileColors(_model.step());
 //		updateGenerationLabel();
-		_gridController.step(_model.step(), new Dimensions(10,10));
+		_gridController.step(_model.step(), new Dimensions(_model.getSize(), _model.getSize()));
 	}
 
 }
