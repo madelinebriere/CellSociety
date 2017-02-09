@@ -3,7 +3,6 @@
 package GUI;
 
 import data_structures.Dimensions;
-import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
 
 public class HexagonalGridView extends GridView {

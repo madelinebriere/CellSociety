@@ -17,6 +17,7 @@ public class CellRatioMap {
 		if(sum < 0.999999 || sum > 1.000001){//margin of error for double addition
 			//TODO throw error, invalid ratios
 		}
+		//TODO: check if cells are compatible
 		this.ratios = ratios;
 	}
 	public Map<CellName, CellRatio> getMapOfCellsRatios(){

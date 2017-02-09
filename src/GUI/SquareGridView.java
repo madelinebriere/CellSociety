@@ -3,7 +3,6 @@
 package GUI;
 
 import data_structures.Dimensions;
-import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -20,7 +19,6 @@ public class SquareGridView extends GridView {
 	@Override
 	public void updateGrid(Color[][] newColors) {
 		// TODO Auto-generated method stub
-		System.out.println("updatingSquareGrid");
 		for(int x=0; x<_dimensions.getX(); x++){
 			for(int y=0; y<_dimensions.getY(); y++){
 				_cells[x][y].setFill(newColors[x][y]);
