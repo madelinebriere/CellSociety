@@ -70,7 +70,7 @@ public class XMLParser {
 			SimulationType tempSim = readSimulationType(root);
 		 
 			for(String field: tempSim.getDataTypes()){
-				if(!field.equals(CELLS)){
+				if(!field.equals(CELLS)){  //Cells are uniquely handled before, as they depend on the dimension being retrieved
 					data.put(field, getTextValue(root, field).get(0));
 				}
 			}
@@ -227,6 +227,8 @@ public class XMLParser {
 		}
 		
 		CellDataGenerator gen = new CellDataGenerator(list, dimension);
-		list = decodeData(e, gen, dimension);
+		List<String> newData = decodeData(e, gen, dimension);
+		list.clear();
+		list.addAll(newData);
 	}
 }
