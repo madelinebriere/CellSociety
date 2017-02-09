@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 
 public class PopUp{
 
-	public Stage myStage;
+	private Stage myStage;
 	
 	public PopUp(Stage stage){
 		myStage = stage;

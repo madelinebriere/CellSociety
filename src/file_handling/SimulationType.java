@@ -29,7 +29,8 @@ public abstract class SimulationType {
 	    });
 	
 	private List<String> cellData;																
-	private List<String> dataTypes = combineDataTypes();
+	protected List<String> dataTypes;
+	protected List<String> settingTypes = Arrays.asList(new String[] {""});
 	private Map<String, String> myDataValues;
 	private Color emptyColor;
 	private List<Class<? extends Cell>> cellTypes;
@@ -118,7 +119,12 @@ public abstract class SimulationType {
 	 * 
 	 * @return List of all attributes that an XMLParser will look for.
 	 */
-	protected abstract List<String> combineDataTypes();
+	protected List<String> combineDataTypes(){
+		List<String> data = new ArrayList<String>();
+		data.addAll(getUniversalTypes());
+		data.addAll(settingTypes);
+		return data;
+	}
 
 	public Color getEmptyColor() {
 		return emptyColor;
