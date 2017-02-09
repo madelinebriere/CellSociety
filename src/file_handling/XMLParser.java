@@ -30,10 +30,11 @@ import javax.xml.parsers.ParserConfigurationException;
 public class XMLParser {
 
 	public static final String SIMULATION_ATTRIBUTE = "simulation";
+	public static final String DIMENSION = "dimension";
 	public static final String CELLS = "cells";
 	public static final String CELL = "cell";
 	public static final String CELL_DATA_TYPE = "cellDataType";
-	public static final String[] POSSIBLE_CELL_DATA = { "location", "number", "probability", "percentage"};
+	public static final String[] POSSIBLE_CELL_DATA = {"location", "number", "probability", "percentage"};
 	private static final String[] POSSIBLE_SIM_STRINGS = {"game of life", "population", "fire", "water"};
 	private static final SimulationType[] POSSIBLE_SIM_TYPES = {
 			new LifeSimulation(null, null),
@@ -73,7 +74,7 @@ public class XMLParser {
 					data.put(field, getTextValue(root, field).get(0));
 				}
 			}
-			fillCellData(root, cells, tempSim.getDimension());
+			fillCellData(root, cells, Integer.parseInt(data.get(DIMENSION)));
 		  
 			return createSimulation(tempSim, data, cells);
 		} else {
@@ -198,13 +199,14 @@ public class XMLParser {
 	 * @param dimension of grid to be filled by Cells
 	 */
 	private List<String> decodeData(Element e, CellDataGenerator gen, int dimension) { //TODO: Must make sure exactly one of these tags are present
-		if(getTextValue(e, CELL_DATA_TYPE).equals(POSSIBLE_CELL_DATA[0])){
+		String cellType = getTextValue(e, CELL_DATA_TYPE).get(0);
+		if(cellType.equals(POSSIBLE_CELL_DATA[0])){
 			return gen.generateLocationData();
-		}else if(getTextValue(e, CELL_DATA_TYPE).equals(POSSIBLE_CELL_DATA[1])){
+		}else if(cellType.equals(POSSIBLE_CELL_DATA[1])){
 			return gen.generateNumberData();
-		}else if(getTextValue(e, CELL_DATA_TYPE).equals(POSSIBLE_CELL_DATA[2])){
+		}else if(cellType.equals(POSSIBLE_CELL_DATA[2])){
 			return gen.generateProbabilityData();
-		}else if(getTextValue(e, CELL_DATA_TYPE).equals(POSSIBLE_CELL_DATA[3])){
+		}else if(cellType.equals(POSSIBLE_CELL_DATA[3])){
 			return gen.generatePercentageData();
 		}else{
 			throw new RuntimeException();

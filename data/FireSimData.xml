@@ -3,6 +3,7 @@
   <author>Stone</author>
   <dimension>20</dimension>
   <cells>
+    <cellDataType>location</cellDataType>
     <cell>12 4 tree</cell>
     <cell>11 5 burn</cell>
     <cell>18 8 tree</cell>
