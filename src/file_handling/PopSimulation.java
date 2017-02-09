@@ -28,14 +28,8 @@ public class PopSimulation extends SimulationType {
 
 	public PopSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
-	}
-
-	@Override
-	protected List<String> combineDataTypes() {
-		List<String> data = new ArrayList<String>();
-		data.addAll(getUniversalTypes());
-		data.addAll(SETTING_TYPES);
-		return data;
+		this.settingTypes = SETTING_TYPES;
+		this.dataTypes = combineDataTypes();
 	}
 
 	@Override
