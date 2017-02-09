@@ -9,6 +9,7 @@ import file_handling.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -48,7 +49,9 @@ public class GUIMain{
     private Timeline _animation;
     private Scene _scene; 
     private Pane _root;
-    private Grid _grid;
+    //private Grid _grid;
+    private UIGridController _gridController;
+    private Pane _gridContainer;
     private Label _generationLabel;
     private Label _societyTitleLabel;
     private Slider _speedSlider;
@@ -90,10 +93,15 @@ public class GUIMain{
     }
     
     private void setupGrid(){
-    	_grid = new Grid(_model.getSize(), GRID_WIDTH, _model.getCurrentColors());
-    	_grid.setLayoutX(20);
-    	_grid.setLayoutY(60);
-    	_root.getChildren().add(_grid);
+    	Frame frame = new Frame(0,0,GRID_WIDTH,GRID_WIDTH);
+    	_gridContainer = new Pane(); //controller will add its views to this view
+    	_gridContainer.setLayoutX(20);
+    	_gridContainer.setLayoutY(60);
+    	_gridContainer.setPrefWidth(GRID_WIDTH);
+    	_gridContainer.setPrefHeight(GRID_WIDTH);
+    	_root.getChildren().add(_gridContainer);
+    	_gridController = new UIGridController(_gridContainer,frame);
+    	//_gridController.setupGridWithShape(CellShape.HEXAGON);
     }
     /**
      * sets up frame and timeline
@@ -131,7 +139,7 @@ public class GUIMain{
     	setupTopMenu();
     	setupButtons();
     	double sliderWidth = SCREEN_WIDTH - GRID_WIDTH - 60;
-    	setupSpeedSlider(sliderWidth, GRID_WIDTH + 30, _grid.getLayoutY() + 30);
+    	setupSpeedSlider(sliderWidth, GRID_WIDTH + 30, _gridContainer.getLayoutY() + 30);
     	setupSizeSlider(sliderWidth, GRID_WIDTH + 30, _speedSlider.getLayoutY() + 80);
     }
     
@@ -357,10 +365,8 @@ public class GUIMain{
     private void resetGUIComponents(){
     	resetGrid();
     	updateGenerationLabel();
-    	//_grid.updateTileColors(_model.getCurrentColors());
     }
     private void setFileToNull(){
-    	//TODO:
 		_currentSimulationType = null; //TODO: do this more elegantly
 		_fileButton.setText("New File");
     }
@@ -371,8 +377,10 @@ public class GUIMain{
     	//TODO:
     }
     private void resetGrid(){
-    	_root.getChildren().remove(_grid);
-    	setupGrid();
+    	//TODO
+//    	_root.getChildren().remove(_grid);
+//    	setupGrid();
+    	System.out.println("TODO resetGrid");
     }
     private void changeAnimationSpeed(Number newValue){
     		pauseAnimation();
@@ -381,15 +389,16 @@ public class GUIMain{
     }
     
     private void updateGenerationLabel(){
-    	_generationLabel.textProperty().set( "Generation " + ((Integer) _grid.getCurrentGeneration()).toString());
+    	_generationLabel.textProperty().set( "Generation " + ((Integer) _gridController.getCurrentGeneration()).toString());
     }
 
     /**
      * updates grid using model (CellSociety object) to retrieve 2d-array of colors
      */
 	private void step(){
-		_grid.updateTileColors(_model.step());
-		updateGenerationLabel();
+		//TODO:
+//		_grid.updateTileColors(_model.step());
+//		updateGenerationLabel();
 	}
 
 }
