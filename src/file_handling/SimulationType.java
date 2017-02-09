@@ -3,7 +3,7 @@
  * return the data behind any Simulation. The abstract class holds the title,
  * artist, dimension, and ArrayList of initial cells. The subclasses are in charge
  * of defining which initial settings need to be stored and how to interpret the
- * Strings of initial cell data. This is a Read-Only data structure.
+ * Strings of initial cell data.
  * 
  * @author Stone Mathers
  */
@@ -74,10 +74,14 @@ public abstract class SimulationType {
 	
 	/**
 	 * Uses List of cell data in String format to create an ArrayList of Cells.
+	 * There must be a valid tag at the beginning of the list for the correct
+	 * filling method to be chosen.
 	 * 
 	 * @return
 	 */
-	public abstract List<Cell> getCells();	
+	public abstract List<Cell> getCells();
+	
+	
 	
 	/**
 	 * @return List of raw Cell data from file.
