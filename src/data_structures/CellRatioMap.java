@@ -9,12 +9,12 @@ public class CellRatioMap {
 	private Map<CellName, CellRatio> ratios;
 	public CellRatioMap(Map<CellName, CellRatio> ratios){
 		//TODO error checking
-		//check if ratios add up to one
+		//check if ratios add up to 1.0
 		double sum = 0;
 		for(Entry<CellName, CellRatio> entry: ratios.entrySet()){
 			sum += entry.getValue().getRatio();
 		}
-		if(sum < 0.99999 || sum > 1.00001){//
+		if(sum < 0.999999 || sum > 1.000001){//margin of error for double addition
 			//TODO throw error, invalid ratios
 		}
 		this.ratios = ratios;
