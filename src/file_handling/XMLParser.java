@@ -18,7 +18,6 @@ import org.w3c.dom.NodeList;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +32,8 @@ public class XMLParser {
 	public static final String SIMULATION_ATTRIBUTE = "simulation";
 	public static final String CELLS = "cells";
 	public static final String CELL = "cell";
-	private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();	
+	public static final String CELL_DATA_TYPE = "cellDataType";
+	public static final String[] POSSIBLE_CELL_DATA = { "location", "number", "probability", "percentage"};
 	private static final String[] POSSIBLE_SIM_STRINGS = {"game of life", "population", "fire", "water"};
 	private static final SimulationType[] POSSIBLE_SIM_TYPES = {
 			new LifeSimulation(null, null),
@@ -41,6 +41,7 @@ public class XMLParser {
 			new FireSimulation(null, null),
 			new WaterSimulation(null, null)
 	};
+	private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();	
 	
 	private HashMap<String, SimulationType> mySimulationMap = new HashMap<String, SimulationType>();
 	
@@ -68,12 +69,11 @@ public class XMLParser {
 			SimulationType tempSim = readSimulationType(root);
 		 
 			for(String field: tempSim.getDataTypes()){
-				if(field.equals(CELLS)){
-					fillCellData(root, cells);
-				} else {
+				if(!field.equals(CELLS)){
 					data.put(field, getTextValue(root, field).get(0));
 				}
 			}
+			fillCellData(root, cells, tempSim.getDimension());
 		  
 			return createSimulation(tempSim, data, cells);
 		} else {
@@ -92,7 +92,7 @@ public class XMLParser {
 	 * @return SimulationType
 	 */
 	@SuppressWarnings({"rawtypes"})  //Now Class[] parameters does not need to be parameterized
-	private SimulationType createSimulation(SimulationType sim, Map<String, String> map, List<String> list) { //TODO: Refactor
+	private SimulationType createSimulation(SimulationType sim, Map<String, String> map, List<String> list) {
 		try{
 			Class<? extends SimulationType> simClass = sim.getClass();
 			Class[] parameters = new Class[2];
@@ -190,14 +190,41 @@ public class XMLParser {
 	}
 	
 	/**
-	 * Fills a List with the initial cell states given in the XML file 
+	 * Determines how the Strings of Cell data should be used to
+	 * generate data usable by a SimulationType.
 	 * 
-	 * @param list
+	 * @param e
+	 * @param gen
+	 * @param dimension of grid to be filled by Cells
 	 */
-	private void fillCellData(Element e, List<String> list) {
+	private List<String> decodeData(Element e, CellDataGenerator gen, int dimension) { //TODO: Must make sure exactly one of these tags are present
+		if(getTextValue(e, CELL_DATA_TYPE).equals(POSSIBLE_CELL_DATA[0])){
+			return gen.generateLocationData();
+		}else if(getTextValue(e, CELL_DATA_TYPE).equals(POSSIBLE_CELL_DATA[1])){
+			return gen.generateNumberData();
+		}else if(getTextValue(e, CELL_DATA_TYPE).equals(POSSIBLE_CELL_DATA[2])){
+			return gen.generateProbabilityData();
+		}else if(getTextValue(e, CELL_DATA_TYPE).equals(POSSIBLE_CELL_DATA[3])){
+			return gen.generatePercentageData();
+		}else{
+			throw new RuntimeException();
+		}
+	}
+	
+	/**
+	 * Fills a List with the initial cell states given in the XML file.
+	 * 
+	 * @param e
+	 * @param list
+	 * @param dimension of grid to be filled by Cells
+	 */
+	private void fillCellData(Element e, List<String> list, int dimension) {
 		List<String> values = getTextValue(e, CELL);
 		for(String text: values){
 			list.add(text);
 		}
+		
+		CellDataGenerator gen = new CellDataGenerator(list, dimension);
+		list = decodeData(e, gen, dimension);
 	}
 }
