@@ -82,7 +82,7 @@ public class WaterSimulation extends SimulationType {
 	
 	@Override
 	public void initializeCellTypes(){
-		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
 		cellTypes.add(FishCell.class);
 		cellTypes.add(SharkCell.class);
 		cellTypes.add(EmptyCell.class);
@@ -91,7 +91,7 @@ public class WaterSimulation extends SimulationType {
 	
 	@Override
 	public void initializeDefaultCells(){
-		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
 		cellTypes.add(EmptyCell.class);
 		setDefaultCellTypes(cellTypes);
 	}

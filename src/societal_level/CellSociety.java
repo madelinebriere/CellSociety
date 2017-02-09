@@ -27,8 +27,8 @@ public class CellSociety {
 	private static final Color DEFAULT_COLOR = Color.WHITE;
 
 	private Collection<Cell> currentCells;
-	private List <Class> cellTypes;
-	private List<Class> defaultCellTypes;
+	private List <Class<? extends Cell>> cellTypes;
+	private List<Class<? extends Cell>> defaultCellTypes;
 	private int size;
 	private Color emptyColor;
 	
@@ -36,8 +36,8 @@ public class CellSociety {
 	public CellSociety() {
 		currentCells = new ArrayList<Cell>();
 		setCurrentCells(makeCells(10));
-		cellTypes = new ArrayList<Class>();
-		defaultCellTypes = new ArrayList<Class>();
+		cellTypes = new ArrayList<Class<? extends Cell>>();
+		defaultCellTypes = new ArrayList<Class<? extends Cell>>();
 		size=10;
 		emptyColor=Color.WHITE;
 	}
@@ -154,7 +154,7 @@ public class CellSociety {
 		for (int i = 0; i < newSize; i++) {
 			for (int j = 0; j < newSize; j++) {
 				if (i >= oldSize || j >= oldSize){
-					ArrayList<Class> defa = (new ArrayList<Class>(getDefaultCellTypes()));
+					ArrayList<Class<? extends Cell>> defa = (new ArrayList<Class<? extends Cell>>(getDefaultCellTypes()));
 					Cell newCell;
 					try{
 						newCell = (Cell) defa.get(0).newInstance();
@@ -594,19 +594,19 @@ public class CellSociety {
 	}
 	
 
-	public List<Class> getCellTypes() {
+	public List<Class<? extends Cell>> getCellTypes() {
 		return cellTypes;
 	}
 
-	public void setCellTypes(List<Class> cellTypes) {
+	public void setCellTypes(List<Class<? extends Cell>> cellTypes) {
 		this.cellTypes = cellTypes;
 	}
 
-	public List<Class> getDefaultCellTypes() {
+	public List<Class<? extends Cell>> getDefaultCellTypes() {
 		return defaultCellTypes;
 	}
 
-	public void setDefaultCellTypes(List<Class> defaultCellTypes) {
+	public void setDefaultCellTypes(List<Class<? extends Cell>> defaultCellTypes) {
 		this.defaultCellTypes = defaultCellTypes;
 	}
 

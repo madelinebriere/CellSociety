@@ -67,7 +67,7 @@ public class FireSimulation extends SimulationType {
 	
 	@Override
 	public void initializeCellTypes(){
-		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
 		cellTypes.add(TreeCell.class);
 		cellTypes.add(BurnCell.class);
 		cellTypes.add(EmptyCell.class);
@@ -77,7 +77,7 @@ public class FireSimulation extends SimulationType {
 
 	@Override
 	public void initializeDefaultCells(){
-		ArrayList<Class>cellTypes = new ArrayList<Class>();
+		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
 		cellTypes.add(TreeCell.class);
 		setDefaultCellTypes(cellTypes);
 	}
