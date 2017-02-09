@@ -3,6 +3,7 @@
   <author>Stone</author>
   <dimension>15</dimension>
   <cells>
+    <cellDataType>location</cellDataType>
     		<cell>0 0 Empty</cell>
 		<cell>0 1 Fish</cell>
 		<cell>0 2 Empty</cell>
