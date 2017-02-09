@@ -5,6 +5,7 @@ package GUI;
 import java.util.HashMap;
 import java.util.Random;
 
+import data_structures.CellShape;
 import data_structures.Dimensions;
 import file_handling.*;
 import javafx.animation.KeyFrame;
@@ -97,8 +98,7 @@ public class GUIMain{
     	_gridContainer.setPrefWidth(GRID_WIDTH);
     	_gridContainer.setPrefHeight(GRID_WIDTH);
     	_root.getChildren().add(_gridContainer);
-    	_gridController = new UIGridController(_gridContainer,frame, _model.getCurrentColors());
-    	//_gridController.setupGridWithShape(CellShape.HEXAGON);
+    	_gridController = new UIGridController(_gridContainer,frame, _model.getCurrentColors(), CellShape.SQUARE);
     }
     /**
      * sets up frame and timeline
@@ -240,7 +240,7 @@ public class GUIMain{
     	hbox1.setPrefHeight(SCREEN_HEIGHT - GRID_WIDTH - 40);
     	_root.getChildren().add(hbox1);
     }
-    
+   
     private Button plainButton(String text){
     	Button button = new Button(text);
     	button.setPrefSize(80, 40);
@@ -392,7 +392,8 @@ public class GUIMain{
     }
 
     /**
-     * updates grid using model (CellSociety object) to retrieve 2d-array of colors
+     * updates grid using model (CellSociety object) to retrieve 2d-array of colors and current grid dimensions
+     * the the new dimensions will be used to dynamically change the grid size
      */
 	private void step(){
 		//TODO:
