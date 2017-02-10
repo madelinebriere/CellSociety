@@ -1,9 +1,7 @@
 package cellular_level;
-
-import data_structures.CellData;
 import javafx.scene.paint.Color;
+import data_structures.CellData;
 import util.Location;
-
 /**
  * Add wrapped,
  * delete duplicate code

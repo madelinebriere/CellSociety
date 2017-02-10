@@ -1,4 +1,5 @@
 /**
+ /**
  * Class representing live cells in the Game of Life Simulation
  * Capable of active updates based on surroundings
  * --> Checks for overpopulation
@@ -6,15 +7,11 @@
  * 
  * @author maddiebriere
  */
-
 package cellular_level;
-
 import javafx.scene.paint.Color;
-
+import data_structures.CellData;
 import java.util.ArrayList;
 import java.util.List;
-
-import data_structures.CellData;
 
 public class LiveCell extends LifeSimCell {
 	private static int underpopulation = 2;
@@ -29,7 +26,6 @@ public class LiveCell extends LifeSimCell {
 	public LiveCell(int row, int col){
 		super(row,col, liveColor);
 	}
-
 	protected void changeState(CellData data, ArrayList<Cell> newGen){
 		int numLive = data.countSameNeighbors(this);
 		if(isOverpopulated(numLive)||isUnderpopulated(numLive)){
@@ -58,32 +54,25 @@ public class LiveCell extends LifeSimCell {
 	private boolean isUnderpopulated(int numLive){
 		return numLive<underpopulation;
 	}
-
 	public static int getUnderpopulation() {
 		return underpopulation;
 	}
-
 	public static void setUnderpopulation(int underpopulation) {
 		LiveCell.underpopulation = underpopulation;
 	}
-
 	public static int getOverpopulation() {
 		return overpopulation;
 	}
-
 	public static void setOverpopulation(int overpopulation) {
 		LiveCell.overpopulation = overpopulation;
 	}
-
 	public static Color getLiveColor() {
 		return liveColor;
 	}
-
 	public static void setLiveColor(Color liveColor) {
 		LiveCell.liveColor = liveColor;
 	}
 	
 	
 	
-
 }

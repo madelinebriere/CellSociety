@@ -4,26 +4,25 @@
  * 
  * @author maddiebriere
  */
-
 package cellular_level;
-
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
-
+import java.util.List;
 import data_structures.CellData;
+import util.Location;
 
 public class DeadCell extends LifeSimCell {
-	private int numForLive;
+	private static int numForLive = 3;
+	private static Color deadColor = Color.WHITE;
 	
 	public DeadCell(){
-		this(0,0);
+		super();
+		setMyState(deadColor);
 	}
 	
 	public DeadCell(int row, int col){
-		super(row,col, Color.WHITE);
-		setNumForLive(3);
+		super(row,col, deadColor);
 	}
-
 	protected void changeState(CellData data, ArrayList<Cell> newGen){
 		int numLive = data.countDiffNeighbors(this);
 		if(isReadyToLive(numLive)){
@@ -47,13 +46,19 @@ public class DeadCell extends LifeSimCell {
 	private boolean isReadyToLive(int numLive){
 		return numLive == numForLive;
 	}
-
-	public int getNumForLive() {
+	public static int getNumForLive() {
 		return numForLive;
 	}
-
-	public void setNumForLive(int numForLive) {
-		this.numForLive = numForLive;
+	public static void setNumForLive(int numForLive) {
+		DeadCell.numForLive = numForLive;
 	}
-
+	public static Color getDeadColor() {
+		return deadColor;
+	}
+	public static void setDeadColor(Color deadColor) {
+		DeadCell.deadColor = deadColor;
+	}
+	
+	
+	
 }
