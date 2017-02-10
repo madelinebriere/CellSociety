@@ -25,7 +25,16 @@ public class TriangleGridView extends GridView{
 	@Override
 	protected void setupGrid(Color[][] colors) {
 		// TODO Auto-generated method stub
-		
+		for(int i=0; i<this._dimensions.getX(); i++){
+			for(int j =0; j<_dimensions.getY(); j++){
+				Polygon p;
+				if(i%2==0){
+					p = bottomTriangle(starting_x + i*unit, starting_y + j*unit);
+				}else{
+					p = topTriangle(starting_x + i*unit, starting_y + j*unit);
+				}
+			}
+		}
 	}
 	
 	private Polygon bottomTriangle(double x, double y){
