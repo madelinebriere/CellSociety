@@ -63,7 +63,7 @@ public class XMLParser {
 	 * @return SimulationType holding dataFile's data.
 	 */
 	public SimulationType getSimulation(File dataFile){
-		if(!dataFile.equals(null)){
+		try{
 			Element root = getRootElement(dataFile);		 
 			HashMap<String, String> data = new HashMap<String, String>();
 			ArrayList<String> cells = new ArrayList<String>();
@@ -77,8 +77,8 @@ public class XMLParser {
 			fillCellData(root, cells, Integer.parseInt(data.get(DIMENSION)));
 		  
 			return createSimulation(tempSim, data, cells);
-		} else {
-			throw new RuntimeException();
+		}catch(IllegalArgumentException e){
+			throw new XMLException(e, "No file was selected");
 		}
 		 
 	}
@@ -105,7 +105,7 @@ public class XMLParser {
 			argList[1] = list;
 			return (SimulationType)ct.newInstance(argList);
 			} catch (Throwable e){
-				throw new RuntimeException(e);
+				throw new XMLException(e);
 			}
 	}
 
@@ -122,7 +122,7 @@ public class XMLParser {
             return xmlDocument.getDocumentElement();
         }
         catch (SAXException | IOException e) {
-            throw new RuntimeException(e);
+            throw new XMLException(e);
         }
     }
 	
@@ -136,7 +136,7 @@ public class XMLParser {
             return DocumentBuilderFactory.newInstance().newDocumentBuilder();
         }
         catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
+            throw new XMLException(e);
         }
 	}
 	
@@ -151,16 +151,20 @@ public class XMLParser {
         ArrayList<String> values = new ArrayList<String>();
     	NodeList nodeList = e.getElementsByTagName(tagName);
     	
-        if (nodeList != null && nodeList.getLength() > 0) {
+        if (nodeList != null && nodeList.getLength() > 0){
         	for(int i = 0; i < nodeList.getLength(); i++){
             	values.add(nodeList.item(i).getTextContent());
             }
         }
         else {
-            throw new RuntimeException();
+            throw new XMLException(String.format("The tag '%s' is missing from the file", tagName));
         }
         
-        return values;
+        if(values.size() > 1 && !tagName.equals(CELL)){
+        	throw new XMLException(String.format("There is more than one '%s' tag", tagName));
+        }else{ 
+        	return values;
+        }
     }
 	
 	/**
@@ -172,7 +176,11 @@ public class XMLParser {
 	 */
 	private SimulationType readSimulationType(Element root){
 		String type = root.getAttribute(SIMULATION_ATTRIBUTE);
-		return mySimulationMap.get(type);
+		if(mySimulationMap.containsKey(type)){
+			return mySimulationMap.get(type);
+		}else{
+			throw new XMLException("File does not contain a valid simulation");
+		}
 		
 	}
 	
@@ -186,7 +194,7 @@ public class XMLParser {
 				mySimulationMap.put(POSSIBLE_SIM_STRINGS[i], POSSIBLE_SIM_TYPES[i]);
 			}
 		} else {
-			throw new RuntimeException();
+			throw new XMLException("Simulation types added incorrectly");
 		}
 	}
 	
@@ -198,7 +206,7 @@ public class XMLParser {
 	 * @param gen
 	 * @param dimension of grid to be filled by Cells
 	 */
-	private List<String> decodeData(Element e, CellDataGenerator gen, int dimension) { //TODO: Must make sure exactly one of these tags are present
+	private List<String> decodeData(Element e, CellDataGenerator gen) { //TODO: Must make sure exactly one of these tags are present
 		String cellType = getTextValue(e, CELL_DATA_TYPE).get(0);
 		if(cellType.equals(POSSIBLE_CELL_DATA[0])){
 			return gen.generateLocationData();
@@ -209,7 +217,7 @@ public class XMLParser {
 		}else if(cellType.equals(POSSIBLE_CELL_DATA[3])){
 			return gen.generatePercentageData();
 		}else{
-			throw new RuntimeException();
+			throw new XMLException("No valid cell data type was given");
 		}
 	}
 	
@@ -227,7 +235,8 @@ public class XMLParser {
 		}
 		
 		CellDataGenerator gen = new CellDataGenerator(list, dimension);
-		List<String> newData = decodeData(e, gen, dimension);
+		List<String> newData = decodeData(e, gen);
+		
 		list.clear();
 		list.addAll(newData);
 	}
