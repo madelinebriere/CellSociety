@@ -49,36 +49,5 @@ public class CellGenerator {
 		else
 			return new EmptyCell();
 	}
-	
-	public static Cell newCell(String s){
-		if(s.equals("FISH")){
-			return new FishCell();
-		}
-		if(s.equals("SHARK")){
-			return new SharkCell();
-		}
-		if(s.equals("BURN")){
-			return new BurnCell();
-		}
-		if(s.equals("TREE")){
-			return new TreeCell();
-		}
-		if(s.equals("LIVE")){
-			return new LiveCell();
-		}
-		if(s.equals("DEAD")){
-			return new DeadCell();
-		}
-		if(s.equals("BLUE")){
-			return new HouseCell(BLUE);
-		}
-		if(s.equals("RED")){
-			return new HouseCell(RED);
-		}
-		if(s.equals("GREEN")){
-			return new HouseCell(GREEN);
-		}
-		else
-			return new EmptyCell();
-	}
+
 }
