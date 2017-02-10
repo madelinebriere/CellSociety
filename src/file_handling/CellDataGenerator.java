@@ -10,7 +10,6 @@
 package file_handling;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,9 @@ public class CellDataGenerator {
 	 * @return
 	 */
 	public List<String> generateLocationData(){
-		return cellData;
+		List<String> data = new ArrayList<String>();
+		data.addAll(cellData);
+		return data;
 	}
 	
 	/**
@@ -76,7 +77,7 @@ public class CellDataGenerator {
 			String[] splitData = data.split(" ");
 			totalCells += Integer.parseInt(splitData[0]);
 			if(totalCells > dimension*dimension){ //Ensures the user didn't ask for more cells than possible, which would create an infinite loop
-				throw new RuntimeException();
+				throw new XMLException("Too many cells requested");
 			}
 			for(int i = 0; i < Integer.parseInt(splitData[0]); i++){  //A new Cell is added until the desired number is reached
 				placeCellRandomly(splitData[1], result, filled);
@@ -105,7 +106,7 @@ public class CellDataGenerator {
 		}
 		
 		if(probTotal > 1){  //Ensures that the given probabilities are valid (Do not add up to more than 1)
-			throw new RuntimeException();
+			throw new XMLException("Cell probabilities add up to more than 1");
 		}else{
 			String[] cellNames = createNamesArray(probMap);
 			placeCellsWithProbability(result, cellNames);			

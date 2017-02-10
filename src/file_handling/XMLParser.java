@@ -206,7 +206,7 @@ public class XMLParser {
 	 * @param gen
 	 * @param dimension of grid to be filled by Cells
 	 */
-	private List<String> decodeData(Element e, CellDataGenerator gen) { //TODO: Must make sure exactly one of these tags are present
+	private List<String> decodeData(Element e, CellDataGenerator gen) {
 		String cellType = getTextValue(e, CELL_DATA_TYPE).get(0);
 		if(cellType.equals(POSSIBLE_CELL_DATA[0])){
 			return gen.generateLocationData();

@@ -34,16 +34,20 @@ public class LifeSimulation extends SimulationType {
 	@Override
 	public List<Cell> getCells() {
 		ArrayList<Cell> cells = new ArrayList<Cell>();
-		for(String data: this.getCellData()){
-			String[] vars = data.split(" ");
-			if(vars[NAME_INDEX].toUpperCase().equals("LIVE")){
-				cells.add(new LiveCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
+		try{
+			for(String data: this.getCellData()){
+				String[] vars = data.split(" ");
+				if(vars[NAME_INDEX].toUpperCase().equals("LIVE")){
+					cells.add(new LiveCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
+				}
+				else if(vars[NAME_INDEX].toUpperCase().equals("DEAD")){
+					cells.add(new DeadCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
+				}
 			}
-			else if(vars[NAME_INDEX].toUpperCase().equals("DEAD")){
-				cells.add(new DeadCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
-			}
-		}
 		return cells;
+		}catch(Exception e){
+			throw new XMLException(e, "Cell data improperly formatted");
+		}
 	}
 
 	@Override
