@@ -14,7 +14,7 @@ import java.util.Collection;
 import util.CellData;
 import util.Location;
 
-public class DeadCell extends Cell {
+public class DeadCell extends LifeSimCell {
 	private static int numForLive = 3;
 	private static Color deadColor = Color.WHITE;
 	
@@ -26,28 +26,8 @@ public class DeadCell extends Cell {
 	public DeadCell(int row, int col){
 		super(row,col, deadColor);
 	}
-	
-	@Override
-	public Cell createCopy(){
-		DeadCell copy = new DeadCell();
-		copy.basicCopy(this);
-		return copy;
-	}
-	
-	/**
-	 *@param data CellData object holding accessible information for Cell
-	 * @return ArrayList of Cells for the next generation. Will contain either the current
-	 * dead cell or a new live cell in the same location. Never empty.
-	 */
-	@Override
-	public Collection<Cell> update(CellData data) {
-		ArrayList<Cell> newGen = new ArrayList<Cell>();
-		changeState(data, newGen);
-		return newGen;
-		
-	}
-	
-	private void changeState(CellData data, ArrayList<Cell> newGen){
+
+	protected void changeState(CellData data, ArrayList<Cell> newGen){
 		int numLive = data.countDiffNeighbors(this);
 		if(isReadyToLive(numLive)){
 			generateLiveCell(newGen);

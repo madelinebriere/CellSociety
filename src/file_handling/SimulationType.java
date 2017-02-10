@@ -3,7 +3,7 @@
  * return the data behind any Simulation. The abstract class holds the title,
  * artist, dimension, and ArrayList of initial cells. The subclasses are in charge
  * of defining which initial settings need to be stored and how to interpret the
- * Strings of initial cell data. This is a Read-Only data structure.
+ * Strings of initial cell data.
  * 
  * @author Stone Mathers
  */
@@ -27,38 +27,20 @@ public abstract class SimulationType {
 	        "dimension",
 	        "cells"
 	    });
+	protected static final int NAME_INDEX = 2;
 	
 	private List<String> cellData;																
-	private List<String> dataTypes = combineDataTypes();
+	protected List<String> dataTypes;
+	protected List<String> settingTypes = Arrays.asList(new String[] {""});
 	private Map<String, String> myDataValues;
-	private Color emptyColor;
-	private List<Class<? extends Cell>> cellTypes;
-	private List<Class<? extends Cell>> defaultCellTypes;
 
 	
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
+		dataTypes = combineDataTypes();
 	}
 	
-	/**
-	 *	Called by CellSociety when it wants to initialize its own variables according 
-	 *	to simulation type
-	 */
-	public void initializeSociety(CellSociety c){
-		initializeSocietyVariables();
-		initializeCellTypes();
-		initializeDefaultCells();
-		c.setCurrentCells(getCells());
-		c.setSize(getDimension());
-		c.setEmptyColor(getEmptyColor());
-		c.setCellTypes(cellTypes);
-		c.setDefaultCellTypes(defaultCellTypes);
-	}
-	
-	public abstract void initializeSocietyVariables();
-	public abstract void initializeCellTypes();
-	public abstract void initializeDefaultCells();
 	
 	public String getTitle(){
 		return myDataValues.get(UNIVERSAL_DATA_TYPES.get(0));
@@ -74,10 +56,14 @@ public abstract class SimulationType {
 	
 	/**
 	 * Uses List of cell data in String format to create an ArrayList of Cells.
+	 * There must be a valid tag at the beginning of the list for the correct
+	 * filling method to be chosen.
 	 * 
 	 * @return
 	 */
-	public abstract List<Cell> getCells();	
+	public abstract List<Cell> getCells();
+	
+	
 	
 	/**
 	 * @return List of raw Cell data from file.
@@ -114,31 +100,13 @@ public abstract class SimulationType {
 	 * 
 	 * @return List of all attributes that an XMLParser will look for.
 	 */
-	protected abstract List<String> combineDataTypes();
-
-	public Color getEmptyColor() {
-		return emptyColor;
+	protected List<String> combineDataTypes(){
+		List<String> data = new ArrayList<String>();
+		data.addAll(getUniversalTypes());
+		data.addAll(settingTypes);
+		return data;
 	}
 
-	public void setEmptyColor(Color emptyColor) {
-		this.emptyColor = emptyColor;
-	}
-
-	public List<Class<? extends Cell>> getCellTypes() {
-		return cellTypes;
-	}
-
-	public void setCellTypes(List<Class<? extends Cell>> cellTypes) {
-		this.cellTypes = cellTypes;
-	}
-
-	public List<Class<? extends Cell>> getDefaultCellTypes() {
-		return defaultCellTypes;
-	}
-
-	public void setDefaultCellTypes(List<Class<? extends Cell>> defaultCellTypes) {
-		this.defaultCellTypes = defaultCellTypes;
-	} 
 	
 	
 	

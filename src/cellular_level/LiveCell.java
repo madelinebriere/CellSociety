@@ -15,7 +15,7 @@ import util.CellData;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class LiveCell extends Cell {
+public class LiveCell extends LifeSimCell {
 	private static int underpopulation = 2;
 	private static int overpopulation = 3;
 	private static Color liveColor = Color.BLACK;
@@ -28,28 +28,8 @@ public class LiveCell extends Cell {
 	public LiveCell(int row, int col){
 		super(row,col, liveColor);
 	}
-	
-	@Override
-	public Cell createCopy(){
-		LiveCell copy = new LiveCell();
-		copy.basicCopy(this);
-		return copy;
-	}
-	
-	/**
-	 *@param data CellData object holding accessible information for Cell
-	 * @return ArrayList of Cells for the next generation. Will contain either the current
-	 * live cell or a new dead cell in the same location. Never empty.
-	 */
-	@Override
-	public Collection<Cell> update(CellData data) {
-		ArrayList<Cell> newGen = new ArrayList<Cell>();
-		changeState(data, newGen);
-		return newGen;
-		
-	}
-	
-	private void changeState(CellData data, ArrayList<Cell> newGen){
+
+	protected void changeState(CellData data, ArrayList<Cell> newGen){
 		int numLive = data.countSameNeighbors(this);
 		if(isOverpopulated(numLive)||isUnderpopulated(numLive)){
 			generateDeadCell(newGen);

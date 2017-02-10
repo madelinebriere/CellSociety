@@ -3,6 +3,7 @@
   <author>Stone</author>
   <dimension>15</dimension>
   <cells>
+    <cellDataType>location</cellDataType>
     <cell>12 4 red</cell>
     <cell>11 5 red</cell>
     <cell>5 14 blue</cell>

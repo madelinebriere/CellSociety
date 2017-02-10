@@ -20,8 +20,11 @@ public abstract class Cell implements Comparable{
 	private Color myState;
 	
 	public Cell(){
-		myLocation = new Location(0,0);
-		myState = Color.WHITE;
+		this(0, 0, Color.WHITE);
+	}
+
+	public Cell(Color c){
+		this(0, 0, c);
 	}
 	
 	public Cell(int row, int col, Color state){
