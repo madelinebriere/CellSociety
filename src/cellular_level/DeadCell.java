@@ -9,7 +9,7 @@ package cellular_level;
 
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import util.CellData;
 import util.Location;

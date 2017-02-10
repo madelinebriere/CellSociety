@@ -2,7 +2,7 @@ package societal_level;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Collection;
+import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -43,7 +43,7 @@ public class CellSociety {
 	
 	private CellShape myShape;
 	private Dimensions mySize;
-	private Collection<Cell> currentCells;
+	private List<Cell> currentCells;
 	private Color emptyColor;
 	
 	/**
@@ -131,7 +131,7 @@ public class CellSociety {
 	}
 
 	
-	public Collection<Cell> makeCells(CellRatioMap r){
+	public List<Cell> makeCells(CellRatioMap r){
 		ArrayList<Cell> newCells = new ArrayList<Cell>();
 		for(CellName n: r.getMapOfCellsRatios().keySet()){
 			Cell newCell = CellGenerator.newCell(n);
@@ -143,18 +143,18 @@ public class CellSociety {
 	/**
 	 * EmptyCells getter
 	 * 
-	 * @return Collection of all emptyCells in the currentCells
+	 * @return List of all emptyCells in the currentCells
 	 */
-	protected Collection<EmptyCell> getAllEmptyCells() {
+	protected List<EmptyCell> getAllEmptyCells() {
 		return getEmptyCells(getCurrentCells());
 	}
 
 	/**
 	 * TARGETED EmptyCells getter
 	 * 
-	 * @return Collection of all emptyCells in the given Collection
+	 * @return List of all emptyCells in the given List
 	 */
-	public Collection<EmptyCell> getEmptyCells(Collection<Cell> possibleOptions) {
+	public List<EmptyCell> getEmptyCells(List<Cell> possibleOptions) {
 		ArrayList<EmptyCell> toRet = new ArrayList<EmptyCell>();
 		for (Cell c : possibleOptions) {
 			if (c instanceof EmptyCell) {
@@ -203,22 +203,22 @@ public class CellSociety {
 	 * @param c
 	 *            Cell for update
 	 * @param available
-	 *            Collection of available cells
+	 *            List of available cells
 	 * @return All updated cells from cell updates (new baby cells, moved cells,
 	 *         etc.)
 	 */
-	private Collection<Cell> updateCell(Cell c, Collection<EmptyCell> available) {
+	private List<Cell> updateCell(Cell c, List<EmptyCell> available) {
 		return c.update(new CellData(this, available));
 	}
 
 	/**
-	 * Iterate through given Collection and fill any cell-less locations in a
+	 * Iterate through given List and fill any cell-less locations in a
 	 * size x size grid with a new EmptyCell
 	 * 
 	 * @param nextGen
-	 *            The Collection of cells to be padded
+	 *            The List of cells to be padded
 	 */
-	public void fillEmptySpots(Collection<Cell> nextGen) {
+	public void fillEmptySpots(List<Cell> nextGen) {
 		int[][] filled = new int[getX()][getY()];
 		for (Cell c : nextGen) {
 			filled[c.getMyRow()][c.getMyCol()] += 1;
@@ -271,7 +271,7 @@ public class CellSociety {
 	 *            Cell whose neighbors are returned
 	 * @return neighbors of Cell c
 	 */
-	public Collection<Cell> neighbors(Cell c){
+	public List<Cell> neighbors(Cell c){
 		ArrayList<Cell> neighbors = new ArrayList<Cell>();
 		//return getNeighbors(c);
 		return neighbors;
@@ -297,11 +297,11 @@ public class CellSociety {
 		setCurrentCells(orderedCells);
 	}
 
-	public Collection<Cell> getCurrentCells() {
+	public List<Cell> getCurrentCells() {
 		return currentCells;
 	}
 
-	public void setCurrentCells(Collection<Cell> current) {
+	public void setCurrentCells(List<Cell> current) {
 		currentCells = current;
 	}
 
