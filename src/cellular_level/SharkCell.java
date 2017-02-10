@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import data_structures.CellData;
 import javafx.scene.paint.Color;
-import util.CellData;
 import util.Location;
 
 public class SharkCell extends WaterWorldCell {

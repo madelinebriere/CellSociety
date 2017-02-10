@@ -16,8 +16,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import cellular_level.Cell;
+import cellular_level.EmptyCell;
+import cellular_level.FishCell;
+import cellular_level.SharkCell;
 import javafx.scene.paint.Color;
+import sim_rules.SimRules;
 import societal_level.CellSociety;
+import util.CellGenerator;
 
 public abstract class SimulationType {
 
@@ -33,12 +38,14 @@ public abstract class SimulationType {
 	protected List<String> dataTypes;
 	protected List<String> settingTypes = Arrays.asList(new String[] {""});
 	private Map<String, String> myDataValues;
+	private SimRules simRules;
 
 	
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
 		dataTypes = combineDataTypes();
+		simRules = generateSimRules();
 	}
 	
 	
@@ -61,9 +68,22 @@ public abstract class SimulationType {
 	 * 
 	 * @return
 	 */
-	public abstract List<Cell> getCells();
+	public List<Cell> getCells(){
+		ArrayList<Cell> cells = new ArrayList<Cell>();
+		for(String data: this.getCellData()){
+			String[] vars = data.split(" ");
+			int row = Integer.parseInt(vars[0]);
+			int col = Integer.parseInt(vars[1]);
+			String name = vars[NAME_INDEX].toUpperCase();
+			Cell newCell = CellGenerator.newCell(name);
+			newCell.setMyRow(row);
+			newCell.setMyCol(col);
+			cells.add(newCell);
+		}
+		return cells;
+	}
 	
-	
+	public abstract SimRules generateSimRules();
 	
 	/**
 	 * @return List of raw Cell data from file.
@@ -107,10 +127,9 @@ public abstract class SimulationType {
 		return data;
 	}
 
-	
-	
-	
-	
-	
+
+	public SimRules getSimRules() {
+		return simRules;
+	}
 	
 }

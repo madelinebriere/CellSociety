@@ -1,4 +1,4 @@
-package societal_level;
+package util;
 
 import borders.Border;
 import data_structures.CellShape;

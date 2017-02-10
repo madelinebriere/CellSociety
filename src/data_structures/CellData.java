@@ -1,4 +1,4 @@
-package util;
+package data_structures;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import java.util.Random;
 import cellular_level.Cell;
 import cellular_level.EmptyCell;
 import societal_level.CellSociety;
+import util.Location;
 
 /**
  * This class is used to limit the amount of control given to a single Cell

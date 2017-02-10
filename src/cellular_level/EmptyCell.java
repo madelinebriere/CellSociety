@@ -3,12 +3,11 @@ package cellular_level;
 import java.util.ArrayList;
 import java.util.List;
 
+import data_structures.CellData;
 import javafx.scene.paint.Color;
-import util.CellData;
 
 public class EmptyCell extends Cell{
 	private static Color EMPTY_COLOR = Color.WHITE;
-	private static Color emptyColor;
 
 	public EmptyCell(){
 		this(0,0);
@@ -33,14 +32,6 @@ public class EmptyCell extends Cell{
 	public List<Cell> update(CellData data) {
 		ArrayList<Cell> empty = new ArrayList<Cell>();
 		return empty;
-	}
-	
-	public static Color getEmptyColor() {
-		return emptyColor;
-	}
-
-	public static void setEmptyColor(Color emptyColor) {
-		EmptyCell.emptyColor = emptyColor;
 	}
 	
 

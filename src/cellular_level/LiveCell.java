@@ -10,10 +10,11 @@
 package cellular_level;
 
 import javafx.scene.paint.Color;
-import util.CellData;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import data_structures.CellData;
 
 public class LiveCell extends LifeSimCell {
 	private static int underpopulation = 2;

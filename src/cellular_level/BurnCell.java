@@ -12,24 +12,22 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import util.CellData;
+import data_structures.CellData;
 import util.Location;
 
 public class BurnCell extends Cell {
-	private static Color burnColor = Color.RED;
-	private static int stepsToBurn = 1;
+	private int stepsToBurn;
 	private int mySteps;
 
 
 	public BurnCell(){
-		super();
-		setMyState(burnColor);
-		setMySteps(0);
+		this(0,0);
 	}
 	
 	public BurnCell(int row, int col){
-		super(row, col, burnColor);
+		super(row, col, Color.RED);
 		setMySteps(0);
+		setStepsToBurn(1);
 	}
 	
 	@Override
@@ -67,20 +65,12 @@ public class BurnCell extends Cell {
 		return mySteps>=stepsToBurn;
 	}
 
-	public static Color getBurnColor() {
-		return burnColor;
-	}
-
-	public static void setBurnColor(Color burnColor) {
-		BurnCell.burnColor = burnColor;
-	}
-
-	public static int getStepsToBurn() {
+	public int getStepsToBurn() {
 		return stepsToBurn;
 	}
 
-	public static void setStepsToBurn(int stepsToBurn) {
-		BurnCell.stepsToBurn = stepsToBurn;
+	public void setStepsToBurn(int stepsToBurn) {
+		this.stepsToBurn = stepsToBurn;
 	}
 
 	public int getMySteps() {

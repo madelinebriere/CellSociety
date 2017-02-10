@@ -13,15 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import data_structures.CellData;
 import javafx.scene.paint.Color;
-import util.CellData;
 import util.Location;
 
 public class FishCell extends WaterWorldCell {
-	private static int stepsToBreed=5;
-	private static Color fishColor = Color.GREEN;
-	
-	private Random randy = new Random();
+	private int stepsToBreed;
 	private int stepsSinceBreed;
 	private boolean isEaten; //used as an indicator in WaterSociety
 
@@ -30,7 +27,8 @@ public class FishCell extends WaterWorldCell {
 	}
 	
 	public FishCell(int row, int col){
-		super(row,col, fishColor);
+		super(row,col, Color.GREEN);
+		setStepsToBreed(3);
 		setStepsSinceBreed(0);
 		setEaten(false);
 	}

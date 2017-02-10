@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import util.CellData;
+import data_structures.CellData;
 
 public class TreeCell extends Cell {
 	private static double probCatch = .30;

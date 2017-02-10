@@ -9,22 +9,19 @@ package cellular_level;
 
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
-import java.util.List;
 
-import util.CellData;
-import util.Location;
+import data_structures.CellData;
 
 public class DeadCell extends LifeSimCell {
-	private static int numForLive = 3;
-	private static Color deadColor = Color.WHITE;
+	private int numForLive;
 	
 	public DeadCell(){
-		super();
-		setMyState(deadColor);
+		this(0,0);
 	}
 	
 	public DeadCell(int row, int col){
-		super(row,col, deadColor);
+		super(row,col, Color.WHITE);
+		setNumForLive(3);
 	}
 
 	protected void changeState(CellData data, ArrayList<Cell> newGen){
@@ -51,23 +48,12 @@ public class DeadCell extends LifeSimCell {
 		return numLive == numForLive;
 	}
 
-	public static int getNumForLive() {
+	public int getNumForLive() {
 		return numForLive;
 	}
 
-	public static void setNumForLive(int numForLive) {
-		DeadCell.numForLive = numForLive;
+	public void setNumForLive(int numForLive) {
+		this.numForLive = numForLive;
 	}
-
-	public static Color getDeadColor() {
-		return deadColor;
-	}
-
-	public static void setDeadColor(Color deadColor) {
-		DeadCell.deadColor = deadColor;
-	}
-	
-	
-	
 
 }

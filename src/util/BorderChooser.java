@@ -1,4 +1,4 @@
-package societal_level;
+package util;
 
 import borders.*;
 import data_structures.SimulationData;
