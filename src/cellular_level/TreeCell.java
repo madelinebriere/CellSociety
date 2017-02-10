@@ -11,7 +11,7 @@ package cellular_level;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import util.CellData;
@@ -46,7 +46,7 @@ public class TreeCell extends Cell {
 	 * same location (if the tree has caught fire)
 	 */
 	@Override
-	public Collection<Cell> update(CellData data) {
+	public List<Cell> update(CellData data) {
 		ArrayList <Cell> nextGen = new ArrayList<Cell>();
 		if(countBurnTrees(data)>=1 && catchFire()){
 			BurnCell child = new BurnCell();

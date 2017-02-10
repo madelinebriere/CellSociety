@@ -9,7 +9,7 @@ package cellular_level;
 
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import util.CellData;
 import util.Location;
@@ -43,7 +43,7 @@ public class HouseCell extends Cell{
 	 * same location, or the current Cell in a new location (if it was not satisfied)
 	 */
 	@Override
-	public Collection<Cell> update(CellData data) {
+	public List<Cell> update(CellData data) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		double percentSame = percentSame(data);
 		if(!isSatisfied(percentSame)){

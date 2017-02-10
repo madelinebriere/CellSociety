@@ -1,5 +1,14 @@
-package cellular_level;
+package societal_level;
 
+import cellular_level.BurnCell;
+import cellular_level.Cell;
+import cellular_level.DeadCell;
+import cellular_level.EmptyCell;
+import cellular_level.FishCell;
+import cellular_level.HouseCell;
+import cellular_level.LiveCell;
+import cellular_level.SharkCell;
+import cellular_level.TreeCell;
 import data_structures.CellName;
 import javafx.scene.paint.Color;
 

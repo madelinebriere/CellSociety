@@ -11,7 +11,7 @@ package cellular_level;
 import util.CellData;
 import util.Location;
 
-import java.util.Collection;
+import java.util.List;
 
 import javafx.scene.paint.Color;
 
@@ -50,7 +50,7 @@ public abstract class Cell implements Comparable{
 		
 	}
 	
-	public <T extends Cell>boolean locationIn(Collection<T>cells){
+	public <T extends Cell>boolean locationIn(List<T>cells){
 		for(Cell c: cells){
 			if(positionEquals(c)){
 				return true;
@@ -61,7 +61,7 @@ public abstract class Cell implements Comparable{
 	
 	public abstract Cell createCopy();
 	
-	public abstract Collection<Cell> update(CellData data);
+	public abstract List<Cell> update(CellData data);
 	
 	public void copyLocation(Cell copyFrom){
 		this.setMyCol(copyFrom.getMyCol());
