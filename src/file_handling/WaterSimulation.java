@@ -7,7 +7,6 @@
 
 package file_handling;
 
-import sim_rules.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +25,6 @@ public class WaterSimulation extends SimulationType {
 		this.dataTypes = combineDataTypes();
 	}
 
-	@Override
-	public SimRules generateSimRules() {
-		int fishbreed = getFishBreed();
-		int sharkbreed = getSharkBreed();
-		int sharkstarve = getSharkStarve();
-		return new WaterSimRules(fishbreed, sharkbreed, sharkstarve);
-	}
 
 	public Integer getFishBreed(){
 		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(0)));

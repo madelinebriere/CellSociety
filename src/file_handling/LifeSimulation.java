@@ -7,8 +7,6 @@
 
 package file_handling;
 
-import sim_rules.*;
-import sim_rules.SimRules;
 import java.util.List;
 import java.util.Map;
 
@@ -23,13 +21,7 @@ public class LifeSimulation extends SimulationType {
 	protected List<String> combineDataTypes() {
 		return this.getUniversalTypes();
 	}
-	
-	@Override
-	public SimRules generateSimRules() {
-		return new LifeSimRules();
-	}
-	
-	
+
 
 
 }

@@ -6,29 +6,27 @@
  * 
  * @author maddiebriere
  */
-
 package cellular_level;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import data_structures.CellData;
 import javafx.scene.paint.Color;
+import data_structures.CellData;
 import util.Location;
 
 public class FishCell extends WaterWorldCell {
-	private int stepsToBreed;
+	private static int stepsToBreed=5;
+	private static Color fishColor = Color.GREEN;
+	
+	private Random randy = new Random();
 	private int stepsSinceBreed;
 	private boolean isEaten; //used as an indicator in WaterSociety
-
 	public FishCell(){
 		this(0,0);
 	}
 	
 	public FishCell(int row, int col){
-		super(row,col, Color.GREEN);
-		setStepsToBreed(3);
+		super(row,col, fishColor);
 		setStepsSinceBreed(0);
 		setEaten(false);
 	}
@@ -89,15 +87,12 @@ public class FishCell extends WaterWorldCell {
 		return stepsSinceBreed>=stepsToBreed;
 	}
 	
-
 	public static int getStepsToBreed() {
 		return stepsToBreed;
 	}
-
 	public static void setStepsToBreed(int stepsToBreed) {
 		FishCell.stepsToBreed = stepsToBreed;
 	}
-
 	public void incrementStepsSinceBreed(){
 		stepsSinceBreed++;
 	}
@@ -105,27 +100,21 @@ public class FishCell extends WaterWorldCell {
 	public static Color getFishColor() {
 		return fishColor;
 	}
-
 	public static void setFishColor(Color fishColor) {
 		FishCell.fishColor = fishColor;
 	}
-
 	public int getStepsSinceBreed() {
 		return stepsSinceBreed;
 	}
-
 	public void setStepsSinceBreed(int stepsSinceBreed) {
 		this.stepsSinceBreed = stepsSinceBreed;
 	}
-
 	public boolean isEaten() {
 		return isEaten;
 	}
-
 	public void setEaten(boolean isEaten) {
 		this.isEaten = isEaten;
 	}
 	
 	
-
 }

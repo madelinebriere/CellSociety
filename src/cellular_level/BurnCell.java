@@ -4,30 +4,26 @@
  * 
  * @author maddiebriere
  */
-
 package cellular_level;
-
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import data_structures.CellData;
-import util.Location;
+import data_structures.CellName;
 
 public class BurnCell extends Cell {
-	private int stepsToBurn;
+	private static Color burnColor = Color.RED;
+	private static int stepsToBurn = 1;
 	private int mySteps;
-
-
 	public BurnCell(){
-		this(0,0);
+		super();
+		setMyState(burnColor);
+		setMySteps(0);
 	}
 	
 	public BurnCell(int row, int col){
-		super(row, col, Color.RED);
+		super(row, col, burnColor);
 		setMySteps(0);
-		setStepsToBurn(1);
 	}
 	
 	@Override
@@ -64,24 +60,33 @@ public class BurnCell extends Cell {
 	private boolean isBurnt(){
 		return mySteps>=stepsToBurn;
 	}
-
-	public int getStepsToBurn() {
+	public static Color getBurnColor() {
+		return burnColor;
+	}
+	public static void setBurnColor(Color burnColor) {
+		BurnCell.burnColor = burnColor;
+	}
+	public static int getStepsToBurn() {
 		return stepsToBurn;
 	}
-
-	public void setStepsToBurn(int stepsToBurn) {
-		this.stepsToBurn = stepsToBurn;
+	public static void setStepsToBurn(int stepsToBurn) {
+		BurnCell.stepsToBurn = stepsToBurn;
 	}
-
 	public int getMySteps() {
 		return mySteps;
 	}
-
 	public void setMySteps(int mySteps) {
 		this.mySteps = mySteps;
 	}
-
 	public void incrementSteps(){
 		mySteps++;
+	}
+
+	public static CellName getName() {
+		return name;
+	}
+
+	public static void setName(CellName name) {
+		BurnCell.name = name;
 	}
 }

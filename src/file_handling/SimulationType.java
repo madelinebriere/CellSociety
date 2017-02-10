@@ -12,13 +12,13 @@ package file_handling;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 import cellular_level.Cell;
 import data_structures.CellName;
-import sim_rules.SimRules;
 import util.CellGenerator;
 import util.Location;
 
@@ -36,14 +36,12 @@ public abstract class SimulationType {
 	protected List<String> dataTypes;
 	protected List<String> settingTypes = Arrays.asList(new String[] {""});
 	private Map<String, String> myDataValues;
-	private SimRules simRules;
 
 	
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
 		dataTypes = combineDataTypes();
-		simRules = generateSimRules();
 	}
 	
 	
@@ -66,8 +64,8 @@ public abstract class SimulationType {
 	 * 
 	 * @return
 	 */
-	public Map<CellName,List<Cell>> getCells(){
-		HashMap<CellName, List<Cell>> cells = new HashMap<CellName, List<Cell>>();
+	public TreeMap<CellName,List<Cell>> getCells(){
+		TreeMap<CellName, List<Cell>> cells = new TreeMap<CellName, List<Cell>>();
 		for(String data: this.getCellData()){
 			String[] vars = data.split(" ");
 			int row = Integer.parseInt(vars[0]);
@@ -125,7 +123,6 @@ public abstract class SimulationType {
 		return toRet;
 	}
 	
-	public abstract SimRules generateSimRules();
 	
 	/**
 	 * @return List of raw Cell data from file.
@@ -169,9 +166,4 @@ public abstract class SimulationType {
 		return data;
 	}
 
-
-	public SimRules getSimRules() {
-		return simRules;
-	}
-	
 }

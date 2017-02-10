@@ -3,6 +3,7 @@ package societal_level;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -14,7 +15,6 @@ import javafx.scene.paint.Color;
 import util.BorderChooser;
 import util.NeighborsChooser;
 import neighbors.*;
-import sim_rules.*;
 import borders.*;
 
 
@@ -45,14 +45,14 @@ import borders.*;
 public abstract class CellSociety {
 	private static final Color DEFAULT_COLOR = Color.WHITE;
 	
+	private SimulationName name;
 	private CellShape myShape;
 	private Dimensions mySize;
-	private Map<CellName, List<Cell>> currentCells;
+	private TreeMap<CellName, List<? extends Cell>> currentCells;
 	private Color emptyColor;
 	private Neighbors neighbors;
 	private Border border;
 	private CellName defaultCell;
-	private SimRules sim;
 	
 	/**
 	 * Default 
@@ -66,15 +66,12 @@ public abstract class CellSociety {
 		setSize(sim.getDimensions());
 		setBorder(BorderChooser.chooseBorder(sim));
 		setNeighbors(NeighborsChooser.chooseNeighbors(border, sim.getShape()));
-		setSim(sim.getSim());
 		makeCells(sim);
 	}
 	
 	public CellSociety(SimulationType sim) {
 		setCurrentCells(sim.getCells());
 		setSize(new Dimensions(sim.getDimension(), sim.getDimension()));
-		setSim(sim.getSimRules());
-		
 	}
 	
 	
@@ -130,7 +127,7 @@ public abstract class CellSociety {
 		applyCurrentRules();
 		sortByPriorityCurrentCells();
 		shuffleCurrentCells();
-		stepAllCells(new ArrayList<EmptyCell>(getAllEmptyCells()));
+		stepAllCells(getAllEmptyCells());
 		applyCurrentColors();
 		return getCurrentColors();
 	}
@@ -162,7 +159,12 @@ public abstract class CellSociety {
 	 * @return List of all emptyCells in the currentCells
 	 */
 	protected List<EmptyCell> getAllEmptyCells() {
-		return getEmptyCells(getCurrentCells());
+		try{
+			return (List<EmptyCell>)currentCells.get(CellName.EMPTY_CELL);
+		}
+		catch(Exception e){
+			return new ArrayList<EmptyCell>();
+		}
 	}
 
 	/**
@@ -202,14 +204,16 @@ public abstract class CellSociety {
 	 *            Available spots
 	 * @return ArrayList of updated cells
 	 */
-	private ArrayList<Cell> updateAllCells(ArrayList<EmptyCell> available) {
-		ArrayList<Cell> nextGen = new ArrayList<Cell>();
-		for (Cell c : getCurrentCells()) {
-			ArrayList<Cell> cells = new ArrayList<Cell>(updateCell(c, available));
-			removeUsedSpots(available, cells);
-			nextGen.addAll(cells);
+	private TreeMap<CellName, List<Cell>> updateAllCells(ArrayList<EmptyCell> available) {
+		TreeMap<CellName, List<Cell>> newMap = new TreeMap<CellName, List<Cell>>();
+		for (CellName name : getCurrentCells().keySet()) {
+			for(Cell cell: getCurrentCells().get(name)){
+				ArrayList<Cell> cells = new ArrayList<Cell>(updateCell(cell, available));
+				removeUsedSpots(available, cells);
+				newMap.put(name, cells);
+			}
 		}
-		return nextGen;
+		return newMap;
 	}
 
 	/**
@@ -302,7 +306,7 @@ public abstract class CellSociety {
 		CellRatioMap r = new CellRatioMap(m);
 		SocietyData s = new SocietyData(false, Color.WHITE, r, CellName.EMPTY_CELL);
 		BoardData b = new BoardData ();
-		SimulationData d = new SimulationData(SimulationName.WATER_SOCIETY, b, s, new WaterSimRules());
+		SimulationData d = new SimulationData(SimulationName.WATER_SOCIETY, b, s);
 		return d;
 	}
 
@@ -326,11 +330,11 @@ public abstract class CellSociety {
 		setCurrentCells(orderedCells);
 	}
 
-	public List<Cell> getCurrentCells() {
+	public Map<CellName,List<Cell>> getCurrentCells() {
 		return currentCells;
 	}
 
-	public void setCurrentCells(List<Cell> current) {
+	public void setCurrentCells(Map<CellName, List<Cell>> current) {
 		currentCells = current;
 	}
 
@@ -391,13 +395,14 @@ public abstract class CellSociety {
 		this.defaultCell = defaultCell;
 	}
 
-	public SimRules getSim() {
-		return sim;
+	public SimulationName getName() {
+		return name;
 	}
-
-	public void setSim(SimRules sim) {
-		this.sim = sim;
+	public void setName(SimulationName name) {
+		this.name = name;
 	}
+	
+	
 	
 	
 	

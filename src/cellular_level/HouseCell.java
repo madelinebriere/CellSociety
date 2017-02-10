@@ -4,13 +4,10 @@
  * 
  * @author maddiebriere
  */
-
 package cellular_level;
-
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
-
 import data_structures.CellData;
 import util.Location;
 
@@ -80,12 +77,10 @@ public class HouseCell extends Cell{
 	private void stayInPlace(ArrayList<Cell>nextGen){
 		nextGen.add(this);
 	}
-
 	
 	public static double getSatisfiedThreshold() {
 		return satisfiedThreshold;
 	}
-
 	public static void setSatisfiedThreshold(double satisfiedThreshold) {
 		HouseCell.satisfiedThreshold = satisfiedThreshold;
 	}

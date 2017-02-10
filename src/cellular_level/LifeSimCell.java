@@ -1,11 +1,8 @@
 package cellular_level;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import data_structures.CellData;
 import javafx.scene.paint.Color;
-
+import data_structures.CellData;
 public abstract class LifeSimCell extends Cell {
 	
 	public LifeSimCell(){
