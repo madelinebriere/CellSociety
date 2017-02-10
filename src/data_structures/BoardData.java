@@ -14,17 +14,17 @@ public class BoardData {
 	private static int DEFAULT_SIZE = 10;
 	
 	private Dimensions dimensions;
-	private Border border;
+	private BorderType border;
 	private CellShape shape;
 	
 	public BoardData(){
 		dimensions = new Dimensions(DEFAULT_SIZE,DEFAULT_SIZE);
-		border = new FiniteBorder();
+		border = BorderType.FINITE;
 		shape = CellShape.SQUARE;
 	}
 
 
-	public BoardData(Dimensions dimensions, Border border, CellShape shape) {
+	public BoardData(Dimensions dimensions, BorderType border, CellShape shape) {
 		super();
 		this.dimensions = dimensions;
 		this.border = border;
@@ -37,7 +37,7 @@ public class BoardData {
 		return dimensions;
 	}
 	
-	public Border getBorder() {
+	public BorderType getBorder() {
 		return border;
 	}
 	

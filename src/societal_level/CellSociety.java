@@ -2,7 +2,6 @@ package societal_level;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -12,7 +11,9 @@ import file_handling.*;
 import data_structures.*;
 import javafx.scene.paint.Color;
 import util.CellData;
-import util.Location;
+import neighbors.*;
+import borders.*;
+
 
 /**
  * 1) Figure out empty color situation
@@ -45,6 +46,8 @@ public class CellSociety {
 	private Dimensions mySize;
 	private List<Cell> currentCells;
 	private Color emptyColor;
+	private Neighbors neighbors;
+	private Border border;
 	
 	/**
 	 * Default 
@@ -52,6 +55,20 @@ public class CellSociety {
 	public CellSociety(){
 		this(generateDefaultData());
 	}
+	
+	public CellSociety(SimulationData sim) {
+		myShape = sim.getShape();
+		mySize = sim.getDimensions();
+		NeighborsChooser.chooseNeighbors(sim);
+		BorderChooser.chooseBorder(sim);
+		makeCells(sim);
+	}
+	
+	public CellSociety(SimulationType sim) {
+		setCurrentCells(sim.getCells());
+		setSize(new Dimensions(sim.getDimension(), sim.getDimension()));
+	}
+	
 	
 	private static SimulationData generateDefaultData(){
 		HashMap<CellName, CellRatio> m = new HashMap<CellName, CellRatio>();
@@ -64,20 +81,6 @@ public class CellSociety {
 		SimulationData d = new SimulationData(SimulationName.WATER_SOCIETY, b, s);
 		return d;
 	}
-	
-	
-	public CellSociety(SimulationData sim) {
-		myShape = sim.getShape();
-		mySize = sim.getDimensions();
-		CellRatioMap myRatio = sim.getRatios();
-		makeCells(myRatio);
-	}
-	
-	public CellSociety(SimulationType sim) {
-		setCurrentCells(sim.getCells());
-		setSize(new Dimensions(sim.getDimension(), sim.getDimension()));
-	}
-	
 
 	/**
 	 * Main method for interaction between front and back end
@@ -131,9 +134,10 @@ public class CellSociety {
 	}
 
 	
-	public List<Cell> makeCells(CellRatioMap r){
+	public List<Cell> makeCells(SimulationData sim){
+		CellRatioMap myRatio = sim.getRatios();
 		ArrayList<Cell> newCells = new ArrayList<Cell>();
-		for(CellName n: r.getMapOfCellsRatios().keySet()){
+		for(CellName n: myRatio.getMapOfCellsRatios().keySet()){
 			Cell newCell = CellGenerator.newCell(n);
 		}
 		

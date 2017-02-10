@@ -1,5 +1,5 @@
 package neighbors;
 
-public class SquareNeighbors {
+public class SquareNeighbors extends Neighbors {
 
 }
