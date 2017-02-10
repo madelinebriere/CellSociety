@@ -18,4 +18,7 @@ public class Dimensions {
 	public boolean equals(Dimensions other){
 		return (this != null && other != null) && (other.getX() == getX() && other.getY() == getY());
 	}
+	public void setX(int value) {
+		this.x = value;
+	}
 }

@@ -54,7 +54,7 @@ public class GUIMain{
     private Label _societyTitleLabel;
     private Slider _speedSlider;
     //private Slider _sizeSlider;
-    private int _currentGridLength;
+    private Dimensions _currentGridDimensions;
     private Button _pauseButton;
     private Button _playButton;
     private Button _fileButton;
@@ -66,7 +66,7 @@ public class GUIMain{
     }
     public GUIMain(CellSociety model){
     	_model = model;
-    	_currentGridLength = model.getSize();
+    	_currentGridDimensions = model.getSize();
 //		SOCIETY_TYPE = (Class<CellSociety>) model.getClass();
 		
 		/*
@@ -98,8 +98,7 @@ public class GUIMain{
     	_gridContainer.setPrefWidth(GRID_WIDTH);
     	_gridContainer.setPrefHeight(GRID_WIDTH);
     	_root.getChildren().add(_gridContainer);
-    	//(Pane root, CellShape shape, Dimensions dimensions, Frame frame, Color[][] colors){...}
-    	_gridController = new UIGridController(_gridContainer, CellShape.SQUARE, new Dimensions(10,10),frame, _model.getCurrentColors());
+    	_gridController = new UIGridController(_gridContainer,frame, _model.getCurrentColors(), CellShape.SQUARE);
     }
     /**
      * sets up frame and timeline
@@ -304,7 +303,7 @@ public class GUIMain{
     	Slider _sizeSlider = new Slider();
     	_sizeSlider.setMin(5);
     	_sizeSlider.setMax(40);
-    	_sizeSlider.setValue(_currentGridLength);
+    	_sizeSlider.setValue(_currentGridDimensions.getX());
     	_sizeSlider.setShowTickLabels(true);
     	_sizeSlider.setShowTickMarks(true);
     	_sizeSlider.setMajorTickUnit(5);
@@ -314,10 +313,10 @@ public class GUIMain{
     	_sizeSlider.setLayoutX(startX);
     	_sizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
     		_sizeSlider.setValue(_sizeSlider.getValue() - _sizeSlider.getValue() % 5 );
-    		if(_sizeSlider.getValue() % 5 == 0 && _sizeSlider.getValue() != _currentGridLength){
+    		if(_sizeSlider.getValue() % 5 == 0 && _sizeSlider.getValue() != _currentGridDimensions.getX()){
     			setFileToNull();
     			System.out.println("Changing grid size to " + _sizeSlider.getValue());
-    			_currentGridLength = (int) _sizeSlider.getValue();
+    			_currentGridDimensions.setX((int) _sizeSlider.getValue());
         		resetAnimation();
     		}
     	});
@@ -400,7 +399,7 @@ public class GUIMain{
 		//TODO:
 //		_grid.updateTileColors(_model.step());
 //		updateGenerationLabel();
-		_gridController.step(_model.step(), new Dimensions(_model.getSize(), _model.getSize()));
+		_gridController.step(_model.step(), _model.getSize());
 	}
 
 }
