@@ -446,7 +446,7 @@ public class CellSociety {
 	 *         TRUE).
 	 */
 	private boolean inColAcrossBoard(Location l1, Location l2) {
-		return (l1.getMyCol() == 0 && l2.getMyCol() == size - 1) || (l2.getMyCol() == 0 && l1.getMyCol() == size - 1);
+		return (l1.getMyCol() == 0 && l2.getMyCol() == getX() - 1) || (l2.getMyCol() == 0 && l1.getMyCol() == getX() - 1);
 	}
 
 	/**
@@ -461,7 +461,7 @@ public class CellSociety {
 	 *         the lowest row, this method will return TRUE).
 	 */
 	private boolean inRowAcrossBoard(Location l1, Location l2) {
-		return (l1.getMyRow() == 0 && l2.getMyRow() == size - 1) || (l2.getMyRow() == 0 && l1.getMyRow() == size - 1);
+		return (l1.getMyRow() == 0 && l2.getMyRow() == getY() - 1) || (l2.getMyRow() == 0 && l1.getMyRow() == getY() - 1);
 	}
 
 	/**
@@ -553,11 +553,11 @@ public class CellSociety {
 		this.mySize = size;
 	}
 
-	private int getX(){
+	public int getX(){
 		return mySize.getX();
 	}
 	
-	private int getY(){
+	public int getY(){
 		return mySize.getY();
 	}
 

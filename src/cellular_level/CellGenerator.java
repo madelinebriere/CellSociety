@@ -4,7 +4,9 @@ import data_structures.CellName;
 import javafx.scene.paint.Color;
 
 public class CellGenerator {
-
+	private static Color COLOR_1 = Color.BLUE;
+	private static Color COLOR_2= Color.RED;
+	private static Color COLOR_3 = Color.GREEN;
 	//Add this to SimulationType as well -- replace duplicate code with this
 	
 	public static Cell newCell(CellName c){
@@ -26,17 +28,14 @@ public class CellGenerator {
 		if(c == CellName.DEAD_CELL){
 			return new DeadCell();
 		}
-		if(c == CellName.HOUSE_CELL_BLUE){
-			return new HouseCell(Color.BLUE);
+		if(c == CellName.HOUSE_CELL_1){
+			return new HouseCell(COLOR_1);
 		}
-		if(c == CellName.HOUSE_CELL_RED){
-			return new HouseCell(Color.RED);
+		if(c == CellName.HOUSE_CELL_2){
+			return new HouseCell(COLOR_2);
 		}
-		if(c == CellName.HOUSE_CELL_GREEN){
-			return new HouseCell(Color.GREEN);
-		}
-		if(c == CellName.HOUSE_CELL_YELLOW){
-			return new HouseCell(Color.YELLOW);
+		if(c == CellName.HOUSE_CELL_3){
+			return new HouseCell(COLOR_3);
 		}
 		else
 			return new EmptyCell();

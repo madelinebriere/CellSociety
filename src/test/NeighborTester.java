@@ -48,13 +48,13 @@ public class NeighborTester {
 			if(c.getMyRow()==0){
 				System.out.print("*Top Row ");
 			}
-			if(c.getMyRow()==d.getSize()-1){
+			if(c.getMyRow()==d.getY()-1){
 				System.out.print("*Bottom Row ");
 			}
 			if(c.getMyCol()==0){
 				System.out.print("*Left Col ");
 			}
-			if(c.getMyCol()==d.getSize()-1){
+			if(c.getMyCol()==d.getX()-1){
 				System.out.print("*Right Col ");
 			}
 			System.out.println();
