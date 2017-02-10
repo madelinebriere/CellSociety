@@ -8,12 +8,12 @@ import java.util.Map.Entry;
 import cellular_level.Cell;
 
 public class CellRatioMap {
-	private Map<Class<Cell>, CellRatio> ratios;
-	public <T extends Cell> CellRatioMap(Map<Class<Cell>, CellRatio> ratios){
+	private Map<CellName, CellRatio> ratios;
+	public CellRatioMap(Map<CellName, CellRatio> ratios){
 		//TODO error checking
 		//check if ratios add up to 1.0
 		double sum = 0;
-		for(Entry<Class<Cell>, CellRatio> entry: ratios.entrySet()){
+		for(Entry<CellName, CellRatio> entry: ratios.entrySet()){
 			sum += entry.getValue().getRatio();
 		}
 		if(sum < 0.999999 || sum > 1.000001){//margin of error for double addition
@@ -22,7 +22,7 @@ public class CellRatioMap {
 		//TODO: check if cells are compatible
 		this.ratios = ratios;
 	}
-	public Map<Class<Cell>, CellRatio> getMapOfCellsRatios(){
+	public Map<CellName, CellRatio> getMapOfCellsRatios(){
 		return ratios;
 	}
 }

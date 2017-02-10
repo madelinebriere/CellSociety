@@ -42,7 +42,7 @@ public class SocietyTester{
 	}
 	
 	private static void checkCellSize(){
-		int expected = mySociety.getSize()*mySociety.getSize();
+		int expected = mySociety.getX()*mySociety.getY();
 		int current = mySociety.getCurrentCells().size();
 		checkEquals(current, expected);
 	}
