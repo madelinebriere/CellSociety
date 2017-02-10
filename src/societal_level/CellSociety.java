@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import cellular_level.*;
 import file_handling.*;
@@ -18,9 +19,11 @@ import util.Location;
  * 2) SimulationType incorporation/ constructor?
  * 3) How do I know the size of the cell list I'm creating?
  * 4) Implement neighbors by shape (move all neighbors stuff into that)
+ * 		Implement interface by edges? 
  * 5) Check all default variables
  * 6) Double check that step function works
  * 7) General makeCells function
+ * 8) Make a class that converts strings -> a default instance of a cell
  */
 
 
@@ -37,21 +40,37 @@ import util.Location;
 
 public class CellSociety {
 	private static final Color DEFAULT_COLOR = Color.WHITE;
-
+	
 	private CellShape myShape;
 	private Dimensions mySize;
-	private CellRatioMap myRatio;
 	private Collection<Cell> currentCells;
-	//private int size;
 	private Color emptyColor;
+	
+	/**
+	 * Default 
+	 */
+	public CellSociety(){
+		this(generateDefaultData());
+	}
+	
+	private static SimulationData generateDefaultData(){
+		HashMap<CellName, CellRatio> m = new HashMap<CellName, CellRatio>();
+		m.put(CellName.FISH_CELL, new CellRatio(0.5));
+		m.put(CellName.SHARK_CELL, new CellRatio(0.2));
+		m.put(CellName.EMPTY_CELL, new CellRatio(0.3));
+		CellRatioMap r = new CellRatioMap(m);
+		SimulationData d = new SimulationData(
+				new Dimensions(10,10), SimulationName.WATER_SOCIETY, r, CellShape.SQUARE, true, Color.WHITE 
+				);
+		return d;
+	}
 	
 	
 	public CellSociety(SimulationData sim) {
 		myShape = sim.getShape();
 		mySize = sim.getDimensions();
-		myRatio = sim.getRatio();
-		makeCells();
-		
+		CellRatioMap myRatio = sim.getRatio();
+		makeCells(myRatio);
 	}
 	
 	public CellSociety(SimulationType sim) {
@@ -113,9 +132,13 @@ public class CellSociety {
 	}
 
 	
-	public Collection<Cell> makeCells(){
+	public Collection<Cell> makeCells(CellRatioMap r){
 		ArrayList<Cell> newCells = new ArrayList<Cell>();
+		for(CellName n: r.getMapOfCellsRatios().keySet()){
+			Cell newCell = CellGenerator.newCell(n);
+		}
 		
+		return newCells;
 	}
 
 	/**

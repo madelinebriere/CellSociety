@@ -21,6 +21,10 @@ public class HouseCell extends Cell{
 		super();
 	}
 	
+	public HouseCell(Color c){
+		super(c);
+	}
+	
 	public HouseCell(int row, int col, Color state){
 		super(row, col, state);
 	}
