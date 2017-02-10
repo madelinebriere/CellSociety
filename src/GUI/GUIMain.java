@@ -98,7 +98,8 @@ public class GUIMain{
     	_gridContainer.setPrefWidth(GRID_WIDTH);
     	_gridContainer.setPrefHeight(GRID_WIDTH);
     	_root.getChildren().add(_gridContainer);
-    	_gridController = new UIGridController(_gridContainer,frame, _model.getCurrentColors(), CellShape.SQUARE);
+    	//(Pane root, CellShape shape, Dimensions dimensions, Frame frame, Color[][] colors){...}
+    	_gridController = new UIGridController(_gridContainer, CellShape.SQUARE, new Dimensions(10,10),frame, _model.getCurrentColors());
     }
     /**
      * sets up frame and timeline

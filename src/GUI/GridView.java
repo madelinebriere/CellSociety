@@ -18,11 +18,13 @@ public abstract class GridView extends Pane{
 	}
 	protected void setBackgroundColor(Color color){
 		Rectangle rec = new Rectangle();
-		rec.setX(0);
-		rec.setY(0);
-		rec.setWidth(_bounds.getWidth());
-		rec.setHeight(_bounds.getHeight());
+		rec.setX(-1);
+		rec.setY(-1);
+		rec.setWidth(_bounds.getWidth()+2);
+		rec.setHeight(_bounds.getHeight()+2);
 		rec.setFill(color);
+		rec.setArcHeight(8);
+		rec.setArcWidth(8);
 		this.getChildren().add(rec);
 	}
 	protected abstract void setupGrid(Color[][] colors);
