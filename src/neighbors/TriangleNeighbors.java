@@ -1,5 +1,5 @@
 package neighbors;
 
-public class TriangleNeighbors {
+public class TriangleNeighbors extends Neighbors {
 
 }

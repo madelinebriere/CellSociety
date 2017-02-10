@@ -1,5 +1,5 @@
 package neighbors;
 
-public class HexagonNeighbors {
+public class HexagonNeighbors extends Neighbors{
 
 }

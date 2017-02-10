@@ -12,7 +12,7 @@ import util.Location;
  *
  */
 
-public class Neighbors {
+public abstract class Neighbors {
 
 	/*
 	

@@ -33,7 +33,7 @@ public class SimulationData {
 		return board.getDimensions();
 	}
 	
-	public Border getBorder() {
+	public BorderType getBorder() {
 		return board.getBorder();
 	}
 	

@@ -7,7 +7,7 @@ package borders;
 
 public class Border {
 
-	public Border(){
+	public abstract Border(){
 	//TODO
 	}
 }
