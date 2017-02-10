@@ -5,12 +5,27 @@ import java.util.List;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import cellular_level.*;
 import file_handling.*;
+import data_structures.*;
 import javafx.scene.paint.Color;
 import util.CellData;
 import util.Location;
+
+/**
+ * 1) Figure out empty color situation
+ * 2) SimulationType incorporation/ constructor?
+ * 3) How do I know the size of the cell list I'm creating?
+ * 4) Implement neighbors by shape (move all neighbors stuff into that)
+ * 		Implement interface by edges? 
+ * 5) Check all default variables
+ * 6) Double check that step function works
+ * 7) General makeCells function
+ * 8) Make a class that converts strings -> a default instance of a cell
+ */
+
 
 /**
  * This class represents a SOCIETY of Cells, and keeps track of the current
@@ -25,25 +40,42 @@ import util.Location;
 
 public class CellSociety {
 	private static final Color DEFAULT_COLOR = Color.WHITE;
-
+	
+	private CellShape myShape;
+	private Dimensions mySize;
 	private Collection<Cell> currentCells;
-	private List <Class<? extends Cell>> cellTypes;
-	private List<Class<? extends Cell>> defaultCellTypes;
-	private int size;
 	private Color emptyColor;
 	
+	/**
+	 * Default 
+	 */
+	public CellSociety(){
+		this(generateDefaultData());
+	}
 	
-	public CellSociety() {
-		currentCells = new ArrayList<Cell>();
-		setCurrentCells(makeCells(10));
-		cellTypes = new ArrayList<Class<? extends Cell>>();
-		defaultCellTypes = new ArrayList<Class<? extends Cell>>();
-		size=10;
-		emptyColor=Color.WHITE;
+	private static SimulationData generateDefaultData(){
+		HashMap<CellName, CellRatio> m = new HashMap<CellName, CellRatio>();
+		m.put(CellName.FISH_CELL, new CellRatio(0.5));
+		m.put(CellName.SHARK_CELL, new CellRatio(0.2));
+		m.put(CellName.EMPTY_CELL, new CellRatio(0.3));
+		CellRatioMap r = new CellRatioMap(m);
+		SimulationData d = new SimulationData(
+				new Dimensions(10,10), SimulationName.WATER_SOCIETY, r, CellShape.SQUARE, true, Color.WHITE 
+				);
+		return d;
+	}
+	
+	
+	public CellSociety(SimulationData sim) {
+		myShape = sim.getShape();
+		mySize = sim.getDimensions();
+		CellRatioMap myRatio = sim.getRatio();
+		makeCells(myRatio);
 	}
 	
 	public CellSociety(SimulationType sim) {
-		sim.initializeSociety(this);
+		setCurrentCells(sim.getCells());
+		setSize(new Dimensions(sim.getDimension(), sim.getDimension()));
 	}
 	
 
@@ -54,10 +86,10 @@ public class CellSociety {
 	 *         create the visualization of the current simulation status
 	 */
 	public Color[][] getCurrentColors() {
-		Color[][] toRet = new Color[size][size];
+		Color[][] toRet = new Color[getX()][getY()];
 		Color emptyColor = getEmptyColor();
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
+		for (int i = 0; i < getX(); i++) {
+			for (int j = 0; j < getY(); j++) {
 				toRet[i][j] = emptyColor;
 			}
 		}
@@ -79,52 +111,10 @@ public class CellSociety {
 		return toRet;
 	}
 
-	// public abstract CellSociety generateDefaultSociety(int size);
+	
 
 	/**
-	 * Step function for CellSociety, moves each cell through one update Returns
-	 * the array of current colors for use in the front end MUST be defined by
-	 * all CellSocieties
-	 * 
-	 * @return 2D Array of current Cell colors
-	 */
-	public Color[][] step(){
-		return orderedStep();
-	}
-
-	/**
-	 * Options for step function, called upon in descendants to choose type of
-	 * step taken with each update
-	 */
-
-	/**
-	 * Normal update -- shuffles cells and updates each, without providing the
-	 * Cells any available positions to move into, breed into, etc. (passing
-	 * null)
-	 * 
-	 * @return 2D Array of current Cell colors
-	 */
-	public Color[][] totalStep() {
-		shuffleCurrentCells();
-		stepAllCells(null);
-		return getCurrentColors();
-	}
-
-	/**
-	 * Slightly more complicated update -- shuffles cells and updates each,
-	 * PROVIDING the Cells any available positions to move into, breed into,
-	 * etc. (passing an arrayList of emptyCells)
-	 * 
-	 * @return 2D Array of current Cell colors
-	 */
-	public Color[][] guidedStep() {
-		shuffleCurrentCells();
-		stepAllCells(new ArrayList<EmptyCell>(getAllEmptyCells()));
-		return getCurrentColors();
-	}
-
-	/**
-	 * Most complex option -- Sorts the current cells by Cell-defined preference
+	 *	Step function (update) -- Sorts the current cells by Cell-defined preference
 	 * (decided with the compareTo method in each Cell), putting certain types
 	 * of Cells first on the list the update. This is used in WaterWorld to have
 	 * the Sharks update before the fish so that the eaten fish can be removed
@@ -134,55 +124,20 @@ public class CellSociety {
 	 * 
 	 * @return 2D Array of current Cell colors
 	 */
-	public Color[][] orderedStep() {
+	public Color[][] step() {
 		sortByPriorityCurrentCells();
-		return guidedStep();
+		shuffleCurrentCells();
+		stepAllCells(new ArrayList<EmptyCell>(getAllEmptyCells()));
+		return getCurrentColors();
 	}
 
-	/**
-	 * Makes new border cells to fill in new space produced from changing grid
-	 * from smaller to larger size.
-	 * 
-	 * @param oldSize
-	 *            The old size of the grid
-	 * @param newSize
-	 *            The new size of the grid
-	 * @return Collection of Cells to fill in the new space
-	 */
-	public Collection<Cell> makeBorderCells(int oldSize, int newSize){
-		ArrayList<Cell> newCells = new ArrayList<Cell>();
-		for (int i = 0; i < newSize; i++) {
-			for (int j = 0; j < newSize; j++) {
-				if (i >= oldSize || j >= oldSize){
-					ArrayList<Class<? extends Cell>> defa = (new ArrayList<Class<? extends Cell>>(getDefaultCellTypes()));
-					Cell newCell;
-					try{
-						newCell = (Cell) defa.get(0).newInstance();
-					}
-					catch (Exception e){
-						newCell = new EmptyCell();
-					}
-					newCell.setMyRow(i);
-					newCell.setMyCol(j);
-					newCells.add(newCell);
-				}
-			}
-		}
-		return newCells;
-	}
 	
-	public Collection<Cell> makeCells(int size){
+	public Collection<Cell> makeCells(CellRatioMap r){
 		ArrayList<Cell> newCells = new ArrayList<Cell>();
-		for(int i=0; i<size; i++){
-			for(int j=0; j<size; j++){
-				if(j%2==0)
-					newCells.add(new HouseCell(i,j, Color.BLUE));
-				else if(i%2 == 0)
-					newCells.add(new HouseCell(i,j,Color.RED));
-				else
-					newCells.add(new EmptyCell(i,j));
-			}
+		for(CellName n: r.getMapOfCellsRatios().keySet()){
+			Cell newCell = CellGenerator.newCell(n);
 		}
+		
 		return newCells;
 	}
 
@@ -265,12 +220,12 @@ public class CellSociety {
 	 *            The Collection of cells to be padded
 	 */
 	public void fillEmptySpots(Collection<Cell> nextGen) {
-		int[][] filled = new int[size][size];
+		int[][] filled = new int[getX()][getY()];
 		for (Cell c : nextGen) {
 			filled[c.getMyRow()][c.getMyCol()] += 1;
 		}
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
+		for (int i = 0; i < getX(); i++) {
+			for (int j = 0; j < getY(); j++) {
 				if (filled[i][j] == 0)
 					nextGen.add(new EmptyCell(i, j));
 			}
@@ -574,42 +529,6 @@ public class CellSociety {
 		setCurrentCells(orderedCells);
 	}
 
-	public void setNewSizeAndCells(int size) {
-		if (size == getSize()) {
-			return;
-		}
-		ArrayList<Cell> newCells = new ArrayList<Cell>();
-		if (size < getSize()) {
-			for (Cell c : getCurrentCells()) {
-				if (c.getMyRow() <= size - 1 && c.getMyCol() <= size - 1) {
-					newCells.add(c);
-				}
-			}
-		} else {
-			newCells.addAll(currentCells);
-			newCells.addAll(makeBorderCells(getSize(), size));
-		}
-		setCurrentCells(newCells);
-		setSize(size);
-	}
-	
-
-	public List<Class<? extends Cell>> getCellTypes() {
-		return cellTypes;
-	}
-
-	public void setCellTypes(List<Class<? extends Cell>> cellTypes) {
-		this.cellTypes = cellTypes;
-	}
-
-	public List<Class<? extends Cell>> getDefaultCellTypes() {
-		return defaultCellTypes;
-	}
-
-	public void setDefaultCellTypes(List<Class<? extends Cell>> defaultCellTypes) {
-		this.defaultCellTypes = defaultCellTypes;
-	}
-
 	public Collection<Cell> getCurrentCells() {
 		return currentCells;
 	}
@@ -626,11 +545,29 @@ public class CellSociety {
 		this.emptyColor = emptyColor;
 	}
 
-	public int getSize() {
-		return size;
+	public Dimensions getSize() {
+		return mySize;
 	}
 
-	public void setSize(int size) {
-		this.size = size;
+	public void setSize(Dimensions size) {
+		this.mySize = size;
 	}
+
+	private int getX(){
+		return mySize.getX();
+	}
+	
+	private int getY(){
+		return mySize.getY();
+	}
+
+	public CellShape getMyShape() {
+		return myShape;
+	}
+
+	public void setMyShape(CellShape myShape) {
+		this.myShape = myShape;
+	}
+	
+	
 }

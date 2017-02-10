@@ -2,5 +2,7 @@
 package data_structures;
 
 public enum CellName {
-	//TODO: cell names
+	BURN_CELL, DEAD_CELL, EMPTY_CELL, FISH_CELL, HOUSE_CELL_BLUE, HOUSE_CELL_RED,
+	HOUSE_CELL_YELLOW, HOUSE_CELL_GREEN, SHARK_CELL, TREE_CELL, LIVE_CELL
 }
+

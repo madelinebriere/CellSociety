@@ -20,7 +20,6 @@ import java.util.Map;
 import cellular_level.Cell;
 
 public class LifeSimulation extends SimulationType {
-	
 
 	public LifeSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
@@ -36,35 +35,15 @@ public class LifeSimulation extends SimulationType {
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		for(String data: this.getCellData()){
 			String[] vars = data.split(" ");
-			if(vars[2].toUpperCase().equals("LIVE")){
+			if(vars[NAME_INDEX].toUpperCase().equals("LIVE")){
 				cells.add(new LiveCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
 			}
-			else if(vars[2].toUpperCase().equals("DEAD")){
+			else if(vars[NAME_INDEX].toUpperCase().equals("DEAD")){
 				cells.add(new DeadCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
 			}
 		}
 		return cells;
 	}
 
-	@Override
-	public void initializeSocietyVariables() {
-		setEmptyColor(Color.WHITE);
-	}
-	
-	@Override
-	public void initializeCellTypes(){
-		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
-		cellTypes.add(LiveCell.class);
-		cellTypes.add(DeadCell.class);
-		setCellTypes(cellTypes);
-	}
-	
-	@Override
-	public void initializeDefaultCells(){
-		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
-		cellTypes.add(DeadCell.class);
-		setDefaultCellTypes(cellTypes);
-	}
-	
 
 }

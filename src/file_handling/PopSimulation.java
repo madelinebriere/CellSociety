@@ -28,14 +28,8 @@ public class PopSimulation extends SimulationType {
 
 	public PopSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
-	}
-
-	@Override
-	protected List<String> combineDataTypes() {
-		List<String> data = new ArrayList<String>();
-		data.addAll(getUniversalTypes());
-		data.addAll(SETTING_TYPES);
-		return data;
+		this.settingTypes = SETTING_TYPES;
+		this.dataTypes = combineDataTypes();
 	}
 
 	@Override
@@ -43,13 +37,13 @@ public class PopSimulation extends SimulationType {
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		for(String data: this.getCellData()){
 			String[] vars = data.split(" ");
-			if(vars[2].toUpperCase().equals("BLUE")){
+			if(vars[NAME_INDEX].toUpperCase().equals("BLUE")){
 				cells.add(new HouseCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1]), Color.BLUE));
 			}
-			else if(vars[2].toUpperCase().equals("RED")){
+			else if(vars[NAME_INDEX].toUpperCase().equals("RED")){
 				cells.add(new HouseCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1]), Color.RED));
 			}
-			else if(vars[2].toUpperCase().equals("EMPTY")){
+			else if(vars[NAME_INDEX].toUpperCase().equals("EMPTY")){
 				cells.add(new EmptyCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
 			}
 		}
@@ -60,26 +54,6 @@ public class PopSimulation extends SimulationType {
 		return Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
 	}
 
-	@Override
-	public void initializeSocietyVariables() {
-		HouseCell.setSatisfiedThreshold(getThreshold());
-		setEmptyColor(Color.WHITE);
-		
-	}
-	
-	@Override
-	public void initializeCellTypes(){
-		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
-		cellTypes.add(HouseCell.class);
-		cellTypes.add(EmptyCell.class);
-		setCellTypes(cellTypes);
-	}
-	
-	@Override
-	public void initializeDefaultCells(){
-		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
-		cellTypes.add(EmptyCell.class);
-		setDefaultCellTypes(cellTypes);
-	}
+
 }
 
