@@ -12,23 +12,13 @@ package file_handling;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import cellular_level.BurnCell;
 import cellular_level.Cell;
-import cellular_level.DeadCell;
-import cellular_level.EmptyCell;
-import cellular_level.FishCell;
-import cellular_level.HouseCell;
-import cellular_level.LiveCell;
-import cellular_level.SharkCell;
-import cellular_level.TreeCell;
 import data_structures.CellName;
-import javafx.scene.paint.Color;
-import sim_rules.SimRules;
-import societal_level.CellSociety;
 import util.CellGenerator;
 import util.Location;
 
@@ -46,14 +36,12 @@ public abstract class SimulationType {
 	protected List<String> dataTypes;
 	protected List<String> settingTypes = Arrays.asList(new String[] {""});
 	private Map<String, String> myDataValues;
-	private SimRules simRules;
 
 	
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
 		dataTypes = combineDataTypes();
-		simRules = generateSimRules();
 	}
 	
 	
@@ -76,35 +64,29 @@ public abstract class SimulationType {
 	 * 
 	 * @return
 	 */
-	public Map<CellName,List<Cell>> getCells(){
-		HashMap<CellName, Location> cells = new HashMap<CellName, Location>();
-		ArrayList<Cell> cells = new ArrayList<Cell>();
-		for(String data: this.getCellData()){
-			String[] vars = data.split(" ");
-			int row = Integer.parseInt(vars[0]);
-			int col = Integer.parseInt(vars[1]);
-			String name = vars[NAME_INDEX].toUpperCase();
-			Cell newCell = CellGenerator.newCell(name);
-			newCell.setMyRow(row);
-			newCell.setMyCol(col);
-			cells.add(newCell);
-		}
-		return cells;
-	}
-	
-	
-	public HashMap<CellName,Location> generateEnumMap(){
-		HashMap<CellName, Location> cells = new HashMap<CellName, Location>();
+	public TreeMap<CellName,List<Cell>> getCells(){
+		TreeMap<CellName, List<Cell>> cells = new TreeMap<CellName, List<Cell>>();
 		for(String data: this.getCellData()){
 			String[] vars = data.split(" ");
 			int row = Integer.parseInt(vars[0]);
 			int col = Integer.parseInt(vars[1]);
 			Location loc = new Location(row,col);
-			String name = vars[NAME_INDEX].toUpperCase();
-			CellName cell;
-			
+			CellName name = getCellName(vars[NAME_INDEX].toUpperCase());
+			Cell newCell = CellGenerator.newCell(name);
+			newCell.setMyLocation(loc);
+			if(cells.containsKey(name)){
+				cells.get(name).add(newCell);
+			}
+			else{
+				ArrayList<Cell> list = new ArrayList<>();
+				list.add(newCell);
+				cells.put(name, list);
+			}
 		}
+		return cells;
 	}
+	
+	
 	
 	public CellName getCellName(String s){
 		CellName toRet;
@@ -141,7 +123,6 @@ public abstract class SimulationType {
 		return toRet;
 	}
 	
-	public abstract SimRules generateSimRules();
 	
 	/**
 	 * @return List of raw Cell data from file.
@@ -185,9 +166,4 @@ public abstract class SimulationType {
 		return data;
 	}
 
-
-	public SimRules getSimRules() {
-		return simRules;
-	}
-	
 }

@@ -7,7 +7,6 @@
 
 package file_handling;
 
-import sim_rules.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,14 +23,6 @@ public class FireSimulation extends SimulationType {
 		super(values, cells);
 		this.settingTypes = SETTING_TYPES;
 		this.dataTypes = combineDataTypes();
-	}
-
-	@Override
-	public SimRules generateSimRules() {
-		Double prob = getProbability();
-		Integer steps = getSteps();
-		SimRules toRet = new FireSimRules(prob, steps);
-		return toRet;
 	}
 	
 	public Double getProbability(){
