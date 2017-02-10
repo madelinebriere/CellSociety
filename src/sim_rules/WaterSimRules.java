@@ -1,5 +1,7 @@
 package sim_rules;
 
+import data_structures.SimulationName;
+
 public class WaterSimRules extends SimRules{
 	private static final String WATER_NAME = "Wa-Tor Society";
 	private static int DEFAULT_FISH_BREED = 3;
@@ -15,7 +17,7 @@ public class WaterSimRules extends SimRules{
 	}
 
 	public WaterSimRules(int fishBreed, int sharkBreed, int sharkStarve) {
-		super(WATER_NAME);
+		super(SimulationName.WATER_SOCIETY);
 		this.fishBreed = fishBreed;
 		this.sharkBreed = sharkBreed;
 		this.sharkStarve = sharkStarve;

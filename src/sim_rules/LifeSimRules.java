@@ -1,7 +1,8 @@
 package sim_rules;
 
+import data_structures.SimulationName;
+
 public class LifeSimRules extends SimRules{
-	private static final String LIFE_NAME = "Life Society";
 	private static final int NUM_FOR_LIVE = 3;
 	private static final int OVER_POP = 3;
 	private static final int UNDER_POP=2;
@@ -15,7 +16,7 @@ public class LifeSimRules extends SimRules{
 	}
 
 	public LifeSimRules(int numForLive, int overPop, int underPop) {
-		super(LIFE_NAME);
+		super(SimulationName.GAME_OF_LIFE);
 		this.numForLive = numForLive;
 		this.overPop = overPop;
 		this.underPop = underPop;

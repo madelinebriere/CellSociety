@@ -1,7 +1,8 @@
 package sim_rules;
 
+import data_structures.SimulationName;
+
 public class PopSimRules extends SimRules {
-	private static final String POP_NAME = "Segregation Society";
 	private static final double DEFAULT_THRESH = .5;
 	
 	private double satisfiedThreshold;
@@ -12,7 +13,7 @@ public class PopSimRules extends SimRules {
 	}
 	
 	public PopSimRules(double s){
-		super(POP_NAME);
+		super(SimulationName.POP_SOCIETY);
 		satisfiedThreshold = s;
 	}
 

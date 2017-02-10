@@ -1,21 +1,27 @@
 package sim_rules;
 
+import java.util.List;
+
+import cellular_level.Cell;
+import data_structures.SimulationName;
 import societal_level.CellSociety;
 
 public abstract class SimRules {
-	private String simulationName;
+	private SimulationName name;
 	
-	public SimRules(String s){
-		simulationName = s;
+	public SimRules(SimulationName n){
+		name=n;
 	}
 
-	public String getSimulationName() {
-		return simulationName;
+	public SimulationName getSimulationName() {
+		return name;
 	}
 
-	public void setSimulationName(String simulationName) {
-		this.simulationName = simulationName;
+	public void setSimulationName(SimulationName simulationName) {
+		this.name = simulationName;
 	}
+	
+	public abstract CellSociety applyCurrentRules(List<Cell> cells);
 	
 	
 }

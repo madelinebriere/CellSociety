@@ -1,7 +1,12 @@
 package sim_rules;
 
+import java.util.List;
+
+import cellular_level.Cell;
+import data_structures.SimulationName;
+import societal_level.CellSociety;
+
 public class FireSimRules extends SimRules{
-	private static final String FIRE_NAME = "Fire Society";
 	private static final double DEFAULT_PROBABILITY = .5;
 	private static final int DEFAULT_STEPS = 1;
 	
@@ -13,7 +18,7 @@ public class FireSimRules extends SimRules{
 	}
 	
 	public FireSimRules(double p, int s){
-		super(FIRE_NAME);
+		super(SimulationName.FIRE_SOCIETY);
 		probability=p;
 		steps = s;
 	}
@@ -32,6 +37,11 @@ public class FireSimRules extends SimRules{
 
 	public void setSteps(int steps) {
 		this.steps = steps;
+	}
+
+	@Override
+	public CellSociety applyCurrentRules(List<Cell> cells) {
+	
 	}
 	
 	
