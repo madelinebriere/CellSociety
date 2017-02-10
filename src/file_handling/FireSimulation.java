@@ -52,28 +52,5 @@ public class FireSimulation extends SimulationType {
 		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
 	}
 
-	@Override
-	public void initializeSocietyVariables() {
-		TreeCell.setProbCatch(getProbability());
-		BurnCell.setStepsToBurn(getSteps());
-		setEmptyColor(Color.YELLOW);
-	}
-	
-	@Override
-	public void initializeCellTypes(){
-		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
-		cellTypes.add(TreeCell.class);
-		cellTypes.add(BurnCell.class);
-		cellTypes.add(EmptyCell.class);
-		setCellTypes(cellTypes);
-		
-	}
-
-	@Override
-	public void initializeDefaultCells(){
-		ArrayList<Class<? extends Cell>>cellTypes = new ArrayList<Class<? extends Cell>>();
-		cellTypes.add(TreeCell.class);
-		setDefaultCellTypes(cellTypes);
-	}
 
 }

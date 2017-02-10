@@ -32,8 +32,12 @@ public class CellData {
 		available = validSpots;
 	}
 
-	public int getSize() {
-		return mySociety.getSize();
+	public int getX() {
+		return mySociety.getX();
+	}
+	
+	public int getY() {
+		return mySociety.getY();
 	}
 
 	public int getNumberNeighbors(Cell c) {

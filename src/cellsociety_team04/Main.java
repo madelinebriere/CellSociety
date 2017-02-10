@@ -1,7 +1,19 @@
 package cellsociety_team04;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import GUI.GUIMain;
+import cellular_level.Cell;
+import data_structures.CellName;
+import data_structures.CellRatio;
+import data_structures.CellRatioMap;
+import data_structures.CellShape;
+import data_structures.Dimensions;
+import data_structures.SimulationData;
+import data_structures.SimulationName;
 import javafx.application.Application;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import societal_level.*;
 
@@ -16,7 +28,6 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		
 		CellSociety model = new CellSociety();
 		GUIMain display = new GUIMain(model);
 		
