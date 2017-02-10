@@ -10,7 +10,7 @@
 package cellular_level;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
@@ -50,18 +50,18 @@ public class SharkCell extends WaterWorldCell {
 	/**
 	 * Update for SharkCell, returns new Cells
 	 * @param data CellData provided Cell with necessary access and information
-	 * @return Collection of updated cells, including current shark (same spot or moved) or not 
+	 * @return List of updated cells, including current shark (same spot or moved) or not 
 	 * (if it has starved), and baby shark if the shark has bred
 	 */
 	@Override
-	public Collection<Cell> update(CellData data) {
+	public List<Cell> update(CellData data) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		eatOrMove(nextGen, data);
 		breedOrDie(nextGen, data);
 		return nextGen;
 	}
 	
-	private void eatOrMove(Collection <Cell> nextGen, CellData data){
+	private void eatOrMove(List <Cell> nextGen, CellData data){
 		FishCell food = getRandomFish(data);
 		if(food!=null){
 			eatFish(food);
@@ -72,7 +72,7 @@ public class SharkCell extends WaterWorldCell {
 		}
 	}
 	
-	private void breedOrDie(Collection <Cell> nextGen, CellData data){
+	private void breedOrDie(List <Cell> nextGen, CellData data){
 		if(!isStarved()){
 			stayAlive(nextGen);
 			if(timeToBreed()){
@@ -90,7 +90,7 @@ public class SharkCell extends WaterWorldCell {
 		setStepsSinceEat(0);
 	}
 	
-	private void breed(CellData data, Collection<Cell> nextGen){
+	private void breed(CellData data, List<Cell> nextGen){
 		SharkCell baby = getBabyShark(data);
 		if(baby!=null){
 			nextGen.add(baby);
@@ -118,7 +118,7 @@ public class SharkCell extends WaterWorldCell {
 		}	
 	}
 	
-	private ArrayList<FishCell> locateFishCells(Collection<Cell>neighbors){
+	private ArrayList<FishCell> locateFishCells(List<Cell>neighbors){
 		ArrayList<FishCell> possibleFood = new ArrayList<FishCell>();
 		for(Cell c: neighbors){
 			if(c!=null && c instanceof FishCell && !((FishCell)c).isEaten()){
@@ -128,7 +128,7 @@ public class SharkCell extends WaterWorldCell {
 		return possibleFood;
 	}
 	
-	private void stayAlive(Collection <Cell>nextGen){
+	private void stayAlive(List <Cell>nextGen){
 		nextGen.add(this);
 	}
 	

@@ -10,7 +10,7 @@
 package cellular_level;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
@@ -51,7 +51,7 @@ public class FishCell extends WaterWorldCell {
 	 *  and a baby fish cell if the current cell is ready to breed
 	 */
 	@Override
-	public Collection<Cell> update(CellData data) {
+	public List<Cell> update(CellData data) {
 		ArrayList<Cell> nextGen = new ArrayList<Cell>();
 		if(!isEaten()){
 			changeState(data,nextGen);

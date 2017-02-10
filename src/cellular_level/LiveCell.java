@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 import util.CellData;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 public class LiveCell extends LifeSimCell {
 	private static int underpopulation = 2;

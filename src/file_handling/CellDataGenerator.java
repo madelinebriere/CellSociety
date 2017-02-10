@@ -64,7 +64,11 @@ public class CellDataGenerator {
 	 */
 	private List<String> generateNumberData(List<String> dataList){
 		Boolean[][] filled = new Boolean[dimension][dimension];
-		Arrays.fill(filled, false);
+		for(int x = 0; x < dimension; x++){
+			for(int y = 0; y < dimension; y++){
+				filled[x][y] = false;
+			}
+		}
 		List<String> result = new ArrayList<String>();
 		int totalCells = 0;
 		
