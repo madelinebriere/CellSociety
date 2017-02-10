@@ -1,22 +1,32 @@
 package neighbors;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
+import borders.Border;
 import cellular_level.Cell;
-import util.Location;
+import data_structures.Dimensions;
 
 /**
- * Class to define neighbors
+ * Class to define neighbors/ boundaries between neighbors, adjacency, etc.
  * @author maddiebriere
  *
  */
 
 public abstract class Neighbors {
-
-	/*
+	private Border myBorder;
 	
-	*//**
+	public Neighbors(Border b){
+		myBorder= b;
+	}
+	
+	public abstract List<Cell> getNeighbors(Cell c);	
+	
+	protected boolean isAdjacent(Cell c1, Cell c2){
+		return myBorder.isAdjacent(c1, c2);
+	}
+	
+	
+	/**
 	 * Normal neighbors function, gets any adjacent cells
 	 * 
 	 * @param c

@@ -59,8 +59,8 @@ public class CellSociety {
 	public CellSociety(SimulationData sim) {
 		myShape = sim.getShape();
 		mySize = sim.getDimensions();
-		NeighborsChooser.chooseNeighbors(sim);
-		BorderChooser.chooseBorder(sim);
+		border = BorderChooser.chooseBorder(sim);
+		neighbors = NeighborsChooser.chooseNeighbors(border, sim.getShape());
 		makeCells(sim);
 	}
 	
@@ -69,18 +69,6 @@ public class CellSociety {
 		setSize(new Dimensions(sim.getDimension(), sim.getDimension()));
 	}
 	
-	
-	private static SimulationData generateDefaultData(){
-		HashMap<CellName, CellRatio> m = new HashMap<CellName, CellRatio>();
-		m.put(CellName.FISH_CELL, new CellRatio(0.5));
-		m.put(CellName.SHARK_CELL, new CellRatio(0.2));
-		m.put(CellName.EMPTY_CELL, new CellRatio(0.3));
-		CellRatioMap r = new CellRatioMap(m);
-		SocietyData s = new SocietyData(false, Color.WHITE, r);
-		BoardData b = new BoardData ();
-		SimulationData d = new SimulationData(SimulationName.WATER_SOCIETY, b, s);
-		return d;
-	}
 
 	/**
 	 * Main method for interaction between front and back end
@@ -90,7 +78,7 @@ public class CellSociety {
 	 */
 	public Color[][] getCurrentColors() {
 		Color[][] toRet = new Color[getX()][getY()];
-		Color emptyColor = getEmptyColor();
+		/**Color emptyColor = getEmptyColor();
 		for (int i = 0; i < getX(); i++) {
 			for (int j = 0; j < getY(); j++) {
 				toRet[i][j] = emptyColor;
@@ -109,8 +97,9 @@ public class CellSociety {
 				toRet[c.getMyRow()][c.getMyCol()] = setColor;
 
 			}
-		}
+		}**/
 		return toRet;
+		//TODO: Fix this to account for non-positive indices
 	}
 
 	
@@ -134,6 +123,14 @@ public class CellSociety {
 	}
 
 	
+	/**
+	 * Assumptions made here:
+	 * 	-> Correct cell types have been given 
+	 * 	-> Dimensions are even (no incomplete rows)
+	 * 
+	 * @param sim
+	 * @return
+	 */
 	public List<Cell> makeCells(SimulationData sim){
 		CellRatioMap myRatio = sim.getRatios();
 		ArrayList<Cell> newCells = new ArrayList<Cell>();
@@ -280,6 +277,18 @@ public class CellSociety {
 		//return getNeighbors(c);
 		return neighbors;
 	}
+	
+	private static SimulationData generateDefaultData(){
+		HashMap<CellName, CellRatio> m = new HashMap<CellName, CellRatio>();
+		m.put(CellName.FISH_CELL, new CellRatio(0.5));
+		m.put(CellName.SHARK_CELL, new CellRatio(0.2));
+		m.put(CellName.EMPTY_CELL, new CellRatio(0.3));
+		CellRatioMap r = new CellRatioMap(m);
+		SocietyData s = new SocietyData(false, Color.WHITE, r, CellName.EMPTY_CELL);
+		BoardData b = new BoardData ();
+		SimulationData d = new SimulationData(SimulationName.WATER_SOCIETY, b, s);
+		return d;
+	}
 
 	/**
 	 * Shuffle current cells to avoid certain cells consistently updating before
@@ -336,10 +345,29 @@ public class CellSociety {
 	public CellShape getMyShape() {
 		return myShape;
 	}
+	
 
 	public void setMyShape(CellShape myShape) {
 		this.myShape = myShape;
 	}
+
+	public Neighbors getNeighbors() {
+		return neighbors;
+	}
+
+	public void setNeighbors(Neighbors neighbors) {
+		this.neighbors = neighbors;
+	}
+
+	public Border getBorder() {
+		return border;
+	}
+
+	public void setBorder(Border border) {
+		this.border = border;
+	}
+	
+	
 	
 	
 }
