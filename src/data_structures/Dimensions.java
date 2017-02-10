@@ -53,7 +53,5 @@ public class Dimensions {
 			return getPosXBound();
 	
 	}
-	public void setX(int value) {
-		this.x = value;
-	}
+
 }
