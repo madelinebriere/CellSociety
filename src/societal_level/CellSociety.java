@@ -2,6 +2,7 @@ package societal_level;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -10,8 +11,10 @@ import cellular_level.*;
 import file_handling.*;
 import data_structures.*;
 import javafx.scene.paint.Color;
-import util.CellData;
+import util.BorderChooser;
+import util.NeighborsChooser;
 import neighbors.*;
+import sim_rules.*;
 import borders.*;
 
 
@@ -39,35 +42,42 @@ import borders.*;
  *         the superclass
  */
 
-public class CellSociety {
+public abstract class CellSociety {
 	private static final Color DEFAULT_COLOR = Color.WHITE;
 	
 	private CellShape myShape;
 	private Dimensions mySize;
-	private List<Cell> currentCells;
+	private Map<CellName, List<Cell>> currentCells;
 	private Color emptyColor;
 	private Neighbors neighbors;
 	private Border border;
+	private CellName defaultCell;
+	private SimRules sim;
 	
 	/**
 	 * Default 
 	 */
+
 	public CellSociety(){
 		this(generateDefaultData());
 	}
-	
 	public CellSociety(SimulationData sim) {
-		myShape = sim.getShape();
-		mySize = sim.getDimensions();
-		border = BorderChooser.chooseBorder(sim);
-		neighbors = NeighborsChooser.chooseNeighbors(border, sim.getShape());
+		setMyShape(sim.getShape());
+		setSize(sim.getDimensions());
+		setBorder(BorderChooser.chooseBorder(sim));
+		setNeighbors(NeighborsChooser.chooseNeighbors(border, sim.getShape()));
+		setSim(sim.getSim());
 		makeCells(sim);
 	}
 	
 	public CellSociety(SimulationType sim) {
 		setCurrentCells(sim.getCells());
 		setSize(new Dimensions(sim.getDimension(), sim.getDimension()));
+		setSim(sim.getSimRules());
+		
 	}
+	
+	
 	
 
 	/**
@@ -105,7 +115,8 @@ public class CellSociety {
 	
 
 	/**
-	 *	Step function (update) -- Sorts the current cells by Cell-defined preference
+	 *	Step function (update) -- Applies the current rules of the simulation
+	 * To each of the current Cells. Sorts the current cells by Cell-defined preference
 	 * (decided with the compareTo method in each Cell), putting certain types
 	 * of Cells first on the list the update. This is used in WaterWorld to have
 	 * the Sharks update before the fish so that the eaten fish can be removed
@@ -116,9 +127,11 @@ public class CellSociety {
 	 * @return 2D Array of current Cell colors
 	 */
 	public Color[][] step() {
+		applyCurrentRules();
 		sortByPriorityCurrentCells();
 		shuffleCurrentCells();
 		stepAllCells(new ArrayList<EmptyCell>(getAllEmptyCells()));
+		applyCurrentColors();
 		return getCurrentColors();
 	}
 
@@ -131,16 +144,18 @@ public class CellSociety {
 	 * @param sim
 	 * @return
 	 */
-	public List<Cell> makeCells(SimulationData sim){
-		CellRatioMap myRatio = sim.getRatios();
-		ArrayList<Cell> newCells = new ArrayList<Cell>();
-		for(CellName n: myRatio.getMapOfCellsRatios().keySet()){
-			Cell newCell = CellGenerator.newCell(n);
-		}
-		
-		return newCells;
-	}
+	public abstract List<Cell> makeCells(SimulationData sim);
+	
+	/**
+	 * Called during each update to apply the most recent colors for the society
+	 */
+	public abstract void applyCurrentColors();
 
+	/**
+	 * Called during each update to apply to most recent rules to all of the cells
+	 */
+	public abstract void applyCurrentRules();
+	
 	/**
 	 * EmptyCells getter
 	 * 
@@ -198,6 +213,8 @@ public class CellSociety {
 	}
 
 	/**
+	 * ABSTRACT BECAUSE EACH SUBCLASS MUST DEFINE THE 
+	 * 
 	 * Updates the cell by passing it a new CellData object with defined
 	 * available spots and knowledge of this specific Cell Society
 	 * 
@@ -208,10 +225,9 @@ public class CellSociety {
 	 * @return All updated cells from cell updates (new baby cells, moved cells,
 	 *         etc.)
 	 */
-	private List<Cell> updateCell(Cell c, List<EmptyCell> available) {
+	private List<Cell> updateCell(Cell c, List<EmptyCell> available){
 		return c.update(new CellData(this, available));
 	}
-
 	/**
 	 * Iterate through given List and fill any cell-less locations in a
 	 * size x size grid with a new EmptyCell
@@ -286,7 +302,7 @@ public class CellSociety {
 		CellRatioMap r = new CellRatioMap(m);
 		SocietyData s = new SocietyData(false, Color.WHITE, r, CellName.EMPTY_CELL);
 		BoardData b = new BoardData ();
-		SimulationData d = new SimulationData(SimulationName.WATER_SOCIETY, b, s);
+		SimulationData d = new SimulationData(SimulationName.WATER_SOCIETY, b, s, new WaterSimRules());
 		return d;
 	}
 
@@ -366,6 +382,24 @@ public class CellSociety {
 	public void setBorder(Border border) {
 		this.border = border;
 	}
+
+	public CellName getDefaultCell() {
+		return defaultCell;
+	}
+
+	public void setDefaultCell(CellName defaultCell) {
+		this.defaultCell = defaultCell;
+	}
+
+	public SimRules getSim() {
+		return sim;
+	}
+
+	public void setSim(SimRules sim) {
+		this.sim = sim;
+	}
+	
+	
 	
 	
 	

@@ -1,4 +1,4 @@
-package societal_level;
+package util;
 
 import cellular_level.BurnCell;
 import cellular_level.Cell;
@@ -13,9 +13,9 @@ import data_structures.CellName;
 import javafx.scene.paint.Color;
 
 public class CellGenerator {
-	private static Color COLOR_1 = Color.BLUE;
-	private static Color COLOR_2= Color.RED;
-	private static Color COLOR_3 = Color.GREEN;
+	private static Color BLUE = Color.BLUE;
+	private static Color RED= Color.RED;
+	private static Color GREEN = Color.GREEN;
 	//Add this to SimulationType as well -- replace duplicate code with this
 	
 	public static Cell newCell(CellName c){
@@ -38,13 +38,45 @@ public class CellGenerator {
 			return new DeadCell();
 		}
 		if(c == CellName.HOUSE_CELL_1){
-			return new HouseCell(COLOR_1);
+			return new HouseCell(BLUE);
 		}
 		if(c == CellName.HOUSE_CELL_2){
-			return new HouseCell(COLOR_2);
+			return new HouseCell(RED);
 		}
 		if(c == CellName.HOUSE_CELL_3){
-			return new HouseCell(COLOR_3);
+			return new HouseCell(GREEN);
+		}
+		else
+			return new EmptyCell();
+	}
+	
+	public static Cell newCell(String s){
+		if(s.equals("FISH")){
+			return new FishCell();
+		}
+		if(s.equals("SHARK")){
+			return new SharkCell();
+		}
+		if(s.equals("BURN")){
+			return new BurnCell();
+		}
+		if(s.equals("TREE")){
+			return new TreeCell();
+		}
+		if(s.equals("LIVE")){
+			return new LiveCell();
+		}
+		if(s.equals("DEAD")){
+			return new DeadCell();
+		}
+		if(s.equals("BLUE")){
+			return new HouseCell(BLUE);
+		}
+		if(s.equals("RED")){
+			return new HouseCell(RED);
+		}
+		if(s.equals("GREEN")){
+			return new HouseCell(GREEN);
 		}
 		else
 			return new EmptyCell();

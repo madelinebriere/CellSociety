@@ -8,11 +8,11 @@
 
 
 package cellular_level;
-import util.CellData;
 import util.Location;
 
 import java.util.List;
 
+import data_structures.CellData;
 import javafx.scene.paint.Color;
 
 public abstract class Cell implements Comparable{

@@ -2,19 +2,21 @@
 
 package data_structures;
 
-import borders.Border;
 import javafx.scene.paint.Color;
+import sim_rules.SimRules;
 
 public class SimulationData {
 	private SimulationName name;
 	private BoardData board;
 	private SocietyData society;
+	private SimRules sim;
 
 	
-	public SimulationData(SimulationName id, BoardData b, SocietyData s){
+	public SimulationData(SimulationName id, BoardData b, SocietyData s, SimRules sr){
 		name = id;
 		board = b;
 		society = s;
+		sim=sr;
 	}
 
 	public SimulationName getName() {
@@ -52,6 +54,11 @@ public class SimulationData {
 	public CellRatioMap getRatios() {
 		return society.getRatios();
 	}
+
+	public SimRules getSim() {
+		return sim;
+	}
+	
 	
 	
 }

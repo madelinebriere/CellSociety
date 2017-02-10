@@ -1,7 +1,7 @@
 package test;
 import societal_level.*;
-import util.CellData;
 import cellular_level.*;
+import data_structures.CellData;
 
 /**
  * Class used for testing that each cell (especially border cells) is
