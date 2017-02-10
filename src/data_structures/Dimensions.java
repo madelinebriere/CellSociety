@@ -15,9 +15,15 @@ public class Dimensions {
 	public int getY(){
 		return y;
 	}
-	public boolean equals(Dimensions other){
-		return (this != null && other != null) && (other.getX() == getX() && other.getY() == getY());
+	
+	public void setX(int value){
+		this.x = value;
 	}
+	public void setY(int value){
+		this.y = value;
+	}
+	
+	
 	
 	/**
 	 * Methods used in checking boundaries in CellSociety
@@ -45,5 +51,6 @@ public class Dimensions {
 			return getPosXBound()-1;
 		else
 			return getPosXBound();
+	
 	}
 }
