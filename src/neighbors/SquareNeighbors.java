@@ -20,8 +20,8 @@ public class SquareNeighbors extends Neighbors {
 	@Override
 	public List<Patch> getAllNeighbors(Patch c) {
 		List<Patch> neighbors = new ArrayList<Patch>();
-		int x = c.getMyLocation().getMyRow();
-		int y = c.getMyLocation().getMyCol();
+		int x = c.getMyLocation().getMyCol();
+		int y = c.getMyLocation().getMyRow();
 		neighbors.addAll(getCardinalNeighbors(c));
 		if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x-1, y-1)){
 			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x-1, y-1);
@@ -46,8 +46,8 @@ public class SquareNeighbors extends Neighbors {
 	public List<Patch> getCardinalNeighbors(Patch c) {
 		
 		List<Patch> neighbors = new ArrayList<Patch>();
-		int x = c.getMyLocation().getMyRow();
-		int y = c.getMyLocation().getMyCol();
+		int x = c.getMyLocation().getMyCol();
+		int y = c.getMyLocation().getMyRow();
 		
 		if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x-1, y)){
 			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x-1, y);
