@@ -7,20 +7,18 @@
  * 
  * @author Stone Mathers
  */
-
 package file_handling;
-
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.HashMap;
 import cellular_level.Cell;
-import javafx.scene.paint.Color;
-import societal_level.CellSociety;
-
+import data_structures.CellName;
+import util.CellGenerator;
+import util.Location;
 public abstract class SimulationType {
-
 	private static final List<String> UNIVERSAL_DATA_TYPES = Arrays.asList(new String[] {
 			"title",
 	        "author",
@@ -33,7 +31,6 @@ public abstract class SimulationType {
 	protected List<String> dataTypes;
 	protected List<String> settingTypes = Arrays.asList(new String[] {""});
 	private Map<String, String> myDataValues;
-
 	
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
@@ -61,8 +58,64 @@ public abstract class SimulationType {
 	 * 
 	 * @return
 	 */
-	public abstract List<Cell> getCells();
+	public TreeMap<CellName,List<Cell>> getCells(){
+		TreeMap<CellName, List<Cell>> cells = new TreeMap<CellName, List<Cell>>();
+		for(String data: this.getCellData()){
+			String[] vars = data.split(" ");
+			int row = Integer.parseInt(vars[0]);
+			int col = Integer.parseInt(vars[1]);
+			Location loc = new Location(row,col);
+			CellName name = getCellName(vars[NAME_INDEX].toUpperCase());
+			Cell newCell = CellGenerator.newCell(name);
+			newCell.setMyLocation(loc);
+			if(cells.containsKey(name)){
+				cells.get(name).add(newCell);
+			}
+			else{
+				ArrayList<Cell> list = new ArrayList<>();
+				list.add(newCell);
+				cells.put(name, list);
+			}
+		}
+		return cells;
+	}
 	
+	
+	
+	public CellName getCellName(String s){
+		CellName toRet;
+		if(s.equals("FISH")){
+			toRet=CellName.FISH_CELL;
+		}
+		if(s.equals("SHARK")){
+			toRet = CellName.SHARK_CELL;
+		}
+		if(s.equals("BURN")){
+			toRet=CellName.BURN_CELL;
+		}
+		if(s.equals("TREE")){
+			toRet = CellName.TREE_CELL;
+		}
+		if(s.equals("LIVE")){
+			toRet= CellName.LIVE_CELL;
+		}
+		if(s.equals("DEAD")){
+			toRet = CellName.DEAD_CELL;
+		}
+		if(s.equals("BLUE")){
+			toRet = CellName.HOUSE_CELL_1;
+		}
+		if(s.equals("RED")){
+			toRet = CellName.HOUSE_CELL_2;
+		}
+		if(s.equals("GREEN")){
+			toRet= CellName.HOUSE_CELL_3;
+		}
+		else{
+			toRet = CellName.EMPTY_CELL;
+		}
+		return toRet;
+	}
 	
 	
 	/**
@@ -106,11 +159,4 @@ public abstract class SimulationType {
 		data.addAll(settingTypes);
 		return data;
 	}
-
-	
-	
-	
-	
-	
-	
 }
