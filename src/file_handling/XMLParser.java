@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
+
 import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -42,7 +44,9 @@ public class XMLParser {
 			new FireSimulation(null, null),
 			new WaterSimulation(null, null)
 	};
-	private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();	
+	public static final String ERROR_BUNDLE = "resources/Errors";
+	public static final ResourceBundle myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
+	private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
 	
 	private HashMap<String, SimulationType> mySimulationMap = new HashMap<String, SimulationType>();
 	
@@ -67,7 +71,7 @@ public class XMLParser {
 			Element root = getRootElement(dataFile);		 
 			HashMap<String, String> data = new HashMap<String, String>();
 			ArrayList<String> cells = new ArrayList<String>();
-			SimulationType tempSim = readSimulationType(root);
+			SimulationType tempSim = readSimulationType(root);  //Created to access a specific SimulationType's required values
 		 
 			for(String field: tempSim.getDataTypes()){
 				if(!field.equals(CELLS)){  //Cells are uniquely handled before, as they depend on the dimension being retrieved
@@ -78,7 +82,7 @@ public class XMLParser {
 		  
 			return createSimulation(tempSim, data, cells);
 		}catch(IllegalArgumentException e){
-			throw new XMLException(e, "No file was selected");
+			throw new XMLException(e, myResources.getString("NoFile"));
 		}
 		 
 	}
@@ -157,11 +161,11 @@ public class XMLParser {
             }
         }
         else {
-            throw new XMLException(String.format("The tag '%s' is missing from the file", tagName));
+            throw new XMLException(String.format(myResources.getString("TagMissing"), tagName));
         }
         
         if(values.size() > 1 && !tagName.equals(CELL)){
-        	throw new XMLException(String.format("There is more than one '%s' tag", tagName));
+        	throw new XMLException(String.format(myResources.getString("RepeatTag"), tagName));
         }else{ 
         	return values;
         }
@@ -179,7 +183,7 @@ public class XMLParser {
 		if(mySimulationMap.containsKey(type)){
 			return mySimulationMap.get(type);
 		}else{
-			throw new XMLException("File does not contain a valid simulation");
+			throw new XMLException(myResources.getString("InvalidSimulation"));
 		}
 		
 	}
@@ -194,7 +198,7 @@ public class XMLParser {
 				mySimulationMap.put(POSSIBLE_SIM_STRINGS[i], POSSIBLE_SIM_TYPES[i]);
 			}
 		} else {
-			throw new XMLException("Simulation types added incorrectly");
+			throw new XMLException(myResources.getString("FinalsIncorrect"));
 		}
 	}
 	
@@ -217,7 +221,7 @@ public class XMLParser {
 		}else if(cellType.equals(POSSIBLE_CELL_DATA[3])){
 			return gen.generatePercentageData();
 		}else{
-			throw new XMLException("No valid cell data type was given");
+			throw new XMLException(myResources.getString("InvalidCellDataType"));
 		}
 	}
 	

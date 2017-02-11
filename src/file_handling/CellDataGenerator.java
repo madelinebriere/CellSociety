@@ -77,7 +77,7 @@ public class CellDataGenerator {
 			String[] splitData = data.split(" ");
 			totalCells += Integer.parseInt(splitData[0]);
 			if(totalCells > dimension*dimension){ //Ensures the user didn't ask for more cells than possible, which would create an infinite loop
-				throw new XMLException("Too many cells requested");
+				throw new XMLException(XMLParser.myResources.getString("TooManyCells"));
 			}
 			for(int i = 0; i < Integer.parseInt(splitData[0]); i++){  //A new Cell is added until the desired number is reached
 				placeCellRandomly(splitData[1], result, filled);
@@ -106,7 +106,7 @@ public class CellDataGenerator {
 		}
 		
 		if(probTotal > 1){  //Ensures that the given probabilities are valid (Do not add up to more than 1)
-			throw new XMLException("Cell probabilities add up to more than 1");
+			throw new XMLException(XMLParser.myResources.getString("InvalidProbabilities"));
 		}else{
 			String[] cellNames = createNamesArray(probMap);
 			placeCellsWithProbability(result, cellNames);			
