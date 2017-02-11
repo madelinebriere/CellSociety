@@ -231,7 +231,7 @@ public abstract class CellSociety {
 	public Color[][] step() {
 		updatePatches();
 		shuffleCurrentCells();
-		stepAllCells(getAllEmptyCells());
+		//stepAllCells(getAllEmptyCells());
 		return getCurrentColors();
 	}
 
