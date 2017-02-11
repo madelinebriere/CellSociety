@@ -1,10 +1,8 @@
 package util;
 
-import borders.Border;
 import cellular_level.Cell;
 import data_structures.BorderType;
 import data_structures.CellShape;
-import data_structures.SimulationData;
 import neighbors.*;
 
 public class NeighborsChooser {

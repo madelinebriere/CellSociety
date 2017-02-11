@@ -97,7 +97,7 @@ public class SimulationTypeTester {
 		System.out.println(lifeSim.getTitle());
 		System.out.println(lifeSim.getAuthor());
 		System.out.println(lifeSim.getDimension());
-		System.out.println(lifeSim.getShiftedCells());
+		System.out.println(lifeSim.getCells());
 		System.out.println();
 	}
 	
@@ -106,7 +106,7 @@ public class SimulationTypeTester {
 		System.out.println(fireSim.getTitle());
 		System.out.println(fireSim.getAuthor());
 		System.out.println(fireSim.getDimension());
-		System.out.println(fireSim.getShiftedCells());
+		System.out.println(fireSim.getCells());
 		System.out.println(fireSim.getProbability());
 		System.out.println(fireSim.getSteps());
 		System.out.println();
@@ -117,7 +117,7 @@ public class SimulationTypeTester {
 		System.out.println(popSim.getTitle());
 		System.out.println(popSim.getAuthor());
 		System.out.println(popSim.getDimension());
-		System.out.println(popSim.getShiftedCells());
+		System.out.println(popSim.getCells());
 		System.out.println(popSim.getThreshold());
 		System.out.println();
 	}
@@ -127,7 +127,7 @@ public class SimulationTypeTester {
 		System.out.println(waterSim.getTitle());
 		System.out.println(waterSim.getAuthor());
 		System.out.println(waterSim.getDimension());
-		System.out.println(waterSim.getShiftedCells());
+		System.out.println(waterSim.getCells());
 		System.out.println(waterSim.getFishBreed());
 		System.out.println(waterSim.getSharkBreed());
 		System.out.println(waterSim.getSharkStarve());

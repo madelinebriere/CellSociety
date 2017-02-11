@@ -12,7 +12,6 @@ import cellular_level.*;
 import file_handling.*;
 import data_structures.*;
 import javafx.scene.paint.Color;
-import util.BorderChooser;
 import util.CellGenerator;
 import util.Location;
 import util.NeighborsChooser;
@@ -65,8 +64,7 @@ public abstract class CellSociety {
 	private Dimensions mySize;
 	private TreeMap<CellName, List<Cell>> currentCells;
 	private Patch[][] patches;
-	private Neighbors neighbors;
-	private Border border;
+	private BorderType border;
 	
 	/**
 	 * Default 
@@ -83,7 +81,7 @@ public abstract class CellSociety {
 	
 	public CellSociety(SimulationType sim) {
 		setBoardData(sim.getBoardData());
-		setCellsFromFile(sim);
+		setCurrentCells(sim.getCells());
 		setPatches();
 	}
 	
@@ -92,10 +90,10 @@ public abstract class CellSociety {
 		setName(data.getName());
 		setMyShape(data.getShape());
 		setSize(data.getDimensions());
-		setBorder(BorderChooser.chooseBorder(data));
-		setNeighbors(NeighborsChooser.chooseNeighbors(border, data.getShape()));
+		setBorder(data.getBorder());
 	}
 	
+
 	/**
 	 * This is only the DEFAULT version of this method, to ensure that no variables
 	 * are left uninitialized -- the default is NO PARSING at all -- this must
@@ -181,15 +179,9 @@ public abstract class CellSociety {
 	}
 	
 	private boolean validSpot(Location loc){
-		return (loc.getMyRow()<=mySize.getPosYBound() && loc.getMyRow()>=mySize.getNegYBound()) &&
-				(loc.getMyCol()<=mySize.getPosXBound() && loc.getMyCol()>=mySize.getNegXBound());
+		return (loc.getMyRow()<getY() && loc.getMyCol()<getX());
 	}
 	
-	
-	
-	public void setCellsFromFile(SimulationType sim){
-		setCurrentCells(centerCells(sim.getShiftedCells()));
-	}
 	
 	/**
 	 * Main method for interaction between front and back end
@@ -206,9 +198,8 @@ public abstract class CellSociety {
 			}
 		}
 		for (Cell c : getCellsAsList()) {
-			int newRow = c.getMyRow() - mySize.getNegYBound();
-			int newCol = c.getMyCol() - mySize.getNegXBound();
-			toRet[newRow][newCol] = c.getMyState();
+			if (validSpot(c.getMyLocation()))
+			toRet[c.getMyCol()][c.getMyRow()] = c.getMyState();
 		}
 		return toRet;
 	}
@@ -292,24 +283,14 @@ public abstract class CellSociety {
 	
 	private ArrayList<Location> getValidLocations(Dimensions valid){
 		ArrayList<Location>locs = new ArrayList<Location>();
-		for(int i = valid.getNegXBound(); i<=valid.getPosXBound(); i++){
-			for(int j=valid.getNegYBound(); j<=valid.getPosYBound(); j++){
+		for(int i = 0; i<getY(); i++){
+			for(int j=0; j<getX(); j++){
 				locs.add(new Location(i,j));
 			}
 		}
 		return locs;
 	}
 	
-	
-	private TreeMap<CellName,List<Cell>> centerCells(Map<CellName,List<Cell>> shifted){
-		for(CellName c: shifted.keySet()){
-			for(Cell cell: shifted.get(c)){
-				cell.setMyCol(cell.getMyCol()+mySize.getNegXBound());
-				cell.setMyRow(cell.getMyRow()+mySize.getNegYBound());
-			}
-		}
-		return new TreeMap<CellName,List<Cell>>(shifted);
-	}
 
 	/**
 	 * Locations getter
@@ -383,7 +364,6 @@ public abstract class CellSociety {
 	}
 
 	/**
-	 * ABSTRACT BECAUSE EACH SUBCLASS MUST DEFINE THE 
 	 * 
 	 * Updates the cell by passing it a new CellData object with defined
 	 * available spots and knowledge of this specific Cell Society
@@ -398,42 +378,7 @@ public abstract class CellSociety {
 	private List<Cell> updateCell(Cell c, List<Location> available){
 		return c.update(new CellData(this, available));
 	}
-	/**
-	 * Iterate through given List and fill any cell-less locations in a
-	 * size x size grid with a new Location
-	 * 
-	 * @param nextGen
-	 *            The List of cells to be padded
-	 */
-	/*public void fillEmptySpots(TreeMap <CellName, List<Cell>> cells) {
-		ArrayList<Cell>allCells = new ArrayList<Cell>();
-		if(cells==null || cells.size()==0){return;}
-		for(CellName n: cells.keySet()){
-			allCells.addAll(cells.get(n));
-		}
-		int[][] filled = new int[getX()][getY()];
-		for (Cell c : allCells) {
-			int shiftedRow = c.getMyRow() - mySize.getNegYBound();
-			int shiftedCol = c.getMyCol() - mySize.getNegXBound();
-			filled[shiftedRow][shiftedCol] += 1;
-		}
-		ArrayList<Cell> newEmpty = new ArrayList<Cell>();
-		for (int i = 0; i < getX(); i++) {
-			for (int j = 0; j < getY(); j++) {
-				if (filled[i][j] == 0){
-					int centerRow = i+ mySize.getNegYBound();
-					int centerCol = j+ mySize.getNegXBound();
-					newEmpty.add(new Location(centerRow, centerCol));
-				}
-			}
-		}
-		ArrayList<Cell>oldEmpty  = new ArrayList<Cell>();
-		if(cells.get(CellName.EMPTY_CELL) != null && cells.get(CellName.EMPTY_CELL).size()!=0){
-			oldEmpty = new ArrayList<Cell>(cells.get(CellName.EMPTY_CELL));	
-		}
-		oldEmpty.addAll(newEmpty);
-		cells.put(CellName.EMPTY_CELL, oldEmpty);
-	}*/
+	
 
 	/**
 	 * Iterate through both the available spots and the newly updated cells and
@@ -476,7 +421,8 @@ public abstract class CellSociety {
 	 * @return neighbors of Cell c
 	 */
 	public List<Cell> neighbors(Cell c){
-		return getNeighbors(c);
+		Neighbors neighbors = NeighborsChooser.chooseNeighbors(border, getMyShape(), getCellsAsArray());
+		return neighbors.getAllNeighbors(c);
 	}
 	
 	private static SimulationData generateDefaultData(){
@@ -505,6 +451,25 @@ public abstract class CellSociety {
 		return currentCells;
 	}
 	
+	/**
+	 * This WILL RETURN NULL CELLS IN PLACE OF NON EXISTENT ONES
+	 * @return
+	 */
+	public Cell[][] getCellsAsArray(){
+		Cell[][] ret = new Cell[getY()][getX()];
+		for(int i=0; i<getY(); i++){
+			for(int j=0; j<getX(); j++){
+				ret[i][j]=null;
+			}
+		}
+		for(Cell c: getCellsAsList()){
+			if(validSpot(c.getMyLocation()))
+				ret[c.getMyCol()][c.getMyRow()] = c;
+		}
+		return ret;
+	}
+	
+	
 	public List<Cell> getCellsAsList(){
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		for(CellName c: currentCells.keySet()){
@@ -512,189 +477,7 @@ public abstract class CellSociety {
 		}
 		return cells;
 	}
-	
-	
-	
-	/**
-	 * Normal neighbors function, gets any adjacent cells
-	 * 
-	 * @param c
-	 *            Cell of interest
-	 * @return Neighbors of Cell c
-	 */
-	protected List<Cell> getNeighbors(Cell c) {
-		ArrayList<Cell> neighbors = new ArrayList<Cell>();
-		for (Cell possible : getCellsAsList()) {
-			if (isAdjacent(c, possible)) {
-				neighbors.add(possible);
-			}
-		}
-		return neighbors;
-	}
 
-	
-	/**
-	 * Adjacency in common sense
-	 * 
-	 * @param c1
-	 *            target cell 1
-	 * @param c2
-	 *            target cell 2 (for comparison)
-	 * @return true if adjacent, false otherwise
-	 */
-	public boolean isAdjacent(Cell c1, Cell c2) {
-		return isAdjacent(c1.getMyLocation(), c2.getMyLocation());
-	}
-
-	protected boolean isAdjacent(Location l1, Location l2) {
-		return isCardinalAdjacent(l1, l2) || (oneAwayVertical(l1, l2) && oneAwayHorizontal(l1, l2));
-	}
-
-	/**
-	 * Adjacency, but only in cardinal directions (N, S, E, W)
-	 * 
-	 * @param c1
-	 *            target cell 1
-	 * @param c2
-	 *            target cell 2 (for comparison)
-	 * @return true if cardinal adjacent, false otherwise
-	 */
-	public boolean isCardinalAdjacent(Cell c1, Cell c2) {
-		return isCardinalAdjacent(c1.getMyLocation(), c2.getMyLocation());
-	}
-
-	public boolean isCardinalAdjacent(Location l1, Location l2) {
-		return (sameColumn(l1, l2) && oneAwayVertical(l1, l2)) || (sameRow(l1, l2) && oneAwayHorizontal(l1, l2));
-	}
-
-	/**
-	 * Adjacency EVEN ACROSS BOARD (wrapped sides)
-	 * 
-	 * @param c1
-	 *            target cell
-	 * @param c2
-	 *            target cell for comparison
-	 * @return true if wrapped adjacent, false otherwise
-	 */
-	protected boolean isWrappedAdjacent(Cell c1, Cell c2) {
-		return isWrappedAdjacent(c1.getMyLocation(), c2.getMyLocation());
-	}
-
-	protected boolean isWrappedAdjacent(Location l1, Location l2) {
-		return (sameColumn(l1, l2) && inRowAcrossBoard(l1, l2)) || (sameRow(l1, l2) && inColAcrossBoard(l1, l2));
-	}
-
-	/**
-	 * Adjacency EVEN ACROSS BOARD (wrapped sides), includes cardinal cells
-	 * 
-	 * @param c1
-	 *            target cell
-	 * @param c2
-	 *            target cell for comparison
-	 * @return true if wrapped adjacent, false otherwise
-	 */
-	protected boolean isWrappedCardinalAdjacent(Cell c1, Cell c2) {
-		return isWrappedCardinalAdjacent(c1.getMyLocation(), c2.getMyLocation());
-	}
-
-	protected boolean isWrappedCardinalAdjacent(Location l1, Location l2) {
-		return isWrappedAdjacent(l1, l2) || isCardinalAdjacent(l1, l2);
-	}
-
-	/**
-	 * Includes both common adjacency and wrapped adjacency
-	 * 
-	 * @param c1
-	 *            Target cell 1
-	 * @param c2
-	 *            Target cell 2
-	 * @return true if any type of adjacent, false otherwise
-	 */
-	public boolean isAnyAdjacent(Cell c1, Cell c2) {
-		return isAnyAdjacent(c1.getMyLocation(), c2.getMyLocation());
-	}
-
-	protected boolean isAnyAdjacent(Location l1, Location l2) {
-		return isWrappedAdjacent(l1, l2) || isAdjacent(l1, l2);
-	}
-
-	/**
-	 * Check for adjacency by column ACROSS the board
-	 * 
-	 * @param l1
-	 *            location 1
-	 * @param l2
-	 *            location 2 for comparison
-	 * @return true if l1 and l2 are in adjacent columns, only considering
-	 *         wrapped motion (e.g., if one cell is in the farthest left column
-	 *         and the other is in the farthest right, this method will return
-	 *         TRUE).
-	 */
-	private boolean inColAcrossBoard(Location l1, Location l2) {
-		return (l1.getMyCol() == 0 && l2.getMyCol() == getX() - 1) || (l2.getMyCol() == 0 && l1.getMyCol() == getX() - 1);
-	}
-
-	/**
-	 * Check for adjacency by row ACROSS the board
-	 * 
-	 * @param l1
-	 *            location 1
-	 * @param l2
-	 *            location 2 for comparison
-	 * @return true if l1 and l2 are in adjacent row, only considering wrapped
-	 *         motion (e.g., if one cell is in the top row and the other is in
-	 *         the lowest row, this method will return TRUE).
-	 */
-	private boolean inRowAcrossBoard(Location l1, Location l2) {
-		return (l1.getMyRow() == 0 && l2.getMyRow() == getY() - 1) || (l2.getMyRow() == 0 && l1.getMyRow() == getY() - 1);
-	}
-
-	/**
-	 * Check for same column/row
-	 */
-
-	private boolean sameColumn(Location l1, Location l2) {
-		return l2.getMyCol() == l1.getMyCol();
-	}
-
-	private boolean sameRow(Location l1, Location l2) {
-		return l2.getMyRow() == l1.getMyRow();
-	}
-
-	/**
-	 * Check distance in directions
-	 */
-
-	private boolean oneAwayVertical(Location l1, Location l2) {
-		return oneAwayDown(l1, l2) || oneAwayUp(l1, l2);
-	}
-
-	private boolean oneAwayHorizontal(Location l1, Location l2) {
-		return oneAwayRight(l1, l2) || oneAwayLeft(l1, l2);
-	}
-
-	/**
-	 * Check if l1 and l2 are one away in each direction (up, down, right,
-	 * left), return true if this is the case, false otherwise
-	 */
-
-	private boolean oneAwayUp(Location l1, Location l2) {
-		return ((l1.getMyRow() - 1) == l2.getMyRow());
-	}
-
-	private boolean oneAwayDown(Location l1, Location l2) {
-		return ((l1.getMyRow() + 1) == l2.getMyRow());
-	}
-
-	private boolean oneAwayRight(Location l1, Location l2) {
-		return ((l1.getMyCol() + 1) == l2.getMyCol());
-	}
-
-	private boolean oneAwayLeft(Location l1, Location l2) {
-		return ((l1.getMyCol() - 1) == l2.getMyCol());
-	}
-	
-	
 
 	public void setCurrentCells(TreeMap<CellName, List<Cell>> current) {
 		currentCells = current;
@@ -725,19 +508,11 @@ public abstract class CellSociety {
 		this.myShape = myShape;
 	}
 
-	public Neighbors getNeighbors() {
-		return neighbors;
-	}
-
-	public void setNeighbors(Neighbors neighbors) {
-		this.neighbors = neighbors;
-	}
-
-	public Border getBorder() {
+	public BorderType getBorder() {
 		return border;
 	}
 
-	public void setBorder(Border border) {
+	public void setBorder(BorderType border) {
 		this.border = border;
 	}
 
