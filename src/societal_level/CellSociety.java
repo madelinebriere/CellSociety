@@ -126,11 +126,6 @@ public abstract class CellSociety {
 	
 	
 	public void updatePatches(){
-		for(int i=0; i<patches.length; i++){
-			for(int j=0; j<patches[0].length; j++){
-				System.out.println(patches[i][j]);
-			}
-		}
 		for(int i=0; i<getPatches().length; i++){
 			for(int j=0; j<getPatches()[0].length; j++){
 				getPatches()[i][j].update();
@@ -167,11 +162,6 @@ public abstract class CellSociety {
 			}
 		}
 		fillPatchList(patches);
-		for(int i=0; i<patches.length; i++){
-			for(int j=0; j<patches[0].length; j++){
-				System.out.println(patches[i][j]);
-			}
-		}
 		return patches;
 	}
 	
@@ -268,20 +258,13 @@ public abstract class CellSociety {
 			expectedNum -= numPlace;
 			cellNums.put(name, numPlace);
 		}
-		if(expectedNum!=0){
-			for(CellName name: cellNums.keySet()){
-				int prev = cellNums.get(name);
-				prev+=expectedNum;
-				cellNums.put(name, prev);
-				break;
-			}
-		}
 		
+		//TODO: Possible fraction error
 		for(CellName name: cellNums.keySet()){
 			ArrayList<Cell> singleType = new ArrayList<Cell>();
 			for(int i=0; i<cellNums.get(name); i++){
 				int index = randomizer.nextInt(validLocations.size());
-				Location newLoc = validLocations.get(index);
+				Location newLoc = validLocations.remove(index);
 				Cell newCell = CellGenerator.newCell(name);
 				newCell.setMyLocation(newLoc);
 				singleType.add(newCell);
