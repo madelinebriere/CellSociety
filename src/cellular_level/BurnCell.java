@@ -82,11 +82,4 @@ public class BurnCell extends Cell {
 		mySteps++;
 	}
 
-	public static CellName getName() {
-		return name;
-	}
-
-	public static void setName(CellName name) {
-		BurnCell.name = name;
-	}
 }

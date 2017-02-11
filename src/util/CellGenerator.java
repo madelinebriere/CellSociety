@@ -49,5 +49,36 @@ public class CellGenerator {
 		else
 			return new EmptyCell();
 	}
+	
+	public static CellName getCellName(Cell cell){
+		if(cell instanceof LiveCell){
+			return CellName.LIVE_CELL;
+		}
+		else if(cell instanceof DeadCell){
+			return CellName.DEAD_CELL;
+		}
+		else if(cell instanceof BurnCell){
+			return CellName.BURN_CELL;
+		}
+		else if(cell instanceof TreeCell){
+			return CellName.TREE_CELL;
+		}
+		else if(cell instanceof FishCell){
+			return CellName.FISH_CELL;
+		}
+		else if(cell instanceof SharkCell){
+			return CellName.SHARK_CELL;
+		}
+		else if(cell instanceof HouseCell){
+			if(cell.getMyState().equals(BLUE))
+				return CellName.HOUSE_CELL_1;
+			if(cell.getMyState().equals(RED))
+				return CellName.HOUSE_CELL_2;
+			if(cell.getMyState().equals(GREEN))
+				return CellName.HOUSE_CELL_3;
+		}
+		return CellName.EMPTY_CELL;
+	}
+
 
 }
