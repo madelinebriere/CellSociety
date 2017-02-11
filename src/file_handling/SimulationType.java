@@ -13,11 +13,15 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import cellular_level.Cell;
 import data_structures.CellName;
+import data_structures.PatchName;
+import javafx.scene.paint.Color;
+import patch_level.Patch;
 import util.CellGenerator;
 import util.Location;
+import util.PatchGenerator;
+
 public abstract class SimulationType {
 	private static final List<String> UNIVERSAL_DATA_TYPES = Arrays.asList(new String[] {
 			"title",
@@ -58,7 +62,7 @@ public abstract class SimulationType {
 	 * 
 	 * @return
 	 */
-	public TreeMap<CellName,List<Cell>> getShiftedCells(){
+	private TreeMap<CellName,List<Cell>> getShiftedCells(){
 		TreeMap<CellName, List<Cell>> cells = new TreeMap<CellName, List<Cell>>();
 		for(String data: this.getCellData()){
 			String[] vars = data.split(" ");
@@ -80,6 +84,25 @@ public abstract class SimulationType {
 		return cells;
 	}
 	
+	public abstract TreeMap<PatchName, List<Patch>> getShiftedPatches();
+	
+	
+	public TreeMap<PatchName, List<Patch>> getShiftedPatches(PatchName patchType, Color color){
+		TreeMap<PatchName, List<Patch>> patches = new TreeMap<PatchName, List<Patch>>();
+		TreeMap<CellName, List<Cell>> cells = getShiftedCells();
+		ArrayList<Patch>fill = new ArrayList<Patch>();
+		for(CellName name: cells.keySet()){
+			for(Cell cell: cells.get(name)){
+				Patch newPatch = PatchGenerator.newPatch(patchType);
+				newPatch.setMyCell(cell);
+				newPatch.setMyColor(color);
+				newPatch.setMyLocation(cell.getMyLocation());
+				fill.add(newPatch);
+			}
+		}
+		patches.put(patchType, fill);
+		return patches;
+	}
 	
 	/**
 	 * @return List of raw Cell data from file.

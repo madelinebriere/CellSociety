@@ -10,6 +10,11 @@ package file_handling;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+
+import data_structures.PatchName;
+import javafx.scene.paint.Color;
+import patch_level.Patch;
 
 public class WaterSimulation extends SimulationType {
 	
@@ -36,6 +41,11 @@ public class WaterSimulation extends SimulationType {
 	
 	public Integer getSharkStarve(){
 		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
+	}
+	
+	@Override
+	public TreeMap<PatchName, List<Patch>> getShiftedPatches() {
+		return getShiftedPatches(PatchName.EMPTY_PATCH, Color.BLUE);
 	}
 
 }
