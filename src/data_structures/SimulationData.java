@@ -2,7 +2,7 @@
 
 package data_structures;
 
-import javafx.scene.paint.Color;
+import cellular_level.RawData;
 
 public class SimulationData {
 	private BoardData data;
@@ -47,6 +47,10 @@ public class SimulationData {
 	
 	public  CellShape getShape(){
 		return data.getShape();
+	}
+	
+	public RawData getRawData(){
+		return data.getRaw();
 	}
 	
 }

@@ -16,13 +16,23 @@ import util.BorderChooser;
 import util.CellGenerator;
 import util.Location;
 import util.NeighborsChooser;
-import util.PatchGenerator;
 import neighbors.*;
 import patch_level.*;
 import borders.*;
 
 
 /**
+ * TODO:
+ * 1) Stone: Add BoardData initialization
+ * 2) Talha: Make GUI work/ decide how to initial using new design
+ * 3) Implement new Color method with cells AND patches
+ * 4) Implement subclasses of CellSociety
+ * 5) Finish Slime Simulation
+ * 6) Assess viability of parseRules() / RawData structure
+ * 
+ * 
+ * 
+ * OLD:
  * 1) Figure out empty color situation
  * 2) SimulationType incorporation/ constructor?
  * 3) How do I know the size of the cell list I'm creating?
@@ -75,7 +85,7 @@ public abstract class CellSociety {
 	}
 	
 	public void setBoardData(BoardData data){
-		applyRules(data);
+		parseRules(data.getRaw());
 		setName(data.getName());
 		setMyShape(data.getShape());
 		setSize(data.getDimensions());
@@ -84,10 +94,24 @@ public abstract class CellSociety {
 	}
 	
 	/**
-	 * Use to apply rules of specific simulation (values defined
-	 * by files or by user)
+	 * This is only the DEFAULT version of this method, to ensure that no variables
+	 * are left uninitialized -- the default is NO PARSING at all -- this must
+	 * be implemented by subclasses
+	 * 
+	 *	This method should be implemented by every CellSociety in order to parse
+	 *	RawData passed to the society. If it does not define anything 
+	 *
 	 */
-	public abstract void applyRules(BoardData data);
+	//NOTE: Is this annotation a good way to avoid use in superclass?
+	@Deprecated
+	public void parseRules(RawData data){
+		setVariablesToDefault();
+	}
+	
+	/**
+	 * 
+	 */
+	public abstract void setVariablesToDefault();
 	
 
 	/**
@@ -137,7 +161,7 @@ public abstract class CellSociety {
 		//TODO: Fix this to account for non-positive indices
 	}
 
-	public abstract TreeMap<PatchName, List<Patch>> getShiftedPatches();
+	public abstract List<Patch> getShiftedPatches();
 	
 	
 	public TreeMap<PatchName, List<Patch>> getShiftedPatches(PatchName patchType, Color color){
@@ -157,7 +181,21 @@ public abstract class CellSociety {
 		return patches;
 	}
 	
+	
+	
 
+	public Dimensions getMySize() {
+		return mySize;
+	}
+	public void setMySize(Dimensions mySize) {
+		this.mySize = mySize;
+	}
+	public List<Patch> getPatches() {
+		return patches;
+	}
+	public void setPatches(List<Patch> patches) {
+		this.patches = patches;
+	}
 	/**
 	 *	Step function (update) -- Applies the current rules of the simulation
 	 * To each of the current Cells. Sorts the current cells by Cell-defined preference
@@ -425,11 +463,8 @@ public abstract class CellSociety {
 		m.put(CellName.SHARK_CELL, new CellRatio(0.2));
 		m.put(CellName.EMPTY_CELL, new CellRatio(0.3));
 		CellRatioMap r = new CellRatioMap(m);
-		SocietyData s = new SocietyData(false, Color.LIGHTBLUE, CellName.EMPTY_CELL);
-		BoardData b = new BoardData ();
-		ChangeableData data = new ChangeableData(b,s);
-		SimulationData d = new SimulationData(SimulationName.WATER_SOCIETY, data, r);
-		return d;
+		BoardData data = new BoardData();
+		return new SimulationData(data, r);
 	}
 
 	/**

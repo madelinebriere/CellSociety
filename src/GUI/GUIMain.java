@@ -357,7 +357,7 @@ public class GUIMain{
 //    	resetGUIComponents();
     }
     private void resetSimulationToType(SimulationType s){
-    	_model=new CellSociety(s);
+    	_model=new CellSociety(s); //TODO: Figure out how to deal with abstract CellSociety -- sorry Talha!
     	_gridController.setNewGridFromFile(s, _model.getCurrentColors());
     	resetGUIComponents();
     }
