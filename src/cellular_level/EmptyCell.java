@@ -7,16 +7,20 @@ import javafx.scene.paint.Color;
 import util.CellData;
 
 public class EmptyCell extends Cell{
-	private static Color EMPTY_COLOR = Color.WHITE;
-	private static Color emptyColor;
+	private static final Color EMPTY_COLOR = Color.WHITE;
 
 	public EmptyCell(){
 		this(0,0);
 	}
 	
 	public EmptyCell(int row, int col){
-		super(row, col,  EMPTY_COLOR);
+		this(row, col, EMPTY_COLOR);
 	}
+	
+	public EmptyCell(int row, int col, Color color){
+		super(row, col, color);
+	}
+	
 	
 	public EmptyCell(Cell c){
 		super(c.getMyRow(), c.getMyCol(), EMPTY_COLOR);
@@ -34,14 +38,5 @@ public class EmptyCell extends Cell{
 		ArrayList<Cell> empty = new ArrayList<Cell>();
 		return empty;
 	}
-	
-	public static Color getEmptyColor() {
-		return emptyColor;
-	}
-
-	public static void setEmptyColor(Color emptyColor) {
-		EmptyCell.emptyColor = emptyColor;
-	}
-	
 
 }

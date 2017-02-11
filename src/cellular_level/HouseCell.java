@@ -15,18 +15,26 @@ import util.CellData;
 import util.Location;
 
 public class HouseCell extends Cell{
-	public static double satisfiedThreshold = .40;
+	public static final Color DEFAULT_COLOR = Color.BLUE;
+	public static final double SATISFIED_THRESH = .40;
+	
+	public double satisfiedThresh;
 	
 	public HouseCell(){
-		super();
+		this(0,0);
 	}
 	
-	public HouseCell(Color c){
-		super(c);
+	public HouseCell(int row, int col){
+		this(row, row, DEFAULT_COLOR);
 	}
 	
 	public HouseCell(int row, int col, Color state){
+		this(row, col, state, SATISFIED_THRESH);
+	}
+	
+	public HouseCell(int row, int col, Color state, double thresh){
 		super(row, col, state);
+		setSatisfiedThreshold(thresh);
 	}
 	
 	@Override
@@ -67,7 +75,7 @@ public class HouseCell extends Cell{
 	}
 	
 	private boolean isSatisfied(double percentSame){
-		return percentSame >= satisfiedThreshold;
+		return percentSame >= satisfiedThresh;
 	}
 	
 	private double percentSame(CellData data){
@@ -82,12 +90,12 @@ public class HouseCell extends Cell{
 	}
 
 	
-	public static double getSatisfiedThreshold() {
-		return satisfiedThreshold;
+	public double getSatisfiedThreshold() {
+		return satisfiedThresh;
 	}
 
-	public static void setSatisfiedThreshold(double satisfiedThreshold) {
-		HouseCell.satisfiedThreshold = satisfiedThreshold;
+	public void setSatisfiedThreshold(double satisfiedThreshold) {
+		this.satisfiedThresh = satisfiedThreshold;
 	}
 	
 }
