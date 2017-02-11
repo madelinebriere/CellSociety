@@ -11,13 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javafx.scene.paint.Color;
-import data_structures.CellData;
-
+import util.CellData;
 import util.Location;
 public class SharkCell extends WaterWorldCell {
-	private static Color sharkColor = Color.YELLOW;
-	private static int stepsToStarve = 3;
-	private static int stepsToBreed = 5;
+	private static final Color SHARK_COLOR = Color.YELLOW;
+	private static final int STEPS_TO_STARVE = 3;
+	private static final int STEPS_TO_BREED = 8;
+	
+	private int stepsToStarve;
+	private int stepsToBreed;
 	
 	private int stepsSinceEat;
 	private int stepsSinceBreed;
@@ -29,7 +31,17 @@ public class SharkCell extends WaterWorldCell {
 	}
 	
 	public SharkCell(int row, int col){
-		super(row, col, sharkColor);
+		this(row, col, SHARK_COLOR);
+	}
+	
+	public SharkCell(int row, int col, Color color){
+		this(row, col, color, STEPS_TO_STARVE, STEPS_TO_BREED);
+	}
+	
+	public SharkCell(int row, int col, Color color, int starve, int breed){
+		super(row,col,color);
+		setStepsToStarve(starve);
+		setStepsToBreed(breed);
 		setStepsSinceEat(0);
 		setStepsSinceBreed(0);
 	}
@@ -134,24 +146,17 @@ public class SharkCell extends WaterWorldCell {
 	private boolean isStarved(){
 		return stepsSinceEat>=stepsToStarve;
 	}
-	
-	public static Color getSharkColor() {
-		return sharkColor;
-	}
-	public static void setSharkColor(Color sharkColor) {
-		SharkCell.sharkColor = sharkColor;
-	}
-	public static int getStepsToStarve() {
+	public int getStepsToStarve() {
 		return stepsToStarve;
 	}
-	public static void setStepsToStarve(int stepsToStarve) {
-		SharkCell.stepsToStarve = stepsToStarve;
+	public  void setStepsToStarve(int stepsToStarve) {
+		this.stepsToStarve = stepsToStarve;
 	}
-	public static int getStepsToBreed() {
+	public int getStepsToBreed() {
 		return stepsToBreed;
 	}
-	public static void setStepsToBreed(int stepsToBreed) {
-		SharkCell.stepsToBreed = stepsToBreed;
+	public void setStepsToBreed(int stepsToBreed) {
+		this.stepsToBreed = stepsToBreed;
 	}
 	public int getStepsSinceEat() {
 		return stepsSinceEat;

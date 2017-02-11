@@ -8,22 +8,26 @@ package cellular_level;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
-import data_structures.CellData;
-import data_structures.CellName;
-
+import util.CellData;
+import util.Location;
 public class BurnCell extends Cell {
-	private static Color burnColor = Color.RED;
-	private static int stepsToBurn = 1;
+	private static final Color BURN_COLOR = Color.RED;
+	private static final int STEPS_TO_BURN=1;
+	
+	private static int stepsToBurn;
 	private int mySteps;
 	public BurnCell(){
-		super();
-		setMyState(burnColor);
-		setMySteps(0);
+		this(0,0);
 	}
 	
 	public BurnCell(int row, int col){
-		super(row, col, burnColor);
+		this(row,col,BURN_COLOR);
+	}
+	
+	public BurnCell(int row, int col, Color color){
+		super(row, col, color);
 		setMySteps(0);
+		setStepsToBurn(STEPS_TO_BURN);
 	}
 	
 	@Override
@@ -60,12 +64,6 @@ public class BurnCell extends Cell {
 	private boolean isBurnt(){
 		return mySteps>=stepsToBurn;
 	}
-	public static Color getBurnColor() {
-		return burnColor;
-	}
-	public static void setBurnColor(Color burnColor) {
-		BurnCell.burnColor = burnColor;
-	}
 	public static int getStepsToBurn() {
 		return stepsToBurn;
 	}
@@ -81,5 +79,4 @@ public class BurnCell extends Cell {
 	public void incrementSteps(){
 		mySteps++;
 	}
-
 }

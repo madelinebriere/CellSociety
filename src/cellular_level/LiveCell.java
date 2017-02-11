@@ -1,5 +1,4 @@
 /**
- /**
  * Class representing live cells in the Game of Life Simulation
  * Capable of active updates based on surroundings
  * --> Checks for overpopulation
@@ -9,23 +8,35 @@
  */
 package cellular_level;
 import javafx.scene.paint.Color;
-import data_structures.CellData;
+import util.CellData;
 import java.util.ArrayList;
 import java.util.List;
-
 public class LiveCell extends LifeSimCell {
-	private static int underpopulation = 2;
-	private static int overpopulation = 3;
-	private static Color liveColor = Color.BLACK;
+	private static Color LIVE_COLOR = Color.BLACK;
+	private static int UNDER_POP = 2;
+	private static int OVER_POP=3;
+	
+	
+	private static int underpopulation;
+	private static int overpopulation;
 	
 	public LiveCell(){
-		super();
-		setMyState(liveColor);
+		this(0,0);
 	}
 	
 	public LiveCell(int row, int col){
-		super(row,col, liveColor);
+		this(row,col, LIVE_COLOR);
 	}
+	
+	public LiveCell(int row, int col, Color color){
+		this(row,col,color, UNDER_POP, OVER_POP);
+	}
+	public LiveCell(int row, int col, Color color, int under, int over){
+		super(row,col,color);
+		setUnderpopulation(under);
+		setOverpopulation(over);
+	}
+	
 	protected void changeState(CellData data, ArrayList<Cell> newGen){
 		int numLive = data.countSameNeighbors(this);
 		if(isOverpopulated(numLive)||isUnderpopulated(numLive)){
@@ -54,25 +65,18 @@ public class LiveCell extends LifeSimCell {
 	private boolean isUnderpopulated(int numLive){
 		return numLive<underpopulation;
 	}
-	public static int getUnderpopulation() {
+	public int getUnderpopulation() {
 		return underpopulation;
 	}
-	public static void setUnderpopulation(int underpopulation) {
+	public void setUnderpopulation(int underpopulation) {
 		LiveCell.underpopulation = underpopulation;
 	}
-	public static int getOverpopulation() {
+	public int getOverpopulation() {
 		return overpopulation;
 	}
-	public static void setOverpopulation(int overpopulation) {
+	public  void setOverpopulation(int overpopulation) {
 		LiveCell.overpopulation = overpopulation;
 	}
-	public static Color getLiveColor() {
-		return liveColor;
-	}
-	public static void setLiveColor(Color liveColor) {
-		LiveCell.liveColor = liveColor;
-	}
-	
 	
 	
 }

@@ -7,23 +7,18 @@
  * 
  * @author Stone Mathers
  */
-
 package file_handling;
-
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-
 import cellular_level.Cell;
 import data_structures.CellName;
 import util.CellGenerator;
 import util.Location;
-
 public abstract class SimulationType {
-
 	private static final List<String> UNIVERSAL_DATA_TYPES = Arrays.asList(new String[] {
 			"title",
 	        "author",
@@ -36,7 +31,6 @@ public abstract class SimulationType {
 	protected List<String> dataTypes;
 	protected List<String> settingTypes = Arrays.asList(new String[] {""});
 	private Map<String, String> myDataValues;
-
 	
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
@@ -165,5 +159,4 @@ public abstract class SimulationType {
 		data.addAll(settingTypes);
 		return data;
 	}
-
 }
