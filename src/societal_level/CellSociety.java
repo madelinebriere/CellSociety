@@ -156,7 +156,7 @@ public abstract class CellSociety {
 					Patch newPatch = PatchGenerator.newPatch(getPatchType());
 					newPatch.setMyColor(getEmptyColor());
 					newPatch.setMyLocation(c.getMyLocation());
-					newPatch.setMyCell(c);
+					newPatch.setMyCell(c);					
 					patches[c.getMyCol()][c.getMyRow()]=newPatch;
 				}
 			}
@@ -211,6 +211,21 @@ public abstract class CellSociety {
 		this.mySize = mySize;
 	}
 	public Patch[][] getPatches() {
+//		for(int i=0; i<patches.length; i++){
+//			for(int j=0; j<patches.length;j++){
+//				int x = patches[i][j].getMyLocation().getMyCol();
+//				int y = patches[i][j].getMyLocation().getMyRow();
+//				
+//				Integer cx = null;
+//				Integer cy = null;
+//				if (patches[i][j].getMyCell() != null){
+//					cx = patches[i][j].getMyCell().getMyCol();
+//					cy = patches[i][j].getMyCell().getMyRow();
+//				}
+//				System.out.println(i + " " + j+"\t\t" + x + " " + y + "\t\t"+cx + " " + cy);
+//				
+//			}
+//		}
 		return patches;
 	}
 	public void setPatches(Patch[][] patches) {
@@ -229,9 +244,9 @@ public abstract class CellSociety {
 	 * @return 2D Array of current Cell colors
 	 */
 	public Color[][] step() {
-		updatePatches();
 		shuffleCurrentCells();
-		//stepAllCells(getAllEmptyCells());
+		stepAllCells(getAllEmptyCells());
+		updatePatches();
 		return getCurrentColors();
 	}
 
