@@ -4,9 +4,10 @@ import cellular_level.Cell;
 import data_structures.BorderType;
 import data_structures.CellShape;
 import neighbors.*;
+import patch_level.Patch;
 
 public class NeighborsChooser {
-	public static Neighbors chooseNeighbors(BorderType b, CellShape s, Cell[][] grid){
+	public static Neighbors chooseNeighbors(BorderType b, CellShape s, Patch[][] grid){
 		Neighbors neighbors;
 		switch (s){
 			case TRIANGLE:

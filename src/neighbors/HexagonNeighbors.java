@@ -6,17 +6,17 @@ import borders.Border;
 import cellular_level.Cell;
 import data_structures.BorderType;
 import data_structures.Dimensions;
+import patch_level.Patch;
 
 public class HexagonNeighbors extends Neighbors{
 
-	public HexagonNeighbors(Cell[][] cells, BorderType b) {
+	public HexagonNeighbors(Patch[][] cells, BorderType b) {
 		super(cells, b);
 	}
-	
 
 
 	@Override
-	public List<Cell> getAllNeighbors(Cell c) {
+	public List<Patch> getAllNeighbors(Patch c) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -24,7 +24,7 @@ public class HexagonNeighbors extends Neighbors{
 
 
 	@Override
-	public List<Cell> getCardinalNeighbors(Cell c) {
+	public List<Patch> getCardinalNeighbors(Patch c) {
 		// TODO Auto-generated method stub
 		return null;
 	}
