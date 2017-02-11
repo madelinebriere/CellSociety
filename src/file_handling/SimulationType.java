@@ -137,4 +137,6 @@ public abstract class SimulationType {
 		data.addAll(settingTypes);
 		return data;
 	}
+
+
 }
