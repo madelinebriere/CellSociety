@@ -8,6 +8,7 @@ import javafx.scene.shape.Polygon;
 
 public class HexagonalGridView extends GridView {
 	
+	private Polygon[][] _cells;
 	double unit;
 	double starting_y;
 	double starting_x;
@@ -36,6 +37,7 @@ public class HexagonalGridView extends GridView {
 
 	@Override
 	protected void setupGrid(Color[][] newColors) {
+		_cells = new Polygon[_dimensions.getX()][_dimensions.getY()];
 		for(int i=0; i<this._dimensions.getX(); i++){
 			for(int j =0; j<_dimensions.getY(); j++){
 				Polygon hex;
@@ -45,6 +47,7 @@ public class HexagonalGridView extends GridView {
 					hex = plainHexagon(starting_x + i*unit*3 + 1.5*unit, starting_y+j*unit);
 				}
 				hex.setFill(Color.WHITE);
+				this._cells[i][j] = hex;
 				this.getChildren().add(hex);
 			}
 		}

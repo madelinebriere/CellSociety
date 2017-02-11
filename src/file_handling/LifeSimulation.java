@@ -16,5 +16,4 @@ public class LifeSimulation extends SimulationType {
 	protected List<String> combineDataTypes() {
 		return this.getUniversalTypes();
 	}
-	
 }
