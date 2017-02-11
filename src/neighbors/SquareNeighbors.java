@@ -22,7 +22,6 @@ public class SquareNeighbors extends Neighbors {
 		int x = c.getMyLocation().getMyRow();
 		int y = c.getMyLocation().getMyCol();
 		neighbors.addAll(getCardinalNeighbors(c));
-		
 		if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x-1, y-1)){
 			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x-1, y-1);
 			neighbors.add(myGrid[t.x][t.y]);
@@ -39,6 +38,7 @@ public class SquareNeighbors extends Neighbors {
 			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x+1, y+1);
 			neighbors.add(myGrid[t.x][t.y]);
 		}
+		System.out.println(neighbors.size());
 		return neighbors;
 	}
 
@@ -65,6 +65,7 @@ public class SquareNeighbors extends Neighbors {
 			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x, y+1);
 			neighbors.add(myGrid[t.x][t.y]);
 		}
+		System.out.println(neighbors.size());
 		return neighbors;
 	}
 

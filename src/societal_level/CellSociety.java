@@ -126,11 +126,11 @@ public abstract class CellSociety {
 	
 	
 	public void updatePatches(){
-		for(int i=0; i<patches.length; i++){
-			for(int j=0; j<patches[0].length; j++){
-				System.out.println(patches[i][j]);
-			}
-		}
+//		for(int i=0; i<patches.length; i++){
+//			for(int j=0; j<patches[0].length; j++){
+//				//System.out.println(patches[i][j]);
+//			}
+//		}
 		for(int i=0; i<getPatches().length; i++){
 			for(int j=0; j<getPatches()[0].length; j++){
 				getPatches()[i][j].update();
@@ -167,11 +167,11 @@ public abstract class CellSociety {
 			}
 		}
 		fillPatchList(patches);
-		for(int i=0; i<patches.length; i++){
-			for(int j=0; j<patches[0].length; j++){
-				System.out.println(patches[i][j]);
-			}
-		}
+//		for(int i=0; i<patches.length; i++){
+//			for(int j=0; j<patches[0].length; j++){
+//				System.out.println(patches[i][j]);
+//			}
+//		}
 		return patches;
 	}
 	
