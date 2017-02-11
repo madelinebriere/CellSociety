@@ -15,13 +15,10 @@ import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import cellular_level.Cell;
+import data_structures.BoardData;
 import data_structures.CellName;
-import data_structures.PatchName;
-import javafx.scene.paint.Color;
-import patch_level.Patch;
 import util.CellGenerator;
 import util.Location;
-import util.PatchGenerator;
 
 public abstract class SimulationType {
 	private static final List<String> UNIVERSAL_DATA_TYPES = Arrays.asList(new String[] {
@@ -33,16 +30,21 @@ public abstract class SimulationType {
 	protected static final int NAME_INDEX = 2;
 	private static final String ERROR_BUNDLE = "resources/Errors";
 	
+	private BoardData boardData; //TODO: Assign value
+
+
 	private List<String> cellData;																
 	protected List<String> dataTypes;
 	protected List<String> settingTypes = Arrays.asList(new String[] {""});
 	private Map<String, String> myDataValues;
 	public ResourceBundle myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
 	
+	
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
 		dataTypes = combineDataTypes();
+		//TODO: Create BoardData object from input as field variables
 	}
 	
 	public String getTitle(){
@@ -68,7 +70,7 @@ public abstract class SimulationType {
 	 * 
 	 * @return
 	 */
-	private TreeMap<CellName,List<Cell>> getShiftedCells(){
+	public TreeMap<CellName,List<Cell>> getShiftedCells(){
 		TreeMap<CellName, List<Cell>> cells = new TreeMap<CellName, List<Cell>>();
 		try{
 			for(String data: this.getCellData()){
@@ -97,26 +99,6 @@ public abstract class SimulationType {
 			throw new XMLException(e, myResources.getString("InvalidCellData"));
 		}
 		return cells;
-	}
-	
-	public abstract TreeMap<PatchName, List<Patch>> getShiftedPatches();
-	
-	
-	public TreeMap<PatchName, List<Patch>> getShiftedPatches(PatchName patchType, Color color){
-		TreeMap<PatchName, List<Patch>> patches = new TreeMap<PatchName, List<Patch>>();
-		TreeMap<CellName, List<Cell>> cells = getShiftedCells();
-		ArrayList<Patch>fill = new ArrayList<Patch>();
-		for(CellName name: cells.keySet()){
-			for(Cell cell: cells.get(name)){
-				Patch newPatch = PatchGenerator.newPatch(patchType);
-				newPatch.setMyCell(cell);
-				newPatch.setMyColor(color);
-				newPatch.setMyLocation(cell.getMyLocation());
-				fill.add(newPatch);
-			}
-		}
-		patches.put(patchType, fill);
-		return patches;
 	}
 	
 	/**
@@ -159,5 +141,9 @@ public abstract class SimulationType {
 		data.addAll(getUniversalTypes());
 		data.addAll(settingTypes);
 		return data;
+	}
+	
+	public BoardData getBoardData() {
+		return boardData;
 	}
 }

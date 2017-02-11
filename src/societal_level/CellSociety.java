@@ -16,6 +16,7 @@ import util.BorderChooser;
 import util.CellGenerator;
 import util.Location;
 import util.NeighborsChooser;
+import util.PatchGenerator;
 import neighbors.*;
 import patch_level.*;
 import borders.*;
@@ -45,15 +46,13 @@ import borders.*;
  *         the superclass
  */
 
-public class CellSociety {
-	private static final Color DEFAULT_COLOR = Color.WHITE;
+public abstract class CellSociety {
 	
 	private SimulationName name;
 	private CellShape myShape;
 	private Dimensions mySize;
 	private TreeMap<CellName, List<Cell>> currentCells;
-	private TreeMap<PatchName, List<Patch>> currentPatches;
-	private Color emptyColor;
+	private List <Patch> patches;
 	private Neighbors neighbors;
 	private Border border;
 	
@@ -65,22 +64,45 @@ public class CellSociety {
 		this(generateDefaultData());
 	}
 	public CellSociety(SimulationData sim) {
-		setMyShape(sim.getShape());
-		setSize(sim.getDimensions());
-		setBorder(BorderChooser.chooseBorder(sim));
-		setNeighbors(NeighborsChooser.chooseNeighbors(border, sim.getShape()));
+		setBoardData(sim.getData());
 		setCurrentCells(makeCells(sim));
-		setEmptyColor(sim.getEmptyCellColor());
+		setPatches();
 	}
 	
 	public CellSociety(SimulationType sim) {
-		setSize(new Dimensions(sim.getDimension(), sim.getDimension()));
+		setBoardData(sim.getBoardData());
+		setCellsFromFile(sim);
+	}
+	
+	public void setBoardData(BoardData data){
+		applyRules(data);
+		setName(data.getName());
+		setMyShape(data.getShape());
+		setSize(data.getDimensions());
+		setBorder(BorderChooser.chooseBorder(data));
+		setNeighbors(NeighborsChooser.chooseNeighbors(border, data.getShape()));
+	}
+	
+	/**
+	 * Use to apply rules of specific simulation (values defined
+	 * by files or by user)
+	 */
+	public abstract void applyRules(BoardData data);
+	
+
+	/**
+	 * Use to set the type of patches (empty spots) in the simulation
+	 * 	
+	 */
+	public abstract void setPatches();
+	
+	
+	
+	public void setCellsFromFile(SimulationType sim){
 		setCurrentCells(centerCells(sim.getShiftedCells()));
 		fillEmptySpots(getCurrentCells());
 	}
 	
-	
-
 	/**
 	 * Main method for interaction between front and back end
 	 * 
@@ -115,6 +137,25 @@ public class CellSociety {
 		//TODO: Fix this to account for non-positive indices
 	}
 
+	public abstract TreeMap<PatchName, List<Patch>> getShiftedPatches();
+	
+	
+	public TreeMap<PatchName, List<Patch>> getShiftedPatches(PatchName patchType, Color color){
+		TreeMap<PatchName, List<Patch>> patches = new TreeMap<PatchName, List<Patch>>();
+		TreeMap<CellName, List<Cell>> cells = getShiftedCells();
+		ArrayList<Patch>fill = new ArrayList<Patch>();
+		for(CellName name: cells.keySet()){
+			for(Cell cell: cells.get(name)){
+				Patch newPatch = PatchGenerator.newPatch(patchType);
+				newPatch.setMyCell(cell);
+				newPatch.setMyColor(color);
+				newPatch.setMyLocation(cell.getMyLocation());
+				fill.add(newPatch);
+			}
+		}
+		patches.put(patchType, fill);
+		return patches;
+	}
 	
 
 	/**
@@ -384,9 +425,10 @@ public class CellSociety {
 		m.put(CellName.SHARK_CELL, new CellRatio(0.2));
 		m.put(CellName.EMPTY_CELL, new CellRatio(0.3));
 		CellRatioMap r = new CellRatioMap(m);
-		SocietyData s = new SocietyData(false, Color.LIGHTBLUE, r, CellName.EMPTY_CELL);
+		SocietyData s = new SocietyData(false, Color.LIGHTBLUE, CellName.EMPTY_CELL);
 		BoardData b = new BoardData ();
-		SimulationData d = new SimulationData(SimulationName.WATER_SOCIETY, b, s);
+		ChangeableData data = new ChangeableData(b,s);
+		SimulationData d = new SimulationData(SimulationName.WATER_SOCIETY, data, r);
 		return d;
 	}
 
