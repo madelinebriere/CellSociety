@@ -46,6 +46,7 @@ public class CellGenerator {
 			return new HouseCell(GREEN);
 		}
 		else
+			System.out.println("developer error, cell should not return null");
 			return null;
 	}
 	

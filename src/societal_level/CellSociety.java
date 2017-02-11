@@ -425,11 +425,10 @@ public abstract class CellSociety {
 		return neighbors.getAllNeighbors(c);
 	}
 	
-	private static SimulationData generateDefaultData(){
+	public static SimulationData generateDefaultData(){
 		HashMap<CellName, CellRatio> m = new HashMap<CellName, CellRatio>();
 		m.put(CellName.FISH_CELL, new CellRatio(0.5));
 		m.put(CellName.SHARK_CELL, new CellRatio(0.2));
-		m.put(CellName.EMPTY_CELL, new CellRatio(0.3));
 		CellRatioMap r = new CellRatioMap(m);
 		BoardData data = new BoardData();
 		return new SimulationData(data, r);

@@ -16,7 +16,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		CellSociety model = new CellSociety();
+		WaterSociety model = new WaterSociety(CellSociety.generateDefaultData());
 		GUIMain display = new GUIMain(model);
 		
 		//

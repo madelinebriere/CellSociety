@@ -59,10 +59,6 @@ public class GUIMain{
     private Button _fileButton;
     private SimulationType _currentSimulationType;
     
-    public GUIMain(){
-    	//default society
-		this(new CellSociety());
-    }
     public GUIMain(CellSociety model){
     	_model = model;
     	_currentGridDimensions = model.getSize();
@@ -360,7 +356,7 @@ public class GUIMain{
 //    	resetGUIComponents();
     }
     private void resetSimulationToType(SimulationType s){
-    	_model=new CellSociety(s); //TODO: Figure out how to deal with abstract CellSociety -- sorry Talha!
+    	//_model=new CellSociety(s); //TODO: Figure out how to deal with abstract CellSociety -- sorry Talha!
     	_gridController.setNewGridFromFile(s, _model.getCurrentColors());
     	resetGUIComponents();
     }
