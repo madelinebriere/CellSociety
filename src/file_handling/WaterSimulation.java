@@ -32,15 +32,27 @@ public class WaterSimulation extends SimulationType {
 
 
 	public Integer getFishBreed(){
-		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(0)));
+		try{
+			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(0)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(0)));
+		}
 	}
 	
 	public Integer getSharkBreed(){
-		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
+		try{
+			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(1)));
+		}
 	}
 	
 	public Integer getSharkStarve(){
-		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
+		try{
+			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(2)));
+		}
 	}
 	
 	@Override
