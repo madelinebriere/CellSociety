@@ -74,7 +74,7 @@ public class CellSociety {
 	
 	public CellSociety(SimulationType sim) {
 		setSize(new Dimensions(sim.getDimension(), sim.getDimension()));
-		setCurrentCells(sim.getCells());
+		setCurrentCells(centerCells(sim.getShiftedCells()));
 	}
 	
 	
@@ -192,6 +192,16 @@ public class CellSociety {
 		return locs;
 	}
 	
+	
+	private TreeMap<CellName,List<Cell>> centerCells(Map<CellName,List<Cell>> shifted){
+		for(CellName c: shifted.keySet()){
+			for(Cell cell: shifted.get(c)){
+				cell.setMyCol(cell.getMyCol()+mySize.getNegXBound());
+				cell.setMyRow(cell.getMyRow()+mySize.getNegYBound());
+			}
+		}
+		return new TreeMap<CellName,List<Cell>>(shifted);
+	}
 
 	/**
 	 * EmptyCells getter
