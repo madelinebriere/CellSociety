@@ -11,18 +11,13 @@ package file_handling;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-
-import data_structures.PatchName;
-import javafx.scene.paint.Color;
-import patch_level.Patch;
 
 public class FireSimulation extends SimulationType {
 	
 	private static final List<String> SETTING_TYPES = Arrays.asList(new String[] {
 			"probability",
 	        "steps"
-	    });
+	   });
 
 	public FireSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
@@ -46,10 +41,6 @@ public class FireSimulation extends SimulationType {
 		}
 	}
 
-	@Override
-	public TreeMap<PatchName, List<Patch>> getShiftedPatches() {
-		return getShiftedPatches(PatchName.EMPTY_PATCH, Color.YELLOW);
-	}
 
 
 }

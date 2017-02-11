@@ -22,6 +22,17 @@ import borders.*;
 
 
 /**
+ * TODO:
+ * 1) Stone: Add BoardData initialization
+ * 2) Talha: Make GUI work/ decide how to initial using new design
+ * 3) Implement new Color method with cells AND patches
+ * 4) Implement subclasses of CellSociety
+ * 5) Finish Slime Simulation
+ * 6) Assess viability of parseRules() / RawData structure
+ * 
+ * 
+ * 
+ * OLD:
  * 1) Figure out empty color situation
  * 2) SimulationType incorporation/ constructor?
  * 3) How do I know the size of the cell list I'm creating?
@@ -45,15 +56,13 @@ import borders.*;
  *         the superclass
  */
 
-public class CellSociety {
-	private static final Color DEFAULT_COLOR = Color.WHITE;
+public abstract class CellSociety {
 	
 	private SimulationName name;
 	private CellShape myShape;
 	private Dimensions mySize;
 	private TreeMap<CellName, List<Cell>> currentCells;
-	private TreeMap<PatchName, List<Patch>> currentPatches;
-	private Color emptyColor;
+	private List <Patch> patches;
 	private Neighbors neighbors;
 	private Border border;
 	
@@ -65,22 +74,59 @@ public class CellSociety {
 		this(generateDefaultData());
 	}
 	public CellSociety(SimulationData sim) {
-		setMyShape(sim.getShape());
-		setSize(sim.getDimensions());
-		setBorder(BorderChooser.chooseBorder(sim));
-		setNeighbors(NeighborsChooser.chooseNeighbors(border, sim.getShape()));
+		setBoardData(sim.getData());
 		setCurrentCells(makeCells(sim));
-		setEmptyColor(sim.getEmptyCellColor());
+		setPatches();
 	}
 	
 	public CellSociety(SimulationType sim) {
-		setSize(new Dimensions(sim.getDimension(), sim.getDimension()));
+		setBoardData(sim.getBoardData());
+		setCellsFromFile(sim);
+	}
+	
+	public void setBoardData(BoardData data){
+		parseRules(data.getRaw());
+		setName(data.getName());
+		setMyShape(data.getShape());
+		setSize(data.getDimensions());
+		setBorder(BorderChooser.chooseBorder(data));
+		setNeighbors(NeighborsChooser.chooseNeighbors(border, data.getShape()));
+	}
+	
+	/**
+	 * This is only the DEFAULT version of this method, to ensure that no variables
+	 * are left uninitialized -- the default is NO PARSING at all -- this must
+	 * be implemented by subclasses
+	 * 
+	 *	This method should be implemented by every CellSociety in order to parse
+	 *	RawData passed to the society. If it does not define anything 
+	 *
+	 */
+	//NOTE: Is this annotation a good way to avoid use in superclass?
+	@Deprecated
+	public void parseRules(RawData data){
+		setVariablesToDefault();
+	}
+	
+	/**
+	 * 
+	 */
+	public abstract void setVariablesToDefault();
+	
+
+	/**
+	 * Use to set the type of patches (empty spots) in the simulation
+	 * 	
+	 */
+	public abstract void setPatches();
+	
+	
+	
+	public void setCellsFromFile(SimulationType sim){
 		setCurrentCells(centerCells(sim.getShiftedCells()));
 		fillEmptySpots(getCurrentCells());
 	}
 	
-	
-
 	/**
 	 * Main method for interaction between front and back end
 	 * 
@@ -115,8 +161,41 @@ public class CellSociety {
 		//TODO: Fix this to account for non-positive indices
 	}
 
+	public abstract List<Patch> getShiftedPatches();
+	
+	
+	public TreeMap<PatchName, List<Patch>> getShiftedPatches(PatchName patchType, Color color){
+		TreeMap<PatchName, List<Patch>> patches = new TreeMap<PatchName, List<Patch>>();
+		TreeMap<CellName, List<Cell>> cells = getShiftedCells();
+		ArrayList<Patch>fill = new ArrayList<Patch>();
+		for(CellName name: cells.keySet()){
+			for(Cell cell: cells.get(name)){
+				Patch newPatch = PatchGenerator.newPatch(patchType);
+				newPatch.setMyCell(cell);
+				newPatch.setMyColor(color);
+				newPatch.setMyLocation(cell.getMyLocation());
+				fill.add(newPatch);
+			}
+		}
+		patches.put(patchType, fill);
+		return patches;
+	}
+	
+	
 	
 
+	public Dimensions getMySize() {
+		return mySize;
+	}
+	public void setMySize(Dimensions mySize) {
+		this.mySize = mySize;
+	}
+	public List<Patch> getPatches() {
+		return patches;
+	}
+	public void setPatches(List<Patch> patches) {
+		this.patches = patches;
+	}
 	/**
 	 *	Step function (update) -- Applies the current rules of the simulation
 	 * To each of the current Cells. Sorts the current cells by Cell-defined preference
@@ -384,10 +463,8 @@ public class CellSociety {
 		m.put(CellName.SHARK_CELL, new CellRatio(0.2));
 		m.put(CellName.EMPTY_CELL, new CellRatio(0.3));
 		CellRatioMap r = new CellRatioMap(m);
-		SocietyData s = new SocietyData(false, Color.LIGHTBLUE, r, CellName.EMPTY_CELL);
-		BoardData b = new BoardData ();
-		SimulationData d = new SimulationData(SimulationName.WATER_SOCIETY, b, s);
-		return d;
+		BoardData data = new BoardData();
+		return new SimulationData(data, r);
 	}
 
 	/**
