@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.TreeMap;
 
 import cellular_level.Cell;
+import patch_level.Patch;
 import societal_level.CellSociety;
 import util.Location;
 
@@ -49,7 +50,7 @@ public class CellData {
 	/**
 	 * Call will be specific to CellSociety --> correct type of neighbors
 	 */
-	public List<Cell> getNeighbors(Cell c) {
+	public List<Patch> getNeighbors(Cell c) {
 		return mySociety.neighbors(c);
 	}
 
@@ -59,8 +60,9 @@ public class CellData {
 
 	public int countSameNeighbors(Cell center) {
 		int sameCount = 0;
-		for (Cell c : mySociety.neighbors(center)) {
-			if (c.getMyState() != null && c.getMyState().equals(center.getMyState())) {
+		for (Patch p : mySociety.neighbors(center)) {
+			if (p.getMyCell()!= null && p.getMyCell().getMyState() != null
+					&& p.getMyCell().getMyState().equals(center.getMyState())) {
 				sameCount++;
 			}
 		}
@@ -72,8 +74,8 @@ public class CellData {
 	}
 
 	public int countNonEmptyNeighbors(Cell center) {
-		List<Cell> neighbors = mySociety.neighbors(center);
-		List<Location> emptyNeighbors = mySociety.getEmptyCells(getCellLocations(neighbors));
+		List<Patch> neighbors = mySociety.neighbors(center);
+		List<Location> emptyNeighbors = mySociety.getEmptyCells(getPatchLocations(neighbors));
 		if (neighbors.size() == 0) {
 			return 0;
 		}
@@ -83,10 +85,10 @@ public class CellData {
 		return neighbors.size() - emptyNeighbors.size();
 	}
 	
-	private List<Location> getCellLocations(List<Cell> cells){
+	private List<Location> getPatchLocations(List<Patch> patches){
 		ArrayList <Location> locs = new ArrayList<Location>();
-		for(Cell c: cells){
-			locs.add(c.getMyLocation());
+		for(Patch p: patches){
+			locs.add(p.getMyLocation());
 		}
 		return locs;
 	}
@@ -101,20 +103,13 @@ public class CellData {
 		return openCells.get(emptyIndex);
 	}
 
-	public Location getAvailableNeighborSpot(Cell c) {
-		if (getAvailableNeighbor(c) != null)
-			return getAvailableNeighbor(c);
-		else
-			return null;
-	}
-
 	public Location getAvailableNeighbor(Cell c) {
 		if (available.size() == 0) {
 			return null;
 		}
 		Random randy = new Random();
 		ArrayList<Location> availableNeighbors = new ArrayList<Location>(available);
-		availableNeighbors.retainAll(mySociety.neighbors(c));
+		availableNeighbors.retainAll(getPatchLocations(mySociety.neighbors(c)));
 		if (availableNeighbors.size() == 0) {
 			return null;
 		}

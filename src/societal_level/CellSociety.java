@@ -413,9 +413,10 @@ public abstract class CellSociety {
 	 *            Cell whose neighbors are returned
 	 * @return neighbors of Cell c
 	 */
-	public List<Patch> neighbors(Patch c){
+	public List<Patch> neighbors(Cell c){
 		Neighbors neighbors = NeighborsChooser.chooseNeighbors(border, getMyShape(), getPatches());
-		return neighbors.getAllNeighbors(c);
+		Patch patch = patches[c.getMyCol()][c.getMyRow()];
+		return neighbors.getAllNeighbors(patch);
 	}
 	
 	public static SimulationData generateDefaultData(){
