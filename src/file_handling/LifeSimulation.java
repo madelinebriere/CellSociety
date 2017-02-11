@@ -17,5 +17,4 @@ public class LifeSimulation extends SimulationType {
 		return this.getUniversalTypes();
 	}
 	
-
 }

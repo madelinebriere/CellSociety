@@ -51,18 +51,16 @@ public class HexagonalGridView extends GridView {
 	}
 	
 	private Polygon plainHexagon(double x, double y){
-		Polygon p = new Polygon();
 		double center = getH(unit) + 1.0;
 		double side = unit - .5;
-		Double[] points = {
+		Polygon p = new Polygon(new double[] {
 				x, y,
 				x + side, y,
 				x + side + side/2, y + center,
 				x + side, y + center*2,
 				x, y+center*2,
 				x - side/2, y + center
-		};
-		p.getPoints().addAll(points);
+		});
 		return p;
 	}
 	private double getH(double side) {

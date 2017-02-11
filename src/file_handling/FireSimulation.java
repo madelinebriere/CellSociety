@@ -44,3 +44,4 @@ public class FireSimulation extends SimulationType {
 
 
 }
+

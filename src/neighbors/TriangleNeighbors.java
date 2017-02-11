@@ -4,16 +4,24 @@ import java.util.List;
 
 import borders.Border;
 import cellular_level.Cell;
+import data_structures.BorderType;
 import data_structures.Dimensions;
 
 public class TriangleNeighbors extends Neighbors {
 
-	public TriangleNeighbors(Border b) {
-		super(b);
+	public TriangleNeighbors(Cell[][] cells, BorderType b) {
+		super(cells, b);
+	}
+
+
+	@Override
+	public List<Cell> getAllNeighbors(Cell c) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public List<Cell> getNeighbors(Cell c) {
+	public List<Cell> getCardinalNeighbors(Cell c) {
 		// TODO Auto-generated method stub
 		return null;
 	}

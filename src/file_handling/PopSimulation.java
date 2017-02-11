@@ -33,4 +33,3 @@ public class PopSimulation extends SimulationType {
 	
 
 }
-
