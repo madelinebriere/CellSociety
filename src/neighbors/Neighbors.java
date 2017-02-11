@@ -1,10 +1,12 @@
-package neighbors;
+ package neighbors;
 
 import java.util.List;
 
 import borders.Border;
 import cellular_level.Cell;
+import data_structures.BorderType;
 import data_structures.Dimensions;
+import util.Tuple;
 
 /**
  * Class to define neighbors/ boundaries between neighbors, adjacency, etc.
@@ -13,18 +15,28 @@ import data_structures.Dimensions;
  */
 
 public abstract class Neighbors {
-	private Border myBorder;
+	protected Cell[][] myGrid;
+	protected BorderType myBorderType;
 	
-	public Neighbors(Border b){
-		myBorder= b;
+	public Neighbors(Cell[][] cellGrid, BorderType b){
+		myGrid = cellGrid;
+		myBorderType= b;
 	}
 	
-	public abstract List<Cell> getNeighbors(Cell c);	
+	public abstract List<Cell> getAllNeighbors(Cell c);
+	public abstract List<Cell> getCardinalNeighbors(Cell c);
 	
-	protected boolean isAdjacent(Cell c1, Cell c2){
-		return myBorder.isAdjacent(c1, c2);
+
+	protected boolean isValidCoordinate(int x, int y){
+		return (x>=0 && x<myGrid.length) && (y>=0 && y<myGrid.length);
 	}
-	
+	protected Tuple<Integer, Integer> getCoordinateWithWrapCheck(int x, int y){
+		if (x < 0) x = myGrid.length;
+		else if (x >= myGrid.length) x = 0;	
+		if (y < 0) y = myGrid.length;
+		else if (y >= myGrid.length) y = 0;
+		return new Tuple<Integer, Integer>(x,y);
+	}
 	
 	/**
 	 * Normal neighbors function, gets any adjacent cells

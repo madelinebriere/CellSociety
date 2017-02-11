@@ -11,7 +11,6 @@ import file_handling.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -98,7 +97,11 @@ public class GUIMain{
     	_gridContainer.setPrefWidth(GRID_WIDTH);
     	_gridContainer.setPrefHeight(GRID_WIDTH);
     	_root.getChildren().add(_gridContainer);
-    	_gridController = new UIGridController(_gridContainer,frame, _model.getCurrentColors(), CellShape.SQUARE);
+    	_gridController = new UIGridController(
+    			_gridContainer,
+    			frame, 
+    			_model.getCurrentColors(), 
+    			CellShape.SQUARE);
     }
     /**
      * sets up frame and timeline
