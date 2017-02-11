@@ -6,17 +6,13 @@
  * 
  * @author maddiebriere
  */
-
 package cellular_level;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import javafx.scene.paint.Color;
-import util.CellData;
+import data_structures.CellData;
 import util.Location;
-
 public class SharkCell extends WaterWorldCell {
 	private static final Color SHARK_COLOR = Color.YELLOW;
 	private static final int STEPS_TO_STARVE = 3;
@@ -58,8 +54,6 @@ public class SharkCell extends WaterWorldCell {
 		copy.setStepsSinceEat(this.getStepsSinceEat());
 		return copy;
 	}
-
-
 	/**
 	 * Update for SharkCell, returns new Cells
 	 * @param data CellData provided Cell with necessary access and information
@@ -152,24 +146,18 @@ public class SharkCell extends WaterWorldCell {
 	private boolean isStarved(){
 		return stepsSinceEat>=stepsToStarve;
 	}
-
-
 	public int getStepsToStarve() {
 		return stepsToStarve;
 	}
-
 	public  void setStepsToStarve(int stepsToStarve) {
 		this.stepsToStarve = stepsToStarve;
 	}
-
 	public int getStepsToBreed() {
 		return stepsToBreed;
 	}
-
 	public void setStepsToBreed(int stepsToBreed) {
 		this.stepsToBreed = stepsToBreed;
 	}
-
 	public int getStepsSinceEat() {
 		return stepsSinceEat;
 	}
@@ -177,15 +165,12 @@ public class SharkCell extends WaterWorldCell {
 	public void incrementStepsSinceEat(){
 		stepsSinceEat++;
 	}
-
 	public void setStepsSinceEat(int stepsSinceEat) {
 		this.stepsSinceEat = stepsSinceEat;
 	}
-
 	public int getStepsSinceBreed() {
 		return stepsSinceBreed;
 	}
-
 	public void setStepsSinceBreed(int stepsSinceBreed) {
 		this.stepsSinceBreed = stepsSinceBreed;
 	}
@@ -193,6 +178,4 @@ public class SharkCell extends WaterWorldCell {
 	public void incrementStepsSinceBreed(){
 		stepsSinceBreed++;
 	}
-
-
 }

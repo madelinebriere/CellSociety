@@ -5,24 +5,18 @@
  * 
  * @author maddiebriere
  */
-
 package cellular_level;
-
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import util.CellData;
-
+import data_structures.CellData;
 public class TreeCell extends Cell {
 	private static final double PROB_CATCH = .3;
 	private static final Color TREE_COLOR = Color.FORESTGREEN;
 	
 	private double probCatch;
 	private Random randy = new Random();
-
 	
 	public TreeCell(){
 		this(0,0);
@@ -47,7 +41,6 @@ public class TreeCell extends Cell {
 		copy.basicCopy(this);
 		return copy;
 	}
-
 	
 	/**
 	 * @param data CellData object holding info for Cell
@@ -83,15 +76,12 @@ public class TreeCell extends Cell {
 		int random = randy.nextInt(100);
 		return random<=(probCatch*100);
 	}
-
 	public double getProbCatch() {
 		return probCatch;
 	}
-
 	public void setProbCatch(double probCatch) {
 		this.probCatch = probCatch;
 	}
 	
 	
-
 }

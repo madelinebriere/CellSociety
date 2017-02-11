@@ -6,15 +6,12 @@
  * 
  * @author maddiebriere
  */
-
 package cellular_level;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import javafx.scene.paint.Color;
-import util.CellData;
+import data_structures.CellData;
 import util.Location;
 
 public class FishCell extends WaterWorldCell {
@@ -25,7 +22,6 @@ public class FishCell extends WaterWorldCell {
 	private int stepsToBreed;
 	private int stepsSinceBreed;
 	private boolean isEaten; //used as an indicator in WaterSociety
-
 	public FishCell(){
 		this(0,0);
 	}
@@ -104,11 +100,9 @@ public class FishCell extends WaterWorldCell {
 	public int getStepsToBreed() {
 		return stepsToBreed;
 	}
-
 	public void setStepsToBreed(int stepsToBreed) {
 		this.stepsToBreed = stepsToBreed;
 	}
-
 	public void incrementStepsSinceBreed(){
 		stepsSinceBreed++;
 	}
@@ -116,19 +110,15 @@ public class FishCell extends WaterWorldCell {
 	public int getStepsSinceBreed() {
 		return stepsSinceBreed;
 	}
-
 	public void setStepsSinceBreed(int stepsSinceBreed) {
 		this.stepsSinceBreed = stepsSinceBreed;
 	}
-
 	public boolean isEaten() {
 		return isEaten;
 	}
-
 	public void setEaten(boolean isEaten) {
 		this.isEaten = isEaten;
 	}
 	
 	
-
 }

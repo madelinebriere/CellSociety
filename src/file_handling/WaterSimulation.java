@@ -7,20 +7,9 @@
 
 package file_handling;
 
-import cellular_level.FishCell;
-import cellular_level.LiveCell;
-import cellular_level.SharkCell;
-import javafx.scene.paint.Color;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-
-import cellular_level.Cell;
-import cellular_level.DeadCell;
-import cellular_level.EmptyCell;
 
 public class WaterSimulation extends SimulationType {
 	
@@ -36,35 +25,17 @@ public class WaterSimulation extends SimulationType {
 		this.dataTypes = combineDataTypes();
 	}
 
-	@Override
-	public List<Cell> getCells() {
-		ArrayList<Cell> cells = new ArrayList<Cell>();
-		for(String data: this.getCellData()){
-			String[] vars = data.split(" ");
-			if(vars[NAME_INDEX].toUpperCase().equals("FISH")){
-				cells.add(new FishCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
-			}
-			else if(vars[NAME_INDEX].toUpperCase().equals("SHARK")){
-				cells.add(new SharkCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
-			}
-			else if(vars[NAME_INDEX].toUpperCase().equals("EMPTY")){
-				cells.add(new EmptyCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
-			}
-		}
-		return cells;
-	}
-	
-	public int getFishBreed(){
+
+	public Integer getFishBreed(){
 		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(0)));
 	}
 	
-	public int getSharkBreed(){
+	public Integer getSharkBreed(){
 		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
 	}
 	
-	public int getSharkStarve(){
+	public Integer getSharkStarve(){
 		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
 	}
-
 
 }

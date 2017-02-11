@@ -4,25 +4,18 @@
  * 
  * @author maddiebriere
  */
-
 package cellular_level;
-
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import util.CellData;
+import data_structures.CellData;
 import util.Location;
-
 public class BurnCell extends Cell {
 	private static final Color BURN_COLOR = Color.RED;
 	private static final int STEPS_TO_BURN=1;
 	
 	private static int stepsToBurn;
 	private int mySteps;
-
-
 	public BurnCell(){
 		this(0,0);
 	}
@@ -71,23 +64,18 @@ public class BurnCell extends Cell {
 	private boolean isBurnt(){
 		return mySteps>=stepsToBurn;
 	}
-
 	public static int getStepsToBurn() {
 		return stepsToBurn;
 	}
-
 	public static void setStepsToBurn(int stepsToBurn) {
 		BurnCell.stepsToBurn = stepsToBurn;
 	}
-
 	public int getMySteps() {
 		return mySteps;
 	}
-
 	public void setMySteps(int mySteps) {
 		this.mySteps = mySteps;
 	}
-
 	public void incrementSteps(){
 		mySteps++;
 	}

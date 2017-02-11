@@ -7,14 +7,10 @@
 
 package file_handling;
 
-import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import cellular_level.*;
 
 public class FireSimulation extends SimulationType {
 	
@@ -28,27 +24,12 @@ public class FireSimulation extends SimulationType {
 		this.settingTypes = SETTING_TYPES;
 		this.dataTypes = combineDataTypes();
 	}
-
-	@Override
-	public List<Cell> getCells() {
-		ArrayList<Cell> cells = new ArrayList<Cell>();
-		for(String data: this.getCellData()){
-			String[] vars = data.split(" ");
-			if(vars[NAME_INDEX].toUpperCase().equals("TREE")){
-				cells.add(new TreeCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
-			}
-			else if(vars[NAME_INDEX].toUpperCase().equals("BURN")){
-				cells.add(new BurnCell(Integer.parseInt(vars[0]), Integer.parseInt(vars[1])));
-			}
-		}
-		return cells;
-	}
 	
 	public Double getProbability(){
 		return Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
 	}
 	
-	public int getSteps(){
+	public Integer getSteps(){
 		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
 	}
 

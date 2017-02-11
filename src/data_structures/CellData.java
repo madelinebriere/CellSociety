@@ -1,12 +1,15 @@
-package util;
+package data_structures;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
 
 import cellular_level.Cell;
 import cellular_level.EmptyCell;
 import societal_level.CellSociety;
+import util.Location;
 
 /**
  * This class is used to limit the amount of control given to a single Cell
@@ -51,11 +54,11 @@ public class CellData {
 		return mySociety.neighbors(c);
 	}
 
-	public List<Cell> getCurrentCellsCopy() {
+	public Map <CellName, List<Cell>> getCurrentCellsCopy() {
 		return copy(mySociety.getCurrentCells());
 	}
 
-	public List<EmptyCell> getAvailableCellsCopy() {
+	public List<Cell> getAvailableCellsCopy() {
 		return copy(available);
 	}
 
@@ -127,17 +130,33 @@ public class CellData {
 	/**
 	 * Basic List copy function to limit actual access to items
 	 * 
+	 * @param list
+	 *            List to be copied
+	 * @return Copy of List filled with COPIES OF EACH ITEM
+	 */
+	private <T extends Cell> List<Cell> copy(List<T> list) {
+		ArrayList<Cell> copy = new ArrayList<Cell>();
+		for (Cell c : list) {
+			Cell newCell = c.createCopy();
+			copy.add(newCell);
+		}
+		return copy;
+	}
+	
+	/**
+	 * Basic List copy function to limit actual access to items
+	 * 
 	 * @param toCopy
 	 *            List to be copied
 	 * @return Copy of List filled with COPIES OF EACH ITEM
 	 */
-	private <T extends Cell> List<T> copy(List<T> toCopy) {
-		ArrayList<Cell> copy = new ArrayList<Cell>();
-		for (Cell c : toCopy) {
-			Cell newCell = c.createCopy();
-			copy.add(newCell);
+	private Map<CellName,List<Cell>> copy(Map<CellName, List<Cell>> toCopy) {
+		TreeMap <CellName,List<Cell>> ret = new TreeMap<CellName, List<Cell>>();
+		for(CellName name: toCopy.keySet()){
+			ret.put(name, copy(toCopy.get(name)));
 		}
-		return toCopy;
+		return ret;
+
 	}
 
 }

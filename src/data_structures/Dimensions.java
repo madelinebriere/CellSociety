@@ -37,9 +37,9 @@ public class Dimensions {
 	
 	public int getNegYBound(){
 		if(getY()%2==0)
-			return getPosYBound()-1;
+			return -(getPosYBound()-1);
 		else
-			return getPosYBound();
+			return -(getPosYBound());
 	}
 	
 	public int getPosXBound(){
@@ -48,9 +48,9 @@ public class Dimensions {
 	
 	public int getNegXBound(){
 		if(getX()%2==0)
-			return getPosXBound()-1;
+			return -(getPosXBound()-1);
 		else
-			return getPosXBound();
+			return -(getPosXBound());
 	
 	}
 }

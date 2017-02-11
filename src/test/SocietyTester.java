@@ -14,7 +14,7 @@ import societal_level.CellSociety;
 public class SocietyTester{
 	private static CellSociety mySociety;
 	
-	public static void setSociety(CellSociety c){
+	/*public static void setSociety(CellSociety c){
 		mySociety=c;
 	}
 	
@@ -79,5 +79,5 @@ public class SocietyTester{
 	
 	private static String getTruncatedName(String className){
 		return className.substring(className.indexOf('.')+1);
-	}
+	}*/
 }
