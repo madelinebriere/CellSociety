@@ -3,6 +3,7 @@ package societal_level;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,6 +14,8 @@ import file_handling.*;
 import data_structures.*;
 import javafx.scene.paint.Color;
 import util.BorderChooser;
+import util.CellGenerator;
+import util.Location;
 import util.NeighborsChooser;
 import neighbors.*;
 import borders.*;
@@ -42,17 +45,16 @@ import borders.*;
  *         the superclass
  */
 
-public abstract class CellSociety {
+public class CellSociety {
 	private static final Color DEFAULT_COLOR = Color.WHITE;
 	
 	private SimulationName name;
 	private CellShape myShape;
 	private Dimensions mySize;
-	private TreeMap<CellName, List<? extends Cell>> currentCells;
+	private TreeMap<CellName, List<Cell>> currentCells;
 	private Color emptyColor;
 	private Neighbors neighbors;
 	private Border border;
-	private CellName defaultCell;
 	
 	/**
 	 * Default 
@@ -66,12 +68,13 @@ public abstract class CellSociety {
 		setSize(sim.getDimensions());
 		setBorder(BorderChooser.chooseBorder(sim));
 		setNeighbors(NeighborsChooser.chooseNeighbors(border, sim.getShape()));
-		makeCells(sim);
+		setCurrentCells(makeCells(sim));
+		setEmptyColor(sim.getEmptyCellColor());
 	}
 	
 	public CellSociety(SimulationType sim) {
-		setCurrentCells(sim.getCells());
 		setSize(new Dimensions(sim.getDimension(), sim.getDimension()));
+		setCurrentCells(centerCells(sim.getShiftedCells()));
 	}
 	
 	
@@ -85,15 +88,17 @@ public abstract class CellSociety {
 	 */
 	public Color[][] getCurrentColors() {
 		Color[][] toRet = new Color[getX()][getY()];
-		/**Color emptyColor = getEmptyColor();
+		Color emptyColor = getEmptyColor();
 		for (int i = 0; i < getX(); i++) {
 			for (int j = 0; j < getY(); j++) {
 				toRet[i][j] = emptyColor;
 			}
 		}
-		for (Cell c : currentCells) {
+		for (Cell c : getCellsAsList()) {
+			int newRow = c.getMyRow() - mySize.getNegYBound();
+			int newCol = c.getMyCol() - mySize.getNegXBound();
 			if (!(c instanceof EmptyCell)) {
-				toRet[c.getMyRow()][c.getMyCol()] = c.getMyState();
+				toRet[newRow][newCol] = c.getMyState();
 			} else {
 				Color setColor;
 				if (getEmptyColor() != null) {
@@ -101,10 +106,10 @@ public abstract class CellSociety {
 				} else {
 					setColor = DEFAULT_COLOR;
 				}
-				toRet[c.getMyRow()][c.getMyCol()] = setColor;
+				toRet[newRow][newCol] = setColor;
 
 			}
-		}**/
+		}
 		return toRet;
 		//TODO: Fix this to account for non-positive indices
 	}
@@ -124,11 +129,8 @@ public abstract class CellSociety {
 	 * @return 2D Array of current Cell colors
 	 */
 	public Color[][] step() {
-		applyCurrentRules();
-		sortByPriorityCurrentCells();
 		shuffleCurrentCells();
 		stepAllCells(getAllEmptyCells());
-		applyCurrentColors();
 		return getCurrentColors();
 	}
 
@@ -141,18 +143,66 @@ public abstract class CellSociety {
 	 * @param sim
 	 * @return
 	 */
-	public abstract List<Cell> makeCells(SimulationData sim);
+	public TreeMap<CellName, List<Cell>> makeCells(SimulationData sim){
+		Random randomizer = new Random();
+		ArrayList<Location> validLocations = getValidLocations(sim);
+		if(validLocations.size()==0){return null;}
+		TreeMap<CellName, List<Cell>> toRet = new TreeMap<CellName, List<Cell>>();
+		Map<CellName, CellRatio> ratios = sim.getRatios().getMapOfCellsRatios();
+		Map<CellName, Integer> cellNums = new HashMap<CellName, Integer>();
+		int expectedNum = validLocations.size();
+		
+		for(CellName name: ratios.keySet()){
+			int numPlace = (int)(expectedNum*ratios.get(name).getRatio());
+			expectedNum -= numPlace;
+			cellNums.put(name, numPlace);
+		}
+		if(expectedNum!=0){
+			for(CellName name: cellNums.keySet()){
+				int prev = cellNums.get(name);
+				prev+=expectedNum;
+				cellNums.put(name, prev);
+				break;
+			}
+		}
+		
+		for(CellName name: cellNums.keySet()){
+			ArrayList<Cell> singleType = new ArrayList<Cell>();
+			for(int i=0; i<cellNums.get(name); i++){
+				int index = randomizer.nextInt(validLocations.size());
+				Location newLoc = validLocations.get(index);
+				Cell newCell = CellGenerator.newCell(name);
+				newCell.setMyLocation(newLoc);
+				singleType.add(newCell);
+			}
+			toRet.put(name, singleType);
+		}
+		fillEmptySpots(toRet);
+		return toRet;
+	}
 	
-	/**
-	 * Called during each update to apply the most recent colors for the society
-	 */
-	public abstract void applyCurrentColors();
+	private ArrayList<Location> getValidLocations(SimulationData sim){
+		ArrayList<Location>locs = new ArrayList<Location>();
+		Dimensions valid = sim.getDimensions();
+		for(int i = valid.getNegXBound(); i<=valid.getPosXBound(); i++){
+			for(int j=valid.getNegYBound(); j<=valid.getPosYBound(); j++){
+				locs.add(new Location(i,j));
+			}
+		}
+		return locs;
+	}
+	
+	
+	private TreeMap<CellName,List<Cell>> centerCells(Map<CellName,List<Cell>> shifted){
+		for(CellName c: shifted.keySet()){
+			for(Cell cell: shifted.get(c)){
+				cell.setMyCol(cell.getMyCol()+mySize.getNegXBound());
+				cell.setMyRow(cell.getMyRow()+mySize.getNegYBound());
+			}
+		}
+		return new TreeMap<CellName,List<Cell>>(shifted);
+	}
 
-	/**
-	 * Called during each update to apply to most recent rules to all of the cells
-	 */
-	public abstract void applyCurrentRules();
-	
 	/**
 	 * EmptyCells getter
 	 * 
@@ -160,7 +210,11 @@ public abstract class CellSociety {
 	 */
 	protected List<EmptyCell> getAllEmptyCells() {
 		try{
-			return (List<EmptyCell>)currentCells.get(CellName.EMPTY_CELL);
+			ArrayList<EmptyCell> toRet = new ArrayList<EmptyCell>();
+			for(Cell c: currentCells.get(CellName.EMPTY_CELL)){
+				toRet.add((EmptyCell)c);
+			}
+			return toRet;
 		}
 		catch(Exception e){
 			return new ArrayList<EmptyCell>();
@@ -190,8 +244,8 @@ public abstract class CellSociety {
 	 * @param available
 	 *            Available spots for movement, breeding, etc.
 	 */
-	private void stepAllCells(ArrayList<EmptyCell> available) {
-		ArrayList<Cell> nextGen = updateAllCells(available);
+	private void stepAllCells(List<EmptyCell> available) {
+		TreeMap<CellName, List<Cell>> nextGen = updateAllCells(available);
 		fillEmptySpots(nextGen);
 		setCurrentCells(nextGen);
 	}
@@ -204,13 +258,23 @@ public abstract class CellSociety {
 	 *            Available spots
 	 * @return ArrayList of updated cells
 	 */
-	private TreeMap<CellName, List<Cell>> updateAllCells(ArrayList<EmptyCell> available) {
+	private TreeMap<CellName, List<Cell>> updateAllCells(List<EmptyCell> available) {
 		TreeMap<CellName, List<Cell>> newMap = new TreeMap<CellName, List<Cell>>();
 		for (CellName name : getCurrentCells().keySet()) {
 			for(Cell cell: getCurrentCells().get(name)){
 				ArrayList<Cell> cells = new ArrayList<Cell>(updateCell(cell, available));
 				removeUsedSpots(available, cells);
-				newMap.put(name, cells);
+				for(Cell updated: cells){
+					CellName n = CellGenerator.getCellName(updated);
+					if(newMap.containsKey(n)){
+						(newMap.get(n)).add(updated);
+					}
+					else{
+						ArrayList<Cell> newList = new ArrayList<>();
+						newList.add(updated);
+						newMap.put(n, newList);
+					}
+				}
 			}
 		}
 		return newMap;
@@ -239,17 +303,34 @@ public abstract class CellSociety {
 	 * @param nextGen
 	 *            The List of cells to be padded
 	 */
-	public void fillEmptySpots(List<Cell> nextGen) {
-		int[][] filled = new int[getX()][getY()];
-		for (Cell c : nextGen) {
-			filled[c.getMyRow()][c.getMyCol()] += 1;
+	public void fillEmptySpots(TreeMap <CellName, List<Cell>> cells) {
+		ArrayList<Cell>allCells = new ArrayList<Cell>();
+		if(cells==null || cells.size()==0){return;}
+		for(CellName n: cells.keySet()){
+			allCells.addAll(cells.get(n));
 		}
+		int[][] filled = new int[getX()][getY()];
+		for (Cell c : allCells) {
+			int shiftedRow = c.getMyRow() - mySize.getNegYBound();
+			int shiftedCol = c.getMyCol() - mySize.getNegXBound();
+			filled[shiftedRow][shiftedCol] += 1;
+		}
+		ArrayList<Cell> newEmpty = new ArrayList<Cell>();
 		for (int i = 0; i < getX(); i++) {
 			for (int j = 0; j < getY(); j++) {
-				if (filled[i][j] == 0)
-					nextGen.add(new EmptyCell(i, j));
+				if (filled[i][j] == 0){
+					int centerRow = i+ mySize.getNegYBound();
+					int centerCol = j+ mySize.getNegXBound();
+					newEmpty.add(new EmptyCell(centerRow, centerCol));
+				}
 			}
 		}
+		ArrayList<Cell>oldEmpty  = new ArrayList<Cell>();
+		if(cells.get(CellName.EMPTY_CELL) != null && cells.get(CellName.EMPTY_CELL).size()!=0){
+			oldEmpty = new ArrayList<Cell>(cells.get(CellName.EMPTY_CELL));	
+		}
+		oldEmpty.addAll(newEmpty);
+		cells.put(CellName.EMPTY_CELL, oldEmpty);
 	}
 
 	/**
@@ -262,7 +343,7 @@ public abstract class CellSociety {
 	 * @param newCells
 	 *            Cells generated from update
 	 */
-	private void removeUsedSpots(ArrayList<EmptyCell> available, ArrayList<Cell> newCells) {
+	private void removeUsedSpots(List<EmptyCell> available, ArrayList<Cell> newCells) {
 		if (available == null || newCells == null || available.size() == 0 || newCells.size() == 0) {
 			return;
 		}
@@ -304,7 +385,7 @@ public abstract class CellSociety {
 		m.put(CellName.SHARK_CELL, new CellRatio(0.2));
 		m.put(CellName.EMPTY_CELL, new CellRatio(0.3));
 		CellRatioMap r = new CellRatioMap(m);
-		SocietyData s = new SocietyData(false, Color.WHITE, r, CellName.EMPTY_CELL);
+		SocietyData s = new SocietyData(false, Color.LIGHTBLUE, r, CellName.EMPTY_CELL);
 		BoardData b = new BoardData ();
 		SimulationData d = new SimulationData(SimulationName.WATER_SOCIETY, b, s);
 		return d;
@@ -315,26 +396,26 @@ public abstract class CellSociety {
 	 * others
 	 */
 	private void shuffleCurrentCells() {
-		ArrayList<Cell> shuffle = new ArrayList<Cell>(getCurrentCells());
-		Collections.shuffle(shuffle);
-		setCurrentCells(shuffle);
+		for(CellName name: getCurrentCells().keySet()){
+			ArrayList<Cell> shuffle = new ArrayList<Cell>(getCurrentCells().get(name));
+			Collections.shuffle(shuffle);
+			getCurrentCells().put(name, shuffle);
+		}
 	}
 
-	/**
-	 * Sort current cells by Cell-defined preference (using compareTo method in
-	 * the Cell class) for ordered updates
-	 */
-	private void sortByPriorityCurrentCells() {
-		ArrayList<Cell> orderedCells = new ArrayList<Cell>(getCurrentCells());
-		Collections.sort(orderedCells, Comparator.reverseOrder());
-		setCurrentCells(orderedCells);
-	}
-
-	public Map<CellName,List<Cell>> getCurrentCells() {
+	public TreeMap<CellName,List<Cell>> getCurrentCells() {
 		return currentCells;
 	}
+	
+	public List<Cell> getCellsAsList(){
+		ArrayList<Cell> cells = new ArrayList<Cell>();
+		for(CellName c: currentCells.keySet()){
+			cells.addAll(currentCells.get(c));
+		}
+		return cells;
+	}
 
-	public void setCurrentCells(Map<CellName, List<Cell>> current) {
+	public void setCurrentCells(TreeMap<CellName, List<Cell>> current) {
 		currentCells = current;
 	}
 
@@ -385,14 +466,6 @@ public abstract class CellSociety {
 
 	public void setBorder(Border border) {
 		this.border = border;
-	}
-
-	public CellName getDefaultCell() {
-		return defaultCell;
-	}
-
-	public void setDefaultCell(CellName defaultCell) {
-		this.defaultCell = defaultCell;
 	}
 
 	public SimulationName getName() {

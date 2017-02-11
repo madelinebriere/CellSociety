@@ -15,10 +15,11 @@ import data_structures.CellData;
 import util.Location;
 
 public class FishCell extends WaterWorldCell {
-	private static int stepsToBreed=5;
-	private static Color fishColor = Color.GREEN;
+	private static final int STEPS_TO_BREED=5;
+	private static final Color FISH_COLOR = Color.GREEN;
 	
-	private Random randy = new Random();
+	
+	private int stepsToBreed;
 	private int stepsSinceBreed;
 	private boolean isEaten; //used as an indicator in WaterSociety
 	public FishCell(){
@@ -26,9 +27,18 @@ public class FishCell extends WaterWorldCell {
 	}
 	
 	public FishCell(int row, int col){
-		super(row,col, fishColor);
-		setStepsSinceBreed(0);
+		this(row,col,FISH_COLOR);
+	}
+	
+	public FishCell(int row, int col, Color color){
+		this(row, col, color, STEPS_TO_BREED);
+	}
+	
+	public FishCell(int row, int col, Color color, int steps){
+		super(row,col,color);
+		setStepsToBreed(steps);
 		setEaten(false);
+		setStepsSinceBreed(0);
 	}
 	
 	@Override
@@ -87,22 +97,16 @@ public class FishCell extends WaterWorldCell {
 		return stepsSinceBreed>=stepsToBreed;
 	}
 	
-	public static int getStepsToBreed() {
+	public int getStepsToBreed() {
 		return stepsToBreed;
 	}
-	public static void setStepsToBreed(int stepsToBreed) {
-		FishCell.stepsToBreed = stepsToBreed;
+	public void setStepsToBreed(int stepsToBreed) {
+		this.stepsToBreed = stepsToBreed;
 	}
 	public void incrementStepsSinceBreed(){
 		stepsSinceBreed++;
 	}
 	
-	public static Color getFishColor() {
-		return fishColor;
-	}
-	public static void setFishColor(Color fishColor) {
-		FishCell.fishColor = fishColor;
-	}
 	public int getStepsSinceBreed() {
 		return stepsSinceBreed;
 	}

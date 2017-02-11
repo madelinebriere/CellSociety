@@ -10,18 +10,27 @@ import java.util.ArrayList;
 import java.util.List;
 import data_structures.CellData;
 import util.Location;
-
 public class DeadCell extends LifeSimCell {
-	private static int numForLive = 3;
-	private static Color deadColor = Color.WHITE;
+	private static final Color DEAD_COLOR = Color.WHITE;
+	private static final int NUM_FOR_LIVE = 3;
+	
+	private int numForLive;
 	
 	public DeadCell(){
-		super();
-		setMyState(deadColor);
+		this(0,0);
 	}
 	
 	public DeadCell(int row, int col){
-		super(row,col, deadColor);
+		this(row,col, DEAD_COLOR);
+	}
+	
+	public DeadCell(int row, int col, Color color){
+		this(row,col,color, NUM_FOR_LIVE);
+	}
+	
+	public DeadCell(int row, int col, Color color, int num){
+		super(row,col,color);
+		setNumForLive(num);
 	}
 	protected void changeState(CellData data, ArrayList<Cell> newGen){
 		int numLive = data.countDiffNeighbors(this);
@@ -46,17 +55,11 @@ public class DeadCell extends LifeSimCell {
 	private boolean isReadyToLive(int numLive){
 		return numLive == numForLive;
 	}
-	public static int getNumForLive() {
+	public int getNumForLive() {
 		return numForLive;
 	}
-	public static void setNumForLive(int numForLive) {
-		DeadCell.numForLive = numForLive;
-	}
-	public static Color getDeadColor() {
-		return deadColor;
-	}
-	public static void setDeadColor(Color deadColor) {
-		DeadCell.deadColor = deadColor;
+	public void setNumForLive(int numForLive) {
+		this.numForLive = numForLive;
 	}
 	
 	

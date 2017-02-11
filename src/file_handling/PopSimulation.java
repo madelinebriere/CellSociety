@@ -24,13 +24,10 @@ public class PopSimulation extends SimulationType {
 	}
 	
 	public Double getThreshold(){
-		return Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
+		try{
+			return Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(0)));
+		}
 	}
-
-	
-	public Double getSatisfiedThreshold(){
-		return  Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
-	}
-
-
 }

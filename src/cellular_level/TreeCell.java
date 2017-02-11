@@ -11,19 +11,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import data_structures.CellData;
-
 public class TreeCell extends Cell {
-	private static double probCatch = .30;
-	private static Color treeColor = Color.FORESTGREEN;
+	private static final double PROB_CATCH = .3;
+	private static final Color TREE_COLOR = Color.FORESTGREEN;
+	
+	private double probCatch;
 	private Random randy = new Random();
 	
 	public TreeCell(){
-		super();
-		setMyState(treeColor);
+		this(0,0);
 	}
 	
 	public TreeCell(int row, int col){
-		super(row, col, treeColor);
+		this(row, col, TREE_COLOR);
+	}
+	
+	public TreeCell(int row, int col, Color color){
+		this(row, col, color, PROB_CATCH);
+	}
+	
+	public TreeCell(int row, int col, Color color, double prob){
+		super(row, col, color);
+		setProbCatch(prob);
 	}
 	
 	@Override
@@ -67,23 +76,11 @@ public class TreeCell extends Cell {
 		int random = randy.nextInt(100);
 		return random<=(probCatch*100);
 	}
-	public static double getProbCatch() {
+	public double getProbCatch() {
 		return probCatch;
 	}
-	public static void setProbCatch(double probCatch) {
-		TreeCell.probCatch = probCatch;
-	}
-	public static Color getTreeColor() {
-		return treeColor;
-	}
-	public static void setTreeColor(Color treeColor) {
-		TreeCell.treeColor = treeColor;
-	}
-	public Random getRandy() {
-		return randy;
-	}
-	public void setRandy(Random randy) {
-		this.randy = randy;
+	public void setProbCatch(double probCatch) {
+		this.probCatch = probCatch;
 	}
 	
 	

@@ -7,23 +7,19 @@
  * 
  * @author Stone Mathers
  */
-
 package file_handling;
-
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-
 import cellular_level.Cell;
 import data_structures.CellName;
 import util.CellGenerator;
 import util.Location;
-
 public abstract class SimulationType {
-
 	private static final List<String> UNIVERSAL_DATA_TYPES = Arrays.asList(new String[] {
 			"title",
 	        "author",
@@ -31,19 +27,19 @@ public abstract class SimulationType {
 	        "cells"
 	    });
 	protected static final int NAME_INDEX = 2;
+	private static final String ERROR_BUNDLE = "resources/Errors";
 	
 	private List<String> cellData;																
 	protected List<String> dataTypes;
 	protected List<String> settingTypes = Arrays.asList(new String[] {""});
 	private Map<String, String> myDataValues;
-
+	public ResourceBundle myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
 	
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
 		dataTypes = combineDataTypes();
 	}
-	
 	
 	public String getTitle(){
 		return myDataValues.get(UNIVERSAL_DATA_TYPES.get(0));
@@ -54,7 +50,11 @@ public abstract class SimulationType {
 	}
 	
 	public int getDimension(){
-		return Integer.parseInt(myDataValues.get(UNIVERSAL_DATA_TYPES.get(2)));
+		try{
+			return Integer.parseInt(myDataValues.get(UNIVERSAL_DATA_TYPES.get(2)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), UNIVERSAL_DATA_TYPES.get(2)));
+		}
 	}
 	
 	/**
@@ -64,63 +64,35 @@ public abstract class SimulationType {
 	 * 
 	 * @return
 	 */
-	public TreeMap<CellName,List<Cell>> getCells(){
+	public TreeMap<CellName,List<Cell>> getShiftedCells(){
 		TreeMap<CellName, List<Cell>> cells = new TreeMap<CellName, List<Cell>>();
-		for(String data: this.getCellData()){
-			String[] vars = data.split(" ");
-			int row = Integer.parseInt(vars[0]);
-			int col = Integer.parseInt(vars[1]);
-			Location loc = new Location(row,col);
-			CellName name = getCellName(vars[NAME_INDEX].toUpperCase());
-			Cell newCell = CellGenerator.newCell(name);
-			newCell.setMyLocation(loc);
-			if(cells.containsKey(name)){
-				cells.get(name).add(newCell);
+		try{
+			for(String data: this.getCellData()){
+				String[] vars = data.split(" ");
+				int row = Integer.parseInt(vars[0]);
+				int col = Integer.parseInt(vars[1]);
+			
+				if(row >= this.getDimension() || col >= this.getDimension()){
+					throw new XMLException(myResources.getString("InvalidCellLocation"));
+				}
+			
+				Location loc = new Location(row,col);
+				CellName name = CellGenerator.getCellName(vars[NAME_INDEX].toUpperCase());
+				Cell newCell = CellGenerator.newCell(name);
+				newCell.setMyLocation(loc);
+				if(cells.containsKey(name)){
+					cells.get(name).add(newCell);
+				}
+				else{
+					ArrayList<Cell> list = new ArrayList<>();
+					list.add(newCell);
+					cells.put(name, list);
+				}
 			}
-			else{
-				ArrayList<Cell> list = new ArrayList<>();
-				list.add(newCell);
-				cells.put(name, list);
-			}
+		}catch(Exception e){
+			throw new XMLException(e, myResources.getString("InvalidCellData"));
 		}
 		return cells;
-	}
-	
-	
-	
-	public CellName getCellName(String s){
-		CellName toRet;
-		if(s.equals("FISH")){
-			toRet=CellName.FISH_CELL;
-		}
-		if(s.equals("SHARK")){
-			toRet = CellName.SHARK_CELL;
-		}
-		if(s.equals("BURN")){
-			toRet=CellName.BURN_CELL;
-		}
-		if(s.equals("TREE")){
-			toRet = CellName.TREE_CELL;
-		}
-		if(s.equals("LIVE")){
-			toRet= CellName.LIVE_CELL;
-		}
-		if(s.equals("DEAD")){
-			toRet = CellName.DEAD_CELL;
-		}
-		if(s.equals("BLUE")){
-			toRet = CellName.HOUSE_CELL_1;
-		}
-		if(s.equals("RED")){
-			toRet = CellName.HOUSE_CELL_2;
-		}
-		if(s.equals("GREEN")){
-			toRet= CellName.HOUSE_CELL_3;
-		}
-		else{
-			toRet = CellName.EMPTY_CELL;
-		}
-		return toRet;
 	}
 	
 	
@@ -168,4 +140,3 @@ public abstract class SimulationType {
 
 
 }
-
