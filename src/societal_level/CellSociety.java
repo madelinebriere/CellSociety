@@ -76,13 +76,13 @@ public abstract class CellSociety {
 	public CellSociety(SimulationData sim) {
 		setBoardData(sim.getData());
 		setCurrentCells(makeCells(sim));
-		setPatches();
+		setPatches(setPatches());
 	}
 	
 	public CellSociety(SimulationType sim) {
 		setBoardData(sim.getBoardData());
 		setCurrentCells(sim.getCells());
-		setPatches();
+		setPatches(setPatches());
 	}
 	
 	public void setBoardData(BoardData data){
@@ -126,6 +126,11 @@ public abstract class CellSociety {
 	
 	
 	public void updatePatches(){
+		for(int i=0; i<patches.length; i++){
+			for(int j=0; j<patches[0].length; j++){
+				System.out.println(patches[i][j]);
+			}
+		}
 		for(int i=0; i<getPatches().length; i++){
 			for(int j=0; j<getPatches()[0].length; j++){
 				getPatches()[i][j].update();
@@ -162,6 +167,11 @@ public abstract class CellSociety {
 			}
 		}
 		fillPatchList(patches);
+		for(int i=0; i<patches.length; i++){
+			for(int j=0; j<patches[0].length; j++){
+				System.out.println(patches[i][j]);
+			}
+		}
 		return patches;
 	}
 	
@@ -229,9 +239,9 @@ public abstract class CellSociety {
 	 * @return 2D Array of current Cell colors
 	 */
 	public Color[][] step() {
+		updatePatches();
 		shuffleCurrentCells();
 		stepAllCells(getAllEmptyCells());
-		updatePatches();
 		return getCurrentColors();
 	}
 
