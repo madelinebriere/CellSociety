@@ -7,7 +7,6 @@ import java.util.Random;
 import java.util.TreeMap;
 
 import cellular_level.Cell;
-import cellular_level.EmptyCell;
 import societal_level.CellSociety;
 import util.Location;
 
@@ -23,14 +22,14 @@ import util.Location;
 
 public class CellData {
 	private CellSociety mySociety;
-	private List<EmptyCell> available;
+	private List<Location> available;
 	
 	public CellData(CellSociety s){
 		mySociety=s;
 		available=null;
 	}
 
-	public CellData(CellSociety s, List<EmptyCell> validSpots) {
+	public CellData(CellSociety s, List<Location> validSpots) {
 		mySociety = s;
 		available = validSpots;
 	}
@@ -58,10 +57,6 @@ public class CellData {
 		return copy(mySociety.getCurrentCells());
 	}
 
-	public List<Cell> getAvailableCellsCopy() {
-		return copy(available);
-	}
-
 	public int countSameNeighbors(Cell center) {
 		int sameCount = 0;
 		for (Cell c : mySociety.neighbors(center)) {
@@ -78,7 +73,7 @@ public class CellData {
 
 	public int countNonEmptyNeighbors(Cell center) {
 		List<Cell> neighbors = mySociety.neighbors(center);
-		List<EmptyCell> emptyNeighbors = mySociety.getEmptyCells(neighbors);
+		List<Location> emptyNeighbors = mySociety.getEmptyCells(getCellLocations(neighbors));
 		if (neighbors.size() == 0) {
 			return 0;
 		}
@@ -87,38 +82,38 @@ public class CellData {
 		}
 		return neighbors.size() - emptyNeighbors.size();
 	}
+	
+	private List<Location> getCellLocations(List<Cell> cells){
+		ArrayList <Location> locs = new ArrayList<Location>();
+		for(Cell c: cells){
+			locs.add(c.getMyLocation());
+		}
+		return locs;
+	}
 
-	public Cell getCopyAvailableCell() {
+	public Location getAvailableSpot() {
 		if (available.size() == 0) {
 			return null;
 		}
 		Random randy = new Random();
 		int emptyIndex = randy.nextInt(available.size());
-		ArrayList<Cell> openCells = new ArrayList<Cell>(available);
-		return openCells.get(emptyIndex).createCopy();
+		ArrayList<Location> openCells = new ArrayList<Location>(available);
+		return openCells.get(emptyIndex);
 	}
 
-	public Location getCopyAvailableLocation() {
-		Cell c = getCopyAvailableCell();
-		if (c == null)
-			return null;
-		return c.getMyLocation();
-
-	}
-
-	public Cell getCopyAvailableNeighbor(Cell c) {
+	public Location getAvailableNeighborSpot(Cell c) {
 		if (getAvailableNeighbor(c) != null)
-			return getAvailableNeighbor(c).createCopy();
+			return getAvailableNeighbor(c);
 		else
 			return null;
 	}
 
-	public Cell getAvailableNeighbor(Cell c) {
+	public Location getAvailableNeighbor(Cell c) {
 		if (available.size() == 0) {
 			return null;
 		}
 		Random randy = new Random();
-		ArrayList<EmptyCell> availableNeighbors = new ArrayList<EmptyCell>(available);
+		ArrayList<Location> availableNeighbors = new ArrayList<Location>(available);
 		availableNeighbors.retainAll(mySociety.neighbors(c));
 		if (availableNeighbors.size() == 0) {
 			return null;

@@ -50,15 +50,7 @@ public class BurnCell extends Cell {
 		if(!isBurnt()){
 			nextGen.add(this); 
 		}
-		else{
-			generateBurntCell(nextGen);
-		}
 		return nextGen;
-	}
-	
-	private void generateBurntCell(ArrayList <Cell> nextGen){
-		EmptyCell burned = new EmptyCell(this);
-		nextGen.add(burned);
 	}
 	
 	private boolean isBurnt(){

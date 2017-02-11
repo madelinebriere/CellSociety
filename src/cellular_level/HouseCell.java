@@ -65,7 +65,7 @@ public class HouseCell extends Cell{
 	}
 	
 	private void relocate(CellData data, ArrayList<Cell>nextGen){
-		Location newSpot = data.getCopyAvailableLocation();
+		Location newSpot = data.getAvailableSpot();
 		if(newSpot!=null){
 			HouseCell relocatedCell = new HouseCell(0, 0, this.getMyState());
 			relocatedCell.copyLocation(newSpot);

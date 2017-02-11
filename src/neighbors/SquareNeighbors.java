@@ -18,7 +18,6 @@ public class SquareNeighbors extends Neighbors {
 
 	@Override
 	public List<Cell> getAllNeighbors(Cell c) {
-		
 		List<Cell> neighbors = new ArrayList<Cell>();
 		int x = c.getMyLocation().getMyRow();
 		int y = c.getMyLocation().getMyCol();

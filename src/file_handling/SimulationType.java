@@ -14,11 +14,12 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import cellular_level.Cell;
+import data_structures.BoardData;
 import data_structures.CellName;
 import util.CellGenerator;
 import util.Location;
+
 public abstract class SimulationType {
 	private static final List<String> UNIVERSAL_DATA_TYPES = Arrays.asList(new String[] {
 			"title",
@@ -29,16 +30,21 @@ public abstract class SimulationType {
 	protected static final int NAME_INDEX = 2;
 	private static final String ERROR_BUNDLE = "resources/Errors";
 	
+	private BoardData boardData; //TODO: Assign value
+
+
 	private List<String> cellData;																
 	protected List<String> dataTypes;
 	protected List<String> settingTypes = Arrays.asList(new String[] {""});
 	private Map<String, String> myDataValues;
 	public ResourceBundle myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
 	
+	
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
 		dataTypes = combineDataTypes();
+		//TODO: Create BoardData object from input as field variables
 	}
 	
 	public String getTitle(){
@@ -64,7 +70,7 @@ public abstract class SimulationType {
 	 * 
 	 * @return
 	 */
-	public TreeMap<CellName,List<Cell>> getShiftedCells(){
+	public TreeMap<CellName,List<Cell>> getCells(){
 		TreeMap<CellName, List<Cell>> cells = new TreeMap<CellName, List<Cell>>();
 		try{
 			for(String data: this.getCellData()){
@@ -94,7 +100,6 @@ public abstract class SimulationType {
 		}
 		return cells;
 	}
-	
 	
 	/**
 	 * @return List of raw Cell data from file.
@@ -137,6 +142,8 @@ public abstract class SimulationType {
 		data.addAll(settingTypes);
 		return data;
 	}
-
-
+	
+	public BoardData getBoardData() {
+		return boardData;
+	}
 }

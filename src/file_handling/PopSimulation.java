@@ -30,4 +30,6 @@ public class PopSimulation extends SimulationType {
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(0)));
 		}
 	}
+	
+
 }

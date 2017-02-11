@@ -2,56 +2,56 @@
 
 package data_structures;
 
-import javafx.scene.paint.Color;
+import cellular_level.RawData;
 
 public class SimulationData {
-	private SimulationName name;
-	private BoardData board;
-	private SocietyData society;
+	private BoardData data;
+	private CellRatioMap ratios;
 	
-	public SimulationData(SimulationName id, BoardData b, SocietyData s){
-		name = id;
-		board = b;
-		society = s;
+	public SimulationData(BoardData data, CellRatioMap c){
+		this.data = data;
+		ratios = c;
 	}
 
-	public SimulationName getName() {
-		return name;
+	public BoardData getData() {
+		return data;
 	}
 
-	public BoardData getBoard() {
-		return board;
-	}
-
-	public SocietyData getSociety() {
-		return society;
-	}
-	
-	public Dimensions getDimensions() {
-		return board.getDimensions();
-	}
-	
-	public BorderType getBorder() {
-		return board.getBorder();
-	}
-	
-	public CellShape getShape(){
-		return board.getShape();
-	}
-
-	public boolean isGetAllNeighbors() {
-		return society.isGetAllNeighbors();
-	}
-
-	public Color getEmptyCellColor() {
-		return society.getEmptyCellColor();
+	public void setData(BoardData data) {
+		this.data = data;
 	}
 
 	public CellRatioMap getRatios() {
-		return society.getRatios();
+		return ratios;
 	}
 
+	public void setRatios(CellRatioMap ratios) {
+		this.ratios = ratios;
+	}
+
+	public boolean isGetAllNeighbors(){
+		return data.isGetAllNeighbors();
+	}
 	
+	public SimulationName getSimulationName(){
+		return data.getName();
+	}
+	
+	public Dimensions getDimensions(){
+		return data.getDimensions();
+	}
+	
+	public BorderType getBorder(){
+		return data.getBorder();
+	}
+	
+	public  CellShape getShape(){
+		return data.getShape();
+	}
+	
+	public RawData getRawData(){
+		return data.getRaw();
+	}
 	
 }
 

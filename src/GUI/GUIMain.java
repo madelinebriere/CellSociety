@@ -11,7 +11,6 @@ import file_handling.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -361,7 +360,7 @@ public class GUIMain{
 //    	resetGUIComponents();
     }
     private void resetSimulationToType(SimulationType s){
-    	_model=new CellSociety(s);
+    	_model=new CellSociety(s); //TODO: Figure out how to deal with abstract CellSociety -- sorry Talha!
     	_gridController.setNewGridFromFile(s, _model.getCurrentColors());
     	resetGUIComponents();
     }

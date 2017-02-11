@@ -17,7 +17,7 @@ public class FireSimulation extends SimulationType {
 	private static final List<String> SETTING_TYPES = Arrays.asList(new String[] {
 			"probability",
 	        "steps"
-	    });
+	   });
 
 	public FireSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
@@ -42,4 +42,6 @@ public class FireSimulation extends SimulationType {
 	}
 
 
+
 }
+

@@ -21,18 +21,15 @@ public abstract class WaterWorldCell extends Cell {
 	}
 	
 	protected Location getBreedSpot(CellData data){
-		Cell target = data.getCopyAvailableNeighbor(this);
-		if(target!=null)
-			return target.getMyLocation();
-		else
-			return null;
+		Location target = data.getAvailableNeighbor(this);
+		return target;
 	}
 	
 	
 	protected void move(CellData data){
-		Cell target = data.getCopyAvailableNeighbor(this);
+		Location target = data.getAvailableNeighbor(this);
 		if(target!=null)
-			this.setMyLocation(target.getMyLocation());
+			this.setMyLocation(target);
 	}
 	
 	
