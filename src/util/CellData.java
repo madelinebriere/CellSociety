@@ -1,7 +1,7 @@
 package util;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import cellular_level.Cell;
@@ -20,14 +20,14 @@ import societal_level.CellSociety;
 
 public class CellData {
 	private CellSociety mySociety;
-	private Collection<EmptyCell> available;
+	private List<EmptyCell> available;
 	
 	public CellData(CellSociety s){
 		mySociety=s;
 		available=null;
 	}
 
-	public CellData(CellSociety s, Collection<EmptyCell> validSpots) {
+	public CellData(CellSociety s, List<EmptyCell> validSpots) {
 		mySociety = s;
 		available = validSpots;
 	}
@@ -47,15 +47,15 @@ public class CellData {
 	/**
 	 * Call will be specific to CellSociety --> correct type of neighbors
 	 */
-	public Collection<Cell> getNeighbors(Cell c) {
+	public List<Cell> getNeighbors(Cell c) {
 		return mySociety.neighbors(c);
 	}
 
-	public Collection<Cell> getCurrentCellsCopy() {
+	public List<Cell> getCurrentCellsCopy() {
 		return copy(mySociety.getCurrentCells());
 	}
 
-	public Collection<EmptyCell> getAvailableCellsCopy() {
+	public List<EmptyCell> getAvailableCellsCopy() {
 		return copy(available);
 	}
 
@@ -74,8 +74,8 @@ public class CellData {
 	}
 
 	public int countNonEmptyNeighbors(Cell center) {
-		Collection<Cell> neighbors = mySociety.neighbors(center);
-		Collection<EmptyCell> emptyNeighbors = mySociety.getEmptyCells(neighbors);
+		List<Cell> neighbors = mySociety.neighbors(center);
+		List<EmptyCell> emptyNeighbors = mySociety.getEmptyCells(neighbors);
 		if (neighbors.size() == 0) {
 			return 0;
 		}
@@ -125,13 +125,13 @@ public class CellData {
 	}
 
 	/**
-	 * Basic Collection copy function to limit actual access to items
+	 * Basic List copy function to limit actual access to items
 	 * 
 	 * @param toCopy
-	 *            Collection to be copied
-	 * @return Copy of Collection filled with COPIES OF EACH ITEM
+	 *            List to be copied
+	 * @return Copy of List filled with COPIES OF EACH ITEM
 	 */
-	private <T extends Cell> Collection<T> copy(Collection<T> toCopy) {
+	private <T extends Cell> List<T> copy(List<T> toCopy) {
 		ArrayList<Cell> copy = new ArrayList<Cell>();
 		for (Cell c : toCopy) {
 			Cell newCell = c.createCopy();

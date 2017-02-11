@@ -1,0 +1,13 @@
+<data simulation="water">
+  <title>WaterNumberTest</title>
+  <author>Stone</author>
+  <dimension>15</dimension>
+  <cells>
+    <cellDataType>number</cellDataType>
+    <cell>30 shark</cell>
+    <cell>100 fish</cell>
+  </cells>
+  <fishBreed>3</fishBreed>
+  <sharkBreed>15</sharkBreed>
+  <sharkStarve>7</sharkStarve>
+</data>

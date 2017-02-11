@@ -2,35 +2,57 @@
 
 package data_structures;
 
+import borders.Border;
 import javafx.scene.paint.Color;
 
 public class SimulationData {
-	private Dimensions dimensions;
 	private SimulationName name;
-	private CellRatioMap ratios;
-	private CellShape shape;
-	private boolean getAllNeighbors;
-	private Color emptyCellColor;
+	private BoardData board;
+	private SocietyData society;
+
 	
-	public SimulationData(Dimensions d, SimulationName id, CellRatioMap r, CellShape s, boolean b, Color emptyColor){
-		dimensions = d;
+	public SimulationData(SimulationName id, BoardData b, SocietyData s){
 		name = id;
-		ratios = r;
-		shape = s;
-		getAllNeighbors = b;
-		emptyCellColor = emptyColor;
+		board = b;
+		society = s;
 	}
-	public CellShape getShape(){
-		return shape;
-	}
-	public Dimensions getDimensions(){
-		return dimensions;
-	}
-	public CellRatioMap getRatio(){
-		return ratios;
-	}
-	public SimulationName getSimulationName(){
+
+	public SimulationName getName() {
 		return name;
 	}
+
+	public BoardData getBoard() {
+		return board;
+	}
+
+	public SocietyData getSociety() {
+		return society;
+	}
+	
+	public Dimensions getDimensions() {
+		return board.getDimensions();
+	}
+	
+	public BorderType getBorder() {
+		return board.getBorder();
+	}
+	
+	public CellShape getShape(){
+		return board.getShape();
+	}
+
+	public boolean isGetAllNeighbors() {
+		return society.isGetAllNeighbors();
+	}
+
+	public Color getEmptyCellColor() {
+		return society.getEmptyCellColor();
+	}
+
+	public CellRatioMap getRatios() {
+		return society.getRatios();
+	}
+	
+	
 }
 

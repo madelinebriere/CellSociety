@@ -82,9 +82,9 @@ public class SimulationTypeTester {
 		map.put("title", "WaterSim");
 		map.put("author", "Stone Mathers");
 		map.put("dimension", "10");
-		map.put("fish breed", "3");
-		map.put("shark breed", "5");
-		map.put("shark starve", "10");
+		map.put("fishBreed", "3");
+		map.put("sharkBreed", "5");
+		map.put("sharkStarve", "10");
 		
 		array.clear();
 		array.add("1 2 SHArk");

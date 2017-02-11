@@ -1,0 +1,12 @@
+<data simulation="fire">
+  <title>FirePercentTest</title>
+  <author>Stone</author>
+  <dimension>50</dimension>
+  <cells>
+    <cellDataType>percentage</cellDataType>
+    <cell>.9 Tree</cell>
+    <cell>.05 Burn</cell>
+  </cells>
+  <probability>0.3</probability>
+  <steps>2</steps>
+</data>

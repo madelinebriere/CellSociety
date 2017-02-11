@@ -1,7 +1,7 @@
 package cellular_level;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import javafx.scene.paint.Color;
 import util.CellData;
@@ -30,7 +30,7 @@ public class EmptyCell extends Cell{
 	}
 	
 	@Override
-	public Collection<Cell> update(CellData data) {
+	public List<Cell> update(CellData data) {
 		ArrayList<Cell> empty = new ArrayList<Cell>();
 		return empty;
 	}
