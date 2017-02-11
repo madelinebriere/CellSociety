@@ -3,7 +3,6 @@ package util;
 import cellular_level.BurnCell;
 import cellular_level.Cell;
 import cellular_level.DeadCell;
-import cellular_level.EmptyCell;
 import cellular_level.FishCell;
 import cellular_level.HouseCell;
 import cellular_level.LiveCell;
@@ -47,7 +46,7 @@ public class CellGenerator {
 			return new HouseCell(GREEN);
 		}
 		else
-			return new EmptyCell();
+			return null;
 	}
 	
 	public static CellName getCellName(Cell cell){

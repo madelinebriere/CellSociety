@@ -16,6 +16,7 @@ import util.BorderChooser;
 import util.CellGenerator;
 import util.Location;
 import util.NeighborsChooser;
+import util.PatchGenerator;
 import neighbors.*;
 import patch_level.*;
 import borders.*;
@@ -29,6 +30,7 @@ import borders.*;
  * 4) Implement subclasses of CellSociety
  * 5) Finish Slime Simulation
  * 6) Assess viability of parseRules() / RawData structure
+ * 7) ... Get rid of errors
  * 
  * 
  * 
@@ -62,7 +64,7 @@ public abstract class CellSociety {
 	private CellShape myShape;
 	private Dimensions mySize;
 	private TreeMap<CellName, List<Cell>> currentCells;
-	private List <Patch> patches;
+	private Patch[][] patches;
 	private Neighbors neighbors;
 	private Border border;
 	
@@ -82,6 +84,7 @@ public abstract class CellSociety {
 	public CellSociety(SimulationType sim) {
 		setBoardData(sim.getBoardData());
 		setCellsFromFile(sim);
+		setPatches();
 	}
 	
 	public void setBoardData(BoardData data){
@@ -109,22 +112,83 @@ public abstract class CellSociety {
 	}
 	
 	/**
-	 * 
+	 * Returns the color set for the patches (empty cells)
+	 */
+	public abstract Color getEmptyColor();
+	
+	/**
+	 * Return the desired Patch Type for the specific society
+	 */
+	public abstract PatchName getPatchType();
+	
+	/**
+	 * Set Society specific variables to default (backup)
 	 */
 	public abstract void setVariablesToDefault();
 	
+	
+	public void updatePatches(){
+		for(int i=0; i<getPatches().length; i++){
+			for(int j=0; j<getPatches()[0].length; j++){
+				getPatches()[i][j].update();
+				getPatches()[i][j].setMyCell(null); //reset cells
+			}
+		}
+		resetPatchCells();
+		
+	}
+	
+	/**
+	 * Reset patches according to current cells
+	 */
+	public void resetPatchCells(){
+		for(Cell c: getCellsAsList()){
+			getPatches()[c.getMyCol()][c.getMyRow()].setMyCell(c);
+		}
+	}
 
 	/**
 	 * Use to set the type of patches (empty spots) in the simulation
-	 * 	
 	 */
-	public abstract void setPatches();
+	public Patch[][] setPatches(){
+		Patch[][] patches = new Patch[getY()][getX()];
+		if(getCurrentCells().size()!=0){
+			for(Cell c: getCellsAsList()){
+				if(validSpot(c.getMyLocation())){
+					Patch newPatch = PatchGenerator.newPatch(getPatchType());
+					newPatch.setMyColor(getEmptyColor());
+					newPatch.setMyLocation(c.getMyLocation());
+					newPatch.setMyCell(c);
+					patches[c.getMyCol()][c.getMyRow()]=newPatch;
+				}
+			}
+		}
+		fillPatchList(patches);
+		return patches;
+	}
+	
+	public void fillPatchList(Patch[][] patchyPatches){
+		ArrayList<Location> locs = getValidLocations(getSize());
+		for(Location l: locs){
+			if(patchyPatches[l.getMyCol()][l.getMyRow()]==null){
+				Patch newPatch = PatchGenerator.newPatch(getPatchType());
+				newPatch.setMyColor(getEmptyColor());
+				newPatch.setMyLocation(l);
+				newPatch.setMyCell(null);
+				patchyPatches[l.getMyCol()][l.getMyRow()] = newPatch;
+			}
+		}
+	}
+	
+	private boolean validSpot(Location loc){
+		return (loc.getMyRow()<=mySize.getPosYBound() && loc.getMyRow()>=mySize.getNegYBound()) &&
+				(loc.getMyCol()<=mySize.getPosXBound() && loc.getMyCol()>=mySize.getNegXBound());
+	}
 	
 	
 	
 	public void setCellsFromFile(SimulationType sim){
 		setCurrentCells(centerCells(sim.getShiftedCells()));
-		fillEmptySpots(getCurrentCells());
 	}
 	
 	/**
@@ -134,55 +198,20 @@ public abstract class CellSociety {
 	 *         create the visualization of the current simulation status
 	 */
 	public Color[][] getCurrentColors() {
-		Color[][] toRet = new Color[getX()][getY()];
+		Color[][] toRet = new Color[getY()][getX()]; //rows along y axis, cols along x axis
 		Color emptyColor = getEmptyColor();
-		for (int i = 0; i < getX(); i++) {
-			for (int j = 0; j < getY(); j++) {
-				toRet[i][j] = emptyColor;
+		for (int i = 0; i < getY(); i++) {
+			for (int j = 0; j < getX(); j++) {
+				toRet[i][j] = emptyColor;	//Start will all cells color by patch
 			}
 		}
 		for (Cell c : getCellsAsList()) {
 			int newRow = c.getMyRow() - mySize.getNegYBound();
 			int newCol = c.getMyCol() - mySize.getNegXBound();
-			if (!(c instanceof EmptyCell)) {
-				toRet[newRow][newCol] = c.getMyState();
-			} else {
-				Color setColor;
-				if (getEmptyColor() != null) {
-					setColor = getEmptyColor();
-				} else {
-					setColor = DEFAULT_COLOR;
-				}
-				toRet[newRow][newCol] = setColor;
-
-			}
+			toRet[newRow][newCol] = c.getMyState();
 		}
 		return toRet;
-		//TODO: Fix this to account for non-positive indices
 	}
-
-	public abstract List<Patch> getShiftedPatches();
-	
-	
-	public TreeMap<PatchName, List<Patch>> getShiftedPatches(PatchName patchType, Color color){
-		TreeMap<PatchName, List<Patch>> patches = new TreeMap<PatchName, List<Patch>>();
-		TreeMap<CellName, List<Cell>> cells = getShiftedCells();
-		ArrayList<Patch>fill = new ArrayList<Patch>();
-		for(CellName name: cells.keySet()){
-			for(Cell cell: cells.get(name)){
-				Patch newPatch = PatchGenerator.newPatch(patchType);
-				newPatch.setMyCell(cell);
-				newPatch.setMyColor(color);
-				newPatch.setMyLocation(cell.getMyLocation());
-				fill.add(newPatch);
-			}
-		}
-		patches.put(patchType, fill);
-		return patches;
-	}
-	
-	
-	
 
 	public Dimensions getMySize() {
 		return mySize;
@@ -190,10 +219,10 @@ public abstract class CellSociety {
 	public void setMySize(Dimensions mySize) {
 		this.mySize = mySize;
 	}
-	public List<Patch> getPatches() {
+	public Patch[][] getPatches() {
 		return patches;
 	}
-	public void setPatches(List<Patch> patches) {
+	public void setPatches(Patch[][] patches) {
 		this.patches = patches;
 	}
 	/**
@@ -211,6 +240,7 @@ public abstract class CellSociety {
 	public Color[][] step() {
 		shuffleCurrentCells();
 		stepAllCells(getAllEmptyCells());
+		updatePatches();
 		return getCurrentColors();
 	}
 
@@ -225,7 +255,7 @@ public abstract class CellSociety {
 	 */
 	public TreeMap<CellName, List<Cell>> makeCells(SimulationData sim){
 		Random randomizer = new Random();
-		ArrayList<Location> validLocations = getValidLocations(sim);
+		ArrayList<Location> validLocations = getValidLocations(sim.getDimensions());
 		if(validLocations.size()==0){return null;}
 		TreeMap<CellName, List<Cell>> toRet = new TreeMap<CellName, List<Cell>>();
 		Map<CellName, CellRatio> ratios = sim.getRatios().getMapOfCellsRatios();
@@ -257,13 +287,11 @@ public abstract class CellSociety {
 			}
 			toRet.put(name, singleType);
 		}
-		fillEmptySpots(toRet);
 		return toRet;
 	}
 	
-	private ArrayList<Location> getValidLocations(SimulationData sim){
+	private ArrayList<Location> getValidLocations(Dimensions valid){
 		ArrayList<Location>locs = new ArrayList<Location>();
-		Dimensions valid = sim.getDimensions();
 		for(int i = valid.getNegXBound(); i<=valid.getPosXBound(); i++){
 			for(int j=valid.getNegYBound(); j<=valid.getPosYBound(); j++){
 				locs.add(new Location(i,j));
@@ -284,37 +312,32 @@ public abstract class CellSociety {
 	}
 
 	/**
-	 * EmptyCells getter
+	 * Locations getter
 	 * 
-	 * @return List of all emptyCells in the currentCells
+	 * @return List of all Locations in the currentCells
 	 */
-	protected List<EmptyCell> getAllEmptyCells() {
-		try{
-			ArrayList<EmptyCell> toRet = new ArrayList<EmptyCell>();
-			for(Cell c: currentCells.get(CellName.EMPTY_CELL)){
-				toRet.add((EmptyCell)c);
-			}
-			return toRet;
-		}
-		catch(Exception e){
-			return new ArrayList<EmptyCell>();
-		}
+	protected List<Location> getAllEmptyCells() {
+		return getEmptyCells(getValidLocations(getSize()));
 	}
 
 	/**
-	 * TARGETED EmptyCells getter
+	 * TARGETED Locations getter
 	 * 
-	 * @return List of all emptyCells in the given List
+	 * @return List of all Locations in the given List
 	 */
-	public List<EmptyCell> getEmptyCells(List<Cell> possibleOptions) {
-		ArrayList<EmptyCell> toRet = new ArrayList<EmptyCell>();
-		for (Cell c : possibleOptions) {
-			if (c instanceof EmptyCell) {
-				toRet.add((EmptyCell) c);
+	public List<Location> getEmptyCells(List<Location> possibleOptions) {
+		ArrayList<Location> loc = new ArrayList<Location>();
+		for(int i=0; i<getPatches().length; i++){
+			for(int j=0; j<getPatches()[0].length; j++){
+				Patch currPatch = getPatches()[i][j];
+				if(currPatch.getMyCell()==null && possibleOptions.contains(currPatch.getMyLocation())){
+					loc.add(getPatches()[i][j].getMyLocation());
+				}
 			}
 		}
-		return toRet;
+		return loc;
 	}
+	
 
 	/**
 	 * Updates all cells given a list of available spots (for moving, breeding,
@@ -324,9 +347,8 @@ public abstract class CellSociety {
 	 * @param available
 	 *            Available spots for movement, breeding, etc.
 	 */
-	private void stepAllCells(List<EmptyCell> available) {
+	private void stepAllCells(List<Location> available) {
 		TreeMap<CellName, List<Cell>> nextGen = updateAllCells(available);
-		fillEmptySpots(nextGen);
 		setCurrentCells(nextGen);
 	}
 
@@ -338,7 +360,7 @@ public abstract class CellSociety {
 	 *            Available spots
 	 * @return ArrayList of updated cells
 	 */
-	private TreeMap<CellName, List<Cell>> updateAllCells(List<EmptyCell> available) {
+	private TreeMap<CellName, List<Cell>> updateAllCells(List<Location> available) {
 		TreeMap<CellName, List<Cell>> newMap = new TreeMap<CellName, List<Cell>>();
 		for (CellName name : getCurrentCells().keySet()) {
 			for(Cell cell: getCurrentCells().get(name)){
@@ -373,17 +395,17 @@ public abstract class CellSociety {
 	 * @return All updated cells from cell updates (new baby cells, moved cells,
 	 *         etc.)
 	 */
-	private List<Cell> updateCell(Cell c, List<EmptyCell> available){
+	private List<Cell> updateCell(Cell c, List<Location> available){
 		return c.update(new CellData(this, available));
 	}
 	/**
 	 * Iterate through given List and fill any cell-less locations in a
-	 * size x size grid with a new EmptyCell
+	 * size x size grid with a new Location
 	 * 
 	 * @param nextGen
 	 *            The List of cells to be padded
 	 */
-	public void fillEmptySpots(TreeMap <CellName, List<Cell>> cells) {
+	/*public void fillEmptySpots(TreeMap <CellName, List<Cell>> cells) {
 		ArrayList<Cell>allCells = new ArrayList<Cell>();
 		if(cells==null || cells.size()==0){return;}
 		for(CellName n: cells.keySet()){
@@ -401,7 +423,7 @@ public abstract class CellSociety {
 				if (filled[i][j] == 0){
 					int centerRow = i+ mySize.getNegYBound();
 					int centerCol = j+ mySize.getNegXBound();
-					newEmpty.add(new EmptyCell(centerRow, centerCol));
+					newEmpty.add(new Location(centerRow, centerCol));
 				}
 			}
 		}
@@ -411,7 +433,7 @@ public abstract class CellSociety {
 		}
 		oldEmpty.addAll(newEmpty);
 		cells.put(CellName.EMPTY_CELL, oldEmpty);
-	}
+	}*/
 
 	/**
 	 * Iterate through both the available spots and the newly updated cells and
@@ -423,14 +445,14 @@ public abstract class CellSociety {
 	 * @param newCells
 	 *            Cells generated from update
 	 */
-	private void removeUsedSpots(List<EmptyCell> available, ArrayList<Cell> newCells) {
+	private void removeUsedSpots(List<Location> available, ArrayList<Cell> newCells) {
 		if (available == null || newCells == null || available.size() == 0 || newCells.size() == 0) {
 			return;
 		}
 
 		for (int i = 0; i < available.size(); i++) {
 			for (int j = 0; j < newCells.size(); j++) {
-				if (available.get(i).getMyLocation().equals(newCells.get(j).getMyLocation())) {
+				if (available.get(i).equals(newCells.get(j).getMyLocation())) {
 					available.remove(i);
 					if (i > 0)
 						i--;
@@ -678,14 +700,6 @@ public abstract class CellSociety {
 		currentCells = current;
 	}
 
-	public Color getEmptyColor() {
-		return emptyColor;
-	}
-
-	public void setEmptyColor(Color emptyColor) {
-		this.emptyColor = emptyColor;
-	}
-
 	public Dimensions getSize() {
 		return mySize;
 	}
@@ -733,12 +747,6 @@ public abstract class CellSociety {
 	public void setName(SimulationName name) {
 		this.name = name;
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 }
