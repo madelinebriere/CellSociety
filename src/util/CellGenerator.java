@@ -22,28 +22,28 @@ public class CellGenerator {
 		if(c == CellName.FISH_CELL){
 			return new FishCell();
 		}
-		if(c == CellName.SHARK_CELL){
+		else if(c == CellName.SHARK_CELL){
 			return new SharkCell();
 		}
-		if(c == CellName.BURN_CELL){
+		else if(c == CellName.BURN_CELL){
 			return new BurnCell();
 		}
-		if(c == CellName.TREE_CELL){
+		else if(c == CellName.TREE_CELL){
 			return new TreeCell();
 		}
-		if(c == CellName.LIVE_CELL){
+		else if(c == CellName.LIVE_CELL){
 			return new LiveCell();
 		}
-		if(c == CellName.DEAD_CELL){
+		else if(c == CellName.DEAD_CELL){
 			return new DeadCell();
 		}
-		if(c == CellName.HOUSE_CELL_1){
+		else if(c == CellName.HOUSE_CELL_1){
 			return new HouseCell(BLUE);
 		}
-		if(c == CellName.HOUSE_CELL_2){
+		else if(c == CellName.HOUSE_CELL_2){
 			return new HouseCell(RED);
 		}
-		if(c == CellName.HOUSE_CELL_3){
+		else if(c == CellName.HOUSE_CELL_3){
 			return new HouseCell(GREEN);
 		}
 		else
@@ -85,28 +85,28 @@ public class CellGenerator {
 		if(s.equals("FISH")){
 			toRet=CellName.FISH_CELL;
 		}
-		if(s.equals("SHARK")){
+		else if(s.equals("SHARK")){
 			toRet = CellName.SHARK_CELL;
 		}
-		if(s.equals("BURN")){
+		else if(s.equals("BURN")){
 			toRet=CellName.BURN_CELL;
 		}
-		if(s.equals("TREE")){
+		else if(s.equals("TREE")){
 			toRet = CellName.TREE_CELL;
 		}
-		if(s.equals("LIVE")){
+		else if(s.equals("LIVE")){
 			toRet= CellName.LIVE_CELL;
 		}
-		if(s.equals("DEAD")){
+		else if(s.equals("DEAD")){
 			toRet = CellName.DEAD_CELL;
 		}
-		if(s.equals("BLUE")){
+		else if(s.equals("BLUE")){
 			toRet = CellName.HOUSE_CELL_1;
 		}
-		if(s.equals("RED")){
+		else if(s.equals("RED")){
 			toRet = CellName.HOUSE_CELL_2;
 		}
-		if(s.equals("GREEN")){
+		else if(s.equals("GREEN")){
 			toRet= CellName.HOUSE_CELL_3;
 		}
 		else{

@@ -58,7 +58,7 @@ public abstract class SimulationType {
 	 * 
 	 * @return
 	 */
-	public TreeMap<CellName,List<Cell>> getCells(){
+	public TreeMap<CellName,List<Cell>> getShiftedCells(){
 		TreeMap<CellName, List<Cell>> cells = new TreeMap<CellName, List<Cell>>();
 		for(String data: this.getCellData()){
 			String[] vars = data.split(" ");
