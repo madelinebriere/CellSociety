@@ -26,11 +26,19 @@ public class FireSimulation extends SimulationType {
 	}
 	
 	public Double getProbability(){
-		return Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
+		try{
+			return Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(0)));
+		}
 	}
 	
 	public Integer getSteps(){
-		return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
+		try{
+			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(1)));
+		}
 	}
 
 

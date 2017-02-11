@@ -10,6 +10,7 @@
 package file_handling;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,18 +27,19 @@ public abstract class SimulationType {
 	        "cells"
 	    });
 	protected static final int NAME_INDEX = 2;
+	private static final String ERROR_BUNDLE = "resources/Errors";
 	
 	private List<String> cellData;																
 	protected List<String> dataTypes;
 	protected List<String> settingTypes = Arrays.asList(new String[] {""});
 	private Map<String, String> myDataValues;
+	public ResourceBundle myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
 	
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
 		dataTypes = combineDataTypes();
 	}
-	
 	
 	public String getTitle(){
 		return myDataValues.get(UNIVERSAL_DATA_TYPES.get(0));
@@ -48,7 +50,11 @@ public abstract class SimulationType {
 	}
 	
 	public int getDimension(){
-		return Integer.parseInt(myDataValues.get(UNIVERSAL_DATA_TYPES.get(2)));
+		try{
+			return Integer.parseInt(myDataValues.get(UNIVERSAL_DATA_TYPES.get(2)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), UNIVERSAL_DATA_TYPES.get(2)));
+		}
 	}
 	
 	/**
@@ -60,22 +66,31 @@ public abstract class SimulationType {
 	 */
 	public TreeMap<CellName,List<Cell>> getShiftedCells(){
 		TreeMap<CellName, List<Cell>> cells = new TreeMap<CellName, List<Cell>>();
-		for(String data: this.getCellData()){
-			String[] vars = data.split(" ");
-			int row = Integer.parseInt(vars[0]);
-			int col = Integer.parseInt(vars[1]);
-			Location loc = new Location(row,col);
-			CellName name = CellGenerator.getCellName(vars[NAME_INDEX].toUpperCase());
-			Cell newCell = CellGenerator.newCell(name);
-			newCell.setMyLocation(loc);
-			if(cells.containsKey(name)){
-				cells.get(name).add(newCell);
+		try{
+			for(String data: this.getCellData()){
+				String[] vars = data.split(" ");
+				int row = Integer.parseInt(vars[0]);
+				int col = Integer.parseInt(vars[1]);
+			
+				if(row >= this.getDimension() || col >= this.getDimension()){
+					throw new XMLException(myResources.getString("InvalidCellLocation"));
+				}
+			
+				Location loc = new Location(row,col);
+				CellName name = CellGenerator.getCellName(vars[NAME_INDEX].toUpperCase());
+				Cell newCell = CellGenerator.newCell(name);
+				newCell.setMyLocation(loc);
+				if(cells.containsKey(name)){
+					cells.get(name).add(newCell);
+				}
+				else{
+					ArrayList<Cell> list = new ArrayList<>();
+					list.add(newCell);
+					cells.put(name, list);
+				}
 			}
-			else{
-				ArrayList<Cell> list = new ArrayList<>();
-				list.add(newCell);
-				cells.put(name, list);
-			}
+		}catch(Exception e){
+			throw new XMLException(e, myResources.getString("InvalidCellData"));
 		}
 		return cells;
 	}

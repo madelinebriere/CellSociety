@@ -44,11 +44,11 @@ public class XMLParser {
 			new FireSimulation(null, null),
 			new WaterSimulation(null, null)
 	};
-	public static final String ERROR_BUNDLE = "resources/Errors";
-	public static final ResourceBundle myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
+	private static final String ERROR_BUNDLE = "resources/Errors";
 	private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
 	
 	private HashMap<String, SimulationType> mySimulationMap = new HashMap<String, SimulationType>();
+	public ResourceBundle myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
 	
 	public XMLParser(){
 		fillSimulationMap();
@@ -157,7 +157,11 @@ public class XMLParser {
     	
         if (nodeList != null && nodeList.getLength() > 0){
         	for(int i = 0; i < nodeList.getLength(); i++){
-            	values.add(nodeList.item(i).getTextContent());
+        		if(!nodeList.item(i).getTextContent().equals("")){ //Makes sure all tags contain data
+        			values.add(nodeList.item(i).getTextContent());
+        		}else{
+        			throw new XMLException(String.format(myResources.getString("EmptyData"), tagName));
+        		}
             }
         }
         else {
