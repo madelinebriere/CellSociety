@@ -8,7 +8,7 @@
  */
 package cellular_level;
 import javafx.scene.paint.Color;
-import util.CellData;
+import data_structures.CellData;
 import java.util.ArrayList;
 import java.util.List;
 public class LiveCell extends LifeSimCell {

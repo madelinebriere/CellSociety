@@ -65,7 +65,7 @@ public abstract class SimulationType {
 			int row = Integer.parseInt(vars[0]);
 			int col = Integer.parseInt(vars[1]);
 			Location loc = new Location(row,col);
-			CellName name = getCellName(vars[NAME_INDEX].toUpperCase());
+			CellName name = CellGenerator.getCellName(vars[NAME_INDEX].toUpperCase());
 			Cell newCell = CellGenerator.newCell(name);
 			newCell.setMyLocation(loc);
 			if(cells.containsKey(name)){
@@ -78,43 +78,6 @@ public abstract class SimulationType {
 			}
 		}
 		return cells;
-	}
-	
-	
-	
-	public CellName getCellName(String s){
-		CellName toRet;
-		if(s.equals("FISH")){
-			toRet=CellName.FISH_CELL;
-		}
-		if(s.equals("SHARK")){
-			toRet = CellName.SHARK_CELL;
-		}
-		if(s.equals("BURN")){
-			toRet=CellName.BURN_CELL;
-		}
-		if(s.equals("TREE")){
-			toRet = CellName.TREE_CELL;
-		}
-		if(s.equals("LIVE")){
-			toRet= CellName.LIVE_CELL;
-		}
-		if(s.equals("DEAD")){
-			toRet = CellName.DEAD_CELL;
-		}
-		if(s.equals("BLUE")){
-			toRet = CellName.HOUSE_CELL_1;
-		}
-		if(s.equals("RED")){
-			toRet = CellName.HOUSE_CELL_2;
-		}
-		if(s.equals("GREEN")){
-			toRet= CellName.HOUSE_CELL_3;
-		}
-		else{
-			toRet = CellName.EMPTY_CELL;
-		}
-		return toRet;
 	}
 	
 	

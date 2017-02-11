@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javafx.scene.paint.Color;
-import util.CellData;
+import data_structures.CellData;
 import util.Location;
 public class SharkCell extends WaterWorldCell {
 	private static final Color SHARK_COLOR = Color.YELLOW;

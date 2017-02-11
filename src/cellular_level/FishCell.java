@@ -11,8 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javafx.scene.paint.Color;
-import util.CellData;
+import data_structures.CellData;
 import util.Location;
+
 public class FishCell extends WaterWorldCell {
 	private static final int STEPS_TO_BREED=5;
 	private static final Color FISH_COLOR = Color.GREEN;

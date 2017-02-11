@@ -79,6 +79,40 @@ public class CellGenerator {
 		}
 		return CellName.EMPTY_CELL;
 	}
-
+	
+	public static CellName getCellName(String s){
+		CellName toRet;
+		if(s.equals("FISH")){
+			toRet=CellName.FISH_CELL;
+		}
+		if(s.equals("SHARK")){
+			toRet = CellName.SHARK_CELL;
+		}
+		if(s.equals("BURN")){
+			toRet=CellName.BURN_CELL;
+		}
+		if(s.equals("TREE")){
+			toRet = CellName.TREE_CELL;
+		}
+		if(s.equals("LIVE")){
+			toRet= CellName.LIVE_CELL;
+		}
+		if(s.equals("DEAD")){
+			toRet = CellName.DEAD_CELL;
+		}
+		if(s.equals("BLUE")){
+			toRet = CellName.HOUSE_CELL_1;
+		}
+		if(s.equals("RED")){
+			toRet = CellName.HOUSE_CELL_2;
+		}
+		if(s.equals("GREEN")){
+			toRet= CellName.HOUSE_CELL_3;
+		}
+		else{
+			toRet = CellName.EMPTY_CELL;
+		}
+		return toRet;
+	}
 
 }

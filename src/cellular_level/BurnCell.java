@@ -8,7 +8,7 @@ package cellular_level;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
-import util.CellData;
+import data_structures.CellData;
 import util.Location;
 public class BurnCell extends Cell {
 	private static final Color BURN_COLOR = Color.RED;

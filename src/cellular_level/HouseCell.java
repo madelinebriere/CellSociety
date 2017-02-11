@@ -8,8 +8,9 @@ package cellular_level;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
-import util.CellData;
+import data_structures.CellData;
 import util.Location;
+
 public class HouseCell extends Cell{
 	public static final Color DEFAULT_COLOR = Color.BLUE;
 	public static final double SATISFIED_THRESH = .40;
@@ -18,6 +19,10 @@ public class HouseCell extends Cell{
 	
 	public HouseCell(){
 		this(0,0);
+	}
+	
+	public HouseCell(Color color){
+		this(0,0, color);
 	}
 	
 	public HouseCell(int row, int col){

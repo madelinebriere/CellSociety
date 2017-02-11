@@ -35,7 +35,7 @@ public class NeighborTester {
 		neighborsTest(new WaterSociety());*/
 	}
 	
-	public static void neighborsTest(CellSociety s){
+	/*public static void neighborsTest(CellSociety s){
 		printNeighbors(new CellData(s));
 	}
 	
@@ -59,5 +59,5 @@ public class NeighborTester {
 			}
 			System.out.println();
 		}
-	}
+	}*/
 }
