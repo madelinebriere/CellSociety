@@ -15,7 +15,7 @@ import data_structures.CellData;
 import util.Location;
 
 public class FishCell extends WaterWorldCell {
-	private static final int STEPS_TO_BREED=5;
+	public static final int STEPS_TO_BREED=5;
 	private static final Color FISH_COLOR = Color.GREEN;
 	
 	
