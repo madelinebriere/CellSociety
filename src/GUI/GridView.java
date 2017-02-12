@@ -12,10 +12,12 @@ public abstract class GridView extends Pane{
 	protected Frame _bounds;
 	protected Dimensions _dimensions;
 	protected Shape[][] _cells;
-	public GridView(Frame bounds, Dimensions dimensions){
+	public GridView(Frame bounds, Dimensions dimensions, Shape[][] shapeArray){
 		super();
 		_bounds = bounds;
 		_dimensions = dimensions;
+		_cells = shapeArray;
+		System.out.println("cells:"+ _cells.length + "\tdim: "+ dimensions.getX());
 	}
 	protected void setBackgroundColor(Color color){
 		Rectangle rec = new Rectangle();
@@ -30,12 +32,16 @@ public abstract class GridView extends Pane{
 	}
 	protected abstract void setupGrid(Color[][] colors);
 	public void updateGrid(Color[][] newColors) {
-		
+		System.out.println("updating grid");
 		for(int x=0; x<_dimensions.getX(); x++){
 			for(int y=0; y<_dimensions.getY(); y++){
+				System.out.println(x + "\t" + y);
 				_cells[x][y].setFill(newColors[x][y]);
-				System.out.println(newColors[x][y].toString());
 			}
 		}
+	}
+
+	protected void setShapeAtXY(int x, int y, Shape s){
+		this._cells[x][y] = s;
 	}
 }

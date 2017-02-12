@@ -14,7 +14,7 @@ public class TriangleGridView extends GridView{
 	private double starting_x;
 	
 	public TriangleGridView(Frame bounds, Dimensions dimensions, Color[][] colors){
-		super(bounds, dimensions);
+		super(bounds, dimensions,new Polygon[dimensions.getX()][dimensions.getY()]);
 		unit = Math.floor(bounds.getHeight()/dimensions.getY());
 		starting_y = (bounds.getHeight() - unit*dimensions.getY())/2;
 		starting_x = starting_y;

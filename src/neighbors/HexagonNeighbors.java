@@ -28,23 +28,15 @@ public class HexagonNeighbors extends Neighbors{
 		List<Patch> neighbors = new ArrayList<Patch>();
 		int x = c.getMyLocation().getMyCol();
 		int y = c.getMyLocation().getMyRow();
-		if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x-2,y)){//TOP hexagon 
-			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x-2, y);
+		if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x,y-2)){//TOP hexagon 
+			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x, y-2);
 			neighbors.add(myGrid[t.x][t.y]);
 		}
-		if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x+2, y)){ //bottom hexagon
-			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x+2, y);
+		if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x, y+2)){ //bottom hexagon
+			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x, y+2);
 			neighbors.add(myGrid[t.x][t.y]);
 		}
 		
-		if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x+1, y)){
-			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x+1, y-1);
-			neighbors.add(myGrid[t.x][t.y]);
-		}
-		if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x-1, y)){
-			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x-1, y);
-			neighbors.add(myGrid[t.x][t.y]);
-		}
 		if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x, y-1)){
 			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x, y-1);
 			neighbors.add(myGrid[t.x][t.y]);
@@ -53,6 +45,26 @@ public class HexagonNeighbors extends Neighbors{
 			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x, y+1);
 			neighbors.add(myGrid[t.x][t.y]);
 		}
+		if(y%2==0){ // even rowed hexagons have different relations than odd numbered ones
+			if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x-1, y+1)){
+				Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x-1, y+1);
+				neighbors.add(myGrid[t.x][t.y]);
+			}
+			if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x-1, y-1)){
+				Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x-1, y-1);
+				neighbors.add(myGrid[t.x][t.y]);
+			}
+		}else{
+			if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x+1, y+1)){
+				Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x+1, y+1);
+				neighbors.add(myGrid[t.x][t.y]);
+			}
+			if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x+1, y-1)){
+				Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x+1, y-1);
+				neighbors.add(myGrid[t.x][t.y]);
+			}
+		}
+		
 		return neighbors;
 	}
 
