@@ -52,13 +52,13 @@ public abstract class Patch {
 
 	
 	public Color getShadedColor(){
-		double fraction = concentration/(4*MAX_CONC); //anywhere from 0 to .25
+		double fraction = concentration/(2*MAX_CONC); //anywhere from 0 to .25
 		double shift = 1-fraction; //Larger concentration --> lower brightness
 		return myColor.deriveColor(0, 1, shift, 1);
 	}
 	
 
-	protected Color getMyColor() {
+	public Color getMyColor() {
 		return myColor;
 	}
 
@@ -118,9 +118,22 @@ public abstract class Patch {
 		}
 	}
 	
+	public void incrementConcentration(int inc){
+		if(concentration + inc <=MAX_CONC){
+			this.concentration+=inc;
+		}
+	}
+	
 	public void decrementConcentration(){
 		if(concentration-1>0){
 			this.concentration--;
+		}
+	}
+	
+
+	public void decrementConcentration(int dec){
+		if(concentration-dec>0){
+			this.concentration-=dec;
 		}
 	}
 	

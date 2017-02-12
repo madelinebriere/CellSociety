@@ -14,7 +14,7 @@ public class BurnCell extends Cell {
 	private static final Color BURN_COLOR = Color.RED;
 	private static final int STEPS_TO_BURN=1;
 	
-	private static int stepsToBurn;
+	private int stepsToBurn;
 	private int mySteps;
 	
 	public BurnCell(){
@@ -57,11 +57,11 @@ public class BurnCell extends Cell {
 	private boolean isBurnt(){
 		return mySteps>=stepsToBurn;
 	}
-	public static int getStepsToBurn() {
+	public int getStepsToBurn() {
 		return stepsToBurn;
 	}
-	public static void setStepsToBurn(int stepsToBurn) {
-		BurnCell.stepsToBurn = stepsToBurn;
+	public void setStepsToBurn(int stepsToBurn) {
+		this.stepsToBurn = stepsToBurn;
 	}
 	public int getMySteps() {
 		return mySteps;

@@ -29,6 +29,23 @@ public class RawData {
 		this.integerVariables = integerVariables;
 		this.doubleVariables = doubleVariables;
 	}
+
+	public List<Integer> getIntegerVariables() {
+		return integerVariables;
+	}
+
+	public void setIntegerVariables(List<Integer> integerVariables) {
+		this.integerVariables = integerVariables;
+	}
+
+	public List<Double> getDoubleVariables() {
+		return doubleVariables;
+	}
+
+	public void setDoubleVariables(List<Double> doubleVariables) {
+		this.doubleVariables = doubleVariables;
+	}
+	
 	
 	
 }

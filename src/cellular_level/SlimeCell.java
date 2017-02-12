@@ -1,5 +1,6 @@
 package cellular_level;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -10,9 +11,7 @@ import util.CellGenerator;
 
 public class SlimeCell extends Cell {
 	private static final Color SLIME_COLOR = Color.RED;
-	private static final int DIFFUSE_RATE = 2; //steps
 	
-	private int diffuseRate;
 	private int mySteps;
 
 	public SlimeCell(){
@@ -24,12 +23,7 @@ public class SlimeCell extends Cell {
 	}
 	
 	public SlimeCell(int row, int col, Color c){
-		this(row, col, c, DIFFUSE_RATE);
-	}
-	
-	public SlimeCell(int row, int col, Color c, int diffuse){
-		super(row,col,c);
-		diffuseRate = diffuse;
+		super(row, col, c);
 		mySteps = 0;
 	}
 	
@@ -38,24 +32,15 @@ public class SlimeCell extends Cell {
 	public Cell createCopy() {
 		SlimeCell copy = new SlimeCell();
 		copy.basicCopy(this);
-		copy.setDiffuseRate(this.getDiffuseRate());
 		return copy;
 	}
 
 	@Override
 	public List<Cell> update(CellData data) {
-		Patch [][] patches = data.getCurrentPatchesCopy();
-		Patch patch = 
+		List<Cell> toRet = new ArrayList<Cell>();
+		return toRet;
 	}
 	
-	public int getDiffuseRate() {
-		return diffuseRate;
-	}
-
-	public void setDiffuseRate(int diffuseRate) {
-		this.diffuseRate = diffuseRate;
-	}
-
 	public int getMySteps() {
 		return mySteps;
 	}
