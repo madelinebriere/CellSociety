@@ -35,15 +35,13 @@ public class XMLParser {
 	public static final String DIMENSION = "dimension";
 	public static final String CELLS = "cells";
 	public static final String CELL = "cell";
-	public static final String CELL_DATA_TYPE = "cellDataType";
-	public static final String[] POSSIBLE_CELL_DATA = {"location", "number", "probability", "percentage"};
 	private static final String[] POSSIBLE_SIM_STRINGS = {"game of life", "population", "fire", "water", "slime"};
 	private static final SimulationType[] POSSIBLE_SIM_TYPES = {
-			new LifeSimulation(null, null),
-			new PopSimulation(null, null),
-			new FireSimulation(null, null),
-			new WaterSimulation(null, null),
-			new SlimeSimulation(null, null)
+			new LifeSimulation(new HashMap<String, String>(), new ArrayList<String>()),
+			new PopSimulation(new HashMap<String, String>(), new ArrayList<String>()),
+			new FireSimulation(new HashMap<String, String>(), new ArrayList<String>()),
+			new WaterSimulation(new HashMap<String, String>(), new ArrayList<String>()),
+			new SlimeSimulation(new HashMap<String, String>(), new ArrayList<String>())
 	};
 	private static final String ERROR_BUNDLE = "resources/Errors";
 	private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
@@ -75,8 +73,12 @@ public class XMLParser {
 			SimulationType tempSim = readSimulationType(root);  //Created to access a specific SimulationType's required values
 		 
 			for(String field: tempSim.getDataTypes()){
-				if(!field.equals(CELLS)){  //Cells are uniquely handled before, as they depend on the dimension being retrieved
-					data.put(field, getTextValue(root, field).get(0));
+				if(!field.equals(CELLS)){  //Cells are uniquely handled after, as they depend on the dimension being retrieved
+					try{
+						data.put(field, getTextValue(root, field).get(0));
+					}catch(Exception e){
+						//Nothing is done here, these missing tags will be filled with defaults
+					}
 				}
 			}
 			fillCellData(root, cells, Integer.parseInt(data.get(DIMENSION)));
@@ -156,20 +158,13 @@ public class XMLParser {
         ArrayList<String> values = new ArrayList<String>();
     	NodeList nodeList = e.getElementsByTagName(tagName);
     	
-        if (nodeList != null && nodeList.getLength() > 0){
+        if (nodeList != null && nodeList.getLength() > 0){  //If this is not satisfied, an error is not thrown, because default values are used
         	for(int i = 0; i < nodeList.getLength(); i++){
-        		if(!nodeList.item(i).getTextContent().equals("")){ //Makes sure all tags contain data
-        			values.add(nodeList.item(i).getTextContent());
-        		}else{
-        			throw new XMLException(String.format(myResources.getString("EmptyData"), tagName));
-        		}
+        		values.add(nodeList.item(i).getTextContent());
             }
         }
-        else {
-            throw new XMLException(String.format(myResources.getString("TagMissing"), tagName));
-        }
         
-        if(values.size() > 1 && !tagName.equals(CELL)){
+        if(values.size() > 1 && !tagName.equals(CELL)){  //Only the "cell" tag should occur more than once
         	throw new XMLException(String.format(myResources.getString("RepeatTag"), tagName));
         }else{ 
         	return values;
@@ -206,30 +201,6 @@ public class XMLParser {
 			throw new XMLException(myResources.getString("FinalsIncorrect"));
 		}
 	}
-	
-	/**
-	 * Determines how the Strings of Cell data should be used to
-	 * generate data usable by a SimulationType.
-	 * 
-	 * @param e
-	 * @param gen
-	 * @param dimension of grid to be filled by Cells
-	 */
-	private List<String> decodeData(Element e, CellDataGenerator gen) {
-		String cellType = getTextValue(e, CELL_DATA_TYPE).get(0);
-		if(cellType.equals(POSSIBLE_CELL_DATA[0])){
-			return gen.generateLocationData();
-		}else if(cellType.equals(POSSIBLE_CELL_DATA[1])){
-			return gen.generateNumberData();
-		}else if(cellType.equals(POSSIBLE_CELL_DATA[2])){
-			return gen.generateProbabilityData();
-		}else if(cellType.equals(POSSIBLE_CELL_DATA[3])){
-			return gen.generatePercentageData();
-		}else{
-			throw new XMLException(myResources.getString("InvalidCellDataType"));
-		}
-	}
-	
 	/**
 	 * Fills a List with the initial cell states given in the XML file.
 	 * 
@@ -244,7 +215,8 @@ public class XMLParser {
 		}
 		
 		CellDataGenerator gen = new CellDataGenerator(list, dimension);
-		List<String> newData = decodeData(e, gen);
+		CellDataDecoder dec = new CellDataDecoder(gen);
+		List<String> newData = dec.decodeData(e);
 		
 		list.clear();
 		list.addAll(newData);

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 import data_structures.CellData;
 public class TreeCell extends Cell {
-	private static final double PROB_CATCH = .3;
+	public static final double PROB_CATCH = .3;
 	private static final Color TREE_COLOR = Color.FORESTGREEN;
 	
 	private double probCatch;
