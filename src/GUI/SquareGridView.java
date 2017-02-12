@@ -7,23 +7,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class SquareGridView extends GridView {
-	private Rectangle[][] _cells;
 
 	public SquareGridView(Frame bounds, Dimensions dimensions, Color[][] colors){
 		super(bounds, dimensions, colors);
 		this.setBackgroundColor(Color.BLACK);
 		setupGrid(colors);
-	}
-	
-	
-	@Override
-	public void updateGrid(Color[][] newColors) {
-		// TODO Auto-generated method stub
-		for(int x=0; x<_dimensions.getX(); x++){
-			for(int y=0; y<_dimensions.getY(); y++){
-				_cells[x][y].setFill(newColors[x][y]);
-			}
-		}
 	}
 
 
