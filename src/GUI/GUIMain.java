@@ -5,8 +5,13 @@ package GUI;
 import java.util.HashMap;
 import java.util.Random;
 
+import cellular_level.RawData;
+import data_structures.BoardData;
+import data_structures.BorderType;
 import data_structures.CellShape;
 import data_structures.Dimensions;
+import data_structures.SimulationData;
+import data_structures.SimulationName;
 import file_handling.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -39,39 +44,38 @@ public class GUIMain{
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 600;
     private static final int GRID_WIDTH = SCREEN_WIDTH - 350;
-    private static final HashMap<String, Class<?>> nameToSocietyClassType = new HashMap<String, Class<?>>();
+    private final HashMap<String, SimulationName> simulationNameStringToEnum = new HashMap<String, SimulationName>();
     
     private CellSociety _model;
 //    private Class<CellSociety> SOCIETY_TYPE;
     private Timeline _animation;
     private Scene _scene; 
     private Pane _root;
-    //private Grid _grid;
     private UIGridController _gridController;
     private Pane _gridContainer;
     private Label _generationLabel;
     private Label _societyTitleLabel;
     private Slider _speedSlider;
     //private Slider _sizeSlider;
-    private Dimensions _currentGridDimensions;
     private Button _pauseButton;
     private Button _playButton;
     private Button _fileButton;
     private SimulationType _currentSimulationType;
+    private SimulationData _currentSimulationData;
+
     
     public GUIMain(CellSociety model){
     	_model = model;
-    	_currentGridDimensions = model.getSize();
-//		SOCIETY_TYPE = (Class<CellSociety>) model.getClass();
+    	_currentSimulationData = _model.getSimulationData();
 		
-		/*
-		nameToSocietyClassType.put("Fire Society", FireSociety.class);
-		nameToSocietyClassType.put("Wa-Tor Society", WaterSociety.class);
-		nameToSocietyClassType.put("Segregation Society", PopSociety.class);
-		nameToSocietyClassType.put("Life Society", LifeSociety.class);*/
+		simulationNameStringToEnum.put("Fire Society", SimulationName.FIRE_SOCIETY);
+		simulationNameStringToEnum.put("Wa-Tor Society", SimulationName.WATER_SOCIETY);
+		simulationNameStringToEnum.put("Segregation Society", SimulationName.POPULATION_SOCIETY);
+		simulationNameStringToEnum.put("Life Society", SimulationName.GAME_OF_LIFE);
     	
 		_root =  new Pane();
 		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
+		
 		setupTopLabels();
 		setupGrid();
 		setupAnimationTimeLine(MILLISECOND_DELAY);
@@ -97,7 +101,7 @@ public class GUIMain{
     			_gridContainer,
     			frame, 
     			_model.getCurrentColors(), 
-    			CellShape.SQUARE);
+    			_currentSimulationData);
     }
     /**
      * sets up frame and timeline
@@ -121,7 +125,7 @@ public class GUIMain{
     	_generationLabel.setTextFill(Color.rgb(60, 60, 60));
     	
     	//TODO:
-    	_societyTitleLabel = plainLabel("TODO:", 15);
+    	_societyTitleLabel = plainLabel(_model.getName().toString(), 15);
     	_societyTitleLabel.setLayoutX(SCREEN_WIDTH/2);
     	_societyTitleLabel.setPrefHeight(80);
     	_societyTitleLabel.setPrefWidth(SCREEN_WIDTH/2 - 20);
@@ -143,18 +147,17 @@ public class GUIMain{
     private void setupTopMenu(){
     	ComboBox<String> menu = new ComboBox<String>();
     	double width = 200;
-    	menu.getItems().addAll(nameToSocietyClassType.keySet());
+    	menu.getItems().addAll(simulationNameStringToEnum.keySet());
     	menu.setLayoutY(20);
     	menu.setLayoutX((SCREEN_WIDTH-width)/2);
     	menu.setPrefWidth(width);
     	menu.editableProperty().set(false);
     	menu.setOnAction((event) -> {
-    		//TODO:
-//    	    String name = menu.getSelectionModel().getSelectedItem();
-//    	    SOCIETY_TYPE = (Class<CellSociety>) nameToSocietyClassType.get(name);
-//    	    System.out.println(name + "\t" + SOCIETY_TYPE);
-//    	    setFileToNull();
-//    	    resetAnimation();
+    	    String s = menu.getSelectionModel().getSelectedItem();
+    	    SimulationName name = this.simulationNameStringToEnum.get(s);
+    	    _currentSimulationData = new SimulationData(new BoardData(name),SocietyMaker.getDefaultCellRatioValues(name));
+    	    setFileToNull();
+    	    resetAnimation();
     	});
     	_root.getChildren().add(menu);
     }
@@ -300,22 +303,23 @@ public class GUIMain{
     }
     private void setupSizeSlider(double sliderWidth, double startX, double startY){
     	Slider _sizeSlider = new Slider();
-    	_sizeSlider.setMin(5);
-    	_sizeSlider.setMax(40);
-    	_sizeSlider.setValue(_currentGridDimensions.getX());
+    	_sizeSlider.setMin(10);
+    	_sizeSlider.setMax(100);
+    	_sizeSlider.setValue(this._currentSimulationData.getDimensions().getX());
     	_sizeSlider.setShowTickLabels(true);
     	_sizeSlider.setShowTickMarks(true);
-    	_sizeSlider.setMajorTickUnit(5);
+    	_sizeSlider.setMajorTickUnit(10);
     	_sizeSlider.setMinorTickCount(0);
     	_sizeSlider.setPrefWidth(sliderWidth);
     	_sizeSlider.setLayoutY(startY); //bad way to set this
     	_sizeSlider.setLayoutX(startX);
     	_sizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-    		_sizeSlider.setValue(_sizeSlider.getValue() - _sizeSlider.getValue() % 5 );
-    		if(_sizeSlider.getValue() % 5 == 0 && _sizeSlider.getValue() != _currentGridDimensions.getX()){
+    		_sizeSlider.setValue(_sizeSlider.getValue() - _sizeSlider.getValue() %  _sizeSlider.getMajorTickUnit());
+    		if(_sizeSlider.getValue() % _sizeSlider.getMajorTickUnit() == 0 && _sizeSlider.getValue() != this._currentSimulationData.getDimensions().getX()){
     			setFileToNull();
     			System.out.println("Changing grid size to " + _sizeSlider.getValue());
-    			_currentGridDimensions.setX((int) _sizeSlider.getValue());
+    			this._currentSimulationData.getDimensions().setX((int) _sizeSlider.getValue());
+    			this._currentSimulationData.getDimensions().setY((int) _sizeSlider.getValue());
         		resetAnimation();
     		}
     	});
@@ -344,19 +348,18 @@ public class GUIMain{
     		resetSimulationToType(_currentSimulationType);
     		return;
     	}
-    	//TODO:
-//    	try {
-//			_model = SOCIETY_TYPE.newInstance();
-//		} catch (InstantiationException e) {
-//			e.printStackTrace();
-//		} catch (IllegalAccessException e) {
-//			e.printStackTrace();
-//		}
-//    	_model.setNewSizeAndCells((int) _currentGridLength);
-//    	resetGUIComponents();
+    	//TODO: choose society type and create new instance with given variables
+
+
+    	_model = SocietyMaker.generateCellSociety(_currentSimulationData);
+    	_gridController.setNewSimulation(_model.getCurrentColors(), _currentSimulationData);
+    	resetGUIComponents();
     }
     private void resetSimulationToType(SimulationType s){
     	//_model=new CellSociety(s); //TODO: Figure out how to deal with abstract CellSociety -- sorry Talha!
+//    	switch(s.getBoardData().getName()){
+//    		
+//    	}
     	_gridController.setNewGridFromFile(s, _model.getCurrentColors());
     	resetGUIComponents();
     }

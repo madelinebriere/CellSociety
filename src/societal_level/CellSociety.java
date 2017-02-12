@@ -65,6 +65,7 @@ public abstract class CellSociety {
 	private TreeMap<CellName, List<Cell>> currentCells;
 	private Patch[][] patches;
 	private BorderType border;
+	private SimulationData mySimulationData;
 	
 	/**
 	 * Default 
@@ -74,6 +75,7 @@ public abstract class CellSociety {
 		this(generateDefaultData());
 	}
 	public CellSociety(SimulationData sim) {
+		this.mySimulationData = sim;
 		setBoardData(sim.getData());
 		setCurrentCells(makeCells(sim));
 		setPatches(setPatches());
@@ -211,25 +213,13 @@ public abstract class CellSociety {
 		this.mySize = mySize;
 	}
 	public Patch[][] getPatches() {
-//		for(int i=0; i<patches.length; i++){
-//			for(int j=0; j<patches.length;j++){
-//				int x = patches[i][j].getMyLocation().getMyCol();
-//				int y = patches[i][j].getMyLocation().getMyRow();
-//				
-//				Integer cx = null;
-//				Integer cy = null;
-//				if (patches[i][j].getMyCell() != null){
-//					cx = patches[i][j].getMyCell().getMyCol();
-//					cy = patches[i][j].getMyCell().getMyRow();
-//				}
-//				System.out.println(i + " " + j+"\t\t" + x + " " + y + "\t\t"+cx + " " + cy);
-//				
-//			}
-//		}
 		return patches;
 	}
 	public void setPatches(Patch[][] patches) {
 		this.patches = patches;
+	}
+	public SimulationData getSimulationData(){
+		return this.mySimulationData;
 	}
 	/**
 	 *	Step function (update) -- Applies the current rules of the simulation
