@@ -16,8 +16,8 @@ import data_structures.CellData;
 import util.Location;
 public class SharkCell extends WaterWorldCell {
 	private static final Color SHARK_COLOR = Color.YELLOW;
-	private static final int STEPS_TO_STARVE = 3;
-	private static final int STEPS_TO_BREED = 8;
+	public static final int STEPS_TO_STARVE = 3;
+	public static final int STEPS_TO_BREED = 8;
 	
 	private int stepsToStarve;
 	private int stepsToBreed;

@@ -27,7 +27,14 @@ public abstract class Neighbors {
 	public abstract List<Patch> getAllNeighbors(Patch c);
 	public abstract List<Patch> getCardinalNeighbors(Patch c);
 	
-
+	
+	protected Patch getPatchAtXY(int x, int y){
+		if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x,y)){//TOP hexagon 
+			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x, y);
+			return (myGrid[t.x][t.y]);
+		}
+		return null;
+	}
 	protected boolean isValidCoordinate(int x, int y){
 		return (x>=0 && x<myGrid.length) && (y>=0 && y<myGrid[0].length);
 	}
