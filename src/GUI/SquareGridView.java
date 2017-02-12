@@ -9,7 +9,7 @@ import javafx.scene.shape.Rectangle;
 public class SquareGridView extends GridView {
 
 	public SquareGridView(Frame bounds, Dimensions dimensions, Color[][] colors){
-		super(bounds, dimensions);
+		super(bounds, dimensions, new Rectangle[dimensions.getX()][dimensions.getY()]);
 		this.setBackgroundColor(Color.BLACK);
 		setupGrid(colors);
 	}
@@ -17,7 +17,6 @@ public class SquareGridView extends GridView {
 
 	@Override
 	protected void setupGrid(Color[][] colors) {
-		_cells = new Rectangle[_dimensions.getX()][_dimensions.getY()];
     	int cellWidth = (_bounds.getWidth()/_dimensions.getX());
     	int cellHeight = (_bounds.getHeight()/_dimensions.getY());
     	double pixelMarginErrorWidth = _bounds.getWidth() - cellWidth*_dimensions.getX();

@@ -29,13 +29,13 @@ public abstract class Neighbors {
 	
 
 	protected boolean isValidCoordinate(int x, int y){
-		return (x>=0 && x<myGrid.length) && (y>=0 && y<myGrid.length);
+		return (x>=0 && x<myGrid.length) && (y>=0 && y<myGrid[0].length);
 	}
 	protected Tuple<Integer, Integer> getCoordinateWithWrapCheck(int x, int y){
 		if (x < 0) x = myGrid.length;
 		else if (x >= myGrid.length) x = 0;	
-		if (y < 0) y = myGrid.length;
-		else if (y >= myGrid.length) y = 0;
+		if (y < 0) y = myGrid[0].length;
+		else if (y >= myGrid[0].length) y = 0;
 		return new Tuple<Integer, Integer>(x,y);
 	}	
 }

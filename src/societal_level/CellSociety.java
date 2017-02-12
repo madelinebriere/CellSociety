@@ -438,7 +438,7 @@ public abstract class CellSociety {
 		m.put(CellName.SHARK_CELL, new CellRatio(0.2));
 		CellRatioMap r = new CellRatioMap(m);
 		BoardData data = new BoardData();
-		data.setShape(CellShape.HEXAGON);
+		data.setShape(CellShape.SQUARE);
 		return new SimulationData(data, r);
 	}
 
