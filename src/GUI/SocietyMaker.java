@@ -39,7 +39,7 @@ public class SocietyMaker {
 			ratios.put(CellName.SHARK_CELL, new CellRatio(0.1));
 			break;
 		case GAME_OF_LIFE:
-			ratios.put(CellName.LIVE_CELL, new CellRatio(0.5));
+			ratios.put(CellName.LIVE_CELL, new CellRatio(0.4));
 			break;
 		case POPULATION_SOCIETY:
 			ratios.put(CellName.HOUSE_CELL_1, new CellRatio(0.25));

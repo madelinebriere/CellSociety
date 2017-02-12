@@ -9,7 +9,7 @@ import javafx.scene.shape.Rectangle;
 public class SquareGridView extends GridView {
 
 	public SquareGridView(Frame bounds, Dimensions dimensions, Color[][] colors){
-		super(bounds, dimensions, colors);
+		super(bounds, dimensions);
 		this.setBackgroundColor(Color.BLACK);
 		setupGrid(colors);
 	}

@@ -57,6 +57,7 @@ public abstract class Patch {
 		return myColor.deriveColor(0, 1, shift, 1);
 	}
 	
+
 	protected Color getMyColor() {
 		return myColor;
 	}

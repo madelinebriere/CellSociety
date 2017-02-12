@@ -14,7 +14,7 @@ public class HexagonalGridView extends GridView {
 	double starting_x;
 	
 	public HexagonalGridView(Frame bounds, Dimensions dimensions, Color[][] colors){
-		super(bounds, dimensions, colors);
+		super(bounds, dimensions);
 		this.setBackgroundColor(Color.DARKSLATEGRAY);
 		double numberOfUnits = (dimensions.getX()+1)*3 - 1;
 		unit = bounds.getWidth()/numberOfUnits;
@@ -36,7 +36,7 @@ public class HexagonalGridView extends GridView {
 	}
 
 	@Override
-	protected void setupGrid(Color[][] newColors) {
+	protected void setupGrid(Color[][] colors) {
 		_cells = new Polygon[_dimensions.getX()][_dimensions.getY()];
 		for(int i=0; i<this._dimensions.getX(); i++){
 			for(int j =0; j<_dimensions.getY(); j++){
@@ -46,7 +46,7 @@ public class HexagonalGridView extends GridView {
 				}else{
 					hex = plainHexagon(starting_x + i*unit*3 + 1.5*unit, starting_y+j*unit);
 				}
-				hex.setFill(Color.WHITE);
+				hex.setFill(colors[i][j]);
 				this._cells[i][j] = hex;
 				this.getChildren().add(hex);
 			}
