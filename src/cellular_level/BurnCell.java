@@ -16,6 +16,7 @@ public class BurnCell extends Cell {
 	
 	private static int stepsToBurn;
 	private int mySteps;
+	
 	public BurnCell(){
 		this(0,0);
 	}

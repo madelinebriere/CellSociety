@@ -13,6 +13,8 @@ public class SlimePatch extends Patch {
 	
 	private int evaporate; //Rate of evaporation
 	private int depositRate;	//Units of chemical released
+	private int maxSaturation;
+	
 	
 	public SlimePatch(){
 		this(0,0);

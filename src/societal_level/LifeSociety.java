@@ -15,6 +15,10 @@ public class LifeSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.WHITE;
 	private static final PatchName PATCH_TYPE = PatchName.EMPTY_PATCH;
 	
+	private int underpop;
+	private int overpop;
+	private int numforlive;
+	
 	public LifeSociety(SimulationType sim){
 		super(sim);
 	}

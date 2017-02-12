@@ -1,7 +1,5 @@
 package societal_level;
 
-import java.util.List;
-
 import data_structures.*;
 import file_handling.SimulationType;
 import javafx.scene.paint.Color;
@@ -9,9 +7,9 @@ import javafx.scene.paint.Color;
 public class FireSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.YELLOW;
 	private static final PatchName PATCH_TYPE = PatchName.EMPTY_PATCH;
-	private static final double DEFAULT_THRESH = .5;
 	
-	private double thresh;
+	private double probCatch;
+	private int stepsToBurn;
 
 	public FireSociety(SimulationType sim){
 		super(sim);
