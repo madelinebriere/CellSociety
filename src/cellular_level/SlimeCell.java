@@ -3,9 +3,10 @@ package cellular_level;
 import java.util.List;
 
 
-
 import data_structures.CellData;
 import javafx.scene.paint.Color;
+import patch_level.Patch;
+import util.CellGenerator;
 
 public class SlimeCell extends Cell {
 	private static final Color SLIME_COLOR = Color.RED;
@@ -43,10 +44,10 @@ public class SlimeCell extends Cell {
 
 	@Override
 	public List<Cell> update(CellData data) {
-		// TODO Auto-generated method stub
-		return null;
+		Patch [][] patches = data.getCurrentPatchesCopy();
+		Patch patch = 
 	}
-
+	
 	public int getDiffuseRate() {
 		return diffuseRate;
 	}
@@ -55,4 +56,15 @@ public class SlimeCell extends Cell {
 		this.diffuseRate = diffuseRate;
 	}
 
+	public int getMySteps() {
+		return mySteps;
+	}
+
+	public void setMySteps(int mySteps) {
+		this.mySteps = mySteps;
+	}
+
+	
+	
+	
 }

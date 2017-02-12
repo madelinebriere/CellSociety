@@ -192,10 +192,9 @@ public abstract class CellSociety {
 		}
 	}
 	
-	private boolean validSpot(Location loc){
+	public boolean validSpot(Location loc){
 		return (loc.getMyRow()<getY() && loc.getMyCol()<getX());
 	}
-	
 	
 	/**
 	 * Main method for interaction between front and back end

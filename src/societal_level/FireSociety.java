@@ -1,8 +1,10 @@
 package societal_level;
 
+import cellular_level.Cell;
 import data_structures.*;
 import file_handling.SimulationType;
 import javafx.scene.paint.Color;
+import patch_level.Patch;
 
 public class FireSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.YELLOW;

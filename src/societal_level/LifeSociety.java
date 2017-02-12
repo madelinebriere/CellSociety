@@ -3,6 +3,7 @@ package societal_level;
 import java.util.List;
 import java.util.TreeMap;
 
+import cellular_level.Cell;
 import data_structures.BoardData;
 import data_structures.PatchName;
 import data_structures.RawData;
@@ -48,5 +49,4 @@ public class LifeSociety extends CellSociety {
 	public PatchName getPatchType() {
 		return PATCH_TYPE;
 	}
-
 }
