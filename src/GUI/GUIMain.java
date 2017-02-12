@@ -77,6 +77,7 @@ public class GUIMain{
 		simulationNameStringToEnum.put("Wa-Tor Society", SimulationName.WATER_SOCIETY);
 		simulationNameStringToEnum.put("Segregation Society", SimulationName.POPULATION_SOCIETY);
 		simulationNameStringToEnum.put("Life Society", SimulationName.GAME_OF_LIFE);
+		simulationNameStringToEnum.put("Slime Society", SimulationName.SLIME_SOCIETY);
 		setupTopLabels();
 		setupGrid();
 		setupAnimationTimeLine(MILLISECOND_DELAY);

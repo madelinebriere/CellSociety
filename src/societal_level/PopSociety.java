@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellular_level.Cell;
+import cellular_level.HouseCell;
+import data_structures.CellName;
 import data_structures.PatchName;
 import data_structures.RawData;
 import data_structures.SimulationData;
@@ -27,7 +29,8 @@ public class PopSociety extends CellSociety {
 
 	@Override
 	public void parseRules(RawData data) {
-		
+		if(data.getDoubleVariables().size()==0){return;}
+		satisfiedThresh = data.getDoubleVariables().get(0);
 	}
 	
 	public double getSatisfiedThresh() {
@@ -39,12 +42,6 @@ public class PopSociety extends CellSociety {
 	}
 
 	@Override
-	public void setVariablesToDefault() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public Color getEmptyColor() {
 		return EMPTY_COLOR;
 	}
@@ -52,5 +49,22 @@ public class PopSociety extends CellSociety {
 	@Override
 	public PatchName getPatchType() {
 		return PATCH_TYPE;
+	}
+
+	@Override
+	protected void applySettings() {
+		for(Cell c: getCurrentCells().get(CellName.HOUSE_CELL_1)){
+			if(satisfiedThresh>0 && satisfiedThresh<=1)
+			((HouseCell)c).setSatisfiedThreshold(satisfiedThresh);
+		}
+		for(Cell c: getCurrentCells().get(CellName.HOUSE_CELL_2)){
+			if(satisfiedThresh>0 && satisfiedThresh<=1)
+			((HouseCell)c).setSatisfiedThreshold(satisfiedThresh);
+		}
+		for(Cell c: getCurrentCells().get(CellName.HOUSE_CELL_3)){
+			if(satisfiedThresh>0 && satisfiedThresh<=1)
+			((HouseCell)c).setSatisfiedThreshold(satisfiedThresh);
+		}
+		
 	}
 }

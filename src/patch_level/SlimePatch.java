@@ -3,17 +3,14 @@ package patch_level;
 import javafx.scene.paint.Color;
 
 public class SlimePatch extends Patch {
-	private static final Color MOLD_COLOR = Color.BLACK;
+	private static final Color MOLD_COLOR = Color.GREEN;
 	private static final int EVAPO_RATE= 3; //steps until decrement in chemical
 	private static final int DEPOSIT_RATE = 2; //Amount deposited when cell is in patch
-	private static final int MAX_SATURATION = 20;
 	
-	private int camp;
 	private int stepsSinceDischarge;
 	
 	private int evaporate; //Rate of evaporation
 	private int depositRate;	//Units of chemical released
-	private int maxSaturation;
 	
 	
 	public SlimePatch(){
@@ -29,7 +26,6 @@ public class SlimePatch extends Patch {
 	
 	public SlimePatch(int row, int col, Color color, int evap, int depo){
 		super(row, col, color);
-		setCamp(0);
 		setStepsSinceDischarge(0);
 		setEvaporate(evap);
 		setDepositRate(depo);
@@ -42,6 +38,16 @@ public class SlimePatch extends Patch {
 		layCampTrail();
 	}
 	
+	@Override
+	public Patch createCopy() {
+		SlimePatch copy = new SlimePatch();
+		copy.basicCopy(this);
+		copy.setDepositRate(this.getDepositRate());
+		copy.setEvaporate(this.getEvaporate());
+		copy.setStepsSinceDischarge(this.getStepsSinceDischarge());
+		return copy;
+	}
+	
 	private void incrementSteps(){
 		stepsSinceDischarge++;
 	}
@@ -49,30 +55,13 @@ public class SlimePatch extends Patch {
 	private void checkDischarge(){
 		if(stepsSinceDischarge>=EVAPO_RATE){
 			setStepsSinceDischarge(0);
-			decrementCamp();
+			decrementConcentration(evaporate);
 		}
 	}
-	private void decrementCamp(){
-		if(camp-evaporate>=0)
-			camp-= evaporate;
-	}
-	
-	private void incrementCamp(){
-		if(camp <=MAX_SATURATION)
-			camp+= depositRate;
-	}
-	
 	private void layCampTrail(){
 		if(getMyCell()!=null){
-			incrementCamp();
+			incrementConcentration(depositRate);
 		}
-	}
-	
-	public int getCamp() {
-		return camp;
-	}
-	public void setCamp(int camp) {
-		this.camp = camp;
 	}
 	
 	public int getStepsSinceDischarge() {
@@ -94,7 +83,5 @@ public class SlimePatch extends Patch {
 		this.depositRate = depositRate;
 	}
 	
-	
-
 	
 }

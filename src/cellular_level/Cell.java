@@ -14,6 +14,7 @@ import java.util.List;
 
 import data_structures.CellData;
 import javafx.scene.paint.Color;
+import patch_level.Patch;
 
 public abstract class Cell implements Comparable{
 	private Location myLocation;
@@ -76,6 +77,10 @@ public abstract class Cell implements Comparable{
 	public void basicCopy(Cell copyFrom){
 		this.setMyState(copyFrom.getMyState());
 		this.copyLocation(copyFrom);
+	}
+	
+	public double getDistance(Patch patch){
+		return patch.getMyLocation().distance(this.getMyLocation());
 	}
 	
 	

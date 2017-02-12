@@ -53,11 +53,40 @@ public class CellData {
 	public List<Patch> getNeighbors(Cell c) {
 		return mySociety.neighbors(c);
 	}
+	
+	public List<Location> getNeighborsLocations(Cell c) {
+		return getPatchLocations(getNeighbors(c));
+	}
 
 	public Map <CellName, List<Cell>> getCurrentCellsCopy() {
 		return copy(mySociety.getCurrentCells());
 	}
-
+	
+	public Patch getCurrentPatch(Cell c){
+		if(mySociety.validSpot(c.getMyLocation())){
+			return mySociety.getPatches()[c.getMyCol()][c.getMyRow()];
+		}
+		return null;
+	}
+	
+	public Patch[][] getCurrentPatchesCopy(){
+		return copy(mySociety.getPatches());
+	}
+	
+	public ArrayList<Patch> getRadialPatches(Cell origin, int radius){
+		ArrayList<Patch> radial = new ArrayList<Patch>();
+		for(int i=0; i<mySociety.getPatches().length; i++){
+			for (int j=0; j<mySociety.getPatches()[0].length; j++){
+				Location loc1 = origin.getMyLocation();
+				Location loc2 = mySociety.getPatches()[i][j].getMyLocation();
+				if(loc1.distance(loc2)<=radius){
+					radial.add(mySociety.getPatches()[i][j]);
+				}
+			}
+		}
+		return radial;
+	}
+	
 	public int countSameNeighbors(Cell center) {
 		int sameCount = 0;
 		for (Patch p : mySociety.neighbors(center)) {
@@ -108,8 +137,7 @@ public class CellData {
 			return null;
 		}
 		Random randy = new Random();
-		ArrayList<Location> availableNeighbors = new ArrayList<Location>(available);
-		availableNeighbors.retainAll(getPatchLocations(mySociety.neighbors(c)));
+		ArrayList<Location> availableNeighbors = new ArrayList<Location>(getAvailableNeighbors(c));
 		if (availableNeighbors.size() == 0) {
 			return null;
 		}
@@ -117,6 +145,12 @@ public class CellData {
 		return availableNeighbors.get(emptyIndex);
 	}
 
+	public List<Location> getAvailableNeighbors(Cell c){
+		ArrayList<Location> availableNeighbors = new ArrayList<Location>(available);
+		availableNeighbors.retainAll(getPatchLocations(mySociety.neighbors(c)));
+		return availableNeighbors;
+	}
+	
 	/**
 	 * Basic List copy function to limit actual access to items
 	 * 
@@ -147,6 +181,16 @@ public class CellData {
 		}
 		return ret;
 
+	}
+	
+	private Patch[][] copy(Patch[][] toCopy){
+		Patch[][] copy = new Patch[toCopy.length][toCopy[0].length];
+		for(int i=0; i<toCopy.length; i++){
+			for(int j=0; j<toCopy.length; j++){
+				copy[i][j] = toCopy[i][j].createCopy();
+			}
+		}
+		return copy;
 	}
 
 }

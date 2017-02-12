@@ -15,6 +15,10 @@ public class WaterSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.BLUE;
 	private static final PatchName PATCH_TYPE = PatchName.EMPTY_PATCH;
 	
+	private int fishBreed;
+	private int sharkBreed;
+	private int sharkDie;
+	
 	public WaterSociety(SimulationData sim){
 		super(sim);
 	}
@@ -25,14 +29,10 @@ public class WaterSociety extends CellSociety {
 	
 	@Override
 	public void parseRules(RawData data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setVariablesToDefault() {
-		// TODO Auto-generated method stub
-		
+		if(data.getIntegerVariables().size()==0){return;}
+		fishBreed = data.getIntegerVariables().get(0);
+		sharkBreed = data.getIntegerVariables().get(1);
+		sharkDie = data.getIntegerVariables().get(2);
 	}
 
 	@Override
@@ -43,6 +43,12 @@ public class WaterSociety extends CellSociety {
 	@Override
 	public PatchName getPatchType() {
 		return PATCH_TYPE;
+	}
+
+	@Override
+	protected void applySettings() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -1,15 +1,14 @@
 package societal_level;
 
-import java.util.List;
-import java.util.TreeMap;
-
-import data_structures.BoardData;
+import cellular_level.Cell;
+import cellular_level.DeadCell;
+import cellular_level.LiveCell;
+import data_structures.CellName;
 import data_structures.PatchName;
 import data_structures.RawData;
 import data_structures.SimulationData;
 import file_handling.SimulationType;
 import javafx.scene.paint.Color;
-import patch_level.Patch;
 
 public class LifeSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.WHITE;
@@ -29,15 +28,12 @@ public class LifeSociety extends CellSociety {
 	
 	@Override
 	public void parseRules(RawData raw) {
-		// TODO Auto-generated method stub
-		
+		if(raw.getIntegerVariables().size()==0){return;}
+		underpop = raw.getIntegerVariables().get(0);
+		overpop = raw.getIntegerVariables().get(1);
+		numforlive = raw.getIntegerVariables().get(2);
 	}
 
-	@Override
-	public void setVariablesToDefault() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public Color getEmptyColor() {
@@ -49,4 +45,21 @@ public class LifeSociety extends CellSociety {
 		return PATCH_TYPE;
 	}
 
+	@Override
+	protected void applySettings() {
+		for(Cell c: getCurrentCells().get(CellName.LIVE_CELL)){
+			if(underpop>0 && underpop<overpop){
+				((LiveCell)c).setUnderpopulation(underpop);
+			}
+			if(overpop>underpop){
+				((LiveCell)c).setUnderpopulation(underpop);
+			}
+		}
+		for(Cell c: getCurrentCells().get(CellName.DEAD_CELL)){
+			if(numforlive>0){
+				((DeadCell)c).setNumForLive(numforlive);
+			}
+		}
+		
+	}
 }

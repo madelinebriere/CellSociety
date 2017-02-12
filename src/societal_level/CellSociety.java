@@ -111,17 +111,13 @@ public abstract class CellSociety {
 	
 
 	/**
-	 * This is only the DEFAULT version of this method, to ensure that no variables
-	 * are left uninitialized -- the default is NO PARSING at all -- this must
-	 * be implemented by subclasses
-	 * 
-	 *	This method should be implemented by every CellSociety in order to parse
-	 *	RawData passed to the society. If it does not define anything 
+	 * This method should be implemented by every CellSociety in order to parse
+	 *	RawData passed to the society. If it does not define anything, 
+	 *	the cells will just use their own default variables.
 	 *
 	 */
-	public void parseRules(RawData data){
-		setVariablesToDefault();
-	}
+	public abstract void parseRules(RawData data);
+	
 	
 	/**
 	 * Returns the color set for the patches (empty cells)
@@ -133,10 +129,6 @@ public abstract class CellSociety {
 	 */
 	public abstract PatchName getPatchType();
 	
-	/**
-	 * Set Society specific variables to default (backup)
-	 */
-	public abstract void setVariablesToDefault();
 	
 	
 	public void updatePatches(){
@@ -158,6 +150,11 @@ public abstract class CellSociety {
 			getPatches()[c.getMyCol()][c.getMyRow()].setMyCell(c);
 		}
 	}
+	
+	/**
+	 * Set cells and patches with current settings
+	 */
+	protected abstract void applySettings();
 
 	/**
 	 * Use to set the type of patches (empty spots) in the simulation
@@ -192,10 +189,9 @@ public abstract class CellSociety {
 		}
 	}
 	
-	private boolean validSpot(Location loc){
+	public boolean validSpot(Location loc){
 		return (loc.getMyRow()<getY() && loc.getMyCol()<getX());
 	}
-	
 	
 	/**
 	 * Main method for interaction between front and back end
@@ -205,10 +201,9 @@ public abstract class CellSociety {
 	 */
 	public Color[][] getCurrentColors() {
 		Color[][] toRet = new Color[getX()][getY()]; //rows along y axis, cols along x axis
-		Color emptyColor = getEmptyColor();
 		for (int i = 0; i < getX(); i++) {
 			for (int j = 0; j < getY(); j++) {
-				toRet[i][j] = emptyColor;	//Start will all cells color by patch
+				toRet[i][j] = patches[i][j].getMyColor();	//Start will all cells color by patch
 			}
 		}
 		for (Cell c : getCellsAsList()) {
@@ -246,6 +241,7 @@ public abstract class CellSociety {
 	 * @return 2D Array of current Cell colors
 	 */
 	public Color[][] step() {
+		applySettings();
 		shuffleCurrentCells();
 		stepAllCells(getAllEmptyCells());
 		updatePatches();

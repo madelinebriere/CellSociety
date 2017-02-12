@@ -22,6 +22,9 @@ public class SocietyMaker {
 		case GAME_OF_LIFE:
 			System.out.println("Life");
 			return new LifeSociety(simData);
+		case SLIME_SOCIETY:
+			System.out.println("Slime");
+			return new SlimeSociety(simData);
 		default:
 			System.out.println("Segregation");
 			return new PopSociety(simData);
@@ -45,6 +48,9 @@ public class SocietyMaker {
 			ratios.put(CellName.HOUSE_CELL_1, new CellRatio(0.25));
 			ratios.put(CellName.HOUSE_CELL_2, new CellRatio(0.25));
 			ratios.put(CellName.HOUSE_CELL_3, new CellRatio(0.25));
+			break;
+		case SLIME_SOCIETY:
+			ratios.put(CellName.SLIME_CELL, new CellRatio(.3));
 			break;
 		}
 		return new CellRatioMap(ratios);

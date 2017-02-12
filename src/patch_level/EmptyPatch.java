@@ -1,5 +1,6 @@
 package patch_level;
 
+import cellular_level.Cell;
 import javafx.scene.paint.Color;
 
 public class EmptyPatch extends Patch{
@@ -16,5 +17,11 @@ public class EmptyPatch extends Patch{
 	@Override
 	public void update() {
 		return; //Empty patch does nothing to update	
+	}
+	@Override
+	public Patch createCopy() {
+		EmptyPatch copy = new EmptyPatch();
+		copy.basicCopy(this);
+		return copy;
 	}
 }

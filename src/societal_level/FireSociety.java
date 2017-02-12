@@ -1,5 +1,8 @@
 package societal_level;
 
+import cellular_level.BurnCell;
+import cellular_level.Cell;
+import cellular_level.TreeCell;
 import data_structures.*;
 import file_handling.SimulationType;
 import javafx.scene.paint.Color;
@@ -21,12 +24,10 @@ public class FireSociety extends CellSociety {
 	
 	@Override
 	public void parseRules(RawData data) {
-		//TODO
-	}
-
-	@Override
-	public void setVariablesToDefault() {
-		//TODO
+		if(data.getDoubleVariables().size()!=0)
+			probCatch = data.getDoubleVariables().get(0);
+		if(data.getIntegerVariables().size()!=0)
+			stepsToBurn = data.getIntegerVariables().get(0);
 	}
 
 	@Override
@@ -37,6 +38,21 @@ public class FireSociety extends CellSociety {
 	@Override
 	public PatchName getPatchType() {
 		return PATCH_TYPE;
+	}
+
+	@Override
+	protected void applySettings() {
+		for(Cell c: getCurrentCells().get(CellName.TREE_CELL)){
+			if (probCatch>0 && probCatch<=1){
+				((TreeCell)c).setProbCatch(probCatch);
+			}
+		}
+		for(Cell c: getCurrentCells().get(CellName.BURN_CELL)){
+			if(stepsToBurn>0){
+				((BurnCell)c).setStepsToBurn(stepsToBurn);
+			}
+		}
+		
 	}
 	
 }
