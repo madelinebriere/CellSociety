@@ -165,6 +165,7 @@ public abstract class CellSociety {
 			for(Cell c: getCellsAsList()){
 				if(validSpot(c.getMyLocation())){
 					Patch newPatch = PatchGenerator.newPatch(getPatchType());
+					newPatch.setMyPatchType(getPatchType());
 					newPatch.setMyColor(getEmptyColor());
 					newPatch.setMyLocation(c.getMyLocation());
 					newPatch.setMyCell(c);					
@@ -181,6 +182,7 @@ public abstract class CellSociety {
 		for(Location l: locs){
 			if(patchyPatches[l.getMyCol()][l.getMyRow()]==null){
 				Patch newPatch = PatchGenerator.newPatch(getPatchType());
+				newPatch.setMyPatchType(getPatchType());
 				newPatch.setMyColor(getEmptyColor());
 				newPatch.setMyLocation(l);
 				newPatch.setMyCell(null);
@@ -203,7 +205,7 @@ public abstract class CellSociety {
 		Color[][] toRet = new Color[getX()][getY()]; //rows along y axis, cols along x axis
 		for (int i = 0; i < getX(); i++) {
 			for (int j = 0; j < getY(); j++) {
-				toRet[i][j] = patches[i][j].getMyColor();	//Start will all cells color by patch
+				toRet[i][j] = patches[i][j].getShadedColor();	//Start will all cells color by patch
 			}
 		}
 		for (Cell c : getCellsAsList()) {
@@ -264,15 +266,14 @@ public abstract class CellSociety {
 		TreeMap<CellName, List<Cell>> toRet = new TreeMap<CellName, List<Cell>>();
 		Map<CellName, CellRatio> ratios = sim.getRatios().getMapOfCellsRatios();
 		Map<CellName, Integer> cellNums = new HashMap<CellName, Integer>();
-		int expectedNum = validLocations.size();
-		
+		int total = validLocations.size();
+		int expectedNum = total;
 		for(CellName name: ratios.keySet()){
-			int numPlace = (int)(expectedNum*ratios.get(name).getRatio());
+			int numPlace = (int)(total * ratios.get(name).getRatio());
 			expectedNum -= numPlace;
 			cellNums.put(name, numPlace);
 		}
 		
-		//TODO: Possible fraction error
 		for(CellName name: cellNums.keySet()){
 			ArrayList<Cell> singleType = new ArrayList<Cell>();
 			for(int i=0; i<cellNums.get(name); i++){
@@ -348,6 +349,7 @@ public abstract class CellSociety {
 	 * @return ArrayList of updated cells
 	 */
 	private Map<CellName, List<Cell>> updateAllCells(List<Location> available) {
+		System.out.println(getPatches().length);
 		TreeMap<CellName, List<Cell>> newMap = new TreeMap<CellName, List<Cell>>();
 		for (CellName name : getCurrentCells().keySet()) {
 			for(Cell cell: getCurrentCells().get(name)){
