@@ -1,8 +1,11 @@
 package file_handling;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import data_structures.SimulationName;
 
 public class SlimeSimulation extends SimulationType {
 
@@ -49,5 +52,24 @@ public class SlimeSimulation extends SimulationType {
 		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(3)));
 		}
+	}
+
+	@Override
+	protected List<Integer> getIntegerData() {
+		ArrayList<Integer> data = new ArrayList<Integer>();
+		//data.add(get());
+		return data;
+	}
+
+	@Override
+	protected List<Double> getDoubleData() {
+		ArrayList<Double> data = new ArrayList<Double>();
+		//data.add(getProbability());
+		return data;
+	}
+
+	@Override
+	protected SimulationName getSimulationName() {
+		return SimulationName.SLIME_SOCIETY;
 	}
 }

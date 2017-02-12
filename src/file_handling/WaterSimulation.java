@@ -7,12 +7,14 @@
 
 package file_handling;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import cellular_level.FishCell;
 import cellular_level.SharkCell;
+import data_structures.SimulationName;
 
 public class WaterSimulation extends SimulationType {
 	
@@ -40,6 +42,7 @@ public class WaterSimulation extends SimulationType {
 		this.defaultCellData = DEFAULT_CELLS;
 		myDataValues = createDataMap(values);
 		cellData = createCellList(cells);
+		boardData = createBoardData();
 	}
 
 
@@ -65,6 +68,28 @@ public class WaterSimulation extends SimulationType {
 		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(2)));
 		}
+	}
+
+
+	@Override
+	protected List<Integer> getIntegerData() {
+		ArrayList<Integer> data = new ArrayList<Integer>();
+		data.add(getFishBreed());
+		data.add(getSharkStarve());
+		data.add(getSharkBreed());
+		return data;
+	}
+
+	@Override
+	protected List<Double> getDoubleData() {
+		ArrayList<Double> data = new ArrayList<Double>();
+		return data;
+	}
+
+
+	@Override
+	protected SimulationName getSimulationName() {
+		return SimulationName.WATER_SOCIETY;
 	}
 
 }

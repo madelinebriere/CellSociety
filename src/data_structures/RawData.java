@@ -25,7 +25,7 @@ public class RawData {
 		doubleVariables = new ArrayList<Double>();
 	}
 
-	public RawData(ArrayList<Integer> integerVariables, ArrayList<Double> doubleVariables) {
+	public RawData(List<Integer> integerVariables, List<Double> doubleVariables) {
 		this.integerVariables = integerVariables;
 		this.doubleVariables = doubleVariables;
 	}
