@@ -43,7 +43,10 @@ public abstract class Patch {
 	
 	public void basicCopy(Patch copyFrom){
 		this.setMyLocation(copyFrom.getMyLocation());
-		this.setMyCell(copyFrom.getMyCell().createCopy());
+		if(copyFrom.getMyCell()!=null)
+			this.setMyCell(copyFrom.getMyCell().createCopy());
+		else
+			this.setMyCell(null);
 		this.setMyColor(copyFrom.getMyColor());
 		this.setConcentration(copyFrom.getConcentration());
 	}

@@ -12,7 +12,7 @@ import patch_level.SlimePatch;
 import util.Location;
 
 public class SlimeCell extends Cell {
-	private static final Color SLIME_COLOR = Color.RED;
+	private static final Color SLIME_COLOR = Color.GREENYELLOW;
 
 	public SlimeCell(){
 		this(0,0);
@@ -38,6 +38,7 @@ public class SlimeCell extends Cell {
 	public List<Cell> update(CellData data) {
 		List<Cell> toRet = new ArrayList<Cell>();
 		moveTowardsSlime(data);
+		toRet.add(this);
 		return toRet;
 	}
 	
