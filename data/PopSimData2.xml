@@ -45,7 +45,6 @@
 		<cell>3 8 Blue</cell>
 		<cell>3 9 Blue</cell>
 		<cell>4 0 Red</cell>
-		<cell>4 1 Empty</cell>
 		<cell>4 2 Blue</cell>
 		<cell>4 3 Red</cell>
 		<cell>4 4 Blue</cell>
@@ -55,30 +54,24 @@
 		<cell>4 8 Red</cell>
 		<cell>4 9 Blue</cell>
 		<cell>5 0 Blue</cell>
-		<cell>5 1 Empty</cell>
 		<cell>5 2 Blue</cell>
 		<cell>5 3 Red</cell>
 		<cell>5 4 Blue</cell>
 		<cell>5 5 Red</cell>
 		<cell>5 6 Blue</cell>
 		<cell>5 7 Red</cell>
-		<cell>5 8 Empty</cell>
 		<cell>5 9 Blue</cell>
 		<cell>6 0 Red</cell>
 		<cell>6 1 Blue</cell>
-		<cell>6 2 Empty</cell>
 		<cell>6 3 Blue</cell>
 		<cell>6 4 Blue</cell>
 		<cell>6 5 Red</cell>
-		<cell>6 6 Empty</cell>
 		<cell>6 7 Red</cell>
 		<cell>6 8 Blue</cell>
 		<cell>6 9 Red</cell>
 		<cell>7 0 Red</cell>
 		<cell>7 1 Red</cell>
 		<cell>7 2 Red</cell>
-		<cell>7 3 Empty</cell>
-		<cell>7 4 Empty</cell>
 		<cell>7 5 Red</cell>
 		<cell>7 6 Blue</cell>
 		<cell>7 7 Red</cell>
@@ -95,7 +88,6 @@
 		<cell>8 8 Blue</cell>
 		<cell>8 9 Red</cell>
 		<cell>9 0 Red</cell>
-		<cell>9 1 Empty</cell>
 		<cell>9 2 Red</cell>
 		<cell>9 3 Blue</cell>
 		<cell>9 4 Blue</cell>

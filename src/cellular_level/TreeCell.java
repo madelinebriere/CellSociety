@@ -7,6 +7,8 @@
  */
 package cellular_level;
 import javafx.scene.paint.Color;
+import patch_level.Patch;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -64,8 +66,8 @@ public class TreeCell extends Cell {
 	
 	private int countBurnTrees(CellData data){
 		int count=0;
-		for(Cell c: data.getNeighbors(this)){
-			if(c instanceof BurnCell){
+		for(Patch p: data.getNeighbors(this)){
+			if(p.getMyCell() instanceof BurnCell){
 				count++;
 			}
 		}

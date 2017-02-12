@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javafx.scene.paint.Color;
+import patch_level.Patch;
 import data_structures.CellData;
 import util.Location;
 public class SharkCell extends WaterWorldCell {
@@ -125,11 +126,13 @@ public class SharkCell extends WaterWorldCell {
 		}	
 	}
 	
-	private ArrayList<FishCell> locateFishCells(List<Cell>neighbors){
+	private ArrayList<FishCell> locateFishCells(List<Patch>neighbors){
 		ArrayList<FishCell> possibleFood = new ArrayList<FishCell>();
-		for(Cell c: neighbors){
-			if(c!=null && c instanceof FishCell && !((FishCell)c).isEaten()){
-				possibleFood.add((FishCell)c);
+		for(Patch p: neighbors){
+			if(p!=null && p.getMyCell()!=null && 
+					p.getMyCell() instanceof FishCell && 
+					!((FishCell)p.getMyCell()).isEaten()){
+				possibleFood.add((FishCell)p.getMyCell());
 			}
 		}
 		return possibleFood;

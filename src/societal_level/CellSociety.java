@@ -76,13 +76,13 @@ public abstract class CellSociety {
 	public CellSociety(SimulationData sim) {
 		setBoardData(sim.getData());
 		setCurrentCells(makeCells(sim));
-		setPatches();
+		setPatches(setPatches());
 	}
 	
 	public CellSociety(SimulationType sim) {
 		setBoardData(sim.getBoardData());
 		setCurrentCells(sim.getCells());
-		setPatches();
+		setPatches(setPatches());
 	}
 	
 	public void setBoardData(BoardData data){
@@ -156,7 +156,7 @@ public abstract class CellSociety {
 					Patch newPatch = PatchGenerator.newPatch(getPatchType());
 					newPatch.setMyColor(getEmptyColor());
 					newPatch.setMyLocation(c.getMyLocation());
-					newPatch.setMyCell(c);
+					newPatch.setMyCell(c);					
 					patches[c.getMyCol()][c.getMyRow()]=newPatch;
 				}
 			}
@@ -211,6 +211,21 @@ public abstract class CellSociety {
 		this.mySize = mySize;
 	}
 	public Patch[][] getPatches() {
+//		for(int i=0; i<patches.length; i++){
+//			for(int j=0; j<patches.length;j++){
+//				int x = patches[i][j].getMyLocation().getMyCol();
+//				int y = patches[i][j].getMyLocation().getMyRow();
+//				
+//				Integer cx = null;
+//				Integer cy = null;
+//				if (patches[i][j].getMyCell() != null){
+//					cx = patches[i][j].getMyCell().getMyCol();
+//					cy = patches[i][j].getMyCell().getMyRow();
+//				}
+//				System.out.println(i + " " + j+"\t\t" + x + " " + y + "\t\t"+cx + " " + cy);
+//				
+//			}
+//		}
 		return patches;
 	}
 	public void setPatches(Patch[][] patches) {
@@ -258,20 +273,13 @@ public abstract class CellSociety {
 			expectedNum -= numPlace;
 			cellNums.put(name, numPlace);
 		}
-		if(expectedNum!=0){
-			for(CellName name: cellNums.keySet()){
-				int prev = cellNums.get(name);
-				prev+=expectedNum;
-				cellNums.put(name, prev);
-				break;
-			}
-		}
 		
+		//TODO: Possible fraction error
 		for(CellName name: cellNums.keySet()){
 			ArrayList<Cell> singleType = new ArrayList<Cell>();
 			for(int i=0; i<cellNums.get(name); i++){
 				int index = randomizer.nextInt(validLocations.size());
-				Location newLoc = validLocations.get(index);
+				Location newLoc = validLocations.remove(index);
 				Cell newCell = CellGenerator.newCell(name);
 				newCell.setMyLocation(newLoc);
 				singleType.add(newCell);
@@ -420,9 +428,10 @@ public abstract class CellSociety {
 	 *            Cell whose neighbors are returned
 	 * @return neighbors of Cell c
 	 */
-	public List<Cell> neighbors(Cell c){
-		Neighbors neighbors = NeighborsChooser.chooseNeighbors(border, getMyShape(), getCellsAsArray());
-		return neighbors.getAllNeighbors(c);
+	public List<Patch> neighbors(Cell c){
+		Neighbors neighbors = NeighborsChooser.chooseNeighbors(border, getMyShape(), getPatches());
+		Patch patch = patches[c.getMyCol()][c.getMyRow()];
+		return neighbors.getAllNeighbors(patch);
 	}
 	
 	public static SimulationData generateDefaultData(){

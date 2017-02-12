@@ -8,21 +8,21 @@ import borders.Border;
 import cellular_level.Cell;
 import data_structures.BorderType;
 import data_structures.Dimensions;
+import patch_level.Patch;
 
 public class SquareNeighbors extends Neighbors {
 
 
-	public SquareNeighbors(Cell[][] cells, BorderType b) {
+	public SquareNeighbors(Patch[][] cells, BorderType b) {
 		super(cells, b);
 	}
 
 	@Override
-	public List<Cell> getAllNeighbors(Cell c) {
-		List<Cell> neighbors = new ArrayList<Cell>();
-		int x = c.getMyLocation().getMyRow();
-		int y = c.getMyLocation().getMyCol();
+	public List<Patch> getAllNeighbors(Patch c) {
+		List<Patch> neighbors = new ArrayList<Patch>();
+		int x = c.getMyLocation().getMyCol();
+		int y = c.getMyLocation().getMyRow();
 		neighbors.addAll(getCardinalNeighbors(c));
-		
 		if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x-1, y-1)){
 			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x-1, y-1);
 			neighbors.add(myGrid[t.x][t.y]);
@@ -43,11 +43,11 @@ public class SquareNeighbors extends Neighbors {
 	}
 
 	@Override
-	public List<Cell> getCardinalNeighbors(Cell c) {
+	public List<Patch> getCardinalNeighbors(Patch c) {
 		
-		List<Cell> neighbors = new ArrayList<Cell>();
-		int x = c.getMyLocation().getMyRow();
-		int y = c.getMyLocation().getMyCol();
+		List<Patch> neighbors = new ArrayList<Patch>();
+		int x = c.getMyLocation().getMyCol();
+		int y = c.getMyLocation().getMyRow();
 		
 		if(myBorderType == BorderType.TOROIDAL || isValidCoordinate(x-1, y)){
 			Tuple<Integer, Integer> t = getCoordinateWithWrapCheck(x-1, y);
