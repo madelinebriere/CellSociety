@@ -46,7 +46,7 @@ public class SlimeCell extends Cell {
 		Patch[][] patches = data.getCurrentPatchesCopy();
 		ArrayList<SlimePatch> slime = new ArrayList<SlimePatch>();
 		for(int i=0; i<patches.length; i++){
-			for(int j=0; j<patches.length; j++){
+			for(int j=0; j<patches[0].length; j++){
 				if(patches[i][j].getMyPatchType()==PatchName.SLIME_PATCH){
 					slime.add((SlimePatch) patches[i][j]);
 				}
