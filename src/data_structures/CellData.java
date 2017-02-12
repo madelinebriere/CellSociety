@@ -53,6 +53,10 @@ public class CellData {
 	public List<Patch> getNeighbors(Cell c) {
 		return mySociety.neighbors(c);
 	}
+	
+	public List<Location> getNeighborsLocations(Cell c) {
+		return getPatchLocations(getNeighbors(c));
+	}
 
 	public Map <CellName, List<Cell>> getCurrentCellsCopy() {
 		return copy(mySociety.getCurrentCells());
@@ -133,8 +137,7 @@ public class CellData {
 			return null;
 		}
 		Random randy = new Random();
-		ArrayList<Location> availableNeighbors = new ArrayList<Location>(available);
-		availableNeighbors.retainAll(getPatchLocations(mySociety.neighbors(c)));
+		ArrayList<Location> availableNeighbors = new ArrayList<Location>(getAvailableNeighbors(c));
 		if (availableNeighbors.size() == 0) {
 			return null;
 		}
@@ -142,6 +145,12 @@ public class CellData {
 		return availableNeighbors.get(emptyIndex);
 	}
 
+	public List<Location> getAvailableNeighbors(Cell c){
+		ArrayList<Location> availableNeighbors = new ArrayList<Location>(available);
+		availableNeighbors.retainAll(getPatchLocations(mySociety.neighbors(c)));
+		return availableNeighbors;
+	}
+	
 	/**
 	 * Basic List copy function to limit actual access to items
 	 * 

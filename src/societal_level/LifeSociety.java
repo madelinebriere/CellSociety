@@ -28,6 +28,7 @@ public class LifeSociety extends CellSociety {
 	
 	@Override
 	public void parseRules(RawData raw) {
+		if(raw.getIntegerVariables().size()==0){return;}
 		underpop = raw.getIntegerVariables().get(0);
 		overpop = raw.getIntegerVariables().get(1);
 		numforlive = raw.getIntegerVariables().get(2);

@@ -1,7 +1,5 @@
 package patch_level;
 
-import cellular_level.Cell;
-import data_structures.PatchName;
 import javafx.scene.paint.Color;
 
 public class SlimePatch extends Patch {

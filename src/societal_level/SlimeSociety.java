@@ -34,6 +34,7 @@ public class SlimeSociety extends CellSociety {
 
 	@Override
 	public void parseRules(RawData data) {
+		if(data.getIntegerVariables().size()==0){return;}
 		evaporate = data.getIntegerVariables().get(0);
 		depositRate = data.getIntegerVariables().get(1);
 	}

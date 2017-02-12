@@ -29,8 +29,10 @@ public class WaterSociety extends CellSociety {
 	
 	@Override
 	public void parseRules(RawData data) {
-		// TODO Auto-generated method stub
-		
+		if(data.getIntegerVariables().size()==0){return;}
+		fishBreed = data.getIntegerVariables().get(0);
+		sharkBreed = data.getIntegerVariables().get(1);
+		sharkDie = data.getIntegerVariables().get(2);
 	}
 
 	@Override

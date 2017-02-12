@@ -29,6 +29,7 @@ public class PopSociety extends CellSociety {
 
 	@Override
 	public void parseRules(RawData data) {
+		if(data.getDoubleVariables().size()==0){return;}
 		satisfiedThresh = data.getDoubleVariables().get(0);
 	}
 	

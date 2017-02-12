@@ -24,8 +24,10 @@ public class FireSociety extends CellSociety {
 	
 	@Override
 	public void parseRules(RawData data) {
-		probCatch = data.getDoubleVariables().get(0);
-		stepsToBurn = data.getIntegerVariables().get(0);
+		if(data.getDoubleVariables().size()!=0)
+			probCatch = data.getDoubleVariables().get(0);
+		if(data.getIntegerVariables().size()!=0)
+			stepsToBurn = data.getIntegerVariables().get(0);
 	}
 
 	@Override
