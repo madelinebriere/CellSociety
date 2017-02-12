@@ -2,11 +2,13 @@
 
 package GUI;
 
+import data_structures.BorderType;
 import data_structures.Dimensions;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import util.Tuple;
 
 public abstract class GridView extends Pane{
 	protected Frame _bounds;
@@ -17,7 +19,7 @@ public abstract class GridView extends Pane{
 		_bounds = bounds;
 		_dimensions = dimensions;
 		_cells = shapeArray;
-		System.out.println("cells:"+ _cells.length + "\tdim: "+ dimensions.getX());
+		//System.out.println("cells:"+ _cells.length + "\tdim: "+ dimensions.getX());
 	}
 	protected void setBackgroundColor(Color color){
 		Rectangle rec = new Rectangle();
@@ -32,10 +34,8 @@ public abstract class GridView extends Pane{
 	}
 	protected abstract void setupGrid(Color[][] colors);
 	public void updateGrid(Color[][] newColors) {
-		System.out.println("updating grid");
 		for(int x=0; x<_dimensions.getX(); x++){
 			for(int y=0; y<_dimensions.getY(); y++){
-				System.out.println(x + "\t" + y);
 				_cells[x][y].setFill(newColors[x][y]);
 			}
 		}

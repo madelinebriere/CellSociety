@@ -35,7 +35,7 @@ public class TriangleGridView extends GridView{
 					p = topTriangle(starting_x + i/2*unit, starting_y + j*unit);
 				}
 				p.setFill(colors[i][j]);
-				_cells[i][j] = p;
+				this.setShapeAtXY(i, j, p);
         		getChildren().add(p);
 			}
 		}

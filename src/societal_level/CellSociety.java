@@ -441,7 +441,7 @@ public abstract class CellSociety {
 		m.put(CellName.FISH_CELL, new CellRatio(0.5));
 		m.put(CellName.SHARK_CELL, new CellRatio(0.2));
 		CellRatioMap r = new CellRatioMap(m);
-		BoardData data = new BoardData();
+		BoardData data = new BoardData(SimulationName.WATER_SOCIETY);
 		data.setShape(CellShape.SQUARE);
 		return new SimulationData(data, r);
 	}
