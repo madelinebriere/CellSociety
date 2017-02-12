@@ -7,7 +7,10 @@ import java.util.Map;
 public class SlimeSimulation extends SimulationType {
 
 	private static final List<String> SETTING_TYPES = Arrays.asList(new String[] {
-			"lowthreshold", "highthreshold"
+			"threshold",
+			"evaporationRate",
+			"diffusionRate",
+			"depositRate"
 	    });
 
 	public SlimeSimulation(Map<String, String> values, List<String> cells) {
@@ -16,13 +19,35 @@ public class SlimeSimulation extends SimulationType {
 		this.dataTypes = combineDataTypes();
 	}
 
-	public Double getLowThreshold(){
-		return Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
+	public Double getThreshold(){
+		try{
+			return Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(0)));
+		}
 	}
 	
-	public Double getHighThreshold(){
-		return  Double.parseDouble(getDataValues().get(SETTING_TYPES.get(1)));
+	public Integer getEvaporationRate(){
+		try{
+			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(1)));
+		}
 	}
 	
+	public Integer getDiffusionRate(){
+		try{
+			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(2)));
+		}
+	}
 	
+	public Integer getDepositRate(){
+		try{
+			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(3)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(3)));
+		}
+	}
 }

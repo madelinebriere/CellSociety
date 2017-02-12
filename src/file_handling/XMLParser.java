@@ -37,12 +37,13 @@ public class XMLParser {
 	public static final String CELL = "cell";
 	public static final String CELL_DATA_TYPE = "cellDataType";
 	public static final String[] POSSIBLE_CELL_DATA = {"location", "number", "probability", "percentage"};
-	private static final String[] POSSIBLE_SIM_STRINGS = {"game of life", "population", "fire", "water"};
+	private static final String[] POSSIBLE_SIM_STRINGS = {"game of life", "population", "fire", "water", "slime"};
 	private static final SimulationType[] POSSIBLE_SIM_TYPES = {
 			new LifeSimulation(null, null),
 			new PopSimulation(null, null),
 			new FireSimulation(null, null),
-			new WaterSimulation(null, null)
+			new WaterSimulation(null, null),
+			new SlimeSimulation(null, null)
 	};
 	private static final String ERROR_BUNDLE = "resources/Errors";
 	private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
