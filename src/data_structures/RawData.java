@@ -1,4 +1,4 @@
-package cellular_level;
+package data_structures;
 
 import java.util.ArrayList;
 import java.util.List;

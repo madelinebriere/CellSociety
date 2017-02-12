@@ -2,8 +2,6 @@
 
 package data_structures;
 
-import cellular_level.RawData;
-
 public class SimulationData {
 	private BoardData data;
 	private CellRatioMap ratios;
