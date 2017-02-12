@@ -2,7 +2,6 @@ package societal_level;
 
 import java.util.List;
 
-import cellular_level.RawData;
 import data_structures.*;
 import file_handling.SimulationType;
 import javafx.scene.paint.Color;

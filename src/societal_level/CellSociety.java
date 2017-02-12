@@ -18,10 +18,24 @@ import util.NeighborsChooser;
 import util.PatchGenerator;
 import neighbors.*;
 import patch_level.*;
-import borders.*;
 
 
 /**
+ * TODO:
+ * 1) Check up on grid resizing
+ * 2) File-reading test
+ * 3) Slime/Sugar simulations
+ * 	Cells
+ * 	Patches (Add to CellData info)
+ * 	Society
+ * 	Files
+ * 4) Types of neighbors
+ * 5) Borders
+ * 6) ParseRules finish and apply
+ * 
+ * 
+ * 
+ * 
  * TODO:
  * 1) Stone: Add BoardData initialization
  * 2) Talha: Make GUI work/ decide how to initial using new design
@@ -103,8 +117,6 @@ public abstract class CellSociety {
 	 *	RawData passed to the society. If it does not define anything 
 	 *
 	 */
-	//NOTE: Is this annotation a good way to avoid use in superclass?
-	@Deprecated
 	public void parseRules(RawData data){
 		setVariablesToDefault();
 	}
@@ -211,21 +223,6 @@ public abstract class CellSociety {
 		this.mySize = mySize;
 	}
 	public Patch[][] getPatches() {
-//		for(int i=0; i<patches.length; i++){
-//			for(int j=0; j<patches.length;j++){
-//				int x = patches[i][j].getMyLocation().getMyCol();
-//				int y = patches[i][j].getMyLocation().getMyRow();
-//				
-//				Integer cx = null;
-//				Integer cy = null;
-//				if (patches[i][j].getMyCell() != null){
-//					cx = patches[i][j].getMyCell().getMyCol();
-//					cy = patches[i][j].getMyCell().getMyRow();
-//				}
-//				System.out.println(i + " " + j+"\t\t" + x + " " + y + "\t\t"+cx + " " + cy);
-//				
-//			}
-//		}
 		return patches;
 	}
 	public void setPatches(Patch[][] patches) {
