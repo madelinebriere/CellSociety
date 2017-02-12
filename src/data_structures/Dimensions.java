@@ -22,6 +22,10 @@ public class Dimensions {
 	public void setY(int value){
 		this.y = value;
 	}
+	public boolean equals(Dimensions other){
+		
+		return this.getX() == other.getX() && this.getY() == other.getY();
+	}
 	
 	
 	

@@ -472,7 +472,6 @@ public class GUIMain{
     	resetGUIComponents();
     }
     private void resetGUIComponents(){
-    	resetGrid();
     	updateGenerationLabel();
     }
     private void setFileToNull(){
@@ -485,12 +484,7 @@ public class GUIMain{
     private void disableSliders(){
     	//TODO:
     }
-    private void resetGrid(){
-    	//TODO
-//    	_root.getChildren().remove(_grid);
-//    	setupGrid();
-    	System.out.println("TODO resetGrid");
-    }
+
     private void changeAnimationSpeed(Number newValue){
     		pauseAnimation();
         	setupAnimationTimeLine(1000./newValue.doubleValue());
@@ -506,9 +500,7 @@ public class GUIMain{
      * the the new dimensions will be used to dynamically change the grid size
      */
 	private void step(){
-		//TODO:
-//		_grid.updateTileColors(_model.step());
-//		updateGenerationLabel();
+		updateGenerationLabel();
 		_gridController.step(_model.step(), _model.getSize());
 	}
 

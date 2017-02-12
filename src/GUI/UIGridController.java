@@ -33,9 +33,6 @@ public class UIGridController {
 			clearGridFromScreen();
 		}
 		switch(simData.getShape()){
-		case SQUARE:
-			_gridView = new SquareGridView(_bounds, simData.getDimensions(), colors);
-			break;
 		case TRIANGLE:
 			_gridView = new TriangleGridView(_bounds, simData.getDimensions(), colors);
 			break;
@@ -58,10 +55,14 @@ public class UIGridController {
 		setNewSimulation(colors,_currentSimData);
 	}
 	public void step(Color[][] newColors, Dimensions newDimensions){
-		if(!_currentSimData.getDimensions().equals((Dimensions) newDimensions)){
+		if(!_currentSimData.getDimensions().equals(newDimensions)){
+			System.out.println(_currentSimData.getDimensions().getX() + " " + _currentSimData.getDimensions().getY());
+			System.out.println(newDimensions.getX() + " " + newDimensions.getY());
 			setNewGridWithDimension(newDimensions, newColors);
 			System.out.println("setting new grid of size" + newDimensions.toString());
 		}else{
+			System.out.println("Generation: " + _currentGeneration);
+			System.out.println(newColors.length + "x" + newColors[0].length);
 			_gridView.updateGrid(newColors);
 			_currentGeneration ++;
 		}
