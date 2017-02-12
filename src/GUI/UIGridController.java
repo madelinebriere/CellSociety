@@ -28,6 +28,7 @@ public class UIGridController {
 	}
 
 	public void setNewSimulation(Color[][] colors, SimulationData simData){
+		_currentGeneration = 0;
 		if(_gridView != null){
 			clearGridFromScreen();
 		}
@@ -62,6 +63,7 @@ public class UIGridController {
 			System.out.println("setting new grid of size" + newDimensions.toString());
 		}else{
 			_gridView.updateGrid(newColors);
+			_currentGeneration ++;
 		}
 	}
 	

@@ -14,15 +14,14 @@ public class TriangleGridView extends GridView{
 	private double starting_x;
 	
 	public TriangleGridView(Frame bounds, Dimensions dimensions, Color[][] colors){
-		super(bounds, dimensions, colors);
+		super(bounds, dimensions);
+		unit = Math.floor(bounds.getHeight()/dimensions.getY());
+		starting_y = (bounds.getHeight() - unit*dimensions.getY())/2;
+		starting_x = starting_y;
 		this.setBackgroundColor(Color.BLACK);
 		setupGrid(colors);
 	}
-	@Override
-	public void updateGrid(Color[][] newColors) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	@Override
 	protected void setupGrid(Color[][] colors) {
 		_cells = new Polygon[_dimensions.getX()][_dimensions.getY()];
@@ -31,10 +30,11 @@ public class TriangleGridView extends GridView{
 			for(int j =0; j<_dimensions.getY(); j++){
 				Polygon p;
 				if(i%2==0){
-					p = bottomTriangle(starting_x + i*unit, starting_y + j*unit);
+					p = bottomTriangle(starting_x + i/2*unit, starting_y + j*unit);
 				}else{
-					p = topTriangle(starting_x + i*unit, starting_y + j*unit);
+					p = topTriangle(starting_x + i/2*unit, starting_y + j*unit);
 				}
+				p.setFill(colors[i][j]);
 				_cells[i][j] = p;
         		getChildren().add(p);
 			}
@@ -42,7 +42,7 @@ public class TriangleGridView extends GridView{
 	}
 	
 	private Polygon bottomTriangle(double x, double y){
-		double side = unit;
+		double side = unit - 0.5;
 		Polygon t = new Polygon(new double[] {
 				x,y,
 				x, y+side,
@@ -52,7 +52,7 @@ public class TriangleGridView extends GridView{
 		return t;
 	}
 	private Polygon topTriangle(double x, double y){
-		double side = unit;
+		double side = unit - 0.5;
 		Polygon t = new Polygon(new double[] {
 				x,y,
 				x+side, y,

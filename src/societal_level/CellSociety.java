@@ -163,7 +163,7 @@ public abstract class CellSociety {
 	 * Use to set the type of patches (empty spots) in the simulation
 	 */
 	public Patch[][] setPatches(){
-		Patch[][] patches = new Patch[getY()][getX()];
+		Patch[][] patches = new Patch[getX()][getY()];
 		if(getCurrentCells().size()!=0){
 			for(Cell c: getCellsAsList()){
 				if(validSpot(c.getMyLocation())){
@@ -204,10 +204,10 @@ public abstract class CellSociety {
 	 *         create the visualization of the current simulation status
 	 */
 	public Color[][] getCurrentColors() {
-		Color[][] toRet = new Color[getY()][getX()]; //rows along y axis, cols along x axis
+		Color[][] toRet = new Color[getX()][getY()]; //rows along y axis, cols along x axis
 		Color emptyColor = getEmptyColor();
-		for (int i = 0; i < getY(); i++) {
-			for (int j = 0; j < getX(); j++) {
+		for (int i = 0; i < getX(); i++) {
+			for (int j = 0; j < getY(); j++) {
 				toRet[i][j] = emptyColor;	//Start will all cells color by patch
 			}
 		}
