@@ -31,6 +31,11 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -55,7 +60,7 @@ public class GUIMain{
     private Label _generationLabel;
     private Label _societyTitleLabel;
     private Slider _speedSlider;
-    //private Slider _sizeSlider;
+    private Slider _sizeSlider;
     private Button _pauseButton;
     private Button _playButton;
     private Button _fileButton;
@@ -65,31 +70,25 @@ public class GUIMain{
     
     public GUIMain(CellSociety model){
     	_model = model;
-    	_currentSimulationData = _model.getSimulationData();
-		
+		_root =  new Pane();
+		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
+		_currentSimulationData = _model.getSimulationData();
 		simulationNameStringToEnum.put("Fire Society", SimulationName.FIRE_SOCIETY);
 		simulationNameStringToEnum.put("Wa-Tor Society", SimulationName.WATER_SOCIETY);
 		simulationNameStringToEnum.put("Segregation Society", SimulationName.POPULATION_SOCIETY);
 		simulationNameStringToEnum.put("Life Society", SimulationName.GAME_OF_LIFE);
-    	
-		_root =  new Pane();
-		_scene = new Scene(_root, SCREEN_WIDTH, SCREEN_HEIGHT, Color.WHITE);
-		
 		setupTopLabels();
 		setupGrid();
 		setupAnimationTimeLine(MILLISECOND_DELAY);
         setupUserControls();
     }
-    
-    /*
-     * getters and setters
-     */
     public Scene getScene () {
         return _scene;
     }
-    
+    /**
+     * initialze gridController 
+     */
     private void setupGrid(){
-    	Frame frame = new Frame(0,0,GRID_WIDTH,GRID_WIDTH);
     	_gridContainer = new Pane(); //controller will add its views to this view
     	_gridContainer.setLayoutX(20);
     	_gridContainer.setLayoutY(60);
@@ -98,12 +97,12 @@ public class GUIMain{
     	_root.getChildren().add(_gridContainer);
     	_gridController = new UIGridController(
     			_gridContainer,
-    			frame, 
+    			new Frame(0,0,GRID_WIDTH,GRID_WIDTH), 
     			_model.getCurrentColors(), 
     			_currentSimulationData);
     }
     /**
-     * sets up frame and timeline
+     * sets up KeyFrame and timeline for animatio through a step function
      */
     private void setupAnimationTimeLine(double delay){
     	KeyFrame frame = new KeyFrame(Duration.millis(delay),
@@ -138,8 +137,9 @@ public class GUIMain{
     private void setupUserControls(){
     	setupTopMenu();
     	setupButtons();
+    	setupShapeButtons(_gridContainer.getLayoutY() + 16);
     	double sliderWidth = SCREEN_WIDTH - GRID_WIDTH - 60;
-    	setupSpeedSlider(sliderWidth, GRID_WIDTH + 30, _gridContainer.getLayoutY() + 30);
+    	setupSpeedSlider(sliderWidth, GRID_WIDTH + 30, _gridContainer.getLayoutY() + 160);
     	setupSizeSlider(sliderWidth, GRID_WIDTH + 30, _speedSlider.getLayoutY() + 80);
     }
     
@@ -241,7 +241,98 @@ public class GUIMain{
     	hbox1.setPrefHeight(SCREEN_HEIGHT - GRID_WIDTH - 40);
     	_root.getChildren().add(hbox1);
     }
-   
+    private void setupShapeButtons(double topY){
+    	double bottomY = topY + 50;
+    	double width = 60;
+    	double x = _gridContainer.getLayoutX() + _gridContainer.getPrefWidth() + 45;
+    	Polygon triangle = new Polygon(new double[]{
+    			x + width/2, topY,
+    			x + width, bottomY,
+    			x, bottomY
+    	});
+    	x += width + 25;
+    	Rectangle square = new Rectangle(x, topY, 50, 50);
+    	double center = 25;
+    	double side = center/(Math.sqrt(3)/2);
+    	x += 50 + 25 + side/2;
+    	Polygon hexagon = new Polygon(new double[] {
+				x, topY,
+				x + side, topY,
+				x + side + side/2, topY + center,
+				x + side, topY + center*2,
+				x, topY+center*2,
+				x - side/2, topY + center
+		});
+    	
+    	triangle.setFill(Color.rgb(229,57,53)); // red
+    	square.setFill(Color.rgb(30,136,229));  // blue
+    	hexagon.setFill(Color.rgb(0,137,123)); // green
+    	setShapeDeselected(triangle);
+    	setShapeDeselected(hexagon);
+    	setShapeSelected(square);
+    	triangle.setOnMousePressed(new EventHandler<MouseEvent>() {
+    	    public void handle(MouseEvent me) {
+    	    	setShapeHighlighted(triangle);;
+    	    }
+    	});
+    	square.setOnMousePressed(new EventHandler<MouseEvent>() {
+    	    public void handle(MouseEvent me) {
+    	    	setShapeHighlighted(square);;
+    	    }
+    	});
+    	hexagon.setOnMousePressed(new EventHandler<MouseEvent>() {
+    	    public void handle(MouseEvent me) {
+    	    	setShapeHighlighted(hexagon);;
+    	    }
+    	});
+    	triangle.setOnMouseReleased(new EventHandler<MouseEvent>() {
+    	    public void handle(MouseEvent me) {
+    	    	setNewGridShape(CellShape.TRIANGLE);
+    	    	setShapeSelected(triangle);
+    	    }
+    	});
+    	square.setOnMouseReleased(new EventHandler<MouseEvent>() {
+    	    public void handle(MouseEvent me) {
+    	    	setNewGridShape(CellShape.SQUARE);
+    	    	setShapeSelected(square);
+    	    }
+    	});
+    	hexagon.setOnMouseReleased(new EventHandler<MouseEvent>() {
+    	    public void handle(MouseEvent me) {
+    	    	setNewGridShape(CellShape.HEXAGON);
+    	    	setShapeSelected(hexagon);
+    	    }
+    	});
+    	
+    	_root.getChildren().add(triangle);
+    	_root.getChildren().add(square);
+    	_root.getChildren().add(hexagon);
+    	
+    }
+    private void setShapeSelected(Shape s){
+    	setShapeDesign(s, Color.rgb(40, 40, 40), 3);
+    	s.setScaleX(1.);
+    	s.setScaleY(1.);
+    }
+    private void setShapeDeselected(Shape s){
+    	setShapeDesign(s, Color.rgb(80, 80, 80), 2);
+    
+    }
+    private void setShapeHighlighted(Shape s){
+    	setShapeDesign(s, Color.rgb(8, 8, 8), 4);
+    	s.setScaleX(1.3);
+    	s.setScaleY(1.3);
+    }
+    private void setShapeDesign(Shape s, Color strokeColor, double strokeWidth){
+    	s.setStroke(strokeColor);
+    	s.setStrokeWidth(strokeWidth);
+    	s.setStrokeType(StrokeType.OUTSIDE);
+    	s.setStrokeLineCap(StrokeLineCap.ROUND);
+    }
+    private void setNewGridShape(CellShape s){
+    	this._currentSimulationData.getData().setShape(s);
+    	resetAnimation();
+    }
     private Button plainButton(String text){
     	Button button = new Button(text);
     	button.setPrefSize(80, 40);
@@ -301,7 +392,7 @@ public class GUIMain{
     	_root.getChildren().add(label);
     }
     private void setupSizeSlider(double sliderWidth, double startX, double startY){
-    	Slider _sizeSlider = new Slider();
+    	_sizeSlider = new Slider();
     	_sizeSlider.setMin(10);
     	_sizeSlider.setMax(100);
     	_sizeSlider.setValue(this._currentSimulationData.getDimensions().getX());
@@ -314,11 +405,13 @@ public class GUIMain{
     	_sizeSlider.setLayoutX(startX);
     	_sizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
     		_sizeSlider.setValue(_sizeSlider.getValue() - _sizeSlider.getValue() %  _sizeSlider.getMajorTickUnit());
-    		if(_sizeSlider.getValue() % _sizeSlider.getMajorTickUnit() == 0 && _sizeSlider.getValue() != this._currentSimulationData.getDimensions().getX()){
+    		double minValue = Math.min(_currentSimulationData.getDimensions().getX(), _currentSimulationData.getDimensions().getY());
+    		if(_sizeSlider.getValue() % _sizeSlider.getMajorTickUnit() == 0 && 
+    				_sizeSlider.getValue() != minValue){
     			setFileToNull();
     			System.out.println("Changing grid size to " + _sizeSlider.getValue());
-    			this._currentSimulationData.getDimensions().setX((int) _sizeSlider.getValue());
-    			this._currentSimulationData.getDimensions().setY((int) _sizeSlider.getValue());
+//    			this._currentSimulationData.getDimensions().setX((int) _sizeSlider.getValue());
+//    			this._currentSimulationData.getDimensions().setY((int) _sizeSlider.getValue());
         		resetAnimation();
     		}
     	});
@@ -347,12 +440,28 @@ public class GUIMain{
     		resetSimulationToType(_currentSimulationType);
     		return;
     	}
-    	//TODO: choose society type and create new instance with given variables
-
-
+    	updateGridDimensionsForShape(_currentSimulationData.getShape());
+    	//System.out.println("done updating");
     	_model = SocietyMaker.generateCellSociety(_currentSimulationData);
+    	//System.out.println("done making model");
     	_gridController.setNewSimulation(_model.getCurrentColors(), _currentSimulationData);
     	resetGUIComponents();
+    }
+    private void updateGridDimensionsForShape(CellShape s){
+    	int sliderValue = (int) _sizeSlider.getValue();
+    	Dimensions d;
+    	switch(s){
+    	case TRIANGLE:
+    		d = new Dimensions(sliderValue, sliderValue/2);
+    		break;
+    	case HEXAGON:
+    		d = new Dimensions(sliderValue/3, sliderValue);
+    		break;
+    	default:
+    		d = new Dimensions(sliderValue, sliderValue);
+    		break;
+    	}
+    	this._currentSimulationData.getData().setDimensions(d);
     }
     private void resetSimulationToType(SimulationType s){
     	//_model=new CellSociety(s); //TODO: Figure out how to deal with abstract CellSociety -- sorry Talha!

@@ -12,7 +12,7 @@ public abstract class GridView extends Pane{
 	protected Frame _bounds;
 	protected Dimensions _dimensions;
 	protected Shape[][] _cells;
-	public GridView(Frame bounds, Dimensions dimensions, Color[][] colors){
+	public GridView(Frame bounds, Dimensions dimensions){
 		super();
 		_bounds = bounds;
 		_dimensions = dimensions;
@@ -30,9 +30,11 @@ public abstract class GridView extends Pane{
 	}
 	protected abstract void setupGrid(Color[][] colors);
 	public void updateGrid(Color[][] newColors) {
+		
 		for(int x=0; x<_dimensions.getX(); x++){
 			for(int y=0; y<_dimensions.getY(); y++){
 				_cells[x][y].setFill(newColors[x][y]);
+				System.out.println(newColors[x][y].toString());
 			}
 		}
 	}
