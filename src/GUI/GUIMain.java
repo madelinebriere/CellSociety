@@ -405,11 +405,11 @@ public class GUIMain{
     	_sizeSlider.setLayoutX(startX);
     	_sizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
     		_sizeSlider.setValue(_sizeSlider.getValue() - _sizeSlider.getValue() %  _sizeSlider.getMajorTickUnit());
-    		double minValue = Math.min(_currentSimulationData.getDimensions().getX(), _currentSimulationData.getDimensions().getY());
+    		double minValue = Math.max(_currentSimulationData.getDimensions().getX(), _currentSimulationData.getDimensions().getY());
     		if(_sizeSlider.getValue() % _sizeSlider.getMajorTickUnit() == 0 && 
     				_sizeSlider.getValue() != minValue){
     			setFileToNull();
-    			System.out.println("Changing grid size to " + _sizeSlider.getValue());
+    			System.out.println("Grid Size " + _sizeSlider.getValue() + "\tmin val " + minValue);
 //    			this._currentSimulationData.getDimensions().setX((int) _sizeSlider.getValue());
 //    			this._currentSimulationData.getDimensions().setY((int) _sizeSlider.getValue());
         		resetAnimation();
