@@ -14,6 +14,8 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+
 import cellular_level.Cell;
 import data_structures.BoardData;
 import data_structures.CellName;
@@ -25,26 +27,35 @@ public abstract class SimulationType {
 			"title",
 	        "author",
 	        "dimension",
+	        "border",
 	        "cells"
 	    });
+	private static final List<String> DEFAULT_UNIVERSAL_DATA = Arrays.asList(new String[] {
+			"Simulation",
+	        "Default Generator",
+	        "10",
+	        "FINITE"
+	    });
 	protected static final int NAME_INDEX = 2;
+	protected static final String CELLS = "cells";
+	protected static final String DEFAULT_CELL_TYPE = "percentage";
 	private static final String ERROR_BUNDLE = "resources/Errors";
 	
-	private BoardData boardData; //TODO: Assign value
-
-
-	private List<String> cellData;																
+	private BoardData boardData;
+	protected List<String> cellData;
+	protected List<String> defaultCellData;
 	protected List<String> dataTypes;
 	protected List<String> settingTypes = Arrays.asList(new String[] {""});
-	private Map<String, String> myDataValues;
+	protected Map<String, String> dataDefaults;
+	protected List<String> settingDefaults = Arrays.asList(new String[] {""});
+	protected Map<String, String> myDataValues;
 	public ResourceBundle myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
 	
 	
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
-		dataTypes = combineDataTypes();
-		//TODO: Create BoardData object from input as field variables
+		//TODO: boardData = createBoardData();
 	}
 	
 	public String getTitle(){
@@ -55,12 +66,16 @@ public abstract class SimulationType {
 		return myDataValues.get(UNIVERSAL_DATA_TYPES.get(1));
 	}
 	
-	public int getDimension(){
+	public Integer getDimension(){
 		try{
 			return Integer.parseInt(myDataValues.get(UNIVERSAL_DATA_TYPES.get(2)));
 		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), UNIVERSAL_DATA_TYPES.get(2)));
 		}
+	}
+	
+	public String getBorder(){
+		return myDataValues.get(UNIVERSAL_DATA_TYPES.get(3));
 	}
 	
 	/**
@@ -118,6 +133,13 @@ public abstract class SimulationType {
 	}
 	
 	/**
+	 * @return List of defaults that all SimulationTypes share.
+	 */
+	protected List<String> getUniversalDefaults(){
+		return DEFAULT_UNIVERSAL_DATA;
+	}
+	
+	/**
 	 * @return List of data types of SimulationType and the subclass instantiated.
 	 */
 	public List<String> getDataTypes(){
@@ -143,7 +165,69 @@ public abstract class SimulationType {
 		return data;
 	}
 	
+	/**
+	 * Combines List of simulation-specific setting defaults with defaults that all files must contain.
+	 * 
+	 * @return List of all defaults for a specific simulation.
+	 */
+	protected Map<String, String> combineDefaultData(){
+		Map<String, String> data = new HashMap<String, String>();
+
+		mapLists(data, UNIVERSAL_DATA_TYPES, DEFAULT_UNIVERSAL_DATA);
+		mapLists(data, settingTypes, settingDefaults);
+
+		return data;
+	}
+	
+	private void mapLists(Map<String, String> map, List<String> keys, List<String> values){
+		int element = 0;  //Used to account for "cells" being skipped, as well as having to access a List
+		for(String tag: keys){
+			if(!tag.equals(CELLS)){
+				map.put(tag, values.get(element));
+				element++;
+			}
+		}
+	}
+	
 	public BoardData getBoardData() {
 		return boardData;
+	}
+	
+	/**
+	 * Uses the information held by the SimulationType to create a BoardData object.
+	 * 
+	 * @return BoardData object containing information passed in by user.
+	 */
+	//TODO: protected abstract BoardData createBoardData();
+	
+	/**
+	 * Creates a map for the Simulation's data, using default values when parameters aren't passed in.
+	 * 
+	 * @return Map containing the Simulation's data.
+	 */
+	protected Map<String, String> createDataMap(Map<String, String> values){
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		for(String tag: this.dataTypes){
+			if(!tag.equals(CELLS)){ //Cells must be handled separately
+				if(values.containsKey(tag)){
+					map.put(tag, values.get(tag));
+				}else{
+					map.put(tag, this.dataDefaults.get(tag));
+				}
+			}
+		}
+		return map;
+	}
+	
+	protected List<String> createCellList(List<String> data){
+		if(getCellData().size() > 0){  //If given cell data is invalid, then the default cell data will be used
+			return data;
+		}else{
+			CellDataGenerator gen = new CellDataGenerator(defaultCellData, this.getDimension());
+			CellDataDecoder dec = new CellDataDecoder(gen);
+			return dec.decodeData(DEFAULT_CELL_TYPE);
+		}
+		
 	}
 }

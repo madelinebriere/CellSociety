@@ -12,7 +12,7 @@ import data_structures.CellData;
 import util.Location;
 public class BurnCell extends Cell {
 	private static final Color BURN_COLOR = Color.RED;
-	private static final int STEPS_TO_BURN=1;
+	public static final int STEPS_TO_BURN=1;
 	
 	private static int stepsToBurn;
 	private int mySteps;
