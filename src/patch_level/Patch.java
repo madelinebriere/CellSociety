@@ -6,11 +6,15 @@ import util.Location;
 
 public abstract class Patch {
 	private final static Color DEFAULT_COLOR = Color.WHITE;
+	private final static double MAX_DARK = 1;
+	private final static double DEFAULT_HUE = .5;
 	
 	private Color myColor;
 	private Location myLocation;
 	private Cell myCell;
-	
+	private double shade; 	//represent the darkness (from 0 - 10) 
+
+
 	public Patch(){
 		this(0,0);
 	}
@@ -20,13 +24,14 @@ public abstract class Patch {
 	}
 	
 	public Patch(int row, int col, Color color){
-		this(row,col,color, null);
+		this(row,col,color, null, DEFAULT_HUE);
 	}
 	
-	public Patch(int row, int col, Color color, Cell cell){
+	public Patch(int row, int col, Color color, Cell cell, double shade){
 		myLocation = new Location(row,col);
 		myColor=color;
 		myCell=cell;
+		this.shade = shade;
 	}
 	
 	public abstract void update();
@@ -53,6 +58,22 @@ public abstract class Patch {
 
 	public void setMyCell(Cell myCell) {
 		this.myCell = myCell;
+	}
+	
+	public double getShade() {
+		return shade;
+	}
+
+	public void setShade(double shade) {
+		if(shade>=0 && shade<=MAX_DARK){
+			this.shade = shade;
+		}
+		else if(shade>=0){
+			this.shade=MAX_DARK;
+		}
+		else{
+			this.shade = 0;
+		}
 	}
 	
 	

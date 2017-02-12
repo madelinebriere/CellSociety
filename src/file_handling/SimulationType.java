@@ -70,7 +70,7 @@ public abstract class SimulationType {
 	 * 
 	 * @return
 	 */
-	public TreeMap<CellName,List<Cell>> getCells(){
+	public Map<CellName,List<Cell>> getCells(){
 		TreeMap<CellName, List<Cell>> cells = new TreeMap<CellName, List<Cell>>();
 		try{
 			for(String data: this.getCellData()){

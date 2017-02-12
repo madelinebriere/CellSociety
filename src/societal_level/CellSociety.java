@@ -18,10 +18,24 @@ import util.NeighborsChooser;
 import util.PatchGenerator;
 import neighbors.*;
 import patch_level.*;
-import borders.*;
 
 
 /**
+ * TODO:
+ * 1) Check up on grid resizing
+ * 2) File-reading test
+ * 3) Slime/Sugar simulations
+ * 	Cells
+ * 	Patches (Add to CellData info)
+ * 	Society
+ * 	Files
+ * 4) Types of neighbors
+ * 5) Borders
+ * 6) ParseRules finish and apply
+ * 
+ * 
+ * 
+ * 
  * TODO:
  * 1) Stone: Add BoardData initialization
  * 2) Talha: Make GUI work/ decide how to initial using new design
@@ -105,8 +119,6 @@ public abstract class CellSociety {
 	 *	RawData passed to the society. If it does not define anything 
 	 *
 	 */
-	//NOTE: Is this annotation a good way to avoid use in superclass?
-	@Deprecated
 	public void parseRules(RawData data){
 		setVariablesToDefault();
 	}
@@ -249,7 +261,7 @@ public abstract class CellSociety {
 	 * @param sim
 	 * @return
 	 */
-	public TreeMap<CellName, List<Cell>> makeCells(SimulationData sim){
+	public Map<CellName, List<Cell>> makeCells(SimulationData sim){
 		Random randomizer = new Random();
 		ArrayList<Location> validLocations = getValidLocations(sim.getDimensions());
 		if(validLocations.size()==0){return null;}
@@ -327,7 +339,7 @@ public abstract class CellSociety {
 	 *            Available spots for movement, breeding, etc.
 	 */
 	private void stepAllCells(List<Location> available) {
-		TreeMap<CellName, List<Cell>> nextGen = updateAllCells(available);
+		TreeMap<CellName, List<Cell>> nextGen = (TreeMap<CellName, List<Cell>>)updateAllCells(available);
 		setCurrentCells(nextGen);
 	}
 
@@ -339,7 +351,7 @@ public abstract class CellSociety {
 	 *            Available spots
 	 * @return ArrayList of updated cells
 	 */
-	private TreeMap<CellName, List<Cell>> updateAllCells(List<Location> available) {
+	private Map<CellName, List<Cell>> updateAllCells(List<Location> available) {
 		TreeMap<CellName, List<Cell>> newMap = new TreeMap<CellName, List<Cell>>();
 		for (CellName name : getCurrentCells().keySet()) {
 			for(Cell cell: getCurrentCells().get(name)){
@@ -477,8 +489,8 @@ public abstract class CellSociety {
 	}
 
 
-	public void setCurrentCells(TreeMap<CellName, List<Cell>> current) {
-		currentCells = current;
+	public void setCurrentCells(Map<CellName, List<Cell>> map) {
+		currentCells = (TreeMap<CellName, List<Cell>>)map;
 	}
 
 	public Dimensions getSize() {

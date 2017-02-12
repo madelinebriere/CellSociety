@@ -3,9 +3,9 @@ package societal_level;
 import java.util.List;
 import java.util.TreeMap;
 
-import cellular_level.RawData;
 import data_structures.BoardData;
 import data_structures.PatchName;
+import data_structures.RawData;
 import data_structures.SimulationData;
 import file_handling.SimulationType;
 import javafx.scene.paint.Color;

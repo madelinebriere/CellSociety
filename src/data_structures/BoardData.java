@@ -1,7 +1,5 @@
 package data_structures;
 
-import cellular_level.RawData;
-
 /**
  * 
  * STONE USE THIS :)
