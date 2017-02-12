@@ -7,6 +7,10 @@ public class SlimeSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.BLACK;
 	private static final PatchName PATCH_TYPE = PatchName.SLIME_PATCH;
 	
+	private int diffuseRate;
+	private int evaporate;
+	private int depositRate;
+	private int maxSaturation;
 	
 	@Override
 	public Color getEmptyColor() {

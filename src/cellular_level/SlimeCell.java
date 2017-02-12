@@ -8,10 +8,11 @@ import data_structures.CellData;
 import javafx.scene.paint.Color;
 
 public class SlimeCell extends Cell {
-	private static final Color SLIME_COLOR = Color.LIMEGREEN;
+	private static final Color SLIME_COLOR = Color.RED;
 	private static final int DIFFUSE_RATE = 2; //steps
 	
 	private int diffuseRate;
+	private int mySteps;
 
 	public SlimeCell(){
 		this(0,0);
@@ -28,6 +29,7 @@ public class SlimeCell extends Cell {
 	public SlimeCell(int row, int col, Color c, int diffuse){
 		super(row,col,c);
 		diffuseRate = diffuse;
+		mySteps = 0;
 	}
 	
 	

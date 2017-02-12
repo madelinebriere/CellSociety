@@ -25,6 +25,14 @@ public class Location {
 		return (getMyRow() == ((Location)o).getMyRow()) &&
 				(getMyCol() == ((Location)o).getMyCol()); 
 	}
+	
+	public double distance(Location compare){
+		int rowdiff = this.getMyRow() - compare.getMyRow();
+		int rowsq = rowdiff*rowdiff;
+		int coldiff = this.getMyCol() - compare.getMyCol();
+		int colsq = coldiff*coldiff;
+		return Math.sqrt(rowsq + colsq);
+	}
 
 	public int getMyRow() {
 		return myRow;
