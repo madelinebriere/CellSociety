@@ -7,11 +7,13 @@
 
 package file_handling;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import cellular_level.HouseCell;
+import data_structures.SimulationName;
 
 public class PopSimulation extends SimulationType {
 	
@@ -36,6 +38,7 @@ public class PopSimulation extends SimulationType {
 		this.defaultCellData = DEFAULT_CELLS;
 		myDataValues = createDataMap(values);
 		cellData = createCellList(cells);
+		boardData = createBoardData();
 	}
 	
 	public Double getThreshold(){
@@ -44,6 +47,24 @@ public class PopSimulation extends SimulationType {
 		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(0)));
 		}
+	}
+
+	@Override
+	protected List<Integer> getIntegerData() {
+		ArrayList<Integer> data = new ArrayList<Integer>();
+		return data;
+	}
+
+	@Override
+	protected List<Double> getDoubleData() {
+		ArrayList<Double> data = new ArrayList<Double>();
+		data.add(getThreshold());
+		return data;
+	}
+
+	@Override
+	protected SimulationName getSimulationName() {
+		return SimulationName.POPULATION_SOCIETY;
 	}
 	
 

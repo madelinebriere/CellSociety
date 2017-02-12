@@ -18,7 +18,12 @@ import java.util.HashMap;
 
 import cellular_level.Cell;
 import data_structures.BoardData;
+import data_structures.BorderType;
 import data_structures.CellName;
+import data_structures.CellShape;
+import data_structures.Dimensions;
+import data_structures.RawData;
+import data_structures.SimulationName;
 import util.CellGenerator;
 import util.Location;
 
@@ -28,20 +33,22 @@ public abstract class SimulationType {
 	        "author",
 	        "dimension",
 	        "border",
+	        "cellShape",
 	        "cells"
 	    });
 	private static final List<String> DEFAULT_UNIVERSAL_DATA = Arrays.asList(new String[] {
 			"Simulation",
 	        "Default Generator",
 	        "10",
-	        "FINITE"
+	        "FINITE",
+	        "SQUARE"
 	    });
 	protected static final int NAME_INDEX = 2;
 	protected static final String CELLS = "cells";
 	protected static final String DEFAULT_CELL_TYPE = "percentage";
 	private static final String ERROR_BUNDLE = "resources/Errors";
 	
-	private BoardData boardData;
+	protected BoardData boardData;
 	protected List<String> cellData;
 	protected List<String> defaultCellData;
 	protected List<String> dataTypes;
@@ -55,7 +62,6 @@ public abstract class SimulationType {
 	public SimulationType(Map<String, String> values, List<String> cells){
 		myDataValues = values;
 		cellData = cells;
-		//TODO: boardData = createBoardData();
 	}
 	
 	public String getTitle(){
@@ -76,6 +82,10 @@ public abstract class SimulationType {
 	
 	public String getBorder(){
 		return myDataValues.get(UNIVERSAL_DATA_TYPES.get(3));
+	}
+	
+	public String getCellShape(){
+		return myDataValues.get(UNIVERSAL_DATA_TYPES.get(4));
 	}
 	
 	/**
@@ -198,7 +208,23 @@ public abstract class SimulationType {
 	 * 
 	 * @return BoardData object containing information passed in by user.
 	 */
-	//TODO: protected abstract BoardData createBoardData();
+	protected BoardData createBoardData(){
+		SimulationName name = getSimulationName();
+		Dimensions dim = new Dimensions(this.getDimension(), this.getDimension());
+		BorderType borderType = BorderType.valueOf(getBorder().toUpperCase());
+		CellShape shape = CellShape.valueOf(getCellShape().toUpperCase());
+		List<Integer> intData = getIntegerData();
+		List<Double> dblData = getDoubleData();
+		RawData data = new RawData(intData, dblData);
+		
+		return new BoardData(name, dim, borderType, shape, data);
+	}
+	
+	protected abstract List<Integer> getIntegerData();
+	
+	protected abstract List<Double> getDoubleData();
+	
+	protected abstract SimulationName getSimulationName();
 	
 	/**
 	 * Creates a map for the Simulation's data, using default values when parameters aren't passed in.
@@ -227,7 +253,6 @@ public abstract class SimulationType {
 			CellDataGenerator gen = new CellDataGenerator(defaultCellData, this.getDimension());
 			CellDataDecoder dec = new CellDataDecoder(gen);
 			return dec.decodeData(DEFAULT_CELL_TYPE);
-		}
-		
+		}		
 	}
 }

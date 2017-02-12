@@ -10,6 +10,8 @@ package file_handling;
 import cellular_level.BurnCell;
 import cellular_level.TreeCell;
 import data_structures.*;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -33,11 +35,12 @@ public class FireSimulation extends SimulationType {
 		super(values, cells);
 		this.settingTypes = SETTING_TYPES;  //This must be called before this.dataTypes is initialized by combineDataTypes()
 		this.settingDefaults = DEFAULT_SETTINGS; //This must be called before this.dataDefaults is initialized by combineDefaultData()
+		this.defaultCellData = DEFAULT_CELLS;
 		this.dataTypes = combineDataTypes();
 		this.dataDefaults = combineDefaultData();
-		this.defaultCellData = DEFAULT_CELLS;
 		myDataValues = createDataMap(values);
 		cellData = createCellList(cells);
+		boardData = createBoardData();
 	}
 	
 	public Double getProbability(){
@@ -56,13 +59,24 @@ public class FireSimulation extends SimulationType {
 		}
 	}
 
-//	@Override
-//	protected BoardData createBoardData() {
-//		SimulationName name = SimulationName.FIRE_SOCIETY;
-//		Dimensions dim = new Dimensions(this.getDimension(), this.getDimension());
-//		//BorderType border = new
-//		
-//		return null;
-//	}
+	@Override
+	protected List<Integer> getIntegerData() {
+		ArrayList<Integer> data = new ArrayList<Integer>();
+		data.add(getSteps());
+		return data;
+	}
+
+	@Override
+	protected List<Double> getDoubleData() {
+		ArrayList<Double> data = new ArrayList<Double>();
+		data.add(getProbability());
+		return data;
+	}
+	
+	protected SimulationName getSimulationName(){
+		return SimulationName.FIRE_SOCIETY;
+	}
+	
+	
 }
 
