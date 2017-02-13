@@ -1,15 +1,17 @@
+
+package cellular_level;
+import javafx.scene.paint.Color;
+import java.util.ArrayList;
+import java.util.List;
+import data_structures.CellData;
+
 /**
  * Burning tree cell in the forest fire CA simulation
  * Burns for a set number of steps before dying
  * 
  * @author maddiebriere
  */
-package cellular_level;
-import javafx.scene.paint.Color;
-import java.util.ArrayList;
-import java.util.List;
-import data_structures.CellData;
-import util.Location;
+
 public class BurnCell extends Cell {
 	private static final Color BURN_COLOR = Color.RED;
 	public static final int STEPS_TO_BURN=1;

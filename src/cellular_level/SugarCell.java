@@ -4,6 +4,14 @@ import java.util.List;
 
 import data_structures.CellData;
 
+/**
+ * Extension of the Cell class specific to the actors 
+ * in the SugarScape simulation
+ * 
+ * @author maddiebriere
+ *
+ */
+
 public class SugarCell extends Cell{
 	public static final int SUGAR_INIT  = 10;
 	public static final int SUGAR_META = 3;

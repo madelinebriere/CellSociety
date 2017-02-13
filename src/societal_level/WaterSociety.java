@@ -10,6 +10,15 @@ import data_structures.SimulationData;
 import file_handling.SimulationType;
 import javafx.scene.paint.Color;
 
+/**
+ * Extension of CellSociety, specific to the Wa-Tor world simulation,
+ * allows Fish and Shark Cells.
+ * 
+ * @author maddiebriere
+ *
+ */
+
+
 public class WaterSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.BLUE;
 	private static final PatchName PATCH_TYPE = PatchName.EMPTY_PATCH;

@@ -6,6 +6,19 @@ import data_structures.PatchName;
 import javafx.scene.paint.Color;
 import util.Location;
 
+/**
+ * This is a parallel class to the Cell class. Patches represent grid spots, and
+ * are slightly higher on the hierarchical chain than Cells. They exist in every valid spot
+ * and have functionality based on type. They either hold a Cell (when a Cell
+ * has the same location) or hold no Cell and act as Color place holders and sometimes
+ * sources of "memory." All patches are by default given a concentration variable 
+ * to represent this memory.
+ * 
+ * @author maddiebriere
+ *
+ */
+
+
 public abstract class Patch {
 	private final static Color DEFAULT_COLOR = Color.WHITE;
 	private final static int MAX_CONC = 30;
@@ -44,7 +57,7 @@ public abstract class Patch {
 	public void basicCopy(Patch copyFrom){
 		this.setMyLocation(copyFrom.getMyLocation());
 		if(copyFrom.getMyCell()!=null){
-			System.out.println("HERE");
+		
 			this.setMyCell(copyFrom.getMyCell().createCopy());
 		}
 		else{

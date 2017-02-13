@@ -1,10 +1,17 @@
 package util;
 
-import cellular_level.Cell;
 import data_structures.BorderType;
 import data_structures.CellShape;
 import neighbors.*;
 import patch_level.Patch;
+
+/**
+ * Chooses the correct neighbors object based on the CellShape
+ * and the border type
+ * 
+ * @author maddiebriere
+ *
+ */
 
 public class NeighborsChooser {
 	public static Neighbors chooseNeighbors(BorderType b, CellShape s, Patch[][] grid){

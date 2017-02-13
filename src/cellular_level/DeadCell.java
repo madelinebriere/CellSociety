@@ -1,15 +1,16 @@
+
+package cellular_level;
+import javafx.scene.paint.Color;
+import java.util.ArrayList;
+import data_structures.CellData;
+
 /**
  * Class representing dead cells in the Game of Life Simulation
  * Capable of active updates based on surroundings
  * 
  * @author maddiebriere
  */
-package cellular_level;
-import javafx.scene.paint.Color;
-import java.util.ArrayList;
-import java.util.List;
-import data_structures.CellData;
-import util.Location;
+
 public class DeadCell extends LifeSimCell {
 	private static final Color DEAD_COLOR = Color.WHITE;
 	public static final int NUM_FOR_LIVE = 3;

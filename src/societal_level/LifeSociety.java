@@ -10,6 +10,14 @@ import data_structures.SimulationData;
 import file_handling.SimulationType;
 import javafx.scene.paint.Color;
 
+/**
+ * Extension of CellSociety specific to Game of Life simulation. Allows
+ * Dead and Live Cells.
+ * 
+ * @author maddiebriere
+ *
+ */
+
 public class LifeSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.WHITE;
 	private static final PatchName PATCH_TYPE = PatchName.EMPTY_PATCH;

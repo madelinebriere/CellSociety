@@ -5,7 +5,7 @@ package data_structures;
  * STONE USE THIS :)
  * 
  * Information held in SimulationData about board set-up, including dimensions, type of border
- * and shape of tiles
+ * and shape of tiles.
  * 
  * @author maddiebriere
  */
@@ -33,7 +33,7 @@ public class BoardData {
 	}
 
 	public BoardData(SimulationName name, Dimensions dimensions, BorderType border, CellShape shape, RawData raw) {
-		this(false, name, dimensions, border, shape, raw);
+		this(true, name, dimensions, border, shape, raw);
 	}
 
 

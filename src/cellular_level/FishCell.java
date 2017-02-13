@@ -1,18 +1,17 @@
-/**
- * Fish cell in Water World simulation
- * 
- * May merge with SharkCell to create superclass
- * because of duplicate code
- * 
- * @author maddiebriere
- */
+
 package cellular_level;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import javafx.scene.paint.Color;
 import data_structures.CellData;
 import util.Location;
+
+/**
+ * Fish cell in Water World simulation
+ * 
+ * 
+ * @author maddiebriere
+ */
 
 public class FishCell extends WaterWorldCell {
 	public static final int STEPS_TO_BREED=5;

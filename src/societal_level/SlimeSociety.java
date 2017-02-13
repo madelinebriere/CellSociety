@@ -11,6 +11,16 @@ import javafx.scene.paint.Color;
 import patch_level.Patch;
 import patch_level.SlimePatch;
 
+/**
+ * Extension of CellSociety specific to Slime Simulation
+ * 
+ * Models mold cells that gravitate towards each other when they reach a certain 
+ * threshold of cAMP (a chemical). Allows SlimeCells.
+ * 
+ * @author maddiebriere
+ *
+ */
+
 public class SlimeSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.GREEN;
 	private static final PatchName PATCH_TYPE = PatchName.SLIME_PATCH;

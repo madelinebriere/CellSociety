@@ -1,15 +1,21 @@
-/**
- * Cell used in the segregation simulation.
- * Classified solely by color (state).
- * 
- * @author maddiebriere
- */
+
 package cellular_level;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 import data_structures.CellData;
 import util.Location;
+
+/**
+ * Cell used in the segregation simulation.
+ * Classified solely by color (state).
+ * 
+ * NOTE: This classification has caused problems because
+ * all other Cells are defined by class type, and different
+ * colored HouseCells cannot be distinguished in this manner
+ * 
+ * @author maddiebriere
+ */
 
 public class HouseCell extends Cell{
 	public static final Color DEFAULT_COLOR = Color.BLUE;

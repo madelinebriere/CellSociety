@@ -2,15 +2,31 @@ package patch_level;
 
 import javafx.scene.paint.Color;
 
+/**
+ * Extension of Patch specific to the Slime Society
+ * simulation. These patches have memory in that they store a certain 
+ * concentration (here, of cAMP). They discharge this concentration at 
+ * a certain evaporation rate, and have deposited a certain amount of 
+ * chemical in the patch if there is a Slime Cell in the patch. 
+ * 
+ * NOTE: This patch has a very active role -- it defines its concentration
+ * by the Cell in it without the Cell having any role in the action. This
+ * is because Patches are higher on the hierarchical chain and therefore
+ * take on more responsibility.
+ * 
+ * @author maddiebriere
+ *
+ */
+
 public class SlimePatch extends Patch {
 	private static final Color MOLD_COLOR = Color.GREEN;
-	public static final int EVAPO_RATE= 3; //steps until decrement in chemical
-	public static final int DEPOSIT_RATE = 2; //Amount deposited when cell is in patch
+	private static final int EVAPO_RATE= 3; //steps until decrement in chemical
+	private static final int DEPOSIT = 2; //Amount deposited when cell is in patch
 	
 	private int stepsSinceDischarge;
 	
 	private int evaporate; //Rate of evaporation
-	private int depositRate;	//Units of chemical released
+	private int depositInc;	//Units of chemical released
 	
 	
 	public SlimePatch(){
@@ -21,14 +37,14 @@ public class SlimePatch extends Patch {
 	}
 	
 	public SlimePatch(int col, int row, Color color){
-		this(row, col, color, EVAPO_RATE, DEPOSIT_RATE);
+		this(row, col, color, EVAPO_RATE, DEPOSIT);
 	}
 	
 	public SlimePatch(int row, int col, Color color, int evap, int depo){
 		super(row, col, color);
 		setStepsSinceDischarge(0);
 		setEvaporate(evap);
-		setDepositRate(depo);
+		setDeposit(depo);
 	}
 	
 	@Override
@@ -42,7 +58,7 @@ public class SlimePatch extends Patch {
 	public Patch createCopy() {
 		SlimePatch copy = new SlimePatch();
 		copy.basicCopy(this);
-		copy.setDepositRate(this.getDepositRate());
+		copy.setDeposit(this.getDeposit());
 		copy.setEvaporate(this.getEvaporate());
 		copy.setStepsSinceDischarge(this.getStepsSinceDischarge());
 		return copy;
@@ -60,7 +76,7 @@ public class SlimePatch extends Patch {
 	}
 	private void layCampTrail(){
 		if(getMyCell()!=null){
-			incrementConcentration(depositRate);
+			incrementConcentration(depositInc);
 		}
 	}
 	
@@ -76,11 +92,11 @@ public class SlimePatch extends Patch {
 	public void setEvaporate(int evaporate) {
 		this.evaporate = evaporate;
 	}
-	public int getDepositRate() {
-		return depositRate;
+	public int getDeposit() {
+		return depositInc;
 	}
-	public void setDepositRate(int depositRate) {
-		this.depositRate = depositRate;
+	public void setDeposit(int depositRate) {
+		this.depositInc = depositRate;
 	}
 	
 	

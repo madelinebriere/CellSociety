@@ -10,7 +10,8 @@ import javafx.scene.paint.Color;
 /**
  * Extension of CellSociety specific to the Forest Fire simulation,
  * sets up the probability for a tree to catch on fire, and the steps 
- * for a tree to burn out into an empty patch.
+ * for a tree to burn out into an empty patch. Allows Burn and 
+ * Tree Cells (as well as empty spots where trees have burnt out).
  * 
  * @author maddiebriere
  *

@@ -1,11 +1,3 @@
-/**
- * Shark cell in Water World Simulation
- * 
- * May need abstract super class because of duplicate
- * code with FishCell
- * 
- * @author maddiebriere
- */
 package cellular_level;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +6,18 @@ import javafx.scene.paint.Color;
 import patch_level.Patch;
 import data_structures.CellData;
 import util.Location;
+
+/**
+ * Shark cell in Water World Simulation
+ * 
+ * Superclass: WaterWorldCell (shared with FishCell)
+ * 
+ * Adds Shark-specific actions like eating fish
+ * 
+ * @author maddiebriere
+ */
+
+
 public class SharkCell extends WaterWorldCell {
 	private static final Color SHARK_COLOR = Color.YELLOW;
 	public static final int STEPS_TO_STARVE = 3;

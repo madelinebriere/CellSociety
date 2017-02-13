@@ -9,6 +9,23 @@ import data_structures.SimulationData;
 import file_handling.SimulationType;
 import javafx.scene.paint.Color;
 
+/**
+ * Extension of CellSociety specific to Segregation simulation,
+ * with multiple populations relocating according to certain
+ * thresholds of satisfaction.
+ * 
+ * HUGE assumption: 
+ * Only three types of populations are allowed. Our design
+ * could facilitate as many populations as there are cells, but
+ * the only difference between populations is color and this did not
+ * warrant a set of different classes. Because different cells are distinguished
+ * by class name, HouseCells of different colors must be 
+ * manually accounted for (and assigned colors).
+ * 
+ * @author maddiebriere
+ *
+ */
+
 public class PopSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.ALICEBLUE;
 	private static final PatchName PATCH_TYPE = PatchName.EMPTY_PATCH;
