@@ -27,8 +27,6 @@ public abstract class GridView extends Pane{
 		_bounds = bounds;
 		_dimensions = dimensions;
 		_cells = shapeArray;
-		// System.out.println("cells:"+ _cells.length + "\tdim: "+
-		// dimensions.getX());
 	}
 
 	protected void setBackgroundColor(Color color) {
