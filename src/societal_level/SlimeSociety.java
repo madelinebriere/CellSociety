@@ -28,6 +28,7 @@ public class SlimeSociety extends CellSociety {
 	private int evaporate;
 	private int depositRate;
 	private int sniffThresh;
+	private int vision;
 	
 	public SlimeSociety(SimulationData data){
 		super(data);
@@ -56,10 +57,11 @@ public class SlimeSociety extends CellSociety {
 
 	@Override
 	public void parseRules(RawData data) {
-		if(data.getIntegerVariables().size()<2){return;}
+		if(data.getIntegerVariables().size()<4){return;}
 		evaporate = data.getIntegerVariables().get(0);
 		depositRate = data.getIntegerVariables().get(1);
 		sniffThresh = data.getIntegerVariables().get(2);
+		vision = data.getIntegerVariables().get(3);
 	}
 	
 	private void activateSlimeCells(){
