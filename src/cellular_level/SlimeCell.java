@@ -81,7 +81,8 @@ public class SlimeCell extends Cell {
 	
 	private void randomWalk(CellData data){
 		Location loc = data.getAvailableNeighbor(this);
-		this.setMyLocation(loc);
+		if(loc!=null)
+			this.setMyLocation(loc);
 	}
 	
 	private Location getTargetLocation(ArrayList<SlimePatch> slime){
@@ -123,6 +124,16 @@ public class SlimeCell extends Cell {
 		return equalConcentration(maxChem, spot) && 
 				this.getDistance(spot)<minDistance;
 	}
+
+	public int getSniffThresh() {
+		return sniffThresh;
+	}
+
+	public void setSniffThresh(int sniffThresh) {
+		this.sniffThresh = sniffThresh;
+	}
+	
+	
 	
 	
 }

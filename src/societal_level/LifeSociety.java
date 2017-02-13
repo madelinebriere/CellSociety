@@ -28,7 +28,7 @@ public class LifeSociety extends CellSociety {
 	
 	@Override
 	public void parseRules(RawData raw) {
-		if(raw.getIntegerVariables().size()==0){return;}
+		if(raw.getIntegerVariables().size()<2){return;}
 		underpop = raw.getIntegerVariables().get(0);
 		overpop = raw.getIntegerVariables().get(1);
 		numforlive = raw.getIntegerVariables().get(2);
@@ -47,19 +47,41 @@ public class LifeSociety extends CellSociety {
 
 	@Override
 	protected void applySettings() {
+		if(getCurrentCells().size()==0){return;}
+		activateLiveCells();
+		activateDeadCells();
+	}
+	
+	private void activateLiveCells(){
+		if(!getCurrentCells().containsKey(CellName.LIVE_CELL)){
+			return;
+		}
 		for(Cell c: getCurrentCells().get(CellName.LIVE_CELL)){
-			if(underpop>0 && underpop<overpop){
-				((LiveCell)c).setUnderpopulation(underpop);
-			}
-			if(overpop>underpop){
-				((LiveCell)c).setUnderpopulation(underpop);
-			}
+			setOverPop((LiveCell)c);
+			setUnderPop((LiveCell)c);
+		}
+	}
+	
+	private void activateDeadCells(){
+		if(!getCurrentCells().containsKey(CellName.DEAD_CELL)){
+			return;
 		}
 		for(Cell c: getCurrentCells().get(CellName.DEAD_CELL)){
 			if(numforlive>0){
 				((DeadCell)c).setNumForLive(numforlive);
 			}
 		}
-		
+	}
+	
+	private void setOverPop(LiveCell c){
+		if(underpop>0 && underpop<overpop){
+			c.setUnderpopulation(underpop);
+		}
+	}
+	
+	private void setUnderPop(LiveCell c){
+		if(overpop>underpop){
+			c.setOverpopulation(overpop);
+		}
 	}
 }

@@ -1,15 +1,14 @@
 package societal_level;
 
-import java.util.List;
-import java.util.TreeMap;
-
-import data_structures.BoardData;
+import cellular_level.Cell;
+import cellular_level.FishCell;
+import cellular_level.SharkCell;
+import data_structures.CellName;
 import data_structures.PatchName;
 import data_structures.RawData;
 import data_structures.SimulationData;
 import file_handling.SimulationType;
 import javafx.scene.paint.Color;
-import patch_level.Patch;
 
 public class WaterSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.BLUE;
@@ -47,8 +46,46 @@ public class WaterSociety extends CellSociety {
 
 	@Override
 	protected void applySettings() {
-		// TODO Auto-generated method stub
-		
+		if(getCurrentCells().size()==0){return;}
+		activateFishCells();
+		activateSharkCells();
+	}
+	
+	private void activateFishCells(){
+		if(!getCurrentCells().containsKey(CellName.FISH_CELL)){
+			return;
+		}
+		for(Cell c: getCurrentCells().get(CellName.FISH_CELL)){
+			setFishBreed((FishCell)c);
+		}
+	}
+	
+	private void activateSharkCells(){
+		if(!getCurrentCells().containsKey(CellName.SHARK_CELL)){
+			return;
+		}
+		for(Cell c: getCurrentCells().get(CellName.SHARK_CELL)){
+			setSharkBreed((SharkCell)c);
+			setSharkStarve((SharkCell)c);
+		}
+	}
+	
+	private void setSharkBreed(SharkCell c){
+		if(sharkBreed>0){
+			c.setStepsToBreed(sharkBreed);
+		}
+	}
+	
+	private void setSharkStarve(SharkCell c){
+		if(sharkDie>0){
+			c.setStepsToStarve(sharkDie);
+		}
+	}
+
+	private void setFishBreed(FishCell c){
+		if(fishBreed>0){
+			c.setStepsToBreed(fishBreed);
+		}
 	}
 
 }
