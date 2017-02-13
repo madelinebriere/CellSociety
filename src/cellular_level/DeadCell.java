@@ -13,7 +13,7 @@ import data_structures.CellData;
 
 public class DeadCell extends LifeSimCell {
 	private static final Color DEAD_COLOR = Color.WHITE;
-	private static final int NUM_FOR_LIVE = 3;
+	public static final int NUM_FOR_LIVE = 3;
 	
 	private int numForLive;
 	
