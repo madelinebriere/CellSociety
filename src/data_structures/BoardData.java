@@ -2,7 +2,7 @@ package data_structures;
 
 /**
  * 
- * STONE USE THIS :)
+ * :)
  * 
  * Information held in SimulationData about board set-up, including dimensions,
  * type of border and shape of tiles.

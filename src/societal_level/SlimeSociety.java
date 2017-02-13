@@ -1,5 +1,4 @@
 package societal_level;
-
 import cellular_level.Cell;
 import cellular_level.SlimeCell;
 import data_structures.CellName;
@@ -10,7 +9,6 @@ import file_handling.SimulationType;
 import javafx.scene.paint.Color;
 import patch_level.Patch;
 import patch_level.SlimePatch;
-
 /**
  * Extension of CellSociety specific to Slime Simulation
  * 
@@ -20,33 +18,26 @@ import patch_level.SlimePatch;
  * @author maddiebriere
  *
  */
-
 public class SlimeSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.GREEN;
 	private static final PatchName PATCH_TYPE = PatchName.SLIME_PATCH;
-
 	private int evaporate;
 	private int sniffThresh;
 	private int depositRate;
-
 	public SlimeSociety(SimulationData data) {
 		super(data);
 	}
-
 	public SlimeSociety(SimulationType data) {
 		super(data);
 	}
-
 	@Override
 	public Color getEmptyColor() {
 		return EMPTY_COLOR;
 	}
-
 	@Override
 	public PatchName getPatchType() {
 		return PATCH_TYPE;
 	}
-
 	@Override
 	protected void applySettings() {
 		if (getCurrentCells().size() == 0) {
@@ -55,7 +46,6 @@ public class SlimeSociety extends CellSociety {
 		activateSlimeCells();
 		activateSlimePatches();
 	}
-
 	@Override
 	public void parseRules(RawData data) {
 		if (data.getIntegerVariables().size() < 2) {
@@ -65,7 +55,6 @@ public class SlimeSociety extends CellSociety {
 		evaporate = data.getIntegerVariables().get(1);
 		depositRate = data.getIntegerVariables().get(2);
 	}
-
 	private void activateSlimeCells() {
 		if (!getCurrentCells().containsKey(CellName.SLIME_CELL)) {
 			return;
@@ -79,7 +68,6 @@ public class SlimeSociety extends CellSociety {
 			}
 		}
 	}
-
 	private void activateSlimePatches() {
 		if (getPatches().length == 0) {
 			return;
@@ -90,11 +78,9 @@ public class SlimeSociety extends CellSociety {
 			}
 		}
 	}
-
 	private void setEvaporate(SlimePatch patch) {
 		if (evaporate > 0) {
 			patch.setEvaporate(evaporate);
 		}
 	}
-
 }

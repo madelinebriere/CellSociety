@@ -1,3 +1,11 @@
+/**
+ * This class uses a given cell data type (either within an Element or as a String)
+ * to determine how the given data should be altered so that a SimulationType can 
+ * generate a List of Cells.
+ * 
+ * @author Stone Mathers
+ */
+
 package file_handling;
 
 import java.util.ArrayList;

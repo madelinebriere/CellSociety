@@ -23,8 +23,7 @@ import patch_level.Patch;
  * 
  * @author maddiebriere
  */
-
-public abstract class Cell implements Comparable {
+public abstract class Cell implements Comparable<Object>{
 	private Location myLocation;
 	private Color myState;
 

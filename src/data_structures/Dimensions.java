@@ -1,7 +1,7 @@
 //author Talha Koc
 
 package data_structures;
-
+//Author Talha Koc
 public class Dimensions {
 	private int x;
 	private int y;

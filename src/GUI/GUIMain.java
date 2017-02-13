@@ -3,6 +3,7 @@
 package GUI;
 
 import java.util.HashMap;
+
 import data_structures.BoardData;
 import data_structures.BorderType;
 import data_structures.CellShape;
@@ -10,13 +11,15 @@ import data_structures.Dimensions;
 import data_structures.SimulationData;
 import data_structures.SimulationName;
 import file_handling.*;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -42,6 +45,15 @@ import javafx.util.Duration;
 import societal_level.*;
 import util.Tuple;
 
+/**
+ * Intended use: Holds and controls all gui components,
+ * 
+ * Setup window, initializes timeline, inits gridcontroller, 
+ * 
+ * 
+ * @author talha koc
+ *
+ */
 public class GUIMain {
 
 	private static final int MILLISECOND_DELAY = 1000 / 5;
@@ -51,7 +63,6 @@ public class GUIMain {
 	private final HashMap<String, SimulationName> simulationNameStringToEnum = new HashMap<String, SimulationName>();
 
 	private CellSociety _model;
-	// private Class<CellSociety> SOCIETY_TYPE;
 	private Timeline _animation;
 	private Scene _scene;
 	private Pane _root;
@@ -108,7 +119,7 @@ public class GUIMain {
 	private void setupAnimationTimeLine(double delay) {
 		KeyFrame frame = new KeyFrame(Duration.millis(delay), e -> step());
 		_animation = new Timeline();
-		_animation.setCycleCount(Animation.INDEFINITE);
+		_animation.setCycleCount(Timeline.INDEFINITE);
 		_animation.getKeyFrames().add(frame);
 	}
 
@@ -122,7 +133,6 @@ public class GUIMain {
 		_generationLabel.setAlignment(Pos.CENTER_LEFT);
 		_generationLabel.setTextFill(Color.rgb(60, 60, 60));
 
-		// TODO:
 		_societyTitleLabel = plainLabel(_model.getName().toString(), 15);
 		_societyTitleLabel.setLayoutX(SCREEN_WIDTH / 2);
 		_societyTitleLabel.setPrefHeight(80);
@@ -180,64 +190,61 @@ public class GUIMain {
 
 		// add functions to buttons
 		_pauseButton.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setButtonToHighlightedState(_pauseButton);
 			}
 		});
 		_pauseButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				pauseAnimation();
 			}
 		});
 		_playButton.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setButtonToHighlightedState(_playButton);
 			}
 		});
 		_playButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				playAnimation();
 			}
 		});
 		resetButton.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setButtonToHighlightedState(resetButton);
 			}
 		});
 		resetButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				resetAnimation();
 				setButtonToUnhighlightedState(resetButton);
 			}
 		});
 		stepButton.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setButtonToHighlightedState(stepButton);
 				pauseAnimation();
 			}
 		});
 		stepButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setButtonToUnhighlightedState(stepButton);
 				step();
 			}
 		});
 		_fileButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				pauseAnimation();
 				PopUp p = new PopUp((Stage) _scene.getWindow());
-				_currentSimulationType = p.getSimulation();
-				_fileButton.setText(_currentSimulationType.getTitle());
-				resetSimulationToType(_currentSimulationType);
+				try {
+					_currentSimulationType = p.getSimulation();
+					_fileButton.setText(_currentSimulationType.getTitle());
+					resetSimulationToType(_currentSimulationType);
+				} catch (XMLException e) {
+					Alert alert = new Alert(AlertType.CONFIRMATION, e.getLocalizedMessage(), ButtonType.CLOSE);
+					alert.showAndWait();
+				}
+
 			}
 		});
 
@@ -282,42 +289,36 @@ public class GUIMain {
 		setShapeSelected(hexagon);
 		setShapeSelected(square);
 		triangle.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setShapeHighlighted(triangle);
 				;
 			}
 		});
 		square.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setShapeHighlighted(square);
 				;
 			}
 		});
 		hexagon.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setShapeHighlighted(hexagon);
 				;
 			}
 		});
 		triangle.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setNewGridShape(CellShape.TRIANGLE);
 				setShapeSelected(triangle);
 			}
 		});
 		square.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setNewGridShape(CellShape.SQUARE);
 				setShapeSelected(square);
 			}
 		});
 		hexagon.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setNewGridShape(CellShape.HEXAGON);
 				setShapeSelected(hexagon);
@@ -357,14 +358,12 @@ public class GUIMain {
 		x += width + inset;
 
 		finite.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setButtonToHighlightedState(finite);
 			}
 		});
 
 		finite.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setGridBorderType(BorderType.FINITE);
 				setButtonToSelected(finite);
@@ -373,14 +372,12 @@ public class GUIMain {
 			}
 		});
 		toroidal.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setButtonToHighlightedState(toroidal);
 			}
 		});
 
 		toroidal.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setGridBorderType(BorderType.TOROIDAL);
 				setButtonToSelected(toroidal);
@@ -389,14 +386,12 @@ public class GUIMain {
 			}
 		});
 		infinite.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setButtonToHighlightedState(infinite);
 			}
 		});
 
 		infinite.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
 			public void handle(MouseEvent me) {
 				setGridBorderType(BorderType.INFINITE);
 				setButtonToSelected(infinite);
@@ -583,7 +578,7 @@ public class GUIMain {
 			d = new Dimensions(sliderValue, sliderValue / 2);
 			break;
 		case HEXAGON:
-			d = new Dimensions(sliderValue / 3, sliderValue);
+			d = new Dimensions(sliderValue / 3, sliderValue - sliderValue%3);
 			break;
 		default:
 			d = new Dimensions(sliderValue, sliderValue);
@@ -593,11 +588,23 @@ public class GUIMain {
 	}
 
 	private void resetSimulationToType(SimulationType s) {
-		// _model=new CellSociety(s); //TODO: Figure out how to deal with
-		// abstract CellSociety -- sorry Talha!
-		// switch(s.getBoardData().getName()){
-		//
-		// }
+		System.out.println(s.getBoardData().getName());
+		switch (s.getBoardData().getName()) {
+		case FIRE_SOCIETY:
+			_model = new FireSociety(s);
+			break;
+		case WATER_SOCIETY:
+			_model = new WaterSociety(s);
+			break;
+		case POPULATION_SOCIETY:
+			_model = new PopSociety(s);
+			break;
+		case SLIME_SOCIETY:
+			_model = new SlimeSociety(s);
+			break;
+		default:
+			_model = new LifeSociety(s);
+		}
 		_gridController.setNewGridFromFile(s, _model.getCurrentColors());
 		resetGUIComponents();
 	}
@@ -607,16 +614,8 @@ public class GUIMain {
 	}
 
 	private void setFileToNull() {
-		_currentSimulationType = null; // TODO: do this more elegantly
+		_currentSimulationType = null;
 		_fileButton.setText("New File");
-	}
-
-	private void enableSliders() {
-		// TODO:
-	}
-
-	private void disableSliders() {
-		// TODO:
 	}
 
 	private void changeAnimationSpeed(Number newValue) {

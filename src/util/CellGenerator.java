@@ -1,5 +1,4 @@
 package util;
-
 import cellular_level.BurnCell;
 import cellular_level.Cell;
 import cellular_level.DeadCell;
@@ -11,7 +10,6 @@ import cellular_level.SlimeCell;
 import cellular_level.TreeCell;
 import data_structures.CellName;
 import javafx.scene.paint.Color;
-
 /**
  * Class used to choose a CellName from a Cell and vice versa.
  * 
@@ -21,13 +19,11 @@ import javafx.scene.paint.Color;
  * @author maddiebriere
  *
  */
-
 public class CellGenerator {
 	private static Color BLUE = Color.BLUE;
 	private static Color RED = Color.RED;
 	private static Color GREEN = Color.GREEN;
 	// Add this to SimulationType as well -- replace duplicate code with this
-
 	public static Cell newCell(CellName c) {
 		if (c == CellName.FISH_CELL) {
 			return new FishCell();
@@ -53,7 +49,6 @@ public class CellGenerator {
 			System.out.println("developer error, cell should not return null");
 		return null;
 	}
-
 	public static CellName getCellName(Cell cell) {
 		if (cell instanceof LiveCell) {
 			return CellName.LIVE_CELL;
@@ -79,7 +74,6 @@ public class CellGenerator {
 		}
 		return CellName.EMPTY_CELL;
 	}
-
 	public static CellName getCellName(String s) {
 		CellName toRet;
 		if (s.equals("FISH")) {
@@ -107,5 +101,4 @@ public class CellGenerator {
 		}
 		return toRet;
 	}
-
 }

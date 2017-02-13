@@ -44,8 +44,9 @@ public class LifeSimulation extends SimulationType {
 	public Integer getUnderpopulated() {
 		try {
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(0)));
-		} catch (Exception e) {
-			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(1)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(0)));
+
 		}
 	}
 
@@ -60,8 +61,9 @@ public class LifeSimulation extends SimulationType {
 	public Integer getNumberForLive() {
 		try {
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
+
 		} catch (Exception e) {
-			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(1)));
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(2)));
 		}
 	}
 
@@ -69,7 +71,6 @@ public class LifeSimulation extends SimulationType {
 	protected List<String> combineDataTypes() {
 		return this.getUniversalTypes();
 	}
-
 	@Override
 	protected List<Integer> getIntegerData() {
 		ArrayList<Integer> data = new ArrayList<Integer>();

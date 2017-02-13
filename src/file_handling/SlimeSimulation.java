@@ -17,12 +17,22 @@ import data_structures.SimulationName;
 
 public class SlimeSimulation extends SimulationType {
 
-	private static final List<String> SETTING_TYPES = Arrays
-			.asList(new String[] { "threshold", "evaporationRate", "depositRate" });
-	private static final List<String> DEFAULT_SETTINGS = Arrays
-			.asList(new String[] { ((Integer) (SlimeCell.SNIFF_THRESH)).toString(),
-					((Integer) (SlimePatch.EVAPO_RATE)).toString(), ((Integer) (SlimeCell.DEPOSIT)).toString() });
-	private static final List<String> DEFAULT_CELLS = Arrays.asList(new String[] { ".5 slime" });
+
+	private static final List<String> SETTING_TYPES = Arrays.asList(new String[] {
+			"threshold",
+			"evaporationRate",
+			"depositRate",
+			"vision"
+	    });
+	private static final List<String> DEFAULT_SETTINGS = Arrays.asList(new String[] {
+			((Integer)(SlimeCell.SNIFF_THRESH)).toString(),
+	        ((Integer)(SlimePatch.EVAPO_RATE)).toString(),
+	        ((Integer)(SlimeCell.DEPOSIT)).toString(),
+	        ((Integer)(SlimeCell.VISION)).toString(),
+	   });
+	private static final List<String> DEFAULT_CELLS = Arrays.asList(new String[] {
+			".3 slime"
+	   });
 
 	public SlimeSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
@@ -57,8 +67,16 @@ public class SlimeSimulation extends SimulationType {
 		}
 	}
 
-	public Integer getDepositRate() {
-		try {
+	
+	public Integer getDepositRate(){
+		try{
+			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(2)));
+		}
+	}
+	public Integer getVision(){
+		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(3)));
 		} catch (Exception e) {
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(3)));
