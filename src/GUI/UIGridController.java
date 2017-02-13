@@ -2,7 +2,6 @@
 
 package GUI;
 
-import data_structures.CellShape;
 import data_structures.Dimensions;
 import data_structures.SimulationData;
 import file_handling.SimulationType;

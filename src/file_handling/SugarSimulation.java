@@ -8,7 +8,8 @@
 package file_handling;
 
 import cellular_level.SugarCell;
-import data_structures.*;
+import data_structures.SimulationName;
+import patch_level.SugarPatch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,15 +21,17 @@ public class SugarSimulation extends SimulationType {
 	private static final List<String> SETTING_TYPES = Arrays.asList(new String[] {
 			"sugarAmount",
 	        "sugarMetabolism",
-	        "vision"
+	        "vision",
+	        "sugarGrowBack"
 	   });
 	private static final List<String> DEFAULT_SETTINGS = Arrays.asList(new String[] {
 			((Integer)(SugarCell.SUGAR_INIT)).toString(),
 	        ((Integer)(SugarCell.SUGAR_META)).toString(),
 	        ((Integer)(SugarCell.VISION)).toString(),
+	        ((Integer)(SugarPatch.SUGAR_GROW)).toString()
 	   });
 	private static final List<String> DEFAULT_CELLS = Arrays.asList(new String[] {
-			".95 sugar"
+			".5 sugar"
 	   });
 
 	public SugarSimulation(Map<String, String> values, List<String> cells) {
@@ -63,7 +66,15 @@ public class SugarSimulation extends SimulationType {
 		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
 		}catch(Exception e){
-			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(1)));
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(2)));
+		}
+	}
+	
+	public Integer getSugarGrow(){
+		try{
+			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(3)));
 		}
 	}
 
