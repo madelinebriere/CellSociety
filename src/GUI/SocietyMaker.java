@@ -51,7 +51,7 @@ public class SocietyMaker {
 			ratios.put(CellName.HOUSE_CELL_3, new CellRatio(0.25));
 			break;
 		case SLIME_SOCIETY:
-			ratios.put(CellName.SLIME_CELL, new CellRatio(.3));
+			ratios.put(CellName.SLIME_CELL, new CellRatio(.15));
 			break;
 		}
 		return new CellRatioMap(ratios);
