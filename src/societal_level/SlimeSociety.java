@@ -93,7 +93,7 @@ public class SlimeSociety extends CellSociety {
 	
 	private void setDepositRate(SlimePatch patch){
 		if(depositRate>0){
-			patch.setDepositRate(depositRate);
+			patch.setDeposit(depositRate);
 		}
 	}
 	
