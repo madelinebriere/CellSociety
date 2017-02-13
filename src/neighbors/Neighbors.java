@@ -2,9 +2,8 @@
 
 import java.util.List;
 
-import cellular_level.Cell;
+
 import data_structures.BorderType;
-import data_structures.Dimensions;
 import patch_level.Patch;
 import util.Tuple;
 
@@ -38,9 +37,9 @@ public abstract class Neighbors {
 		return (x>=0 && x<myGrid.length) && (y>=0 && y<myGrid[0].length);
 	}
 	protected Tuple<Integer, Integer> getCoordinateWithWrapCheck(int x, int y){
-		if (x < 0) x = myGrid.length;
+		if (x < 0) x = myGrid.length - 1;
 		else if (x >= myGrid.length) x = 0;	
-		if (y < 0) y = myGrid[0].length;
+		if (y < 0) y = myGrid[0].length - 1;
 		else if (y >= myGrid[0].length) y = 0;
 		return new Tuple<Integer, Integer>(x,y);
 	}	
