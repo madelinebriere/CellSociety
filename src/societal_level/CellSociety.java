@@ -114,9 +114,19 @@ public abstract class CellSociety {
 		applySettings();
 		stepAllCells(getAllEmptyCells());
 		updatePatches();
-		return new Tuple<Color[][], Dimensions>(getCurrentColors(), this.getSimulationData().getDimensions());
+		edgeCheck();
+		return new Tuple<Color[][], Dimensions>(getCurrentColors(), getSize());
 	}
-
+	
+	private void edgeCheck(){
+		if(this.getSimulationData() != null && this.getSimulationData().getData().getBorder() == BorderType.INFINITE){
+			Patch[][] newPatches = SocietyResizer.checkEdgesForExpansion(patches, this.getPatchType(), 1, 4);
+			if(newPatches != null){
+				setPatches(newPatches);
+				setSize(new Dimensions(newPatches.length, newPatches[0].length));
+			}
+		}
+	}
 
 	/**
 	 * This method should be implemented by every CellSociety in order to parse
