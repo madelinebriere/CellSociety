@@ -25,7 +25,7 @@ public class SlimeSimulation extends SimulationType {
 	private static final List<String> DEFAULT_SETTINGS = Arrays.asList(new String[] {
 			((Integer)(SlimeCell.SNIFF_THRESH)).toString(),
 	        ((Integer)(SlimePatch.EVAPO_RATE)).toString(),
-	        ((Integer)(SlimePatch.DEPOSIT_RATE)).toString()
+	        ((Integer)(SlimePatch.DEPOSIT)).toString()
 	   });
 	private static final List<String> DEFAULT_CELLS = Arrays.asList(new String[] {
 			".5 slime"

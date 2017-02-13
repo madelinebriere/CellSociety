@@ -20,8 +20,8 @@ import javafx.scene.paint.Color;
 
 public class SlimePatch extends Patch {
 	private static final Color MOLD_COLOR = Color.GREEN;
-	private static final int EVAPO_RATE= 3; //steps until decrement in chemical
-	private static final int DEPOSIT = 2; //Amount deposited when cell is in patch
+	public static final int EVAPO_RATE= 3; //steps until decrement in chemical
+	public static final int DEPOSIT = 2; //Amount deposited when cell is in patch
 	
 	private int stepsSinceDischarge;
 	
