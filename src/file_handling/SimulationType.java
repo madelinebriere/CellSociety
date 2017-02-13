@@ -109,6 +109,7 @@ public abstract class SimulationType {
 			
 				Location loc = new Location(row,col);
 				CellName name = CellGenerator.getCellName(vars[NAME_INDEX].toUpperCase());
+				System.out.println(name);
 				Cell newCell = CellGenerator.newCell(name);
 				newCell.setMyLocation(loc);
 				if(cells.containsKey(name)){
@@ -121,6 +122,7 @@ public abstract class SimulationType {
 				}
 			}
 		}catch(Exception e){
+			e.printStackTrace(); //TODO
 			throw new XMLException(e, myResources.getString("InvalidCellData"));
 		}
 		return cells;

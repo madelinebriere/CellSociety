@@ -112,7 +112,7 @@ public class CellGenerator {
 		else if(s.equals("TREE")){
 			toRet = CellName.TREE_CELL;
 		}
-		else if(s.equals("LIVE")){
+		else if(s.equals("LIVE") || s.equals("ALIVE")){
 			toRet= CellName.LIVE_CELL;
 		}
 		else if(s.equals("DEAD")){
