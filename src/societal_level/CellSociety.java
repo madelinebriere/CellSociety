@@ -234,31 +234,18 @@ public abstract class CellSociety {
 		}
 		return toRet;
 	}
-
-	public Dimensions getMySize() {
-		return mySize;
-	}
-	public void setMySize(Dimensions mySize) {
-		this.mySize = mySize;
-	}
-	public Patch[][] getPatches() {
-		return patches;
-	}
-	public void setPatches(Patch[][] patches) {
-		this.patches = patches;
-	}
-	public SimulationData getSimulationData(){
-		return this.mySimulationData;
-	}
-
 	
 	/**
 	 * Assumptions made here:
 	 * 	-> Correct cell types have been given 
 	 * 	-> Dimensions are even (no incomplete rows)
 	 * 
-	 * @param sim
-	 * @return
+	 * @param sim SimulationData object with set CellRatioMap, from which
+	 * cells must be generated. For instance, if 100 cells are expected and the ratios 
+	 * given are .6 and .4, then 60 cells of the first type and 40 cells
+	 * of the second type will be created and returned in a map
+	 * 
+	 * @return Map of new cells, organized by CellName
 	 */
 	public Map<CellName, List<Cell>> makeCells(SimulationData sim){
 	
@@ -470,6 +457,22 @@ public abstract class CellSociety {
 		}
 		return patches;
 	}
+	
+	public Dimensions getMySize() {
+		return mySize;
+	}
+	public void setMySize(Dimensions mySize) {
+		this.mySize = mySize;
+	}
+	public Patch[][] getPatches() {
+		return patches;
+	}
+	public void setPatches(Patch[][] patches) {
+		this.patches = patches;
+	}
+	public SimulationData getSimulationData(){
+		return this.mySimulationData;
+	}
 
 	public TreeMap<CellName,List<Cell>> getCurrentCells() {
 		return currentCells;
@@ -499,7 +502,6 @@ public abstract class CellSociety {
 		return myShape;
 	}
 	
-
 	public void setMyShape(CellShape myShape) {
 		this.myShape = myShape;
 	}

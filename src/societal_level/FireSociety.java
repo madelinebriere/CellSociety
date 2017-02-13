@@ -7,6 +7,14 @@ import data_structures.*;
 import file_handling.SimulationType;
 import javafx.scene.paint.Color;
 
+/**
+ * Extension of CellSociety specific to the Forest Fire simulation,
+ * sets up the probability for a tree to catch on fire, and the steps 
+ * for a tree to burn out into an empty patch.
+ * 
+ * @author maddiebriere
+ *
+ */
 public class FireSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.YELLOW;
 	private static final PatchName PATCH_TYPE = PatchName.EMPTY_PATCH;
