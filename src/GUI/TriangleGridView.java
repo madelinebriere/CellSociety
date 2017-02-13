@@ -6,8 +6,17 @@ import data_structures.Dimensions;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
-public class TriangleGridView extends GridView {
 
+/**
+ * Intended use: subclass of GridView that implements a grid with triangle shapes
+ * 
+ * Meant to hold display a grid to the user
+ * 
+ * @author talha koc
+ *
+ */
+public class TriangleGridView extends GridView{
+	
 	private Polygon[][] _cells;
 	private double unit;
 	private double starting_y;

@@ -6,6 +6,14 @@ import data_structures.Dimensions;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
+/**
+ * Intended use: subclass of GridView that implements a hexagonal grid
+ * 
+ * Meant to hold display a grid to the user
+ * 
+ * @author talha koc
+ *
+ */
 public class HexagonalGridView extends GridView {
 
 	private Polygon[][] _cells;
@@ -16,10 +24,10 @@ public class HexagonalGridView extends GridView {
 	public HexagonalGridView(Frame bounds, Dimensions dimensions, Color[][] colors) {
 		super(bounds, dimensions, new Polygon[dimensions.getX()][dimensions.getY()]);
 		this.setBackgroundColor(Color.DARKSLATEGRAY);
-		double numberOfUnits = (dimensions.getX() + 1) * 3 - 1;
-		unit = bounds.getWidth() / numberOfUnits;
 
-		// TODO grid inset
+		double numberOfUnits = Math.floor(dimensions.getX()+1)*3 - 1;
+		unit = (bounds.getWidth())/numberOfUnits;
+
 		double gridWidth;
 		double gridHeight;
 

@@ -82,7 +82,7 @@
 		<cell>8 2 Blue</cell>
 		<cell>8 3 Red</cell>
 		<cell>8 4 Blue</cell>
-		<cell>8 5 Empty</cell>
+		<cell>8 5 Blue</cell>
 		<cell>8 6 Blue</cell>
 		<cell>8 7 Red</cell>
 		<cell>8 8 Blue</cell>
@@ -97,5 +97,5 @@
 		<cell>9 8 Red</cell>
 		<cell>9 9 Red</cell>
   </cells>
-  <threshold>0.30</threshold>
+  <threshold>0.4</threshold>
 </data>

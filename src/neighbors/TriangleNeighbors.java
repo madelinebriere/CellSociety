@@ -8,6 +8,14 @@ import java.util.List;
 import data_structures.BorderType;
 import patch_level.Patch;
 
+/**
+ * Intended use: provide cells with a list of neighbors
+ * 
+ * Customized for triangular relationship between cells
+ * 
+ * @author talha koc
+ *
+ */
 public class TriangleNeighbors extends Neighbors {
 
 	public TriangleNeighbors(Patch[][] cells, BorderType b) {
@@ -16,7 +24,7 @@ public class TriangleNeighbors extends Neighbors {
 
 	@Override
 	public List<Patch> getAllNeighbors(Patch c) {
-		// TODO Auto-generated method stub
+		//TODO: 
 		return getCardinalNeighbors(c);
 	}
 

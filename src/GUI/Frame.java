@@ -1,7 +1,13 @@
 //author Talha Koc
 
 package GUI;
-
+/**
+ * Intended use: data structure for holding the layout and dimensions of a node on the window 
+ * 
+ * 
+ * @author talha koc
+ *
+ */
 public class Frame {
 	private int x;
 	private int y;

@@ -3,6 +3,7 @@ package data_structures;
 /**
  * Data structure holding information coming from the front end
  * 
+ * 
  * @author maddiebriere
  * @author tnk3
  */

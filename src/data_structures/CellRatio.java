@@ -3,6 +3,13 @@
 
 package data_structures;
 
+/**
+ * intended use: define ratio of cells to other cells in a grid 
+ * 
+ * Simply holds a double value that is between 0 and 1
+ * @author talha koc
+ *
+ */
 public class CellRatio {
 	private double r;
 
