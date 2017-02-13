@@ -526,8 +526,6 @@ public class GUIMain {
 					_currentSimulationData.getDimensions().getY());
 			if (_sizeSlider.getValue() % _sizeSlider.getMajorTickUnit() == 0 && _sizeSlider.getValue() != minValue) {
 				setFileToNull();
-				// System.out.println("Grid Size " + _sizeSlider.getValue() +
-				// "\tmin val " + minValue);
 				resetAnimation();
 			}
 		});
@@ -560,12 +558,7 @@ public class GUIMain {
 			return;
 		}
 		updateGridDimensionsForShape(_currentSimulationData.getShape());
-		// System.out.println("done updating");
 		_model = SocietyMaker.generateCellSociety(_currentSimulationData);
-		System.out.println(_currentSimulationData.getShape());
-		System.out.println(_model.getSimulationData().getShape());
-		System.out.println(_model.getSize().getX() + "x" + _model.getSize().getY());
-		// System.out.println("done making model");
 		_gridController.setNewSimulation(_model.getCurrentColors(), _currentSimulationData);
 		resetGUIComponents();
 	}
@@ -588,7 +581,6 @@ public class GUIMain {
 	}
 
 	private void resetSimulationToType(SimulationType s) {
-		System.out.println(s.getBoardData().getName());
 		switch (s.getBoardData().getName()) {
 		case FIRE_SOCIETY:
 			_model = new FireSociety(s);
