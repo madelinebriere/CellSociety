@@ -13,11 +13,12 @@ import util.Location;
 
 public class SlimeCell extends Cell {
 	private static final Color SLIME_COLOR = Color.GREENYELLOW;
-	
+	private static final int VISION = 5;
 	private static final int SNIFF_THRESH = 8;
 	
 	private int sniffThresh; //concentration at which Cell no longer moves
-
+	private int vision;
+	
 	public SlimeCell(){
 		this(0,0);
 	}
@@ -27,12 +28,13 @@ public class SlimeCell extends Cell {
 	}
 	
 	public SlimeCell(int row, int col, Color c){
-		this(row,col,c, SNIFF_THRESH);
+		this(row,col,c, SNIFF_THRESH, VISION);
 	}
 	
-	public SlimeCell(int row, int col, Color c, int im){
+	public SlimeCell(int row, int col, Color c, int thresh, int vis){
 		super(row,col,c);
-		sniffThresh = im;
+		sniffThresh = thresh;
+		vision = vis;
 	}
 	
 	@Override
@@ -51,13 +53,11 @@ public class SlimeCell extends Cell {
 	}
 	
 	private ArrayList<SlimePatch> getSlimePatches(CellData data){
-		Patch[][] patches = data.getCurrentPatches();
+		ArrayList<Patch> patches = data.getRadialPatches(this, VISION);
 		ArrayList<SlimePatch> slime = new ArrayList<SlimePatch>();
-		for(int i=0; i<patches.length; i++){
-			for(int j=0; j<patches[0].length; j++){
-				if(patches[i][j].getMyPatchType()==PatchName.SLIME_PATCH){
-					slime.add((SlimePatch) patches[i][j]);
-				}
+		for(Patch patch: patches){
+				if(patch.getMyPatchType()==PatchName.SLIME_PATCH){
+					slime.add((SlimePatch)patch);
 			}
 		}
 		return slime;
@@ -132,8 +132,14 @@ public class SlimeCell extends Cell {
 	public void setSniffThresh(int sniffThresh) {
 		this.sniffThresh = sniffThresh;
 	}
-	
-	
+
+	public int getVision() {
+		return vision;
+	}
+
+	public void setVision(int vision) {
+		this.vision = vision;
+	}
 	
 	
 }

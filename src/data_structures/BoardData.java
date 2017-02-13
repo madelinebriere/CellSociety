@@ -33,7 +33,7 @@ public class BoardData {
 	}
 
 	public BoardData(SimulationName name, Dimensions dimensions, BorderType border, CellShape shape, RawData raw) {
-		this(false, name, dimensions, border, shape, raw);
+		this(true, name, dimensions, border, shape, raw);
 	}
 
 
