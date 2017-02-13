@@ -1,7 +1,6 @@
 package file_handling;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import org.w3c.dom.Element;

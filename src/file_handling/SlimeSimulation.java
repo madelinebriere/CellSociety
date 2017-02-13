@@ -1,10 +1,18 @@
+/**
+ * Holds, interprets, and returns data passed 
+ * in from a file specific to the Slime Simulation.
+ * 
+ * @author Stone Mathers
+ */
+
 package file_handling;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
+import cellular_level.SlimeCell;
+import patch_level.SlimePatch;
 import data_structures.SimulationName;
 
 public class SlimeSimulation extends SimulationType {
@@ -12,19 +20,34 @@ public class SlimeSimulation extends SimulationType {
 	private static final List<String> SETTING_TYPES = Arrays.asList(new String[] {
 			"threshold",
 			"evaporationRate",
-			"diffusionRate",
-			"depositRate"
+			"depositRate",
+			"vision"
 	    });
+	private static final List<String> DEFAULT_SETTINGS = Arrays.asList(new String[] {
+			((Integer)(SlimeCell.SNIFF_THRESH)).toString(),
+	        ((Integer)(SlimePatch.EVAPO_RATE)).toString(),
+	        ((Integer)(SlimePatch.DEPOSIT)).toString(),
+	        ((Integer)(SlimeCell.VISION)).toString(),
+	   });
+	private static final List<String> DEFAULT_CELLS = Arrays.asList(new String[] {
+			".3 slime"
+	   });
 
 	public SlimeSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
-		this.settingTypes = SETTING_TYPES;
+		this.settingTypes = SETTING_TYPES;  //This must be called before this.dataTypes is initialized by combineDataTypes()
+		this.settingDefaults = DEFAULT_SETTINGS; //This must be called before this.dataDefaults is initialized by combineDefaultData()
+		this.defaultCellData = DEFAULT_CELLS;
 		this.dataTypes = combineDataTypes();
+		this.dataDefaults = combineDefaultData();
+		myDataValues = createDataMap(values);
+		cellData = createCellList(cells);
+		boardData = createBoardData();
 	}
 
-	public Double getThreshold(){
+	public Integer getThreshold(){
 		try{
-			return Double.parseDouble(getDataValues().get(SETTING_TYPES.get(0)));
+			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(0)));
 		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(0)));
 		}
@@ -38,15 +61,14 @@ public class SlimeSimulation extends SimulationType {
 		}
 	}
 	
-	public Integer getDiffusionRate(){
+	public Integer getDepositRate(){
 		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
 		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(2)));
 		}
 	}
-	
-	public Integer getDepositRate(){
+	public Integer getVision(){
 		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(3)));
 		}catch(Exception e){
@@ -57,14 +79,15 @@ public class SlimeSimulation extends SimulationType {
 	@Override
 	protected List<Integer> getIntegerData() {
 		ArrayList<Integer> data = new ArrayList<Integer>();
-		//data.add(get());
+		data.add(getThreshold());
+		data.add(getEvaporationRate());
+		data.add(getDepositRate());
 		return data;
 	}
 
 	@Override
 	protected List<Double> getDoubleData() {
 		ArrayList<Double> data = new ArrayList<Double>();
-		//data.add(getProbability());
 		return data;
 	}
 

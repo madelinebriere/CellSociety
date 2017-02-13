@@ -1,5 +1,14 @@
 package util;
 
+/**
+ * Used to give location to cells, patches, etc. --
+ * allows for easy comparison of location across different
+ * types of actors.
+ * 
+ * @author maddiebriere
+ *
+ */
+
 public class Location {
 	private int myRow;
 	private int myCol;

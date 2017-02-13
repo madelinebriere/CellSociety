@@ -1,54 +1,52 @@
 /**
  * Holds, interprets, and returns data passed 
- * in from a file specific to the Predator-Prey Simulation.
+ * in from a file specific to the Sugar Simulation.
  * 
  * @author Stone Mathers
  */
 
 package file_handling;
 
+import cellular_level.SugarCell;
+import data_structures.SimulationName;
+import patch_level.SugarPatch;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import cellular_level.FishCell;
-import cellular_level.SharkCell;
-import data_structures.SimulationName;
-
-public class WaterSimulation extends SimulationType {
+public class SugarSimulation extends SimulationType {
 	
 	private static final List<String> SETTING_TYPES = Arrays.asList(new String[] {
-			"fishBreed",
-			"sharkBreed",
-	        "sharkStarve"
-	        
-	    });
+			"sugarAmount",
+	        "sugarMetabolism",
+	        "vision",
+	        "sugarGrowBack"
+	   });
 	private static final List<String> DEFAULT_SETTINGS = Arrays.asList(new String[] {
-			((Integer)(FishCell.STEPS_TO_BREED)).toString(),
-			((Integer)(SharkCell.STEPS_TO_BREED)).toString(),
-	        ((Integer)(SharkCell.STEPS_TO_STARVE)).toString()
-	        
+			((Integer)(SugarCell.SUGAR_INIT)).toString(),
+	        ((Integer)(SugarCell.SUGAR_META)).toString(),
+	        ((Integer)(SugarCell.VISION)).toString(),
+	        ((Integer)(SugarPatch.SUGAR_GROW)).toString()
 	   });
 	private static final List<String> DEFAULT_CELLS = Arrays.asList(new String[] {
-			".5 fish",
-	        ".2 shark"
+			".5 sugar"
 	   });
 
-	public WaterSimulation(Map<String, String> values, List<String> cells) {
+	public SugarSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
 		this.settingTypes = SETTING_TYPES;  //This must be called before this.dataTypes is initialized by combineDataTypes()
 		this.settingDefaults = DEFAULT_SETTINGS; //This must be called before this.dataDefaults is initialized by combineDefaultData()
+		this.defaultCellData = DEFAULT_CELLS;
 		this.dataTypes = combineDataTypes();
 		this.dataDefaults = combineDefaultData();
-		this.defaultCellData = DEFAULT_CELLS;
 		myDataValues = createDataMap(values);
 		cellData = createCellList(cells);
 		boardData = createBoardData();
 	}
-
-
-	public Integer getFishBreed(){
+	
+	public Integer getSugarAmount(){
 		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(0)));
 		}catch(Exception e){
@@ -56,7 +54,7 @@ public class WaterSimulation extends SimulationType {
 		}
 	}
 	
-	public Integer getSharkBreed(){
+	public Integer getSugarMetabolism(){
 		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
 		}catch(Exception e){
@@ -64,21 +62,28 @@ public class WaterSimulation extends SimulationType {
 		}
 	}
 	
-	public Integer getSharkStarve(){
+	public Integer getVision(){
 		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
 		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(2)));
 		}
 	}
-
+	
+	public Integer getSugarGrow(){
+		try{
+			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(3)));
+		}catch(Exception e){
+			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(3)));
+		}
+	}
 
 	@Override
 	protected List<Integer> getIntegerData() {
 		ArrayList<Integer> data = new ArrayList<Integer>();
-		data.add(getFishBreed());
-		data.add(getSharkBreed());
-		data.add(getSharkStarve());		
+		data.add(getSugarAmount());
+		data.add(getSugarMetabolism());
+		data.add(getVision());
 		return data;
 	}
 
@@ -87,11 +92,11 @@ public class WaterSimulation extends SimulationType {
 		ArrayList<Double> data = new ArrayList<Double>();
 		return data;
 	}
-
-
-	@Override
-	protected SimulationName getSimulationName() {
-		return SimulationName.WATER_SOCIETY;
+	
+	protected SimulationName getSimulationName(){
+		return SimulationName.FIRE_SOCIETY;
 	}
-
+	
+	
 }
+

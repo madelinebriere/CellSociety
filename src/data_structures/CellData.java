@@ -15,7 +15,10 @@ import util.Location;
  * This class is used to limit the amount of control given to a single Cell
  * 
  * A CopySociety is passed to a cell to give it the information it needs about
- * the entire board, but limit access to ONLY NEIGHBORING CELLS
+ * the entire board, but limit access to ONLY NEIGHBORING CELLS.
+ * 
+ * This class does most of the processing for the cell so that it doesn't have
+ * to iterate through the Cells and Patches to make decisions
  * 
  * @author maddiebriere
  *

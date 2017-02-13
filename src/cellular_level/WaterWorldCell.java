@@ -3,9 +3,9 @@ import javafx.scene.paint.Color;
 import data_structures.CellData;
 import util.Location;
 /**
- * Add wrapped,
- * delete duplicate code
- * 
+ * Super class to the Fish and Shark Cells,
+ * performs common functions such as finding breed spots and
+ * moving the cell to an open spot
  * 
  * @author maddiebriere
  *

@@ -3,7 +3,6 @@
 package GUI;
 
 import java.util.HashMap;
-import java.util.Random;
 
 import data_structures.BoardData;
 import data_structures.BorderType;

@@ -1,9 +1,14 @@
 package patch_level;
 
-import cellular_level.Cell;
+/**
+ * Patch specific to the SugarScape Simulation
+ * 
+ * @author maddiebriere
+ *
+ */
 
 public class SugarPatch extends Patch {
-	private static final int SUGAR_GROW = 1;
+	public static final int SUGAR_GROW = 1;
 	
 	
 	private int sugarGrowBackRate; //number sugar added back each step

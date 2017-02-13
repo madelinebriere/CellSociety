@@ -11,6 +11,16 @@ import javafx.scene.paint.Color;
 import patch_level.Patch;
 import patch_level.SlimePatch;
 
+/**
+ * Extension of CellSociety specific to Slime Simulation
+ * 
+ * Models mold cells that gravitate towards each other when they reach a certain 
+ * threshold of cAMP (a chemical). Allows SlimeCells.
+ * 
+ * @author maddiebriere
+ *
+ */
+
 public class SlimeSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.GREEN;
 	private static final PatchName PATCH_TYPE = PatchName.SLIME_PATCH;
@@ -18,6 +28,7 @@ public class SlimeSociety extends CellSociety {
 	private int evaporate;
 	private int depositRate;
 	private int sniffThresh;
+	private int vision;
 	
 	public SlimeSociety(SimulationData data){
 		super(data);
@@ -46,10 +57,11 @@ public class SlimeSociety extends CellSociety {
 
 	@Override
 	public void parseRules(RawData data) {
-		if(data.getIntegerVariables().size()<2){return;}
+		if(data.getIntegerVariables().size()<4){return;}
 		evaporate = data.getIntegerVariables().get(0);
 		depositRate = data.getIntegerVariables().get(1);
 		sniffThresh = data.getIntegerVariables().get(2);
+		vision = data.getIntegerVariables().get(3);
 	}
 	
 	private void activateSlimeCells(){
@@ -83,7 +95,7 @@ public class SlimeSociety extends CellSociety {
 	
 	private void setDepositRate(SlimePatch patch){
 		if(depositRate>0){
-			patch.setDepositRate(depositRate);
+			patch.setDeposit(depositRate);
 		}
 	}
 	

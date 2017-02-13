@@ -8,7 +8,12 @@ import data_structures.CellData;
  * recording the correct number of neighbors (e.g., while LifeSociety allows
  * diagonal neighbors, allowing up to 8 neighbors, WaterSociety should not
  * allow diagonal neighbors, but should allow wrapped neighbors, meaning that every 
- * cell should have exactly four neighbors)
+ * cell should have exactly four neighbors).
+ * 
+ * 
+ * NOTE: This was not used in the second implementation
+ * phase because the focus was not on neighbors, and the neighbors 
+ * algorithm had already been tested.
  * 
  * @author maddiebriere
  *

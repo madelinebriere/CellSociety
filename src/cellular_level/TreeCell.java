@@ -1,10 +1,3 @@
-/**
- * Non-burning tree cell in the forest fire CA simulation
- * Either remains healthy with the update or
- * changes into a burning cell (BurnCell)
- * 
- * @author maddiebriere
- */
 package cellular_level;
 import javafx.scene.paint.Color;
 import patch_level.Patch;
@@ -13,6 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import data_structures.CellData;
+
+/**
+ * Non-burning tree cell in the forest fire CA simulation
+ * Either remains healthy with the update or
+ * changes into a burning cell (BurnCell)
+ * 
+ * @author maddiebriere
+ */
+
 public class TreeCell extends Cell {
 	public static final double PROB_CATCH = .3;
 	private static final Color TREE_COLOR = Color.FORESTGREEN;
