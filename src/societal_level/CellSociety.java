@@ -244,7 +244,7 @@ public abstract class CellSociety {
 	 */
 	public Color[][] step() {
 		applySettings();
-		shuffleCurrentCells();
+		//shuffleCurrentCells(); //TODO: Decide neccessity
 		stepAllCells(getAllEmptyCells());
 		updatePatches();
 		return getCurrentColors();
@@ -349,7 +349,6 @@ public abstract class CellSociety {
 	 * @return ArrayList of updated cells
 	 */
 	private Map<CellName, List<Cell>> updateAllCells(List<Location> available) {
-		System.out.println(getPatches().length);
 		TreeMap<CellName, List<Cell>> newMap = new TreeMap<CellName, List<Cell>>();
 		for (CellName name : getCurrentCells().keySet()) {
 			for(Cell cell: getCurrentCells().get(name)){
@@ -460,29 +459,14 @@ public abstract class CellSociety {
 		return currentCells;
 	}
 	
-	/**
-	 * This WILL RETURN NULL CELLS IN PLACE OF NON EXISTENT ONES
-	 * @return
-	 */
-	public Cell[][] getCellsAsArray(){
-		Cell[][] ret = new Cell[getY()][getX()];
-		for(int i=0; i<getY(); i++){
-			for(int j=0; j<getX(); j++){
-				ret[i][j]=null;
-			}
-		}
-		for(Cell c: getCellsAsList()){
-			if(validSpot(c.getMyLocation()))
-				ret[c.getMyCol()][c.getMyRow()] = c;
-		}
-		return ret;
-	}
+
 	
 	
 	public List<Cell> getCellsAsList(){
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		for(CellName c: currentCells.keySet()){
 			cells.addAll(currentCells.get(c));
+			System.out.println(currentCells.get(c));
 		}
 		return cells;
 	}
