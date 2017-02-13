@@ -9,7 +9,6 @@ import java.util.TreeMap;
 
 import GUI.SocietyMaker;
 
-import java.util.Collections;
 import java.util.HashMap;
 
 import cellular_level.*;
@@ -271,10 +270,8 @@ public abstract class CellSociety {
 		Map<CellName, CellRatio> ratios = sim.getRatios().getMapOfCellsRatios();
 		Map<CellName, Integer> cellNums = new HashMap<CellName, Integer>();
 		int total = validLocations.size();
-		int expectedNum = total;
 		for (CellName name : ratios.keySet()) {
 			int numPlace = (int) (total * ratios.get(name).getRatio());
-			expectedNum -= numPlace;
 			cellNums.put(name, numPlace);
 		}
 		return cellNums;

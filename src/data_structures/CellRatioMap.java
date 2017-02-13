@@ -5,8 +5,6 @@ package data_structures;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import cellular_level.Cell;
-
 public class CellRatioMap {
 	private Map<CellName, CellRatio> ratios;
 	public CellRatioMap(Map<CellName, CellRatio> ratios){
