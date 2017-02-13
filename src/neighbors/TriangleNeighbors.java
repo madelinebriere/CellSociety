@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import borders.Border;
-import cellular_level.Cell;
 import data_structures.BorderType;
-import data_structures.Dimensions;
 import patch_level.Patch;
-import util.Tuple;
 
 public class TriangleNeighbors extends Neighbors {
 

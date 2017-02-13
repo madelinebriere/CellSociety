@@ -1,8 +1,5 @@
 package societal_level;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cellular_level.Cell;
 import cellular_level.HouseCell;
 import data_structures.CellName;
@@ -11,7 +8,6 @@ import data_structures.RawData;
 import data_structures.SimulationData;
 import file_handling.SimulationType;
 import javafx.scene.paint.Color;
-import patch_level.Patch;
 
 public class PopSociety extends CellSociety {
 	private static final Color EMPTY_COLOR = Color.ALICEBLUE;
@@ -53,18 +49,19 @@ public class PopSociety extends CellSociety {
 
 	@Override
 	protected void applySettings() {
-		for(Cell c: getCurrentCells().get(CellName.HOUSE_CELL_1)){
+		if(getCurrentCells().size()==0){return;}
+		activateHouseCell(CellName.HOUSE_CELL_1);
+		activateHouseCell(CellName.HOUSE_CELL_2);
+		activateHouseCell(CellName.HOUSE_CELL_3);
+	}
+	
+	private void activateHouseCell(CellName name){
+		if(!getCurrentCells().containsKey(name)){
+			return;
+		}
+		for(Cell c: getCurrentCells().get(name)){
 			if(satisfiedThresh>0 && satisfiedThresh<=1)
 			((HouseCell)c).setSatisfiedThreshold(satisfiedThresh);
 		}
-		for(Cell c: getCurrentCells().get(CellName.HOUSE_CELL_2)){
-			if(satisfiedThresh>0 && satisfiedThresh<=1)
-			((HouseCell)c).setSatisfiedThreshold(satisfiedThresh);
-		}
-		for(Cell c: getCurrentCells().get(CellName.HOUSE_CELL_3)){
-			if(satisfiedThresh>0 && satisfiedThresh<=1)
-			((HouseCell)c).setSatisfiedThreshold(satisfiedThresh);
-		}
-		
 	}
 }
