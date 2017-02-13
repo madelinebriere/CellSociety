@@ -182,7 +182,7 @@ public class CellDataGenerator {
 		for(int x = 0; x < dimension; x++){
 			for(int y = 0; y < dimension; y++){
 				int random = randy.nextInt(100);
-				if(!names[random].equals(null)){  //If it equals null, then this no Cell will be placed (empty)
+				if(!names[random].equals("")){  //If it equals null, then this no Cell will be placed (empty)
 					list.add(x + " " + y + " " + names[random]);
 				}
 			}
@@ -207,6 +207,10 @@ public class CellDataGenerator {
 				names[i] = cell;
 			}
 			start = end;
+		}
+		
+		for(int i = start; i < 100; i++){ //Fill remaining indices with an empty String
+			names[i] = "";
 		}
 		
 		return names;
