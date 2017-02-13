@@ -19,15 +19,7 @@ import patch_level.*;
  */
 
 public class PatchMap {
-<<<<<<< HEAD
-	private List<Patch> patches;
 
-	public PatchMap(List<Patch> patches) {
-
-	}
-
-	public List<Patch> getPatches() {
-=======
 	private int _layerLength;
 	public static Patch[][] generateSugarPatchMap(int x, int y, PatchName patchName, int layerLength) {
 		//init an array of patches
@@ -50,7 +42,6 @@ public class PatchMap {
 						);
 			}
 		}
->>>>>>> master
 		return patches;
 	}
 
@@ -64,8 +55,4 @@ public class PatchMap {
 			return new EmptyPatch(i,j);
 		}
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 }
