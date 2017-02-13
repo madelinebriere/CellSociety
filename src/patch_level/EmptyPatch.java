@@ -1,7 +1,14 @@
 package patch_level;
 
-import cellular_level.Cell;
 import javafx.scene.paint.Color;
+
+/**
+ * Empty Patch, an extension of Patch, has no functionality other than
+ * displaying a color and holding a cell.
+ * 
+ * @author maddiebriere
+ *
+ */
 
 public class EmptyPatch extends Patch{
 

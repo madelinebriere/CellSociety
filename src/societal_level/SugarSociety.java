@@ -4,6 +4,16 @@ import data_structures.PatchName;
 import data_structures.RawData;
 import javafx.scene.paint.Color;
 
+/**
+ * Extension of CellSociety specific to 
+ * the SugarScape simulation. More complicated in that
+ * the initial patches and concentrations must be accounted for
+ * as well as initial cells. Allows SugarCells.
+ * 
+ * @author maddiebriere
+ *
+ */
+
 public class SugarSociety extends CellSociety{
 
 	@Override

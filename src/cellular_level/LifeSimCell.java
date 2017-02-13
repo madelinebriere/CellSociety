@@ -3,6 +3,16 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.paint.Color;
 import data_structures.CellData;
+
+/**
+ * Superclass to the Live and Dead Cells, holds common
+ * actions like copy creation and general update
+ * 
+ * @author Stone Mathers
+ * @author maddiebriere
+ *
+ */
+
 public abstract class LifeSimCell extends Cell {
 	
 	public LifeSimCell(){

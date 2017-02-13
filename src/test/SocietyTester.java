@@ -7,6 +7,12 @@ import societal_level.CellSociety;
  * Basic test class for CellSocieties to bring out the number of each CellType 
  * and that the number of Cells in not to small or too big
  * 
+ * NOTE: This tester was phased out in the second implementation 
+ * sprint because it focused solely on adding the right numbers of cells
+ * to the population -- the paradigm shifted with the second implementation,
+ * to Maps and Lists, and this tester became outdated.
+ * 
+ * 
  * @author maddiebriere
  *
  */

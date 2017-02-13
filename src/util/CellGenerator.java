@@ -12,6 +12,17 @@ import cellular_level.TreeCell;
 import data_structures.CellName;
 import javafx.scene.paint.Color;
 
+/**
+ * Class used to choose a CellName from a Cell and vice versa.
+ * 
+ * Not the most beautiful, but necessary for file-reading
+ * and decision making within other classes.
+ * 
+ * @author maddiebriere
+ *
+ */
+
+
 public class CellGenerator {
 	private static Color BLUE = Color.BLUE;
 	private static Color RED= Color.RED;

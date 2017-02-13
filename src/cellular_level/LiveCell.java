@@ -1,3 +1,10 @@
+
+package cellular_level;
+import javafx.scene.paint.Color;
+import data_structures.CellData;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class representing live cells in the Game of Life Simulation
  * Capable of active updates based on surroundings
@@ -6,11 +13,7 @@
  * 
  * @author maddiebriere
  */
-package cellular_level;
-import javafx.scene.paint.Color;
-import data_structures.CellData;
-import java.util.ArrayList;
-import java.util.List;
+
 public class LiveCell extends LifeSimCell {
 	private static Color LIVE_COLOR = Color.BLACK;
 	private static int UNDER_POP = 2;

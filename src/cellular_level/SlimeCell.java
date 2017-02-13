@@ -11,6 +11,18 @@ import patch_level.Patch;
 import patch_level.SlimePatch;
 import util.Location;
 
+/**
+ * Extension of Cell class specific to the Slime simulation.
+ * 
+ * The SlimeCell leaves most actions to the SlimePatch. It does,
+ * however, look within a certain range of vision for a patch
+ * of high concentration and gravitate towards that patch if the
+ * concentration is over its set "sniff threshold"
+ * 
+ * @author maddiebriere
+ *
+ */
+
 public class SlimeCell extends Cell {
 	private static final Color SLIME_COLOR = Color.GREENYELLOW;
 	private static final int VISION = 5;

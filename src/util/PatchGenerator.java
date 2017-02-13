@@ -6,6 +6,15 @@ import patch_level.Patch;
 import patch_level.SlimePatch;
 import patch_level.SugarPatch;
 
+/**
+ * Similar to the CellGenerator class,
+ * generates an instance of a Patch from the enum
+ * describing it. 
+ * 
+ * @author maddiebriere
+ *
+ */
+
 public class PatchGenerator {
 	public static Patch newPatch(PatchName name){
 		switch(name){

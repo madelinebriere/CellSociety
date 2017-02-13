@@ -1,11 +1,3 @@
-/**
- * 
- * Because we will have different cells of interest, we need 
- * to pass the entire grid!!
- * 
- * @author maddiebriere
- */
-
 
 package cellular_level;
 import util.Location;
@@ -15,6 +7,23 @@ import java.util.List;
 import data_structures.CellData;
 import javafx.scene.paint.Color;
 import patch_level.Patch;
+
+/**
+ * 
+ * This abstract class defines the framework for all of
+ * the Cells used in the simulations. Every cell
+ * has a location and a state defined by color. 
+ * 
+ * This class provides general functions like copying and
+ * basic updates. 
+ * 
+ * Note that the Cell class also extends Comparable because the
+ * Cells in CellSociety are held in a sorted order (in case certain
+ * types of Cells need to be updated before others, like Sharks before
+ * Fish). Comparable allows for unique definition of this sorting.
+ * 
+ * @author maddiebriere
+ */
 
 public abstract class Cell implements Comparable{
 	private Location myLocation;
