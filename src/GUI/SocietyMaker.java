@@ -26,19 +26,14 @@ public class SocietyMaker {
 	public static CellSociety generateCellSociety(SimulationData simData){
 		switch (simData.getSimulationName()){
 		case FIRE_SOCIETY:
-			System.out.println("Fire");
 			return new FireSociety(simData);
 		case WATER_SOCIETY:
-			System.out.println("Water");
 			return new WaterSociety(simData);
 		case GAME_OF_LIFE:
-			System.out.println("Life");
 			return new LifeSociety(simData);
 		case SLIME_SOCIETY:
-			System.out.println("Slime");
 			return new SlimeSociety(simData);
 		default:
-			System.out.println("Segregation");
 			return new PopSociety(simData);
 		}
 	}
