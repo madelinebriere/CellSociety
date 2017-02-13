@@ -9,7 +9,7 @@ import util.Location;
 public abstract class Patch {
 	private final static Color DEFAULT_COLOR = Color.WHITE;
 	private final static int MAX_CONC = 30;
-	private final static int DEFAULT_CONC = 5;
+	private final static int DEFAULT_CONC = 1;
 	
 	private PatchName myPatchType;
 	private CellName myCellType;
@@ -49,14 +49,16 @@ public abstract class Patch {
 			this.setMyCell(null);
 		this.setMyColor(copyFrom.getMyColor());
 		this.setConcentration(copyFrom.getConcentration());
+		this.setMyPatchType(copyFrom.getMyPatchType());
 	}
 	
 	public abstract void update();
 
 	
 	public Color getShadedColor(){
-		double fraction = concentration/(2*MAX_CONC); //anywhere from 0 to .25
+		double fraction = ((double)concentration)/(1.5*MAX_CONC); //anywhere from 0 to .25
 		double shift = 1-fraction; //Larger concentration --> lower brightness
+		if(shift>.9) shift=1;
 		return myColor.deriveColor(0, 1, shift, 1);
 	}
 	

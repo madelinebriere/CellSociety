@@ -34,8 +34,8 @@ public class SocietyMaker {
 		Map<CellName, CellRatio> ratios = new HashMap<CellName, CellRatio>();
 		switch (name){
 		case FIRE_SOCIETY:
-			ratios.put(CellName.BURN_CELL, new CellRatio(0.08));
-			ratios.put(CellName.TREE_CELL, new CellRatio(0.92));
+			ratios.put(CellName.BURN_CELL, new CellRatio(0.1));
+			ratios.put(CellName.TREE_CELL, new CellRatio(0.9));
 			break;
 		case WATER_SOCIETY:
 			ratios.put(CellName.FISH_CELL, new CellRatio(0.4));
@@ -43,6 +43,7 @@ public class SocietyMaker {
 			break;
 		case GAME_OF_LIFE:
 			ratios.put(CellName.LIVE_CELL, new CellRatio(0.4));
+			ratios.put(CellName.DEAD_CELL, new CellRatio(0.6));
 			break;
 		case POPULATION_SOCIETY:
 			ratios.put(CellName.HOUSE_CELL_1, new CellRatio(0.25));

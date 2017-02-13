@@ -42,7 +42,7 @@ public class FireSociety extends CellSociety {
 
 	@Override
 	protected void applySettings() {
-		for(Cell c: getCurrentCells().get(CellName.TREE_CELL)){
+	/*	for(Cell c: getCurrentCells().get(CellName.TREE_CELL)){
 			if (probCatch>0 && probCatch<=1){
 				((TreeCell)c).setProbCatch(probCatch);
 			}
@@ -51,7 +51,7 @@ public class FireSociety extends CellSociety {
 			if(stepsToBurn>0){
 				((BurnCell)c).setStepsToBurn(stepsToBurn);
 			}
-		}
+		}*/
 		
 	}
 	

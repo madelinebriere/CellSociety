@@ -186,7 +186,7 @@ public class CellData {
 	private Patch[][] copy(Patch[][] toCopy){
 		Patch[][] copy = new Patch[toCopy.length][toCopy[0].length];
 		for(int i=0; i<toCopy.length; i++){
-			for(int j=0; j<toCopy.length; j++){
+			for(int j=0; j<toCopy[0].length; j++){
 				copy[i][j] = toCopy[i][j].createCopy();
 			}
 		}
