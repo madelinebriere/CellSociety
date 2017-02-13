@@ -8,6 +8,20 @@ import patch_level.Patch;
 import patch_level.SlimePatch;
 import util.Location;
 
+/**
+ * Intended use: resize grid 
+ * 
+ * NOTE!!! resizing only works for square grids so far
+ * Furthermore, only SlimeSociety and LifeSociety seem to do anything interesting with an expanding grid
+ * Test this only on square shapes and SlimeSociety/LifeSociety
+ * 
+ * Meant to be able to expand the size of the grid when cells are at the edge
+ * 
+ * Can be customized to shrink/expand 
+ * 
+ * @author talha koc
+ *
+ */
 public class SocietyResizer {
 	/**
 	 * 

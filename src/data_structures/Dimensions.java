@@ -2,6 +2,12 @@
 
 package data_structures;
 //Author Talha Koc
+/**
+ * Intended use: defines the number of cells horizontally and vertically in a grid
+ * 
+ * @author talha koc
+ *
+ */
 public class Dimensions {
 	private int x;
 	private int y;

@@ -45,6 +45,15 @@ import javafx.util.Duration;
 import societal_level.*;
 import util.Tuple;
 
+/**
+ * Intended use: Holds and controls all gui components,
+ * 
+ * Setup window, initializes timeline, inits gridcontroller, 
+ * 
+ * 
+ * @author talha koc
+ *
+ */
 public class GUIMain {
 
 	private static final int MILLISECOND_DELAY = 1000 / 5;

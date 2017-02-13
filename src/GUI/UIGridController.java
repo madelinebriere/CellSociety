@@ -10,7 +10,16 @@ import javafx.scene.paint.Color;
 
 
 
-
+/**
+ * Intended use: Takes care of everything related to grid.
+ * 
+ * Meant to initialize a gridview, 
+ * update grid colors, 
+ * and setup new gridviews with different shapes, colors, and dimensions
+ * 
+ * @author talha koc
+ *
+ */
 public class UIGridController {
 	
 	private GridView _gridView;

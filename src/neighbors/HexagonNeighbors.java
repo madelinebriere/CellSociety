@@ -7,6 +7,14 @@ import java.util.List;
 import data_structures.BorderType;
 import patch_level.Patch;
 
+/**
+ * Intended use: provide cells with a list of neighbors
+ * 
+ * Customized for hexagonal relationship between cells
+ * 
+ * @author talha koc
+ *
+ */
 public class HexagonNeighbors extends Neighbors{
 
 	public HexagonNeighbors(Patch[][] cells, BorderType b) {

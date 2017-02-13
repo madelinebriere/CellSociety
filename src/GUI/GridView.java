@@ -8,6 +8,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
+/**
+ * Intended use: Subclass this to create gridViews with different shapes
+ * 
+ * Meant to hold the shape nodes on display and update their colors on step in guimain
+ * 
+ * @author talha koc
+ *
+ */
 public abstract class GridView extends Pane{
 	protected Frame _bounds;
 	protected Dimensions _dimensions;

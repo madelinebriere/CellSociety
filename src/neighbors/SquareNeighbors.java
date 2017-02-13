@@ -10,6 +10,14 @@ import util.Tuple;
 import data_structures.BorderType;
 import patch_level.Patch;
 
+/**
+ * Intended use: provide cells with a list of neighbors
+ * 
+ * Customized for Manhattanal relationship between cells
+ * 
+ * @author talha koc
+ *
+ */
 public class SquareNeighbors extends Neighbors {
 
 

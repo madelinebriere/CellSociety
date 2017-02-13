@@ -6,6 +6,14 @@ import data_structures.Dimensions;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Intended use: subclass of GridView that implements a regular grid
+ * 
+ * Meant to hold and display a grid to the user
+ * 
+ * @author talha koc
+ *
+ */
 public class SquareGridView extends GridView {
 
 	public SquareGridView(Frame bounds, Dimensions dimensions, Color[][] colors){
