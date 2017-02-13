@@ -41,6 +41,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import societal_level.*;
+import util.Tuple;
 
 public class GUIMain{
 	
@@ -138,9 +139,11 @@ public class GUIMain{
     private void setupUserControls(){
     	setupTopMenu();
     	setupButtons();
-    	setupShapeButtons(_gridContainer.getLayoutY() + 16);
     	double sliderWidth = SCREEN_WIDTH - GRID_WIDTH - 60;
-    	setupSpeedSlider(sliderWidth, GRID_WIDTH + 30, _gridContainer.getLayoutY() + 160);
+    	double yPos = _gridContainer.getLayoutY() + 16;
+    	setupShapeButtons(yPos);
+    	setupBorderOptionButtons(yPos + 120);
+    	setupSpeedSlider(sliderWidth, GRID_WIDTH + 30, yPos + 240);
     	setupSizeSlider(sliderWidth, GRID_WIDTH + 30, _speedSlider.getLayoutY() + 80);
     }
     
@@ -243,9 +246,15 @@ public class GUIMain{
     	_root.getChildren().add(hbox1);
     }
     private void setupShapeButtons(double topY){
+    	Label label = plainLabel("Cell Shape", 12);
+    	label.setLayoutX(_gridContainer.getLayoutX() + _gridContainer.getPrefWidth());
+    	label.setPrefWidth(GUIMain.SCREEN_WIDTH - (_gridContainer.getLayoutX() + _gridContainer.getPrefWidth()));
+    	label.setLayoutY(topY);
+    	_root.getChildren().add(label);
+    	topY += 30;
     	double bottomY = topY + 50;
     	double width = 60;
-    	double x = _gridContainer.getLayoutX() + _gridContainer.getPrefWidth() + 45;
+    	double x = _gridContainer.getLayoutX() + _gridContainer.getPrefWidth() + 56;
     	Polygon triangle = new Polygon(new double[]{
     			x + width/2, topY,
     			x + width, bottomY,
@@ -268,8 +277,8 @@ public class GUIMain{
     	triangle.setFill(Color.rgb(229,57,53)); // red
     	square.setFill(Color.rgb(30,136,229));  // blue
     	hexagon.setFill(Color.rgb(0,137,123)); // green
-    	setShapeDeselected(triangle);
-    	setShapeDeselected(hexagon);
+    	setShapeSelected(triangle);
+    	setShapeSelected(hexagon);
     	setShapeSelected(square);
     	triangle.setOnMousePressed(new EventHandler<MouseEvent>() {
     	    public void handle(MouseEvent me) {
@@ -310,15 +319,92 @@ public class GUIMain{
     	_root.getChildren().add(hexagon);
     	
     }
+    private void setupBorderOptionButtons(double topY){
+    	Label label = plainLabel("Grid Border Type", 12);
+    	label.setLayoutY(topY);
+    	label.setLayoutX(_gridContainer.getLayoutX() + GRID_WIDTH);
+    	label.setPrefWidth(SCREEN_WIDTH - (_gridContainer.getLayoutX() + GRID_WIDTH));
+    	topY += 26;
+    	double inset = 16;
+    	double x = _gridContainer.getLayoutX() + GRID_WIDTH + inset;
+    	double width = (SCREEN_WIDTH - (_gridContainer.getLayoutX() + GRID_WIDTH + 4*inset))/3;
+    	Button finite = plainButton("Finite");
+    	Button toroidal = plainButton("Wrapping");
+    	Button infinite = plainButton("Infinite");
+    	finite.setLayoutX(x);
+    	finite.setPrefWidth(width);
+    	finite.setLayoutY(topY);
+    	x+=width + inset;
+    	toroidal.setLayoutX(x);
+    	toroidal.setPrefWidth(width);
+    	toroidal.setLayoutY(topY);
+    	x+=width + inset;
+    	infinite.setLayoutX(x);
+    	infinite.setPrefWidth(width);
+    	infinite.setLayoutY(topY);
+    	this.setButtonToSelected(finite);
+    	x+=width + inset;
+    	
+    	finite.setOnMousePressed(new EventHandler<MouseEvent>() {
+    	    public void handle(MouseEvent me) {
+    	    	setButtonToHighlightedState(finite);
+    	    }
+    	});
+
+    	finite.setOnMouseReleased(new EventHandler<MouseEvent>() {
+    	    public void handle(MouseEvent me) {
+    	    	setGridBorderType(BorderType.FINITE);
+    	       setButtonToSelected(finite);
+    	       setButtonToUnhighlightedState(infinite);
+    	       setButtonToUnhighlightedState(toroidal);
+    	    }
+    	});
+    	toroidal.setOnMousePressed(new EventHandler<MouseEvent>() {
+    	    public void handle(MouseEvent me) {
+    	    	setButtonToHighlightedState(toroidal);
+    	    }
+    	});
+
+    	toroidal.setOnMouseReleased(new EventHandler<MouseEvent>() {
+    	    public void handle(MouseEvent me) {
+    	    	setGridBorderType(BorderType.TOROIDAL);
+    	       setButtonToSelected(toroidal);
+    	       setButtonToUnhighlightedState(infinite);
+    	       setButtonToUnhighlightedState(finite);
+    	    }
+    	});
+    	infinite.setOnMousePressed(new EventHandler<MouseEvent>() {
+    	    public void handle(MouseEvent me) {
+    	    	setButtonToHighlightedState(infinite);
+    	    }
+    	});
+
+    	infinite.setOnMouseReleased(new EventHandler<MouseEvent>() {
+    	    public void handle(MouseEvent me) {
+    	    	setGridBorderType(BorderType.INFINITE);
+    	    	setButtonToSelected(infinite);
+    	    	setButtonToUnhighlightedState(finite);
+    	    	setButtonToUnhighlightedState(toroidal);
+    	    }
+    	});
+    	_root.getChildren().add(label);
+    	_root.getChildren().add(finite);
+    	_root.getChildren().add(toroidal);
+    	_root.getChildren().add(infinite);
+    }
+    private void setGridBorderType(BorderType b){
+    	this._currentSimulationData.getData().setBorder(b);
+    	resetAnimation();
+    }
     private void setShapeSelected(Shape s){
     	setShapeDesign(s, Color.rgb(40, 40, 40), 3);
     	s.setScaleX(1.);
     	s.setScaleY(1.);
     }
-    private void setShapeDeselected(Shape s){
+    /*private void setShapeDeselected(Shape s){
     	setShapeDesign(s, Color.rgb(80, 80, 80), 2);
     
-    }
+    }*/
     private void setShapeHighlighted(Shape s){
     	setShapeDesign(s, Color.rgb(8, 8, 8), 4);
     	s.setScaleX(1.3);
@@ -410,9 +496,7 @@ public class GUIMain{
     		if(_sizeSlider.getValue() % _sizeSlider.getMajorTickUnit() == 0 && 
     				_sizeSlider.getValue() != minValue){
     			setFileToNull();
-    			System.out.println("Grid Size " + _sizeSlider.getValue() + "\tmin val " + minValue);
-//    			this._currentSimulationData.getDimensions().setX((int) _sizeSlider.getValue());
-//    			this._currentSimulationData.getDimensions().setY((int) _sizeSlider.getValue());
+    			//System.out.println("Grid Size " + _sizeSlider.getValue() + "\tmin val " + minValue);
         		resetAnimation();
     		}
     	});
@@ -444,6 +528,9 @@ public class GUIMain{
     	updateGridDimensionsForShape(_currentSimulationData.getShape());
     	//System.out.println("done updating");
     	_model = SocietyMaker.generateCellSociety(_currentSimulationData);
+    	System.out.println(_currentSimulationData.getShape());
+    	System.out.println(_model.getSimulationData().getShape());
+    	System.out.println(_model.getSize().getX() + "x" + _model.getSize().getY());
     	//System.out.println("done making model");
     	_gridController.setNewSimulation(_model.getCurrentColors(), _currentSimulationData);
     	resetGUIComponents();
@@ -502,7 +589,8 @@ public class GUIMain{
      */
 	private void step(){
 		updateGenerationLabel();
-		_gridController.step(_model.step(), _model.getSize());
+		Tuple<Color[][], Dimensions> t = _model.step();
+		_gridController.step(t.x, t.y);
 	}
 
 }

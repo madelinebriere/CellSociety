@@ -30,7 +30,6 @@ public class HexagonalGridView extends GridView {
 
 	@Override
 	protected void setupGrid(Color[][] colors) {
-		System.out.println("after calling setupgrid "+_cells);
 		for(int i=0; i<_dimensions.getX(); i++){
 			for(int j =0; j<_dimensions.getY(); j++){
 				Polygon hex;

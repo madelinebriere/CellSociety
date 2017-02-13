@@ -38,6 +38,7 @@ public class SocietyMaker {
 			ratios.put(CellName.TREE_CELL, new CellRatio(0.9));
 			break;
 		case WATER_SOCIETY:
+
 			ratios.put(CellName.FISH_CELL, new CellRatio(0.5));
 			ratios.put(CellName.SHARK_CELL, new CellRatio(0.05));
 			break;
