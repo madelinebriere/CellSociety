@@ -4,8 +4,8 @@ package data_structures;
  * 
  * STONE USE THIS :)
  * 
- * Information held in SimulationData about board set-up, including dimensions, type of border
- * and shape of tiles.
+ * Information held in SimulationData about board set-up, including dimensions,
+ * type of border and shape of tiles.
  * 
  * @author maddiebriere
  */
@@ -14,21 +14,21 @@ public class BoardData {
 	private static final SimulationName DEFAULT_SIM = SimulationName.GAME_OF_LIFE;
 	private static final CellShape DEFAULT_SHAPE = CellShape.SQUARE;
 	private static final BorderType DEFAULT_BORDER = BorderType.FINITE;
-	private static final Dimensions DEFAULT_SIZE = new Dimensions(10,10);
+	private static final Dimensions DEFAULT_SIZE = new Dimensions(10, 10);
 	private static final RawData DEFAULT_RAW = new RawData();
-	
+
 	private boolean getAllNeighbors;
 	private SimulationName name;
 	private Dimensions dimensions;
 	private BorderType border;
 	private CellShape shape;
 	private RawData raw;
-	
-	public BoardData(){
+
+	public BoardData() {
 		this(DEFAULT_SIM);
 	}
-	
-	public BoardData(SimulationName name){
+
+	public BoardData(SimulationName name) {
 		this(name, DEFAULT_SIZE, DEFAULT_BORDER, DEFAULT_SHAPE, DEFAULT_RAW);
 	}
 
@@ -36,9 +36,8 @@ public class BoardData {
 		this(true, name, dimensions, border, shape, raw);
 	}
 
-
-	public BoardData(boolean getAllNeighbors, SimulationName name, Dimensions dimensions,
-			BorderType border, CellShape shape, RawData raw) {
+	public BoardData(boolean getAllNeighbors, SimulationName name, Dimensions dimensions, BorderType border,
+			CellShape shape, RawData raw) {
 		super();
 		this.getAllNeighbors = getAllNeighbors;
 		this.name = name;
@@ -79,12 +78,12 @@ public class BoardData {
 	public Dimensions getDimensions() {
 		return dimensions;
 	}
-	
+
 	public BorderType getBorder() {
 		return border;
 	}
-	
-	public CellShape getShape(){
+
+	public CellShape getShape() {
 		return shape;
 	}
 
@@ -92,6 +91,4 @@ public class BoardData {
 		return raw;
 	}
 
-	
-	
 }

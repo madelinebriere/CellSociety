@@ -9,7 +9,6 @@ import java.util.TreeMap;
 
 import GUI.SocietyMaker;
 
-import java.util.Collections;
 import java.util.HashMap;
 
 import cellular_level.*;
@@ -117,7 +116,6 @@ public abstract class CellSociety {
 		updatePatches();
 		return new Tuple<Color[][], Dimensions>(getCurrentColors(), this.getSimulationData().getDimensions());
 	}
-
 
 	/**
 	 * This method should be implemented by every CellSociety in order to parse

@@ -5,7 +5,7 @@ import java.util.List;
 import patch_level.Patch;
 
 /**
- * Intended use: Similar to CellRatioMap 
+ * Intended use: Similar to CellRatioMap
  * 
  * Meant to hold patch information to be conveyed to the CellSociety
  * 
@@ -15,12 +15,10 @@ import patch_level.Patch;
 
 public class PatchMap {
 	private List<Patch> patches;
-	
-	public PatchMap(List<Patch> patches){
-		
+
+	public PatchMap(List<Patch> patches) {
+
 	}
-	
-	
 
 	public List<Patch> getPatches() {
 		return patches;
@@ -29,6 +27,5 @@ public class PatchMap {
 	public void setPatches(List<Patch> patches) {
 		this.patches = patches;
 	}
-	
 
 }

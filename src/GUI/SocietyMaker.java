@@ -11,8 +11,8 @@ import data_structures.SimulationName;
 import societal_level.*;
 
 public class SocietyMaker {
-	public static CellSociety generateCellSociety(SimulationData simData){
-		switch (simData.getSimulationName()){
+	public static CellSociety generateCellSociety(SimulationData simData) {
+		switch (simData.getSimulationName()) {
 		case FIRE_SOCIETY:
 			System.out.println("Fire");
 			return new FireSociety(simData);
@@ -30,9 +30,10 @@ public class SocietyMaker {
 			return new PopSociety(simData);
 		}
 	}
-	public static CellRatioMap getDefaultCellRatioValues(SimulationName name){
+
+	public static CellRatioMap getDefaultCellRatioValues(SimulationName name) {
 		Map<CellName, CellRatio> ratios = new HashMap<CellName, CellRatio>();
-		switch (name){
+		switch (name) {
 		case FIRE_SOCIETY:
 			ratios.put(CellName.BURN_CELL, new CellRatio(0.1));
 			ratios.put(CellName.TREE_CELL, new CellRatio(0.9));
