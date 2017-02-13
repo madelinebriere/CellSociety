@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import util.Tuple;
 
-import borders.Border;
-import cellular_level.Cell;
 import data_structures.BorderType;
-import data_structures.Dimensions;
 import patch_level.Patch;
 
 public class SquareNeighbors extends Neighbors {

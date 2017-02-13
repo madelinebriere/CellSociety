@@ -16,6 +16,7 @@ import util.CellGenerator;
 import util.Location;
 import util.NeighborsChooser;
 import util.PatchGenerator;
+import util.Tuple;
 import neighbors.*;
 import patch_level.*;
 
@@ -242,12 +243,12 @@ public abstract class CellSociety {
 	 * 
 	 * @return 2D Array of current Cell colors
 	 */
-	public Color[][] step() {
+	public Tuple<Color[][], Dimensions> step() {
 		applySettings();
 		shuffleCurrentCells();
 		stepAllCells(getAllEmptyCells());
 		updatePatches();
-		return getCurrentColors();
+		return new Tuple<Color[][], Dimensions>(getCurrentColors(), this.getSimulationData().getDimensions());
 	}
 
 	

@@ -28,10 +28,12 @@ public class UIGridController {
 	}
 
 	public void setNewSimulation(Color[][] colors, SimulationData simData){
+		System.out.println("setting new simulation with shape " + simData.getShape());
 		_currentGeneration = 0;
 		if(_gridView != null){
 			clearGridFromScreen();
 		}
+		setSimData(simData);
 		switch(simData.getShape()){
 		case TRIANGLE:
 			_gridView = new TriangleGridView(_bounds, simData.getDimensions(), colors);
@@ -47,16 +49,16 @@ public class UIGridController {
 		
 	}
 	public void setNewGridWithDimension(Dimensions dimensions, Color[][] colors){
-		_currentSimData.getData().setDimensions(dimensions);
-		setNewSimulation(colors,_currentSimData);
+		getSimData().getData().setDimensions(dimensions);
+		setNewSimulation(colors,getSimData());
 	}
 	public void setNewGridFromFile(SimulationType s, Color[][] colors){
-		_currentSimData = new SimulationData(s.getBoardData(), _currentSimData.getRatios());
-		setNewSimulation(colors,_currentSimData);
+		setSimData( new SimulationData(s.getBoardData(), getSimData().getRatios()));
+		setNewSimulation(colors,getSimData());
 	}
 	public void step(Color[][] newColors, Dimensions newDimensions){
-		if(!_currentSimData.getDimensions().equals(newDimensions)){
-			System.out.println(_currentSimData.getDimensions().getX() + " " + _currentSimData.getDimensions().getY());
+		if(!getSimData().getDimensions().equals(newDimensions)){
+			System.out.println(getSimData().getDimensions().getX() + " " + getSimData().getDimensions().getY());
 			System.out.println(newDimensions.getX() + " " + newDimensions.getY());
 			setNewGridWithDimension(newDimensions, newColors);
 			System.out.println("setting new grid of size" + newDimensions.toString());
@@ -75,6 +77,13 @@ public class UIGridController {
 	private void clearGridFromScreen(){
 		_root.getChildren().remove(_gridView);
 		_gridView = null;
+	}
+	private void setSimData(SimulationData s){
+		System.out.println("setting sim data to shape " + getSimData().getShape());
+		this._currentSimData = s;
+	}
+	private SimulationData getSimData(){
+		return this._currentSimData;
 	}
 	
 }
