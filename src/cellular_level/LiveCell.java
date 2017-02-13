@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 public class LiveCell extends LifeSimCell {
 	private static Color LIVE_COLOR = Color.BLACK;
-	private static int UNDER_POP = 2;
-	private static int OVER_POP=3;
+	public static int UNDER_POP = 2;
+	public static int OVER_POP=3;
 	
 	
 	private static int underpopulation;

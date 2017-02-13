@@ -14,7 +14,7 @@ import util.Location;
 public class SlimeCell extends Cell {
 	private static final Color SLIME_COLOR = Color.GREENYELLOW;
 	
-	private static final int SNIFF_THRESH = 8;
+	public static final int SNIFF_THRESH = 8;
 	
 	private int sniffThresh; //concentration at which Cell no longer moves
 
