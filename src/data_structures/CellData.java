@@ -69,6 +69,10 @@ public class CellData {
 		return null;
 	}
 	
+	public Patch[][] getCurrentPatches(){
+		return mySociety.getPatches();
+	}
+	
 	public Patch[][] getCurrentPatchesCopy(){
 		return copy(mySociety.getPatches());
 	}

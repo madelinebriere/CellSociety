@@ -13,6 +13,10 @@ import util.Location;
 
 public class SlimeCell extends Cell {
 	private static final Color SLIME_COLOR = Color.GREENYELLOW;
+	
+	private static final int SNIFF_THRESH = 8;
+	
+	private int sniffThresh; //concentration at which Cell no longer moves
 
 	public SlimeCell(){
 		this(0,0);
@@ -23,9 +27,13 @@ public class SlimeCell extends Cell {
 	}
 	
 	public SlimeCell(int row, int col, Color c){
-		super(row, col, c);
+		this(row,col,c, SNIFF_THRESH);
 	}
 	
+	public SlimeCell(int row, int col, Color c, int im){
+		super(row,col,c);
+		sniffThresh = im;
+	}
 	
 	@Override
 	public Cell createCopy() {
@@ -43,7 +51,7 @@ public class SlimeCell extends Cell {
 	}
 	
 	private ArrayList<SlimePatch> getSlimePatches(CellData data){
-		Patch[][] patches = data.getCurrentPatchesCopy();
+		Patch[][] patches = data.getCurrentPatches();
 		ArrayList<SlimePatch> slime = new ArrayList<SlimePatch>();
 		for(int i=0; i<patches.length; i++){
 			for(int j=0; j<patches[0].length; j++){
@@ -60,7 +68,10 @@ public class SlimeCell extends Cell {
 		ArrayList<SlimePatch> slime = getSlimePatches(data);
 		if(slime.size()==0){return;}
 		Location target = getTargetLocation(slime);
-		if(target==null){return;}
+		if(target==null){
+			randomWalk(data);
+			return;
+		}
 		Location newSpot = spotNearTarget(target, data);
 		if(newSpot!=null){
 			this.setMyLocation(newSpot);
@@ -68,9 +79,14 @@ public class SlimeCell extends Cell {
 		
 	}
 	
+	private void randomWalk(CellData data){
+		Location loc = data.getAvailableNeighbor(this);
+		this.setMyLocation(loc);
+	}
+	
 	private Location getTargetLocation(ArrayList<SlimePatch> slime){
 		Location newSpot=null;
-		int maxChem = 0;
+		int maxChem = sniffThresh;
 		double minDist = 1000; //random large number
 		for(SlimePatch spot: slime){
 			if(greaterConcentration(maxChem, spot) || 

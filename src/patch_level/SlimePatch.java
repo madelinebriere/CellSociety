@@ -53,9 +53,9 @@ public class SlimePatch extends Patch {
 	}
 	
 	private void checkDischarge(){
-		if(stepsSinceDischarge>=EVAPO_RATE){
+		if(stepsSinceDischarge>=evaporate){
 			setStepsSinceDischarge(0);
-			decrementConcentration(evaporate);
+			decrementConcentration();
 		}
 	}
 	private void layCampTrail(){
