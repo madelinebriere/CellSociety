@@ -109,6 +109,7 @@ public abstract class SimulationType {
 			
 				Location loc = new Location(row,col);
 				CellName name = CellGenerator.getCellName(vars[NAME_INDEX].toUpperCase());
+				System.out.println(name);
 				Cell newCell = CellGenerator.newCell(name);
 				newCell.setMyLocation(loc);
 				if(cells.containsKey(name)){
@@ -121,6 +122,7 @@ public abstract class SimulationType {
 				}
 			}
 		}catch(Exception e){
+			e.printStackTrace(); //TODO
 			throw new XMLException(e, myResources.getString("InvalidCellData"));
 		}
 		return cells;
@@ -189,6 +191,14 @@ public abstract class SimulationType {
 		return data;
 	}
 	
+	/**
+	 * Takes two Lists, one of keys and one of values, and a Map. The given Map
+	 * is filled with mappings from the keys to the values.
+	 * 
+	 * @param map to be filled
+	 * @param keys
+	 * @param values
+	 */
 	private void mapLists(Map<String, String> map, List<String> keys, List<String> values){
 		int element = 0;  //Used to account for "cells" being skipped, as well as having to access a List
 		for(String tag: keys){
@@ -220,8 +230,18 @@ public abstract class SimulationType {
 		return new BoardData(name, dim, borderType, shape, data);
 	}
 	
+	/**
+	 * Puts all Integer-valued initial settings into a List and returns it.
+	 * 
+	 * @return List of Integers
+	 */
 	protected abstract List<Integer> getIntegerData();
 	
+	/**
+	 * Puts all Double-valued initial settings into a List and returns it.
+	 * 
+	 * @return List of Doubles
+	 */
 	protected abstract List<Double> getDoubleData();
 	
 	protected abstract SimulationName getSimulationName();
@@ -246,6 +266,14 @@ public abstract class SimulationType {
 		return map;
 	}
 	
+	/**
+	 * Takes the raw cell data from the file and uses a CellDataGenerator
+	 * and CellDataDecoder to translate it to location-based data that
+	 * SimulationTypes can use.
+	 * 
+	 * @param data - Raw cell data from file
+	 * @return List of cell data strings formatted as an x-coordinate, y-coordinate, and cell type
+	 */
 	protected List<String> createCellList(List<String> data){
 		if(getCellData().size() > 0){  //If given cell data is invalid, then the default cell data will be used
 			return data;
