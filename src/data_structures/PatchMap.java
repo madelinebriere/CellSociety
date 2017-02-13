@@ -28,11 +28,13 @@ public class PatchMap {
 		//
 		int originX = x/2;
 		int originY = y/2;
-		int numberOfLayers = 4;
+		int numberOfLayers = 3;
 		int totalLayerLength = numberOfLayers * layerLength;
 		for (int i=-totalLayerLength; i<totalLayerLength; i++){
 			for (int j=-totalLayerLength; j<totalLayerLength; j++){
-				patches[i][j].setConcentration(concentration);
+				patches[i][j].setConcentration(
+						numberOfLayers + 1 - Math.max(Math.abs(i/numberOfLayers), Math.abs(j/numberOfLayers))
+						);
 			}
 		}
 		return patches;
