@@ -18,7 +18,6 @@ public class TriangleNeighbors extends Neighbors {
 
 	@Override
 	public List<Patch> getAllNeighbors(Patch c) {
-		// TODO Auto-generated method stub
 		return getCardinalNeighbors(c);
 	}
 
