@@ -10,6 +10,18 @@ import data_structures.SimulationData;
 import data_structures.SimulationName;
 import societal_level.*;
 
+/**
+ * Intended use: static methods that help generate societies with default setups
+ * 
+ * Meant to help GUIMain decide what type of society to display and what ratios of cells should be on screen
+ * 
+ * Cell ratios can be easily customized here
+ * 
+ * When adding a new simulation, these methods must be updated for the user to be able to access it in the GUI
+ * 
+ * @author talha koc
+ *
+ */
 public class SocietyMaker {
 	public static CellSociety generateCellSociety(SimulationData simData){
 		switch (simData.getSimulationName()){

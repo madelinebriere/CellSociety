@@ -10,7 +10,7 @@ import util.Tuple;
 
 /**
  * Class to define neighbors/ boundaries between neighbors, adjacency, etc.
- * @author maddiebriere
+ * @author talha koc
  *
  */
 

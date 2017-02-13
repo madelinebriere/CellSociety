@@ -45,6 +45,15 @@ import javafx.util.Duration;
 import societal_level.*;
 import util.Tuple;
 
+/**
+ * Intended use: Holds and controls all gui components,
+ * 
+ * Setup window, initializes timeline, inits gridcontroller, 
+ * 
+ * 
+ * @author talha koc
+ *
+ */
 public class GUIMain {
 
 	private static final int MILLISECOND_DELAY = 1000 / 5;
@@ -54,7 +63,6 @@ public class GUIMain {
 	private final HashMap<String, SimulationName> simulationNameStringToEnum = new HashMap<String, SimulationName>();
 
 	private CellSociety _model;
-	// private Class<CellSociety> SOCIETY_TYPE;
 	private Timeline _animation;
 	private Scene _scene;
 	private Pane _root;
@@ -125,7 +133,6 @@ public class GUIMain {
 		_generationLabel.setAlignment(Pos.CENTER_LEFT);
 		_generationLabel.setTextFill(Color.rgb(60, 60, 60));
 
-		// TODO:
 		_societyTitleLabel = plainLabel(_model.getName().toString(), 15);
 		_societyTitleLabel.setLayoutX(SCREEN_WIDTH / 2);
 		_societyTitleLabel.setPrefHeight(80);
@@ -571,7 +578,7 @@ public class GUIMain {
 			d = new Dimensions(sliderValue, sliderValue / 2);
 			break;
 		case HEXAGON:
-			d = new Dimensions(sliderValue / 3, sliderValue);
+			d = new Dimensions(sliderValue / 3, sliderValue - sliderValue%3);
 			break;
 		default:
 			d = new Dimensions(sliderValue, sliderValue);
@@ -607,16 +614,8 @@ public class GUIMain {
 	}
 
 	private void setFileToNull() {
-		_currentSimulationType = null; // TODO: do this more elegantly
+		_currentSimulationType = null;
 		_fileButton.setText("New File");
-	}
-
-	private void enableSliders() {
-		// TODO:
-	}
-
-	private void disableSliders() {
-		// TODO:
 	}
 
 	private void changeAnimationSpeed(Number newValue) {
