@@ -72,7 +72,7 @@ public class SugarSimulation extends SimulationType {
 	
 	public Integer getSugarGrow(){
 		try{
-			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
+			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(3)));
 		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(3)));
 		}

@@ -63,7 +63,7 @@ public class SlimeSimulation extends SimulationType {
 	
 	public Integer getDepositRate(){
 		try{
-			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(3)));
+			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
 		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(2)));
 		}
