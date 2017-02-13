@@ -13,9 +13,9 @@ import data_structures.CellData;
  */
 
 public class SugarCell extends Cell{
-	private static final int SUGAR_INIT  = 10;
-	private static final int SUGAR_META = 3;
-	private static final int VISION = 1;
+	public static final int SUGAR_INIT  = 10;
+	public static final int SUGAR_META = 3;
+	public static final int VISION = 1;
 	
 	private int sugar; //amount of sugar
 	private int sugarMetabolism; ///sugar metabolism
