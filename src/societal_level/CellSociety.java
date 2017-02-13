@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
+
+import GUI.SocietyMaker;
+
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -21,54 +24,16 @@ import patch_level.*;
 
 
 /**
- * TODO:
- * 1) Check up on grid resizing
- * 2) File-reading test
- * 3) Slime/Sugar simulations
- * 	Cells
- * 	Patches (Add to CellData info)
- * 	Society
- * 	Files
- * 4) Types of neighbors
- * 5) Borders
- * 6) ParseRules finish and apply
- * 
- * 
- * 
- * 
- * TODO:
- * 1) Stone: Add BoardData initialization
- * 2) Talha: Make GUI work/ decide how to initial using new design
- * 3) Implement new Color method with cells AND patches
- * 4) Implement subclasses of CellSociety
- * 5) Finish Slime Simulation
- * 6) Assess viability of parseRules() / RawData structure
- * 7) ... Get rid of errors
- * 
- * 
- * 
- * OLD:
- * 1) Figure out empty color situation
- * 2) SimulationType incorporation/ constructor?
- * 3) How do I know the size of the cell list I'm creating?
- * 4) Implement neighbors by shape (move all neighbors stuff into that)
- * 		Implement interface by edges? 
- * 5) Check all default variables
- * 6) Double check that step function works
- * 7) General makeCells function
- * 8) Make a class that converts strings -> a default instance of a cell
- */
-
-
-/**
  * This class represents a SOCIETY of Cells, and keeps track of the current
  * cells, the size (width and height) of the society, and the color of empty
- * cells in this society.
+ * cells in this society. It also keeps track of the Patches in the society (the background
+ * tiles) which can have functionality, color, etc.
+ * 
+ * This abstract class has many subclasses, one for each simulation type --
+ * these subclasses set simulation specific variables (like satisfied threshold in
+ * population society).
  * 
  * @author maddiebriere
- *
- *         Class made abstract solely to keep users from creating instances of
- *         the superclass
  */
 
 public abstract class CellSociety {
@@ -80,14 +45,21 @@ public abstract class CellSociety {
 	private Patch[][] patches;
 	private BorderType border;
 	private SimulationData mySimulationData;
+	private boolean getAllNeighbors;
+	
 	
 	/**
-	 * Default 
+	 * Default set-up is a Wa-Tor world simulation
 	 */
-
 	public CellSociety(){
 		this(generateDefaultData());
 	}
+	
+	/**
+	 * Take in SimulationData (user related input) and 
+	 * set current cells according to given ratios
+	 * @param sim SimulationData from front-end
+	 */
 	public CellSociety(SimulationData sim) {
 		this.mySimulationData = sim;
 		setBoardData(sim.getData());
@@ -95,42 +67,82 @@ public abstract class CellSociety {
 		setPatches(setPatches());
 	}
 	
+	/**
+	 * Take in SimulationType (file related input) and
+	 * set current cells according to given locations
+	 * @param sim SimulationType from file-reader
+	 */
 	public CellSociety(SimulationType sim) {
 		setBoardData(sim.getBoardData());
 		setCurrentCells(sim.getCells());
 		setPatches(setPatches());
 	}
 	
+	/**
+	 * Sets data-related common between both the SimulationType
+	 * AND the SimulationData (SimulationName, general variables,
+	 * Cell shape, dimensions, border type)
+	 * @param data BoardData that holds current settings
+	 */
 	public void setBoardData(BoardData data){
 		parseRules(data.getRaw());
 		setName(data.getName());
 		setMyShape(data.getShape());
 		setSize(data.getDimensions());
 		setBorder(data.getBorder());
+		setGetAllNeighbors(data.isGetAllNeighbors());
 	}
 	
+	
+	/**
+	 *	Step function (update) -- Applies the current rules of the simulation
+	 * To each of the current Cells. Sorts the current cells by Cell-defined preference
+	 * (decided with the compareTo method in each Cell), putting certain types
+	 * of Cells first on the list the update. This is used in WaterWorld to have
+	 * the Sharks update before the fish so that the eaten fish can be removed
+	 * before the fish update. After the sorting, it calls guidedStep to shuffle
+	 * the cells and update each, PROVIDING the Cells any available positions to
+	 * move into, breed into, etc. (passing null)
+	 * 
+	 * @return 2D Array of current Cell colors
+	 */
+	public Color[][] step() {
+		applySettings();
+		stepAllCells(getAllEmptyCells());
+		updatePatches();
+		return getCurrentColors();
+	}
 
 	/**
 	 * This method should be implemented by every CellSociety in order to parse
 	 *	RawData passed to the society. If it does not define anything, 
 	 *	the cells will just use their own default variables.
 	 *
+	 *	The information in the RawData object should be passed in the correct order,
+	 *	as defined in each parseRules() implementation (this order also matches the 
+	 *	initialization of the variables at the top of the Society class)
 	 */
 	public abstract void parseRules(RawData data);
 	
 	
 	/**
-	 * Returns the color set for the patches (empty cells)
+	 * @return The color set for the patches (empty cells) in this
+	 * particular simulation
 	 */
 	public abstract Color getEmptyColor();
 	
 	/**
-	 * Return the desired Patch Type for the specific society
+	 * @return the desired Patch Type for the specific society
 	 */
 	public abstract PatchName getPatchType();
 	
 	
 	
+	/**
+	 * Resets the patches (background) with the current step by updating (taking
+	 * Patch-specific action) and then reseting the Cell held by the patch to
+	 * the new Cell layout
+	 */
 	public void updatePatches(){
 		for(int i=0; i<getPatches().length; i++){
 			for(int j=0; j<getPatches()[0].length; j++){
@@ -152,7 +164,10 @@ public abstract class CellSociety {
 	}
 	
 	/**
-	 * Set cells and patches with current settings
+	 * Set cells and patches with current settings (for instance,
+	 * in PopSociety, this with apply the satisfied threshold to
+	 * every current cell) so that updates will be based upon the 
+	 * correct settings and not default values
 	 */
 	protected abstract void applySettings();
 
@@ -163,13 +178,8 @@ public abstract class CellSociety {
 		Patch[][] patches = new Patch[getX()][getY()];
 		if(getCurrentCells().size()!=0){
 			for(Cell c: getCellsAsList()){
-				if(validSpot(c.getMyLocation())){
-					Patch newPatch = PatchGenerator.newPatch(getPatchType());
-					newPatch.setMyPatchType(getPatchType());
-					newPatch.setMyColor(getEmptyColor());
-					newPatch.setMyLocation(c.getMyLocation());
-					newPatch.setMyCell(c);					
-					patches[c.getMyCol()][c.getMyRow()]=newPatch;
+				if(validSpot(c.getMyLocation())){		
+					patches[c.getMyCol()][c.getMyRow()]=createNewPatch(c, c.getMyLocation());
 				}
 			}
 		}
@@ -181,14 +191,24 @@ public abstract class CellSociety {
 		ArrayList<Location> locs = getValidLocations(getSize());
 		for(Location l: locs){
 			if(patchyPatches[l.getMyCol()][l.getMyRow()]==null){
-				Patch newPatch = PatchGenerator.newPatch(getPatchType());
-				newPatch.setMyPatchType(getPatchType());
-				newPatch.setMyColor(getEmptyColor());
-				newPatch.setMyLocation(l);
-				newPatch.setMyCell(null);
-				patchyPatches[l.getMyCol()][l.getMyRow()] = newPatch;
+				patchyPatches[l.getMyCol()][l.getMyRow()] = createNewPatch(null, l);
 			}
 		}
+	}
+	
+	/**
+	 * Create a new patch according to the current simulation's settings
+	 * @param patchCell	The Cell held by this new patch
+	 * @param loc	The location of this new patch
+	 * @return	The new patch
+	 */
+	private Patch createNewPatch(Cell patchCell, Location loc){
+		Patch newPatch = PatchGenerator.newPatch(getPatchType());
+		newPatch.setMyPatchType(getPatchType());
+		newPatch.setMyColor(getEmptyColor());
+		newPatch.setMyLocation(loc);
+		newPatch.setMyCell(patchCell);					
+		return newPatch;
 	}
 	
 	public boolean validSpot(Location loc){
@@ -230,25 +250,6 @@ public abstract class CellSociety {
 	public SimulationData getSimulationData(){
 		return this.mySimulationData;
 	}
-	/**
-	 *	Step function (update) -- Applies the current rules of the simulation
-	 * To each of the current Cells. Sorts the current cells by Cell-defined preference
-	 * (decided with the compareTo method in each Cell), putting certain types
-	 * of Cells first on the list the update. This is used in WaterWorld to have
-	 * the Sharks update before the fish so that the eaten fish can be removed
-	 * before the fish update. After the sorting, it calls guidedStep to shuffle
-	 * the cells and update each, PROVIDING the Cells any available positions to
-	 * move into, breed into, etc. (passing null)
-	 * 
-	 * @return 2D Array of current Cell colors
-	 */
-	public Color[][] step() {
-		applySettings();
-		//shuffleCurrentCells(); //TODO: Decide neccessity
-		stepAllCells(getAllEmptyCells());
-		updatePatches();
-		return getCurrentColors();
-	}
 
 	
 	/**
@@ -260,10 +261,14 @@ public abstract class CellSociety {
 	 * @return
 	 */
 	public Map<CellName, List<Cell>> makeCells(SimulationData sim){
-		Random randomizer = new Random();
+	
 		ArrayList<Location> validLocations = getValidLocations(sim.getDimensions());
 		if(validLocations.size()==0){return null;}
-		TreeMap<CellName, List<Cell>> toRet = new TreeMap<CellName, List<Cell>>();
+		Map<CellName, Integer> cellNums = getCellDistribution(sim, validLocations);
+		return distributeCells(cellNums, validLocations);
+	}
+	
+	private Map<CellName, Integer> getCellDistribution(SimulationData sim, ArrayList<Location> validLocations){
 		Map<CellName, CellRatio> ratios = sim.getRatios().getMapOfCellsRatios();
 		Map<CellName, Integer> cellNums = new HashMap<CellName, Integer>();
 		int total = validLocations.size();
@@ -273,7 +278,12 @@ public abstract class CellSociety {
 			expectedNum -= numPlace;
 			cellNums.put(name, numPlace);
 		}
-		
+		return cellNums;
+	}
+	
+	private TreeMap<CellName, List<Cell>> distributeCells(Map<CellName, Integer> cellNums, ArrayList<Location> validLocations){
+		TreeMap<CellName, List<Cell>> toRet = new TreeMap<CellName, List<Cell>>();
+		Random randomizer = new Random();
 		for(CellName name: cellNums.keySet()){
 			ArrayList<Cell> singleType = new ArrayList<Cell>();
 			for(int i=0; i<cellNums.get(name); i++){
@@ -425,53 +435,46 @@ public abstract class CellSociety {
 	 * 
 	 * @param c
 	 *            Cell whose neighbors are returned
-	 * @return neighbors of Cell c
+	 * @return neighbors of Cell c, either all neighbors or cardinal neighbors
 	 */
 	public List<Patch> neighbors(Cell c){
 		Neighbors neighbors = NeighborsChooser.chooseNeighbors(border, getMyShape(), getPatches());
 		Patch patch = patches[c.getMyCol()][c.getMyRow()];
-		return neighbors.getAllNeighbors(patch);
+		if(getAllNeighbors)
+			return neighbors.getAllNeighbors(patch);
+		else
+			return neighbors.getCardinalNeighbors(patch);
 	}
 	
 	public static SimulationData generateDefaultData(){
-		HashMap<CellName, CellRatio> m = new HashMap<CellName, CellRatio>();
-		m.put(CellName.FISH_CELL, new CellRatio(0.5));
-		m.put(CellName.SHARK_CELL, new CellRatio(0.2));
-		CellRatioMap r = new CellRatioMap(m);
+		CellRatioMap r = SocietyMaker.getDefaultCellRatioValues(SimulationName.WATER_SOCIETY);
 		BoardData data = new BoardData(SimulationName.WATER_SOCIETY);
 		data.setShape(CellShape.SQUARE);
 		return new SimulationData(data, r);
 	}
-
-	/**
-	 * Shuffle current cells to avoid certain cells consistently updating before
-	 * others
-	 */
-	private void shuffleCurrentCells() {
-		for(CellName name: getCurrentCells().keySet()){
-			ArrayList<Cell> shuffle = new ArrayList<Cell>(getCurrentCells().get(name));
-			Collections.shuffle(shuffle);
-			getCurrentCells().put(name, shuffle);
+	
+	public List<Cell> getCellsAsList(){
+		ArrayList<Cell> cells = new ArrayList<Cell>();
+		for(CellName c: currentCells.keySet()){
+			cells.addAll(currentCells.get(c));
 		}
+		return cells;
+	}
+	
+	public List<Patch>getPatchesAsList(){
+		ArrayList<Patch>patches = new ArrayList<Patch>();
+		for(int i=0; i<getPatches().length; i++){
+			for(int j=0; j<getPatches()[0].length; j++){
+				patches.add(getPatches()[i][j]);
+			}
+		}
+		return patches;
 	}
 
 	public TreeMap<CellName,List<Cell>> getCurrentCells() {
 		return currentCells;
 	}
 	
-
-	
-	
-	public List<Cell> getCellsAsList(){
-		ArrayList<Cell> cells = new ArrayList<Cell>();
-		for(CellName c: currentCells.keySet()){
-			cells.addAll(currentCells.get(c));
-			System.out.println(currentCells.get(c));
-		}
-		return cells;
-	}
-
-
 	public void setCurrentCells(Map<CellName, List<Cell>> map) {
 		currentCells = (TreeMap<CellName, List<Cell>>)map;
 	}
@@ -515,6 +518,16 @@ public abstract class CellSociety {
 	public void setName(SimulationName name) {
 		this.name = name;
 	}
+
+	public boolean isGetAllNeighbors() {
+		return getAllNeighbors;
+	}
+
+	public void setGetAllNeighbors(boolean getAllNeighbors) {
+		this.getAllNeighbors = getAllNeighbors;
+	}
+	
+	
 	
 	
 }

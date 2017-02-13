@@ -3,7 +3,6 @@ package neighbors;
 import java.util.ArrayList;
 import java.util.List;
 
-import borders.Border;
 import cellular_level.Cell;
 import data_structures.BorderType;
 import data_structures.Dimensions;
