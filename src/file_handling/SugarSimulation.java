@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SugarSimulation extends SimulationType {
-
 	
 	private static final List<String> SETTING_TYPES = Arrays.asList(new String[] {
 			"sugarAmount",
@@ -37,13 +36,8 @@ public class SugarSimulation extends SimulationType {
 
 	public SugarSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
-		this.settingTypes = SETTING_TYPES; // This must be called before
-											// this.dataTypes is initialized by
-											// combineDataTypes()
-		this.settingDefaults = DEFAULT_SETTINGS; // This must be called before
-													// this.dataDefaults is
-													// initialized by
-													// combineDefaultData()
+		this.settingTypes = SETTING_TYPES;  //This must be called before this.dataTypes is initialized by combineDataTypes()
+		this.settingDefaults = DEFAULT_SETTINGS; //This must be called before this.dataDefaults is initialized by combineDefaultData()
 		this.defaultCellData = DEFAULT_CELLS;
 		this.dataTypes = combineDataTypes();
 		this.dataDefaults = combineDefaultData();
@@ -51,27 +45,26 @@ public class SugarSimulation extends SimulationType {
 		cellData = createCellList(cells);
 		boardData = createBoardData();
 	}
-
-	public Integer getSugarAmount() {
-		try {
+	
+	public Integer getSugarAmount(){
+		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(0)));
-		} catch (Exception e) {
+		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(0)));
 		}
 	}
-
-	public Integer getSugarMetabolism() {
-		try {
+	
+	public Integer getSugarMetabolism(){
+		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
-		} catch (Exception e) {
+		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(1)));
 		}
 	}
-
-	public Integer getVision() {
-		try {
+	
+	public Integer getVision(){
+		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
-
 		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(2)));
 		}
@@ -82,7 +75,6 @@ public class SugarSimulation extends SimulationType {
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(3)));
 		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(3)));
-
 		}
 	}
 
@@ -100,10 +92,11 @@ public class SugarSimulation extends SimulationType {
 		ArrayList<Double> data = new ArrayList<Double>();
 		return data;
 	}
-
-	@Override
-	protected SimulationName getSimulationName() {
+	
+	protected SimulationName getSimulationName(){
 		return SimulationName.FIRE_SOCIETY;
 	}
-
+	
+	
 }
+

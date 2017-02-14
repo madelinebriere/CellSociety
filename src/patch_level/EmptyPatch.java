@@ -10,25 +10,21 @@ import javafx.scene.paint.Color;
  *
  */
 
-public class EmptyPatch extends Patch {
+public class EmptyPatch extends Patch{
 
-	public EmptyPatch() {
+	public EmptyPatch(){
 		super();
 	}
-
-	public EmptyPatch(int col, int row) {
-		super(col, row);
+	public EmptyPatch(int col, int row){
+		super(col,row);
 	}
-
-	public EmptyPatch(int col, int row, Color color) {
+	public EmptyPatch(int col, int row, Color color){
 		super(col, row, color);
 	}
-
 	@Override
 	public void update() {
-		return; // Empty patch does nothing to update
+		return; //Empty patch does nothing to update	
 	}
-
 	@Override
 	public Patch createCopy() {
 		EmptyPatch copy = new EmptyPatch();
