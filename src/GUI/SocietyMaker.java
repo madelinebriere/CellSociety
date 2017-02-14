@@ -33,6 +33,8 @@ public class SocietyMaker {
 			return new LifeSociety(simData);
 		case SLIME_SOCIETY:
 			return new SlimeSociety(simData);
+		case SUGAR_SOCIETY:
+			return new SugarSociety(simData);
 		default:
 			return new PopSociety(simData);
 		}
@@ -59,6 +61,9 @@ public class SocietyMaker {
 			break;
 		case SLIME_SOCIETY:
 			ratios.put(CellName.SLIME_CELL, new CellRatio(.15));
+			break;
+		case SUGAR_SOCIETY:
+			ratios.put(CellName.SUGAR_CELL, new CellRatio(.2));
 			break;
 		}
 		return new CellRatioMap(ratios);

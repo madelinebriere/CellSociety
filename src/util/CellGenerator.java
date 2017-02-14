@@ -8,6 +8,7 @@ import cellular_level.HouseCell;
 import cellular_level.LiveCell;
 import cellular_level.SharkCell;
 import cellular_level.SlimeCell;
+import cellular_level.SugarCell;
 import cellular_level.TreeCell;
 import data_structures.CellName;
 import javafx.scene.paint.Color;
@@ -48,6 +49,9 @@ public class CellGenerator {
 		else if(c == CellName.SLIME_CELL){
 			return new SlimeCell();
 		}
+		else if(c == CellName.SUGAR_CELL){
+			return new SugarCell();
+		}
 		else if(c == CellName.DEAD_CELL){
 			return new DeadCell();
 		}
@@ -86,6 +90,9 @@ public class CellGenerator {
 		}
 		else if(cell instanceof SlimeCell){
 			return CellName.SLIME_CELL;
+		}
+		else if(cell instanceof SugarCell){
+			return CellName.SUGAR_CELL;
 		}
 		else if(cell instanceof HouseCell){
 			if(cell.getMyState().equals(BLUE))
@@ -129,6 +136,9 @@ public class CellGenerator {
 		}
 		else if(s.equals("SLIME")){
 			toRet = CellName.SLIME_CELL;
+		}
+		else if(s.equals("SUGAR")){
+			toRet = CellName.SUGAR_CELL;
 		}
 		else{
 			toRet = CellName.EMPTY_CELL;

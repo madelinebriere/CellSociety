@@ -88,6 +88,8 @@ public class GUIMain {
 		simulationNameStringToEnum.put("Segregation Society", SimulationName.POPULATION_SOCIETY);
 		simulationNameStringToEnum.put("Life Society", SimulationName.GAME_OF_LIFE);
 		simulationNameStringToEnum.put("Slime Society", SimulationName.SLIME_SOCIETY);
+		simulationNameStringToEnum.put("Sugar Society", SimulationName.SUGAR_SOCIETY);
+		
 		setupTopLabels();
 		setupGrid();
 		setupAnimationTimeLine(MILLISECOND_DELAY);
@@ -593,6 +595,9 @@ public class GUIMain {
 			break;
 		case SLIME_SOCIETY:
 			_model = new SlimeSociety(s);
+			break;
+		case SUGAR_SOCIETY:
+			_model = new SugarSociety(s);
 			break;
 		default:
 			_model = new LifeSociety(s);

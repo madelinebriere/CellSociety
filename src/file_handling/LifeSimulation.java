@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
 import cellular_level.LiveCell;
 import cellular_level.DeadCell;
 import data_structures.SimulationName;
-
 public class LifeSimulation extends SimulationType {
 	
 	private static final List<String> SETTING_TYPES = Arrays.asList(new String[] {
@@ -42,6 +40,7 @@ public class LifeSimulation extends SimulationType {
 		cellData = createCellList(cells);
 		boardData = createBoardData();
 	}
+
 	
 	public Integer getUnderpopulated(){
 		try{
@@ -50,12 +49,15 @@ public class LifeSimulation extends SimulationType {
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(0)));
 		}
 	}
+
 	public Integer getOverpopulated(){
 		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
 		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(1)));
 		}
+
+		
 	}public Integer getNumberForLive(){
 		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(2)));
@@ -64,7 +66,6 @@ public class LifeSimulation extends SimulationType {
 		}
 	}
 	
-
 	@Override
 	protected List<Integer> getIntegerData() {
 		ArrayList<Integer> data = new ArrayList<Integer>();
