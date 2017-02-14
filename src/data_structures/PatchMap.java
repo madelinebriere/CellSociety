@@ -45,7 +45,7 @@ public class PatchMap {
 		case SLIME_PATCH:
 			return new SlimePatch(i,j);
 		case SUGAR_PATCH:
-			//return new SugarPatch(i,j);
+			return new SugarPatch(i,j);
 		default:
 			return new EmptyPatch(i,j);
 		}
