@@ -1,4 +1,5 @@
 package data_structures;
+
 /**
  * Possible patch types
  * 

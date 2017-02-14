@@ -19,17 +19,17 @@ public class XMLParserTester {
 		File fireFile = new File("data/FireSimData.xml");
 		File popFile = new File("data/PopSimData.xml");
 		File waterFile = new File("data/WaterSimData.xml");
-		
-		SimulationType sim = parser.getSimulation(lifeFile);		
+
+		SimulationType sim = parser.getSimulation(lifeFile);
 		SimulationTypeTester.printLife(sim);
-		
-		sim = parser.getSimulation(fireFile);		
+
+		sim = parser.getSimulation(fireFile);
 		SimulationTypeTester.printFire(sim);
-		
-		sim = parser.getSimulation(popFile);		
+
+		sim = parser.getSimulation(popFile);
 		SimulationTypeTester.printPop(sim);
-		
-		sim = parser.getSimulation(waterFile);		
+
+		sim = parser.getSimulation(waterFile);
 		SimulationTypeTester.printWater(sim);
 	}
 

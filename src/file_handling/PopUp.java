@@ -18,22 +18,22 @@ import java.io.File;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class PopUp{
+public class PopUp {
 
 	private Stage myStage;
-	
-	public PopUp(Stage stage){
+
+	public PopUp(Stage stage) {
 		myStage = stage;
 	}
-	
+
 	/**
 	 * Retrieves the SimulationType represented by the selected file.
 	 * 
 	 * @return SimulationType
 	 */
-	public SimulationType getSimulation(){
+	public SimulationType getSimulation() {
 		XMLParser parser = new XMLParser();
-		return parser.getSimulation(getFile());	
+		return parser.getSimulation(getFile());
 	}
 
 	/**
@@ -41,10 +41,10 @@ public class PopUp{
 	 * 
 	 * @return File
 	 */
-	private File getFile(){
+	private File getFile() {
 		FileChooser chooser = new FileChooser();
 		chooser.setTitle("Select XML File");
 		return chooser.showOpenDialog(myStage);
 	}
-	
+
 }

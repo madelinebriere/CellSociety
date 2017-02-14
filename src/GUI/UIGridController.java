@@ -36,6 +36,7 @@ public class UIGridController {
 	}
 
 	public void setNewSimulation(Color[][] colors, SimulationData simData){
+		System.out.println("setting new simulation with shape " + simData.getShape());
 		_currentGeneration = 0;
 		if(_gridView != null){
 			clearGridFromScreen();
@@ -65,8 +66,13 @@ public class UIGridController {
 	}
 	public void step(Color[][] newColors, Dimensions newDimensions){
 		if(!getSimData().getDimensions().equals(newDimensions)){
+			System.out.println(getSimData().getDimensions().getX() + " " + getSimData().getDimensions().getY());
+			System.out.println(newDimensions.getX() + " " + newDimensions.getY());
 			setNewGridWithDimension(newDimensions, newColors);
+			System.out.println("setting new grid of size" + newDimensions.toString());
 		}else{
+			System.out.println("Generation: " + _currentGeneration);
+			System.out.println(newColors.length + "x" + newColors[0].length);
 			_gridView.updateGrid(newColors);
 			_currentGeneration ++;
 		}
@@ -81,6 +87,7 @@ public class UIGridController {
 		_gridView = null;
 	}
 	private void setSimData(SimulationData s){
+		System.out.println("setting sim data to shape " + getSimData().getShape());
 		this._currentSimData = s;
 	}
 	private SimulationData getSimData(){

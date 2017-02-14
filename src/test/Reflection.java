@@ -21,23 +21,23 @@ public class Reflection {
 	public static void main(String[] args) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("key", "value");
-		List<String> list = Arrays.asList(new String[]{"4 5 LIVE"});
+		List<String> list = Arrays.asList(new String[] { "4 5 LIVE" });
 		SimulationType sim;
-		
-		try{
-		Class fire = FireSimulation.class;
-		Class[] parameters = new Class[2];
-		parameters[0] = Map.class;
-		parameters[1] = List.class;
-		Constructor<SimulationType> ct = fire.getConstructor(parameters);
-		Object[] argList = new Object[2];
-		argList[0] = map;
-		argList[1] = list;
-		sim = (SimulationType)ct.newInstance(argList);
-		} catch (Throwable e){
+
+		try {
+			Class fire = FireSimulation.class;
+			Class[] parameters = new Class[2];
+			parameters[0] = Map.class;
+			parameters[1] = List.class;
+			Constructor<SimulationType> ct = fire.getConstructor(parameters);
+			Object[] argList = new Object[2];
+			argList[0] = map;
+			argList[1] = list;
+			sim = ct.newInstance(argList);
+		} catch (Throwable e) {
 			throw new RuntimeException(e);
 		}
-		
+
 		System.out.println(sim.getClass());
 		System.out.println(sim.getDataTypes());
 
