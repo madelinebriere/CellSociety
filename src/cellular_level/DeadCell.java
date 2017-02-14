@@ -1,13 +1,12 @@
 
 package cellular_level;
-
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import data_structures.CellData;
 
 /**
- * Class representing dead cells in the Game of Life Simulation Capable of
- * active updates based on surroundings
+ * Class representing dead cells in the Game of Life Simulation
+ * Capable of active updates based on surroundings
  * 
  * @author maddiebriere
  */
@@ -15,56 +14,55 @@ import data_structures.CellData;
 public class DeadCell extends LifeSimCell {
 	private static final Color DEAD_COLOR = Color.WHITE;
 	public static final int NUM_FOR_LIVE = 3;
-
+	
 	private int numForLive;
-
-	public DeadCell() {
-		this(0, 0);
+	
+	public DeadCell(){
+		this(0,0);
 	}
-
-	public DeadCell(int row, int col) {
-		this(row, col, DEAD_COLOR);
+	
+	public DeadCell(int row, int col){
+		this(row,col, DEAD_COLOR);
 	}
-
-	public DeadCell(int row, int col, Color color) {
-		this(row, col, color, NUM_FOR_LIVE);
+	
+	public DeadCell(int row, int col, Color color){
+		this(row,col,color, NUM_FOR_LIVE);
 	}
-
-	public DeadCell(int row, int col, Color color, int num) {
-		super(row, col, color);
+	
+	public DeadCell(int row, int col, Color color, int num){
+		super(row,col,color);
 		setNumForLive(num);
 	}
-
-	@Override
-	protected void changeState(CellData data, ArrayList<Cell> newGen) {
+	protected void changeState(CellData data, ArrayList<Cell> newGen){
 		int numLive = data.countDiffNeighbors(this);
-		if (isReadyToLive(numLive)) {
+		if(isReadyToLive(numLive)){
 			generateLiveCell(newGen);
-		} else {
+		}
+		else{
 			stayDead(newGen);
 		}
 	}
-
-	private void generateLiveCell(ArrayList<Cell> newGen) {
+	
+	private void generateLiveCell(ArrayList<Cell>newGen){
 		LiveCell child = new LiveCell();
 		child.copyLocation(this);
 		newGen.add(child);
 	}
-
-	private void stayDead(ArrayList<Cell> newGen) {
+	
+	private void stayDead(ArrayList<Cell> newGen){
 		newGen.add(this);
 	}
-
-	private boolean isReadyToLive(int numLive) {
+	
+	private boolean isReadyToLive(int numLive){
 		return numLive == numForLive;
 	}
-
 	public int getNumForLive() {
 		return numForLive;
 	}
-
 	public void setNumForLive(int numForLive) {
 		this.numForLive = numForLive;
 	}
-
+	
+	
+	
 }

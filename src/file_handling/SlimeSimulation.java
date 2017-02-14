@@ -17,7 +17,6 @@ import data_structures.SimulationName;
 
 public class SlimeSimulation extends SimulationType {
 
-
 	private static final List<String> SETTING_TYPES = Arrays.asList(new String[] {
 			"threshold",
 			"evaporationRate",
@@ -27,7 +26,7 @@ public class SlimeSimulation extends SimulationType {
 	private static final List<String> DEFAULT_SETTINGS = Arrays.asList(new String[] {
 			((Integer)(SlimeCell.SNIFF_THRESH)).toString(),
 	        ((Integer)(SlimePatch.EVAPO_RATE)).toString(),
-	        ((Integer)(SlimeCell.DEPOSIT)).toString(),
+	        ((Integer)(SlimePatch.DEPOSIT)).toString(),
 	        ((Integer)(SlimeCell.VISION)).toString(),
 	   });
 	private static final List<String> DEFAULT_CELLS = Arrays.asList(new String[] {
@@ -36,13 +35,8 @@ public class SlimeSimulation extends SimulationType {
 
 	public SlimeSimulation(Map<String, String> values, List<String> cells) {
 		super(values, cells);
-		this.settingTypes = SETTING_TYPES; // This must be called before
-											// this.dataTypes is initialized by
-											// combineDataTypes()
-		this.settingDefaults = DEFAULT_SETTINGS; // This must be called before
-													// this.dataDefaults is
-													// initialized by
-													// combineDefaultData()
+		this.settingTypes = SETTING_TYPES;  //This must be called before this.dataTypes is initialized by combineDataTypes()
+		this.settingDefaults = DEFAULT_SETTINGS; //This must be called before this.dataDefaults is initialized by combineDefaultData()
 		this.defaultCellData = DEFAULT_CELLS;
 		this.dataTypes = combineDataTypes();
 		this.dataDefaults = combineDefaultData();
@@ -51,22 +45,21 @@ public class SlimeSimulation extends SimulationType {
 		boardData = createBoardData();
 	}
 
-	public Integer getThreshold() {
-		try {
+	public Integer getThreshold(){
+		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(0)));
-		} catch (Exception e) {
+		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(0)));
 		}
 	}
-
-	public Integer getEvaporationRate() {
-		try {
+	
+	public Integer getEvaporationRate(){
+		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(1)));
-		} catch (Exception e) {
+		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(1)));
 		}
 	}
-
 	
 	public Integer getDepositRate(){
 		try{
@@ -78,7 +71,7 @@ public class SlimeSimulation extends SimulationType {
 	public Integer getVision(){
 		try{
 			return Integer.parseInt(getDataValues().get(SETTING_TYPES.get(3)));
-		} catch (Exception e) {
+		}catch(Exception e){
 			throw new XMLException(e, String.format(myResources.getString("InvalidData"), SETTING_TYPES.get(3)));
 		}
 	}
