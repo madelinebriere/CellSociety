@@ -6,11 +6,7 @@ import java.util.List;
 import patch_level.*;
 
 /**
-<<<<<<< HEAD
- * Intended use: Similar to CellRatioMap
-=======
  * Intended use: Setup a 2d array of patches in gradient order
->>>>>>> master
  * 
  * Meant to hold patch information to be conveyed to the CellSociety
  * 
@@ -19,7 +15,6 @@ import patch_level.*;
  */
 
 public class PatchMap {
-
 	private int _layerLength;
 	public static Patch[][] generateSugarPatchMap(int x, int y, PatchName patchName, int layerLength) {
 		//init an array of patches
@@ -50,7 +45,7 @@ public class PatchMap {
 		case SLIME_PATCH:
 			return new SlimePatch(i,j);
 		case SUGAR_PATCH:
-			return new SugarPatch(i,j);
+			//return new SugarPatch(i,j);
 		default:
 			return new EmptyPatch(i,j);
 		}

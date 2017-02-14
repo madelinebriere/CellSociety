@@ -12,16 +12,14 @@ package data_structures;
  */
 public class CellRatio {
 	private double r;
-
-	public CellRatio(double r) {
-		if (r > 0 && r <= 1) {
+	public CellRatio(double r){
+		if(r>0 && r<=1){
 			this.r = r;
-		} else {
-			// TODO: error handling,
+		}else{
+			//TODO: error handling,
 		}
 	}
-
-	public double getRatio() {
+	public double getRatio(){
 		return r;
 	}
 }

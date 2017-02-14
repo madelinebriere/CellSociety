@@ -23,8 +23,8 @@ import societal_level.*;
  *
  */
 public class SocietyMaker {
-	public static CellSociety generateCellSociety(SimulationData simData) {
-		switch (simData.getSimulationName()) {
+	public static CellSociety generateCellSociety(SimulationData simData){
+		switch (simData.getSimulationName()){
 		case FIRE_SOCIETY:
 			return new FireSociety(simData);
 		case WATER_SOCIETY:
@@ -33,16 +33,13 @@ public class SocietyMaker {
 			return new LifeSociety(simData);
 		case SLIME_SOCIETY:
 			return new SlimeSociety(simData);
-		case SUGAR_SOCIETY:
-			return new SugarSociety(simData);	
 		default:
 			return new PopSociety(simData);
 		}
 	}
-
-	public static CellRatioMap getDefaultCellRatioValues(SimulationName name) {
+	public static CellRatioMap getDefaultCellRatioValues(SimulationName name){
 		Map<CellName, CellRatio> ratios = new HashMap<CellName, CellRatio>();
-		switch (name) {
+		switch (name){
 		case FIRE_SOCIETY:
 			ratios.put(CellName.BURN_CELL, new CellRatio(0.1));
 			ratios.put(CellName.TREE_CELL, new CellRatio(0.9));
@@ -62,9 +59,6 @@ public class SocietyMaker {
 			break;
 		case SLIME_SOCIETY:
 			ratios.put(CellName.SLIME_CELL, new CellRatio(.15));
-			break;
-		case SUGAR_SOCIETY:
-			ratios.put(CellName.SUGAR_CELL, new CellRatio(.3));
 			break;
 		}
 		return new CellRatioMap(ratios);
