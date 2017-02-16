@@ -2,228 +2,61 @@
 #Cell Society Design Document
 ##Team 04
 ##Team members: Talha Koç, Maddie Briere, Stone Mathers
-###Completed: January 29th, 2017
+###Completed: February 15th, 2017
 ___
 
-
-###Introduction: Maddie
-This project is aimed towards generalizing the Cellular Automata (CA) Simulation. This type of simulation is composed of several cells, with specific “rules” on how to change, move, create new cells, etc. These cells interact with their neighbors in a simultaneous “step,” displaying a type of evolution over several steps.
-
-This design is meant to allow easy switches from alternate simulations, and the possible addition of new types of cells and “cell societies.” The goal is to take advantage of Java inheritance as frequently as possible, in order to meet the goal of “open-closed” programming. That is, certain parts of our project will be closed to change (or at least we will endeavor to make alterations to such classes unnecessary). Meanwhile, other elements will be open to extension, meaning that, were a programmer to decide to add an element, they could simply extend one component of the current design and build off of that foundation.
-
-The elements we mean to leave closed are those that form the foundation of the simulation. For instance, the basic characteristics of a cell, such as its color, position, and neighbors, are necessary “knowledge” for any cell. Furthermore, cells will perform certain common actions, albeit in a slightly different way. They will update themselves with each generation, according to their own rules. Hence, all of these elements should be closed to revision. 
-
-This does not mean that the program cannot be expanded. For instance, if one were to try to describe a living cell in the Game of Life Cellular Automata Simulation, this cell would certainly inherit the characteristics and requirements of the general cell. However, this cell would have specific rules to dictate how it changes. It will have a threshold for under-population and overpopulation, and will use these thresholds in deciding how to change as it moves into the next generation. These characteristics would hence be an extension of the initial definition of a cell.
-
-The same type of branching will occur with cell societies. Cell societies have certain characteristics in common. They have to have knowledge of the cells they are defined by, in a current state. They must know how many rows and columns form their cell society. Likewise, they must be able to make a generational “step” -- to update all of their cells and check for any conflicting updates. These pieces are general “knowledge” and “ability” for a cell society. These elements are closed to change, as any alterations would alter the foundation of the program and the simulation.
-
-However, as with the cell, we can create extensions of the general cell society. A fire-simulation society, for instance, would not have to do much more than correctly initialize the grid with fire-simulation specific cells and continue to call update on its cells. Meanwhile, the population-simulation society may have to do a bit more work. If, for instance, two cells update to the same position, this society must be able to resolve the conflict by relocating one of the cells (likely at random). These details, however, come down to implementation and do not need to be defined right now -- that is the beauty of creating a foundation common to each simulation. We can add as many details as we desire later, and they will all be local to that specific society.
-
-The user interface will likely be a point of little variation over the course of the project. The intention is to have a popup at the beginning of the game to request the file to read in the initial setup. A separate component of the project will take in this file name and read the text file, interpreting the settings and desired simulation.
-
-After determining the settings, initial simulation state, and simulation type, the popup will disappear, leading the user to the GUI main. The two basic components of the GUI are the grid where the simulation is displayed and the controls that the user can use to manipulate the simulation in various ways (start, stop, reset, step -- the actions most commonly desired in CA Simulation). 
-
-The GUI is, for the most part, closed to extension. However, some of the open components are the controls and the appearance of the grid. These should be changeable -- we do not want to leave the appearance and functionality static. It should be possible for new users to extend these elements.
-
-###Overview: Maddie
-The first general division comes in terms of the Cells. We plan to have an abstract Cell class that defines the basic, unchanging characteristics of a Cell, and requires that each Cell have an update method that returns an ArrayList of Cells (could be just the original cell, or could include a spawned cell, dead cell, etc.). From this Cell we will extend as many subclasses as are necessary to act in a single simulation. For instance, the population simulation only requires a single Cell type, which we have named HouseCell, that knows its color and is able to decide if it is satisfied or not. Meanwhile, the WaterWorld simulation requires a SharkCell and FishCell for the two types of creatures in the simulation. Each has a different type of update for each generation -- while the sharks can die of starvation, the fish cannot. Likewise, while the sharks can eat the fish, the fish cannot harm the sharks. 
-
-Everything encompassed in each Cell subclass is specifically related to LOCAL operations. This is an important element of our segregation of tasks. Each Cell will make an update based on its neighbors only, it will not be able to influence any other cells. That is, if, for instance, a HouseCell decides that it is not happy, it will remove itself from the board, but it will not relocate. This task is left to the CellSociety objects (which will be discussed in a second). The purpose and functionality of each subclass of Cell is laid out in the image below.
-
-<img src="CellDesign.jpg" width="256">  
-
-
-The intended methods and variables for each type of cell are included in the image below.
-
-<img src="CellFunction.jpg" width="256">  
-
-
-Note that, although we made our best efforts to predict necessary variables and methods, there will likely be more in these subclasses. This is okay, because these classes are much more flexible than the superclass Cell. Changes to one subclass can be made without major influence on other types of Cells. This is the case so that new types of Cells can be created without much extra work, but also without altering the foundation of the program.
-
-The class responsible for non-local changes will be CellSociety, which conceptually represents a grouping of Cells with a set of rules for interacting. CellSociety itself will be an abstract class that holds all of the information and functionality common to any society of cells. It will have knowledge of all cells that compose it (an ArrayList of Cells). Likewise, it will be able to update them by calling their respective update methods and deal with any conflicts. These conflicts can arise because each Cell will be making changes with complete ignorance of the changes its neighboring Cell is making. This is the case so that changes will seem to happen instantaneously (both visually and in the logic). This means that some Cells may carry out conflicting updates. 
-
-Consider, for instance, the population simulation. In this simulation, if a cell "relocates," it is only capable of removing itself from the board, not adding itself back. Hence, PopSociety, the extension of CellSociety specific to the population simulation, will have to go through the requested updates and see if the new CellSociety is valid. For PopSociety, this means adding back the Cells that were removed to new empty spots to ensure that the population numbers do not change. The exact implementation of this action has not yet been decided. However, for a lot of the specific types of cells, that means that the Cell must carry with it a certain type of "memory" of past events. A HouseCell must know where it is being moved from, a FishCell must know if it has been eaten, and so on. 
-
-As of the current design, there are only four extensions of CellSociety: FireSociety, PopSociety, WaterSociety and LifeSociety -- one for each simulation and set of rules. These can be seen in their relation to CellSociety in the image below:
-
-<img src="CellSocietyDesign.jpg" width="256">  
-
-
-These are included to avoid giving each Cell power over an entire CellSociety. The CellSociety step function (which updates one generation) allows for everything to happen simultaneously and without conflict. Despite all of this complexity, in the end, the active CellSociety will only interact with the rest of the program when an updated version of the current CellSociety is requested. The true implementation of this process is not known to the rest of the program, nor does it need to be. In addition, the way in which this step is taken will be defined by the type of CellSociety being used. This means that a new simulation can easily be made by creating an extension of CellSociety, with the required Cells. Still, despite extensions in these subclasses, controlling classes will be able to call the step method on ANY CellSociety without having to know its type. This commonality allows for backend implementation to stay private.
-
-This is all the work for the backend, but we are still missing a huge chunk of the program -- the user interface. The backend keeps the logic churning, but we also need something to display these changes. 
-
-This is performed by the front-end of the program. At the forefront, we have the UIMain. This is the class that updates the graphics and records user input. It will make calls to GridView, which transforms the information from the updated CellSociety into Nodes (specifically, Rectangles) in the right location, of the right size and of the right color. These Nodes are defined by the CellNode class, which is used in GridView for simplicity and conciseness of code. The UIMain class also makes a call to the ButtonsView/ControlView class (name/ structure still in the works) in order to generate the buttons displayed in the simulation. 
-
-Hence, from this end, we get a set of Nodes to display. What happens next? How is everything tied together?
-
-The front-end and back-end come together in the Simulation class, which acts as a bridge between the two types of input. The Simulation class is responsible for holding the Stage used in the GUI. It constantly receives input from UIMain in the form of updated Nodes and adds these to the screen at the set number of frames per second. Many of the controls happen here (e.g., response to a button being pressed, pausing the program, resetting the information in the grid). Because the Simulation class holds much of the information about the animation itself, most of the input will be funneled back into this class for processing. This control flow is pictured in the image below.
-
-<img src="OverallDesign.jpg" width="256">  
-
-
-
-###User Interface
-
-The GUI will first create a popup asking the user to input an XML file to determine the simulation type, starting state, and parameters. After successfully parsing the file, the popup will disappear and lead the user to the main page of the GUI. This GUI and its current CellSociety will be initialized according to the user input.
-
-Once the main page is opened, the user can start the simulation by pressing the start button. Some of the other controls the user has over the simulation are pause, reset, step, and speed control. Furthermore, the user has the ability to switch between different simulations using a drop down menu located on top of the grid.
-
-In the case that the XML file input is formatted incorrectly, the user will be notified of the problem and told to re-enter a file. Until the file is formatted correctly, the user will not be able to start the simulation.
-
-Sketch of UI Main
-
-<img src="UI_Sketch.jpg" width="256">  
-
-...and sketch of File Input View 
-
-<img src="File_Input_Sketch.jpg" width="256">  
-
-###Design Details
-**Main**
-This class will simply create a new Simulation and call its run() method. The reason for such a basic Main is to minimize the steps needed to run the simulation.
-
-**Simulation**
-This class will first set up the background of the animation, including a Stage, Timeline, Group, and EventHandler. It will then instantiate a new PopUp, which it will use to obtain a file from the user. This file will then be passed to a FileReader to be interpreted. This information will then be used to instantiate a new CellSociety (backend) and UIMain (frontend). At this point, it will proceed to continuously run its *step* method. This method will first check for any user input and handle it accordingly. It will then call CellSociety's *update* method, which will return the new 2D array. It will then give this array to UIMain's *update* method, which will return an ArrayList of Nodes. It will then add all of these Nodes to the Group to be displayed. Simulation acts as a facilitator and bridge between frontend and backend calculations. Thus, it handles all big-picture tasks while delegating more focused tasks to other classes.
-
-**PopUp**
-PopUp will display a screen prompting the user to input a data file. It will then wait until the file is entered. Once the file is received, a method will be called to check the file's validity, returning true if it is, false if not. If it is not valid, then an error message will be displayed. The user will then be prompted for another file.
-
-**FileReader**
-FileReader will take in a file and, according to formatting rules determined by us, will extract and return all of the data needed to begin the simulation (name of the simulation, dimensions of the grid, initial configuration, etc.). In the future, this class could be extended to read in different pieces of information, giving the user further customization. It could also be extended to read in different data for additional simulations. This will also be the only class that needs to know the formatting rules for files, thus a format change will only impact operations in this class.
-
-**CellSociety**
-This abstract class will define the properties of any grid of cells running a Cellular Automaton. The instance variables will include a Color to represent the color of empty cells, two ints holding the number of rows and columns, and two ArrayLists of Cells, one holding the current Cell layout, one to hold the next Cell layout. It will have a method that takes in a Cell and returns an ArrayList of its neighbors in this CellSociety, one that returns all positions in the grid without reference to Cells, and one that returns all occupied cells. Finally, it will have a method (or constructor) to interpret file information and create a corresponding CellSociety.
-
-It will also have a void method *step* that goes through every Cell in the current layout ArrayList, calls its *update* method, and places the returned Cell in the new layout ArrayList. It will then set the current layout ArrayList equal to the new one. This way, all Cells are updated simultaneously, and Cells don't update their state based on data still developing between steps. The goal of CellSociety is to handle decisions on a non-local level, more specifically resolving conflicts between cells and packaging Cells in a format that Simulation can then pass to UIMain. The abstraction of CellSociety keeps the program open to the extension of new simulations, but closed to modification.
-
-*FireSociety*
-This CellSociety is specific to the forest fire simulation. It dictates the actions of a cell society acting under these specific rules. This particular extension of CellSociety doesn’t have to do much because most of the updates made in this particular simulation are local updates (and are managed in the BurnCells and TreeCells). However, this class implements the step function and updates all of the cells it holds in an ArrayList.
-
-*PopulationSociety*
-This CellSociety is specific to the segregation simulation. It dictates the actions of a cell society acting under these specific rules. This extension must monitor relocations of individuals. When reading in updates in the step function, if any Cells return a NULL object, it must be relocated in an empty space. As a catch, it will likely be prudent to check that the set population levels (the percentage of each race) are still valid. 
-
-*WaterSociety*
-This CellSociety is specific to the Water World simulation. This extension has the largest role out of all of the current simulations. It must regulate breeding, starvation and movement. This means that, for every fish that is updated to eaten, there must be a matching shark in proximity to that fish. If two sharks try to eat the same fish, then one must be denied. Other interactions must also be monitored to make sure that no cells erroneously appear, disappear or move. In this class’ implementation of the step function, the previous checks must be accomplished following the update of each shark and fish cell.
-
-*LifeSociety*
-This extension of Cell addresses the Game of Life simulation. This subclass of CellSociety will, like PopSociety, have little to do other than implement the step method and update each Cell, and create a corresponding LifeSociety given file information. This is because the updates made in the Game of Life simulation are all local.
-
-**Cell**
-This abstract class will define the properties of any cell being represented in a Cellular Automaton. The instance variables will include two ints to represent the Cell's location in the 2D grid and a Color to represent the Cell's current state. It will have a method *update*, which takes in an ArrayList of neighboring Cells, uses the states of those Cells and itself to determine its new state, and create and return a new Cell that has this state. There will also be a method that takes in an ArrayList of neighboring Cells and returns an int representing the number of Cells that share the same state. The purpose of Cell is to make decisions about state on a local level. The abstraction of Cell keeps the program open to the extension of new simulations.
-
-*BurnCell*
-This cell represents a tree that is in the process of burning down, in the Flame Simulation. This subclass of the Cell class will have a static constant *stepsToBurn* that defines how many steps (how many generational updates) it takes for a tree to switch from burning to burned. It also has a local variable *mySteps* to keep track of its “lifetime” and compare to *stepsToBurn*. It will also implement the update class, which decides whether or not the cell should keep burning (return itself) or return an empty Cell (dead).
-
-*TreeCell*
-This cell represents a healthy tree in the Flame Simulation. This subclass of the Cell class will have a static constant *probCatch*, a double from 0 to 1 that describes how a likely a tree is to catch on fire. It implements the update method by either returning the same Cell or returning a BurnCell in the same location (meaning the tree has caught fire).
-
-*HouseCell*
-This is currently the sole cell type in the Segregation Simulation. It is a subclass of Cell representing an individual/household of a certain ethnicity, race, etc. These Cells are defined by their colors. This class will have a static constant *satisfiedThresh* that dictates the percentage (0->1) of same-color neighbors required for a HouseCell to be satisfied. This class also has the method, *isSatisfied()* which returns a boolean based on whether or not the Cell is content in its current location. If the Cell is not content, it will return NULL in its update method and allow PopSociety to relocate it elsewhere. If it is content, then it will return the same Cell. 
-
-*SharkCell*
-This class describes the sharks in the Water World simulation. A shark cell both knows its *stepsToStarve* and *stepsToBreed* (the number of steps between each occurrence of these actions). It also knows its own individual *stepsSinceBreed* and *stepsSinceEat* (its steps from the last occurrence of these actions). Finally, each shark holds a boolean *hasEaten* which indicates if the shark has eaten in this step. This is used in CellSociety for population checks. These variables are used to decide whether the Cell will return in its update method a NULL Cell (a starved shark), a moved Cell (the same shark, but in a new neighboring location), the same Cell and a new Cell (the original shark and its child), or just the same Cell (the original shark with no changes made).
-
-*FishCell*
-This class describes the sharks in the Water World simulation. A fish cell knows its *stepsToBreed* (the number of steps between each breeding event). It also knows its own individual *stepsSinceBreed* (its steps from the last breeding event). Finally, it knows if it has been eaten in this step -- it holds a boolean *isEaten*. This boolean is again used in CellSociety. These variables are used to decide whether the Cell will return in its update method a NULL Cell (a starved shark), a moved Cell (the same shark, but in a new neighboring location), the same Cell and a new Cell (the original shark and its child), or just the same Cell (the original shark with no changes made).
-
-*LiveCell*
- This type of Cell represents a living cell in the Game of Life simulation. It stores a static constant underPop and overPop to keep track of the limits for under and over-population. In its *update* method, it either returns the same cell (alive) or a dead cell (if the cell has died this round). 
-
-*DeadCell*
-This type of Cell represents a dead cell in the Game of Life simulation. It stores a static constant *lifeThresh* that defines the number of neighboring living cells required for life. In its *update* method, it either returns the same cell (dead) or an alive cell (if this cell has regenerated).
-
-**UIMain**
-This class is instantiated from Simulation with handlers for controls. It will contain all of the UI objects. It will also have a GridView object representing the running simulation, which will be obtained by Simulation to be displayed. It also allows the user to interact with the simulation through various controls. This class serves to coordinate all frontend functionality and provide Simulation with everything it needs to display. Thus, Simulation does not need to know how each cell in the grid is determined and created.
-
-**GridView**
-The grid is a subclass of GridPane that displays cells and updates their values. The constructor takes in a 2d-array of colors and makes a new 2d-array of CellNodes of the same dimensions. Each node is added to the grid in the same order as it is in the 2d-array. In order to update the states of the cells in the grid, the *updateGrid* method is called. Its parameter is a 2d-array of colors with the same dimensions that were used to initialize the GridView object. If dimensions are not the same, the method raises an invalid size error. 
-
-**CellNode**
-This will be a Node with variables color and size. It must be initialized with a specific type, such as a circle or rectangle. 
-
-**ControlView**
-A view at the bottom of the screen that contains buttons that the user can click to control some aspects of the simulation. The buttons that we are currently planning on using are as follows:
- - Start : Starts running the simulation
- - Reset: Stops and resets the simulation
- - Pause: Pauses the simulation without affecting the data
- - Step: Moves simulation one-step ahead
- - Speed Slider: used to change the speed of the simulation.
- - Simulation Picker: a drop down menu located on top of the grid that allows the user to change the simulation type
-
-Note that the UI does not determine the function of the buttons. We will implement an interface so that the parent class, Simulation, can handle what happens when the user interacts with the controls.
-
-**UIControls**
-Interface that Simulation implements to specify the function of UI controls like start and pause.
-___
-####**Use Cases**
-Scenario 1: Set a middle cell to dead using Game of Life rules
-
-1. LifeSociety runs through its current Cell ArrayList and then reaches this particular LiveCell.
-2. LifeSociety passes this LiveCell to its *getNeighbors* method, which returns an ArrayList of neighboring Cells.
-3. LifeSociety passes this ArrayList into the LiveCell's *update* method.
-4. The method determines how many LiveCells are in the given ArrayList.
-5. **A)** The Cell is initially a LiveCell. This number is not equal to 2 or 3 (the thresholds for under and over-population), so a new DeadCell is created, with the same location parameters as the LiveCell passed in, and returned to LifeSociety. **B)** The Cell is initially a DeadCell. This number is not equal to 3, so the same DeadCell is returned.
-6. LifeSociety stores this cell in the new layout ArrayList of Cells.
-
-Scenario 2: Set an edge cell to live using Game of Life rules
-
-1. LifeSociety runs through its current Cell ArrayList and then reaches this particular Cell.
-2. LifeSociety passes this Cell to its *getNeighbors* method, which returns an ArrayList of neighboring Cells.
-3. LifeSociety passes this ArrayList into the Cell's *update* method
-4. The method determines how many LiveCells are in the given ArrayList.
-5. **A)** The Cell is initially a LiveCell. This number is equal to 2 or 3, so the same LiveCell is returned. **B)** The Cell is initially a DeadCell. This number is equal to 3 (the number of living neighbors required for life), so a new LiveCell is created, with the same location parameters as the DeadCell, and returned to LifeSociety.
-6. LifeSociety stores this cell in the new layout ArrayList of Cells.
-
-Scenario 3: Move to the next generation
-
-1. Simulation calls CellSociety's *step* method.
-2. CellSociety runs through its current Cell ArrayList.
-3. For each Cell, CellSociety calls its *getNeighbors* method to get the Cell's neighbors, which is passed to the Cell's *update* method.
-4. Depending on the type of Cell, calculations are done with the Cell's state and that of its neighbors to determine the new Cell to be returned to CellSociety.
-5. Once CellSociety goes through its entire current layout ArrayList, it checks for conflicts between Cells in the new layout ArrayList and resolves them. The current layout ArrayList is then set to equal the new layout ArrayList. The current layout ArrayList is then passed back to Simulation.
-6. Simulation passes this ArrayList to UIMain.
-7. UIMain passes this ArrayList to GridView.
-8. GridView creates an empty 2d-array of CellNodes.
-9. GridView runs through the ArrayList of Cells, creating a new CellNode with each Cell's X-position, Y-position, and Color.
-10. The new CellNode is placed in the 2d-array at its X-position and Y-position.
-11. UIMain retrieves this 2d-array from GridView, then passes it to Simulation to be added to the Group and displayed.
-
-Scenario 4: Set a simulation parameter
-
-1. FileReader reads through the file and obtains the value of *probCatch* as a String.
-2. It then parses this value to an int and returns it to Simulation.
-3. Simulation constructs a new FireSociety object with, amongst other things, the value of *probCatch*.
-4. FireSociety now hold the value of *probCatch*, passing it to the constructor of any new TreeCell it creates.
-
-Scenario 5: Switch simulations
-
-1. The user clicks on the "Simulations" drop-down menu, and clicks on the "Wator" option.
-2. Menu object will determine that Wator option was pressed and call the handler. Note that the Simulation class instantiated the interface and passed it down to the Menu object.
-3. Simulation instantiates a new WaterSociety using the user-given grid size.
-4. WaterSociety's constructor assigns default values to all other parameters.
-5. WaterSociety uses these default values to fill the current layout ArrayList with SharkCells and FishCells.
-6. Simulation passes this ArrayList of Cells to UIMain.
-7. UIMain passes this ArrayList to GridView, which creates a 2d-array of CellNodes.
-8. Simulation retrieves this 2d-array from UIMain and displays it.
-
-___
-
-###Design Considerations
-
-
-The biggest open end in our design is the approach to the user’s input file. Currently, we have one class, FileReader, that takes in a String representing the entire file. From here, it will obtain all necessary data and return it to Simulation. However, the number of methods used to do so, the rules dictating the file’s format, and the return types are still undecided. Furthermore, we are considering abstracting FileReader, as different data will be read in for different simulations.
-
-We are also still deciding on the command flow of user input, more specifically, how button commands will be carried out and which object will do it. We have two different designs that we are considering. The first is to have Simulation control the user input by checking the state of the controls. For example, if the boolean isPaused is true, the simulation will not step forward with the simulation. Our second design is to implement an interface whereby the control objects let the parent class handle the functionality. For example, when a button is clicked, the button will simply call myHandler (initialized in the constructor) without actually knowing what the handler will do.
-
-Lastly, our goal of separating local and non-local actions between Cell and CellSociety could be trick for some Cell subclasses. Due to the Cell’s limited view, conflicts between the desired locations could arise, such as where dissatisfied HouseCells move. Currently, CellSociety is in charge of detecting and handling any conflicts between cells. However, we anticipate complications arising when attempting to implement this design.
-
-
-###Team Responsibilities
-This project will largely be split up by frontend and backend designation.
-
-**Talha** will be working on the frontend design. This includes UIMain and the classes it interacts with, such as CellNode, ButtonsView and GridView. His role will be related to user interaction -- his work on the project will make the actual GUI look presentable and clean. Likewise, it will leave room for extension/change to the overall appearance of the GUI. Talha will also be in charge of the file-reading operation. This includes getting file input from the user via a popup, processing this information and converting it to a usable format. 
-
-**Stone** will be working on much of the “in-between” code. He will be writing the Main and Simulation, which will respectively launch and control the program. He will have to take information from the backend (the Cells in a generation) and get them to the front-end in a meaningful format. Stone will also be contributing to the CellSociety code (and the subclasses), coding the general/ non-local rules for each CellSociety. 
-
-**Maddie** will be working on the foundation of the backend. She will be writing the Cell class and designing all of the aforementioned Cells and their local interactions. This includes coding flexibility of the superclass so that new Cells can be added for future simulations. She will also be contributing to the CellSociety code to make sure that all of the code existing in each CellSociety vs. each Cell is properly based depending on locality.
+##High-Level Design Goals
+The largest design goal for our team was hierarchical design. The nature of the challenge clearly indicates a necessity for inheritance on both and high and low-level. Hence, we focused heavily on creating logical inheritance patterns and consolidating common code in abstract superclasses. Following this trend, we have an abstract superclass, CellSociety, that defines many of the general capabilities for ALL Cell Societies, including random generation of Cells, storage of common variables (simulation name, dimensions, etc.). This superclass has a subclass for each simulation, which dictates the simulation-specific settings. Similarly the superclass Cell, which is abstract and defines only basic Cell functions (like copy, equals and compareTo), has a subclass for each Cell type. The specific cell then fills in the Cell-specific nature through the update method. Hence, all of the Cells can be updated at the same time without having to treat any Cells specially -- this allows for easy extension of the design. The same types of inheritance patterns can be seen littered throughout the project. We knew that we would have to make a lot of changes to our design during the last sprint, in order to accommodate new features, and tried our best to make the work required as minimal as possible. Not only would it save us time, but it would also confirm that our design was well-planned and constructed. 
+The next largest goal was separation, yet cohesion, of different components. We strove to make sure that no part of the code was particularly dependent upon the form of implementation used by another part of the project. Hence, the front-end is able to update the grid solely by storing initial information about the simulation and receiving a 2D array of Colors from the back-end with each update. Were the entire implementation to change, the front-end would pay no mind -- it only cares that it gets the 2D array of Colors with each step. Likewise, although we wanted each part to be as separate as possible, we also wanted the parts to go logically together. Hence, we did not have Cells update in radically different ways. Each returns an updated List of Cells when it is done. The types of returns and parameter passes remain consistent across similar classes.
+Every time we added a new feature, especially in the last sprint, we tried to make sure that the addition was actually improving the design and stretching its flexibility, not adding irrelevant functionality. Hence, as we tried to get different shapes to display for the Cells, and to change the types of neighbors functions, we created new ways to make these changes so that similar future changes would be easier to accomplish. There are several portions added to our code that don’t have any functionality (currently), but demonstrate that our code could be extended to other applications if need be. For instance, the PatchMap is added to show that our design could facilitate the logical creation and hand-off of different patch types in order to change the behavior of a simulation.
+Implementation and organization is meant to be intuitive in our design. We strove to make it so that adding new features is a logical process, not a search for dependent functions. This likely was not as successful as we hoped, but was definitely an improvement from our Breakout Games. 
+Another goal of ours was intuitive use (with regards to the GUI). We strove to give the user as many options as possible, giving them a drop-down menu to choose simulations, a button from which to choose XML files, images of shapes to click on, types of boundaries to choose, labeled sliders, and start/stop/pause options. The goal was to provide as much functionality as possible, so that the user could take the simulation where they wanted to, and even extend the product for their own purposes.
+
+##Adding new features
+**Adding a new simulation**
+	Adding a new simulation requires that you add a new CellSociety (subclass of the abstract class CellSociety) that dictates specifically how that society will function. This includes defining the empty color returned by the society (fills in non-cell patches). This also requires choosing the patch type to fill the board. For most of the simulations, the patch type is Empty, because the patches have no functionality. The patches only need to be defined if the simulation specifically requires that locations have a certain type of memory, such as SlimeSociety, which requires that each location hold a certain concentration of cAMP. Hence, the Slime Simulation also defines a specific type of patch, SlimePatch, and implements functionality around this changing concentration. Luckily, none of the framework for these updates actually has to be added. The CellSociety has a step function already defined that updates the cells and patches by calling upon abstract methods which must be defined by the subclasses. Hence, the second you create a subclass of CellSociety, you are forced to implement all of the necessary methods. This includes parseRules, which takes in a RawData object and parses the society-specific variables, storing them for application through the applySettings method.
+	Once a new society has been created, you must give the UI a way to actually work with it. GUIMain is the main class responsible for displaying the GUI components, like GridView, and  deciding what to do with user input. It contains a reference to the CellSociety (_model) which it uses to move information between the backend and frontend. 
+The only method that GUIMain uses from CellSociety is the step method. GUIMain calls this method in its own step method, retrieves a Tuple with a 2D-array of colors and a dimension object, and passes both of these variables to the GridController to update the color of the cells on display and/or resize the grid if necessary. 
+When the user decides to change the simulation, modify the grid size, change the cell shapes, etc., GUIMain must create a new instance of CellSociety and reinitialize some of the GUI components like GridView. GUIMain has no access to anything in the backend except for the step function. So, the backend developers don’t need to worry about GUIMain modifying CellSociety in an unintended way.
+	In addition, to implementing use of the society from the front-end, you must also allow for use of the society through files. This requires first adding a new subclass of SimulationType. This class must have a List of Strings that will be the file tags for each simulation setting, a List of Strings holding the default values for each of these tags, and a List of Strings representing the initial Cells by probability (“0.XX CellName”). The constructor must initialize the SimulationType’s *settingTypes*, *settingDefaults*, and *defaultCellData* with these Lists. It then must initialize SimulationType’s *dataTypes* with the *combineDataTypes* method, *dataDefaults* with the *combineDefaultData* method, *myDataValues* with *createDataMap*, *cellData* with *createCellList*, and *boardData* with *createBoardData*. You must then create a getter method for each setting and implement *getIntegerData*, *getDoubleData*, and *getSimulationName* (which requires adding an enum for your simulation in the SimulationName class.) You must then go into the XMLParser class and add a String to represent your simulation to *POSSIBLE_SIM_STRINGS* and an instance of your new SimulationType subclass to *POSSIBLE_SIM_TYPES*. Additionally, if you wish to allow the user to determine a new feature that applies to all simulations, you can go into SimulationType and add a new String tag for this feature in *UNIVERSAL_DATA_TYPES* and a default value to *DEFAULT_UNIVERSAL_DATA*, along with a getter method for the feature.
+	You also have to define the new Cells that inhabit your simulation. To define a new cell, you add its name to the CellName enum list and create a subclass of Cell of the appropriate name. You then must implement the update method, which takes in a CellData object and returns the updated Cells in a List. These updates will be specific to the simulation and will likely require the storage  and maintenance of variables unique to the simulation. Note that you may have to create more than one Cell type if the Cells in your simulation have unique enough functions. 
+	Once you have defined the Cells for your simulation, you must also define Patches for your simulation (if you will not be relying on the EmptyPatch). This also requires the creation of a subclass of the abstract class Patch. This inheritance will require that you implement the update class -- this is the method in which you much make specific changes to the state of the Patch, dependent upon the Cell it is holding and other variables (which you may choose and define).
+
+**Adding a new button**
+Adding new buttons depends on what kind of button you are adding. For the buttons on the bottom of the screen (pause, play, reset), use the makePlainButton method to get the default style of the button. For the shape buttons, you need to manually define a shape using the polygon tool and add a MouseEvent handler to detect mouse clicks.
+**Adding a new Cell shape**
+	Adding a new cell shape is relatively simple compared to some of the other features. All you have to do is add the cell shape to the CellShape enum list and then implement a neighbors function unique to the CellShape. To do this, one must add a new neighbors class of the appropriate name (e.g., TriangleNeighbors for a triangle) to the neighbors package, and extend the Neighbors class. 
+This part is most of the work, as you must work through what types of neighbors should be allowed, how the shapes will be ordered, etc. This does require some communication between the front and back end (it would be a huge problem if the back-end implemented the cell grid one way, and the front-end drew it another -- this would produce highly unexpected behavior). 
+After the correct neighbors function has been created, the means to produce an instance of this class must be added to NeighborsChooser (this will essentially just be another if statement). The CellSociety will be able to use this to choose a type of Neighbors object to make decisions with. 
+In addition to these back-end choices, the front-end must add a button to allow for the user to actually select this Cell shape (as well as add in this clicking functionality to the button set-up), and the file-reading end must also make such choices available (see file creation section). The front-end must also add in implementation for what happens when this cell shape is actually chosen. 
+GUIMain uses the GridController object to instantiate a new grid with the specified shape. GridView is the abstract class used to create grid views for specific shapes. The underlying data structure for all GridView subclasses is a 2D-array of Shape objects. The SquareGridView was implemented using a 2D-array of Rectangle objects and the HexagonGridView and TriangleGridView were implemented using a 2D-array of Polygon objects. Furthermore, GridView subclasses must implement the updateGridView method which updates the colors of the shapes in the 2D-array. 
+The GridController takes the responsibility for maintaining the correct GridView that the user sees. For example, when the user changes the size of the grid, GridController instantiates a new GridView with the given dimensions. 
+
+**Adding a new border type**
+Our simulation currently supports border types for finite and toroidal. We tried to implement the infinite border type, but we found that it is difficult to implement because of the variance in gridviews that hold different cell shapes. Currently, the infinite border type is supported for SquareGridView only. However, slight modifications to the GridResizer class can accomodate for a better infinite border type.
+
+**Adding Controls to change simulation parameters**
+Although we didn’t have the time to implement this feature into our GUI, the backend is setup to easily support this feature. The data structures that we pass from the frontend to the backend already include parameters like the ratios cells and the threshold variable. Thus, this feature can be implemented in the same way that the grid size slider was implemented.
+
+**Creating a new file**
+	Creating a new XML file has only one requirement, in that you must have the attribute “simulation” at the head of the file and set it equal to one of the valid simulation names in *POSSIBLE_SIM_STRINGS* (found in XMLParser). Beyond this, you can implement as many of the available tags as you want, which are found in XMLParser’s *UNIVERSAL_DATA_TYPES* and your particular simulation’s List of setting types. Any tag that is not implemented will be filled with a default value, and any extra tags will be ignored. Any duplicated tags, improperly formatted data, invalid data (incorrect simulation name, letters for numerical data, etc.) or other errors will be caught at runtime and you will be provided a message indicating the problem. 
+
+
+##Design choices
+	The back-end required a wide variety of design choices. The biggest set of design choices involved inheritance. It was decided that a parallel type of structure would be set up in various parts of the back-end, with Cell having subclasses of unique Cell types, CellSociety having subclasses unique to each Society type, SimulationType having subclasses unique to each Simulation Type and Patch having subclasses unique to each different Patch type. 
+	In some ways, these were good design choices. The inheritance structure makes it really clear what must be implemented when you add a new part (as the abstract class requires the a concrete subclass implement its abstract methods). It also sets up a logical connection between different components, off of which to make decisions.
+	However, we didn’t realize until too late that this structure also had some very serious negatives. One of the biggest was the challenge of coupling. On one hand, we didn’t want to have any component unnecessarily dependent upon other classes, so we didn’t put all of the components for one simulation in a single class. However, by separating all of these parts, it made it very challenging to set boundaries on what is actually “allowed.” For instance, it is still very much so possible to add a SlimeCell to a FireSociety simulation in our design, even though nothing will really happen with it (it would have no SlimePatches to make update decisions off of). In giving our classes freedom, we gave our design too much flexibility. If we were to go back and redo this design, we would likely put in a paradigm for checking the types of Patches and Cells being put into a Society. This would keep strange errors from occurring and would also save us from all of the terrible instanceof-checks and casting set-ups.
+	Another design decision that shifted the paradigm of our design was the introduction of the CellData class. At one point in early development, we just passing around an entire CellSociety to Cells when they were updating. We quickly realized, however, that this type of access is not necessary, nor desirable. Were the Cell to make drastic changes to the CellSociety, the program could crash. Hence, we introduced the CellData class to limit the amount of information and access given during updates. It has many getters that work with copies (as indicated in their names), and other functions that do return valid Cells or Patches (not copies) but only in certain situations (e.g., if they are neighbors). The only negative about this design is that it is not all that closed -- any time a new type of information is required by an updating component, this method has to be added to the CellData class. A type of hierarchy may have been the way to go with this design (if we could properly layout the system of relationships).
+	Another huge design choice came in the form of enums. Many of our classifications center on enums (CellShape, CellName, SimulationName, PatchName, etc.). We used these classifiers in order to avoid having to introduce new comparison methods, and to make clear to the user what types of options are available. However, these enums also require that the user update each list with modification. For instance, it is not possible to add a new Cell and then use it without first adding an enum to represent it in CellName. It can be challenging to keep track of all of the places where modifications must be made.
+	We also actively decided to create a central structure for simulation information. It became rapidly apparent that  the parallels between file-end and user-end input were too great to not consolidate. For instance, although a file can define cell locations while the user defines cell ratios, both avenues can give values for constants, choose a simulation type, define the desired color, etc. We put all of this information in the BoardData class, and both SimulationType (file-end) and SimulationData (user-end) work with this data structure in communicating with CellSociety. 
+	In file reading, we decided to abstract the data holding and interpreting class, SimulationType, so that it could easily be extended when creating a new simulation. It was also done in order to establish the data, such as title, author, and dimension, that all simulations must have. The subclasses could then handle all simulation-specific settings and methods. This also allows for dynamic casting at runtime of the SimulationType that XMLParser returns using reflection. One trade off is an unattractive boilerplate constructor, for SimulationType has certain values that must be initialized, but only after the subclass is known, as each subclass’ tags and default values need to be combined with SimulationType’s.
+	We also decided to only handle XML in one class, the XMLParser. As a result, no other class needs to go through the setup required to read in XML, know the specific formatting rules, or deal with the user file directly in any way. 
+	Lastly, the handling of raw cell data was extracted to two classes, CellDataDecoder and CellDataGenerator. The functionality of CellDataDecoder, which uses a given String to determine how to translate the given cell data into location-style cell data, was originally in XMLParser. This was extracted for two reasons: to hide implementation (an unattractive string of else-if statements) and to avoid code duplication. Originally, only XMLParser needed to be able to alter the data’s raw file format. However, with the implementation of default values, and wanting to avoid hardcoding cell positions, especially when the grid size is unknown, SimulationType had to be able to translate percentage-based data. CellDataGenerator was also created to hide implementation, so that XMLParser did not have to deal with the algorithms necessary to calculate and write the new data.
+
+##Assumptions and Decisions
+	As mentioned in the Design section, because we wanted to create an intuitive hierarchical structure, with parallel types of inheritance across the program, our design gives users almost too much flexibility. Hence, we made a huge assumption that the user would NOT incorrectly place Cells and Patches, or try to mix and match different components. We tried to document the expected use, but even with documentation, that part of the set-up is not entirely intuitive.
+	There are also many places in the back-end where nulls are thrown around (e.g., when a target location is not available). It is assumed that user working with these methods will be aware that null is a possible output -- this is a HUGE assumption that was only slightly reasonable because of the small size of our team. This assumption was made to avoid the complexities of conveying the lack of a cell/patch without null. This would have required the addition of a new data structure to hold empty Cells -- we had already removed that class in favor of working with empty Patches instead, so adding back an old structure would have made our code messy and buggy. On any other project, and moving forward, we will endeavor to avoid assumptions about the knowledge and intentions of future users.
+	We also made a lot of simplifying assumptions about the simulations (and their rules). For instance, the Wa-Tor world simulation that we implemented actually updates all of the shark before the fish. This is NOT to say that the decisions are not simultaneous (which is a requirement if the CA design) -- rather that certain cells receive priority in choosing new states. That is, the shark can eat a fish and set its isEaten variable to true, so that when that fish goes to update, it will die off. This simplified the logic behind conflict resolution (before, a fish could move before a Shark had marked it as eaten), and allowed us to avoid having to do a second-check on the resulting List of updated Cells (i.e., to check if two HouseCells had moved to the same location).
+	Similarly, in SlimeSociety and SugarSociety, we made the rules much more simplistic in order to improve the ease of programming. The goal of adding new societies was not to show that we could come of with complex implementations -- it was to show that our design can handle new simulation types (e.g., with the addition of patches). Hence, for instance, in SlimeSociety, the “random walk” described by the online tutorial is not implemented in its entirety. The description dictates that the Cell move in a certain direction and have an angle of freedom (through which it could change its direction). We simply coded in a completely random walk. In SugarSociety, we did not end up adding in the patch grid of different concentrations. We demonstrated that this would be possible by designing PatchMap, but did not want to spend time following through with the implementation. We focused instead of stretching our program and giving it a breadth of functionalities. Other similar types of simplifications can be seen throughout these two simulations.
+	Another assumption we make is that each Patch will only ever hold one Cell -- our design would not be able to handle a simulation in which Cells could occupy the same Patch at once. This decision was made in order to avoid possible conflicts (as all of the simulations we produced do NOT allow Cells to overlap). This decision was made to simplify the back-end coding and to keep errors from occurring.
+	In dealing with files, it was assumed that the user would be able to access the valid simulation names and tag names, otherwise XMLParser will not be able to recognize the file as valid or collect the data that it holds. Currently, this means that the user has access to SimulationType and its subclasses and can see the **final** Lists containing all valid attributes and tags. In order to not require this level of access, we would likely move this information to *properties* files in further refactoring. We also decided to simply display to the user an error-specific message when their file is incorrectly formatted, thus forcing them to fix the problem. This saved us the time required to devise algorithms that attempt to fix any issues that arise, some of which can be quite complicated. At the same time, this provides the user with very little flexibility, requires that they know the file formatting well, and forces them to be very careful with details such as spelling and spacing.
