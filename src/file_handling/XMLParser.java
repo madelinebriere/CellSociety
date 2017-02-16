@@ -12,6 +12,7 @@
 //It also demonstrates my ability to keep all handling of XML files,
 //in one class. Lastly, it uses helper methods that I created to 
 //hide two kinds of unattractive implementation, both dense and repetitive.
+//(These classes are CellDataDecoder and CellDataGenerator.)
 
 /**
  * The purpose of XMLParser is to take in and pares an XML file.
