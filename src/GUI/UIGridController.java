@@ -1,6 +1,39 @@
 // This entire file is part of my masterpiece.
 // Talha Koc
 
+/* 
+ * GridController takes the brunt off of GUIMain in terms
+ * of setting up, displaying, and updating the GridView. Before
+ * I refactored this code, GUIMain had the responsibility to
+ * initialize the GridView. All the methods that related to 
+ * updating and maintaining the grid were spread across in 
+ * various places. There was no unifying structure to link these
+ * various methods and objects together. After I created this class
+ * I think that my design improved in the following ways: 
+ * 
+ * 1- Having a GridController significantly reduced the 
+ * amount of code in GUIMain. All the methods and instance
+ * variables related to the GridView were taken out and I
+ * felt like I had more room to breathe in GUIMain.
+ * 2- The structure of the GUI is more clear. GUIMain simply
+ * creates an instance of GridController , gives it a pane to display
+ * the GridView, and calls the step method in its own step method
+ * to notify GridController to update its GridView.
+ * 3- Open-Closed Principle: Developers can extend GridView to modify
+ * its visual design or change the shape of the units on the grid.
+ * This design was very helpful in allowing me to integrate the 
+ * hexagonal and triangular GridViews.
+ * 
+ * Negatives of this class:
+ * 1- Somewhat violates the open-closed principle. This class uses
+ * a 2D-array of colors to update its GridView. This limits future
+ * developers to only one data structure. This is hard to refactor
+ * because the backend uses arrays to communicate with the frontend.
+ * If I had more time to refactor my code, I would coordinate with 
+ * my teammates to take out the 2D-array structure and replace it
+ * with a more general data structure like Collection or List.
+ */
+
 package GUI;
 
 import data_structures.CellShape;
@@ -38,16 +71,14 @@ public class UIGridController {
 	}
 
 	public void setNewSimulation(Color[][] colors, SimulationData simData){
-		_currentGeneration = 0;
-		if(_gridView != null){
-			clearGridFromScreen();
-		}
+		resetGeneration();
+		clearGridFromScreen();
 		setSimData(simData);
 		setGridView(simData.getShape(), simData, colors);
-		
 	}
 	  
 	public void setNewGridFromFile(SimulationType s, Color[][] colors){
+		resetGeneration();
 		setSimData( new SimulationData(s.getBoardData(), getSimData().getRatios()));
 		setNewSimulation(colors,getSimData());
 	}
@@ -57,12 +88,8 @@ public class UIGridController {
 			setNewGridWithDimension(newDimensions, newColors);
 		}else{
 			_gridView.updateGrid(newColors);
-			_currentGeneration ++;
+			incrementGeneration();
 		}
-	}
-	
-	public int getCurrentGeneration(){
-		return _currentGeneration;
 	}
 	
 	//Made this method private because it's used internally for resizing the grid. 
@@ -87,14 +114,24 @@ public class UIGridController {
 	}
 	
 	private void clearGridFromScreen(){
-		_root.getChildren().remove(_gridView);
-		_gridView = null;
+		if(_gridView != null){
+			_root.getChildren().remove(_gridView);
+			_gridView = null;
+		}
 	}
 	
+	public int getCurrentGeneration(){
+		return _currentGeneration;
+	}
+	private void resetGeneration(){
+		_currentGeneration = 0;
+	}
+	private void incrementGeneration(){
+		_currentGeneration ++;
+	}
 	private void setSimData(SimulationData s){
 		this._currentSimData = s;
 	}
-	
 	private SimulationData getSimData(){
 		return this._currentSimData;
 	}

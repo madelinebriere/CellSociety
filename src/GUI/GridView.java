@@ -1,6 +1,36 @@
 // This entire file is part of my masterpiece.
 // Talha Koc
 
+/*
+ * This is the refactored version of GridView that I had in Sprint 2.
+ * Previously, the GridView was simply a Pane with square Rectangles.
+ * Now, it's an abstract class that can be implemented using different 
+ * kinds of shapes. 
+ * 
+ * Some of the improved design features of this class are:
+ * 1- 2D-array of Shapes rather than Rectangles. This leaves it open
+ * to extension.
+ * 2- 2D-array _cells is private. Subclasses do not need direct access
+ * except when initializing the grid and adding the Shapes to _cells.
+ * This ensures that subclasses do not modify _cells since that can 
+ * cause a disconnect between the GridController and GridView.
+ * 3- updateGrid method is implemented here rather than in the subclasses.
+ * At first, it was abstract. The reason I changed it is that subclasses
+ * will have the same implementation of updateGrid since all of them use
+ * the same 2D-array data structure. This reduced duplicate code and made
+ *  it easier for me to implement hexagonal and triangular grid view.
+ * 
+ * In the GridController class, I had said that having a 2D-array 
+ * violated the open-closed principle. However in this class, I found 
+ * it very useful to have a 2D-array as opposed to something general 
+ * like Collection. Since all subclasses of GridView need to use a 
+ * 2D-array to store shapes, I was able to implement the updateGrid
+ * method in here rather than keeping it abstract and letting the 
+ * subclasses decided how to implement it. This made it much easier
+ * to subclass GridView when I was developing the hexagonal and 
+ * triangular grid view.
+ */
+
 package GUI;
 
 import data_structures.Dimensions;

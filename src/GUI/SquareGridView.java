@@ -1,6 +1,9 @@
 // This entire file is part of my masterpiece.
 // Talha Koc
 
+//Implementation of GridView that lays out square Rectangles
+//and stores them in the _cells array
+
 package GUI;
 
 import data_structures.Dimensions;
