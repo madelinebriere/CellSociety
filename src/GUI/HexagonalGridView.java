@@ -16,7 +16,6 @@ import javafx.scene.shape.Polygon;
  */
 public class HexagonalGridView extends GridView {
 	
-	private Polygon[][] _cells;
 	double unit;
 	double starting_y;
 	double starting_x;

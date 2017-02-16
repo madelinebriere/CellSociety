@@ -1,7 +1,9 @@
-//author Talha Koc
+// This entire file is part of my masterpiece.
+// Talha Koc
 
 package GUI;
 
+import data_structures.CellShape;
 import data_structures.Dimensions;
 import data_structures.SimulationData;
 import file_handling.SimulationType;
@@ -41,28 +43,15 @@ public class UIGridController {
 			clearGridFromScreen();
 		}
 		setSimData(simData);
-		switch(simData.getShape()){
-		case TRIANGLE:
-			_gridView = new TriangleGridView(_bounds, simData.getDimensions(), colors);
-			break;
-		case HEXAGON:
-			_gridView = new HexagonalGridView(_bounds, simData.getDimensions(), colors);
-			break;
-		default:
-			_gridView = new SquareGridView(_bounds, simData.getDimensions(), colors);
-			break;
-		}
-		_root.getChildren().add(_gridView);
+		setGridView(simData.getShape(), simData, colors);
 		
 	}
-	public void setNewGridWithDimension(Dimensions dimensions, Color[][] colors){
-		getSimData().getData().setDimensions(dimensions);
-		setNewSimulation(colors,getSimData());
-	}
+	  
 	public void setNewGridFromFile(SimulationType s, Color[][] colors){
 		setSimData( new SimulationData(s.getBoardData(), getSimData().getRatios()));
 		setNewSimulation(colors,getSimData());
 	}
+	
 	public void step(Color[][] newColors, Dimensions newDimensions){
 		if(!getSimData().getDimensions().equals(newDimensions)){
 			setNewGridWithDimension(newDimensions, newColors);
@@ -76,13 +65,36 @@ public class UIGridController {
 		return _currentGeneration;
 	}
 	
+	//Made this method private because it's used internally for resizing the grid. 
+	private void setNewGridWithDimension(Dimensions dimensions, Color[][] colors){
+		getSimData().getData().setDimensions(dimensions);
+		setNewSimulation(colors,getSimData());
+	}
+	
+	private void setGridView(CellShape s, SimulationData simData, Color[][] colors){
+		switch(s){
+		case TRIANGLE:
+			_gridView = new TriangleGridView(_bounds, simData.getDimensions(), colors);
+			break;
+		case HEXAGON:
+			_gridView =  new HexagonalGridView(_bounds, simData.getDimensions(), colors);
+			break;
+		default:
+			_gridView =  new SquareGridView(_bounds, simData.getDimensions(), colors);
+			break;
+		}
+		_root.getChildren().add(_gridView);
+	}
+	
 	private void clearGridFromScreen(){
 		_root.getChildren().remove(_gridView);
 		_gridView = null;
 	}
+	
 	private void setSimData(SimulationData s){
 		this._currentSimData = s;
 	}
+	
 	private SimulationData getSimData(){
 		return this._currentSimData;
 	}

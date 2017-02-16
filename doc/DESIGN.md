@@ -65,6 +65,16 @@ The front-end and back-end come together in the Simulation class, which acts as 
 
 ###User Interface
 
+The GUI will allow the user to visually observe the changes in the grid and to control aspects of the simulations such as grid size, simulation speed, and cell shapes.
+
+The GUI opens up to a default cell society with default settings. From there, the user has the ability to run the simulation, play with the simulation controls, or open up another simulation by either entering an XML file with properly formatted data or by choosing a simulation from the menu on top.  
+
+
+***User Controls***
+
+- Speed Slider: changes the speed of the animation to a specified FPS. It ranges from 1fps to 30fps.
+- Grid Size Slider:  
+
 The GUI will first create a popup asking the user to input an XML file to determine the simulation type, starting state, and parameters. After successfully parsing the file, the popup will disappear and lead the user to the main page of the GUI. This GUI and its current CellSociety will be initialized according to the user input.
 
 Once the main page is opened, the user can start the simulation by pressing the start button. Some of the other controls the user has over the simulation are pause, reset, step, and speed control. Furthermore, the user has the ability to switch between different simulations using a drop down menu located on top of the grid.

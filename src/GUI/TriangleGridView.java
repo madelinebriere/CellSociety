@@ -16,7 +16,6 @@ import javafx.scene.shape.Polygon;
  */
 public class TriangleGridView extends GridView{
 	
-	private Polygon[][] _cells;
 	private double unit;
 	private double starting_y;
 	private double starting_x;
@@ -31,9 +30,7 @@ public class TriangleGridView extends GridView{
 	}
 
 	@Override
-	protected void setupGrid(Color[][] colors) {
-		_cells = new Polygon[_dimensions.getX()][_dimensions.getY()];
-		
+	protected void setupGrid(Color[][] colors) {		
 		for(int i=0; i<this._dimensions.getX(); i++){
 			for(int j =0; j<_dimensions.getY(); j++){
 				Polygon p;
