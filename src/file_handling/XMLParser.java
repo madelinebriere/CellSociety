@@ -1,3 +1,18 @@
+//This entire file is part of my masterpiece
+//Stone Mathers
+//
+//I believe that this class is well designed because it 
+//does well to handle errors by passing the user specific
+//messages. It also obtains these messages from a properties
+//file, so that the exact message for each type of error can be
+//changed without having to alter the code. It also shows the
+//use of reflection, which I learned how to do in order to 
+//dynamically instantiate a SimulationType requiring parameters
+//for the constructor when the subclass is not known at runtime.
+//It also demonstrates my ability to keep all handling of XML files,
+//in one class. Lastly, it uses helper methods that I created to 
+//hide two kinds of unattractive implementation, both dense and repetitive.
+
 /**
  * The purpose of XMLParser is to take in and pares an XML file.
  * It then creates a new SimulationType that holds the file's data
